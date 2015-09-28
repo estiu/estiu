@@ -4,13 +4,13 @@ ruby "2.2.3"
 gem 'rails', '4.2.4'
 gem 'sqlite3'
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails'
-gem 'factory_girl_rails'
-gem 'bootstrap-sass'
-gem 'haml-rails'
-gem 'redcarpet'
-gem 'high_voltage'
+gem 'uglifier', '~> 2.7.2'
+gem 'jquery-rails', '~> 4.0.5'
+gem 'factory_girl_rails', '~> 4.5.0'
+gem 'bootstrap-sass', '~> 3.3.5'
+gem 'haml-rails', '~> 0.9.0'
+gem 'redcarpet', '~> 3.3.3'
+gem 'high_voltage', '~> 2.4.0'
 
 group :development, :test do
   gem 'pry'
@@ -24,9 +24,9 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-rails'
-  gem 'webmock'
-  gem 'capybara'
-  gem 'selenium-webdriver'
-  gem 'database_cleaner'
+  gem 'rspec-rails', '~> 3.3.3'
+  gem 'webmock', '~> 1.21.0'
+  gem 'capybara', '~> 2.5.0'
+  gem 'selenium-webdriver', '~> 2.47.1'
+  gem 'database_cleaner', '~> 1.5.0'
 end
