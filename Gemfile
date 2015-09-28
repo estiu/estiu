@@ -10,6 +10,7 @@ gem 'factory_girl_rails'
 gem 'bootstrap-sass'
 gem 'haml-rails'
 gem 'redcarpet'
+gem 'high_voltage'
 
 group :development, :test do
   gem 'pry'
