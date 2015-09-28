@@ -8,6 +8,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'factory_girl_rails'
 gem 'bootstrap-sass'
+gem 'haml-rails'
 
 group :development, :test do
   gem 'pry'
