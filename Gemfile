@@ -7,6 +7,11 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 
 group :development, :test do
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'awesome_print'
+  gem 'better_errors'
+  gem 'quiet_assets'
 end
 
 group :development do
