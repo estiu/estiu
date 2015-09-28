@@ -6,6 +6,7 @@ gem 'sqlite3'
 gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
+gem 'factory_girl_rails'
 
 group :development, :test do
   gem 'pry'
@@ -18,3 +19,10 @@ end
 group :development do
 end
 
+group :test do
+  gem 'rspec-rails'
+  gem 'webmock'
+  gem 'capybara'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
+end
