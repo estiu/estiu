@@ -9,6 +9,7 @@ gem 'jquery-rails'
 gem 'factory_girl_rails'
 gem 'bootstrap-sass'
 gem 'haml-rails'
+gem 'redcarpet'
 
 group :development, :test do
   gem 'pry'
