@@ -3,6 +3,8 @@ FG.define do
   factory :event_promoter do
     
     name "TheEventPromoter"
+    email "event@promoter.com"
+    website "eventpromoter.com"
     
     after(:build) do |rec, eva|
       

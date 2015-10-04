@@ -4,6 +4,8 @@ FG.define do
     
     name "Dixon"
     website "innervisions.com"
+    email 'dixon@innervisions.com'
+    telephone "609929302"
     
     trait :with_events do
       
