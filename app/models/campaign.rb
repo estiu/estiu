@@ -16,4 +16,6 @@ class Campaign < ActiveRecord::Base
   
   validates :goal_cents, presence: true, numericality: {greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT, less_than: MAXIMUM_GOAL_AMOUNT}
   
+  attr_accessor :goal_cents_facade
+  
 end

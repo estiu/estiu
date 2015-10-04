@@ -14,8 +14,19 @@
 //= require jquery_ujs
 //= require jquery-ui/datepicker
 //= require bootstrap
+//= require autonumeric-min
 //= require_tree .
 
 $(function(){
   $(".datepicker").datepicker();
+   $('.currency').autoNumeric('init', {
+     aSep: '.',
+     aDec: ',', 
+   })
+   $('.currency').keyup(function(){
+     var parent = $(this).closest('.form-group')
+     var cents = parent.find('.cents')
+     var val = Number($(this).autoNumeric('get')) * 100
+     cents.val(val)
+   })
 })
