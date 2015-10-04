@@ -1,11 +1,15 @@
-// Do not use `require` - it conflicts with `@import`, as per https://github.com/twbs/bootstrap-sass
+/*
+ *= require jquery-ui/datepicker
+ */
 
 @import "bootstrap-sprockets"
 @import "bootstrap"
 
 body
   padding-left: 10px
-  font-size: 15px
+  font-size: 15px  
+  [readonly]
+    background-color: white !important
 
 ul ul
   padding-left: 10px
