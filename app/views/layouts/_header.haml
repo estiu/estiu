@@ -1,0 +1,20 @@
+%nav.navbar.navbar-default
+  .container-fluid
+    .navbar-header
+      %button.navbar-toggle.collapsed{"aria-expanded" => "false", "data-target" => "#bs-example-navbar-collapse-1", "data-toggle" => "collapse", :type => "button"}
+        %span.sr-only Toggle navigation
+        %span.icon-bar
+        %span.icon-bar
+        %span.icon-bar
+      = link_to "Crowdfunded events", root_path, class: 'navbar-brand'
+    #bs-example-navbar-collapse-1.collapse.navbar-collapse
+      %ul.nav.navbar-nav
+        %li
+          = link_to "Campaigns", campaigns_path
+        %li
+          = link_to "Events", '#'
+      %ul.nav.navbar-nav.navbar-right
+        %li
+          = link_to "Log in", '#'
+        %li
+          = link_to "Sign up", '#'
