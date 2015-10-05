@@ -1,1 +1,3 @@
-= render 'item', campaign: @campaign
+= render 'item', campaign: @campaign, listing: false
+%div{style: 'margin-top: 10px'}
+= link_to "All campaigns", campaigns_path, class: 'btn btn-primary'

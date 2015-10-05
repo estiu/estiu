@@ -1,2 +1,6 @@
-- @campaigns.each do |campaign|
-  = render 'item', campaign: campaign
+%h1 All campaigns
+= link_to "New campaign", new_campaign_path, class: 'btn btn-success'
+%ul
+  - @campaigns.each do |campaign|
+    %li
+      = render 'item', campaign: campaign, listing: true
