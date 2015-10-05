@@ -1,0 +1,6 @@
+.input-group
+  %span.input-group-addon
+    €
+  - value = form.object.send(key)
+  = form.text_field "#{key}_facade".to_sym, html_opts.merge(class: "#{html_opts[:class]} currency", value: (value / 100 if value))
+= form.hidden_field key, html_opts.merge(class: "#{html_opts[:class]} cents")

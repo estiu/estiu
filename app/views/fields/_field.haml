@@ -1,0 +1,8 @@
+- locals.merge!(html_opts: {class: "form-control #{locals[:html_class]}"})
+  
+.form-group
+  - if key == :submit
+    = render "fields/submit", locals.merge(locals: locals)
+  - else
+    = form.label key, class: 'control-label', value: t("#{prefix}.#{key}", default: key.to_s)
+    = render "fields/#{as}", locals.merge(locals: locals)
