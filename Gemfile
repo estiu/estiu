@@ -16,6 +16,7 @@ gem 'high_voltage', '~> 2.4.0'
 group :development, :test do
   gem 'pry'
   gem 'pry-rails'
+  gem 'binding_of_caller'
   gem 'awesome_print'
   gem 'better_errors'
   gem 'quiet_assets'
