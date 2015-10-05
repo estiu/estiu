@@ -13,7 +13,8 @@ ActiveRecord::Migration.maintain_test_schema!
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
-
+  
+  config.render_views  
   config.infer_spec_type_from_file_location!
 
   config.expect_with :rspec do |expectations|
@@ -38,4 +39,9 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+end
+
+def controller_ok status=200
+  expect(response.status).to be status
+  expect(response.body).to be_present
 end
