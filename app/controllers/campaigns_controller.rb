@@ -17,6 +17,7 @@ class CampaignsController < ApplicationController
     @campaign = Campaign.new(campaign_attrs)
     @campaign.event_promoter = EventPromoter.first || FG.create(:event_promoter)
     if @campaign.save
+      flash_content(:success, t('.success'))
       redirect_to @campaign
     else
       flash_content(:error, @campaign)
@@ -27,7 +28,13 @@ class CampaignsController < ApplicationController
   protected
   
   def campaign_attrs
-    params.permit(campaign: Campaign::CREATE_ATTRS)[:campaign]
+    v = params.permit(campaign: Campaign::CREATE_ATTRS)[:campaign]
+    if v
+      %i(starts_at ends_at).map do |attr|
+        v[attr] = Date.strptime(v[attr], date_format) if v[attr].present?
+      end
+    end
+    v
   end
   
   def load_campaign

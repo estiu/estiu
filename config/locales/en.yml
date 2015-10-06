@@ -1,4 +1,6 @@
 en:
   campaigns:
+      create:
+        success: "Succesfully created campaign."
       form:
         goal_cents: Campaign Goal

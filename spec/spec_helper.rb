@@ -13,7 +13,7 @@ ActiveRecord::Migration.maintain_test_schema!
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
-  
+  config.include ActionView::Helpers::TranslationHelper
   config.render_views  
   config.infer_spec_type_from_file_location!
 
