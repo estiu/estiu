@@ -163,6 +163,8 @@ GEM
       rspec-expectations (~> 3.3.0)
       rspec-mocks (~> 3.3.0)
       rspec-support (~> 3.3.0)
+    rspec-retry (0.4.4)
+      rspec-core
     rspec-support (3.3.0)
     ruby_parser (3.7.1)
       sexp_processor (~> 4.1)
@@ -225,6 +227,7 @@ DEPENDENCIES
   rails (= 4.2.4)
   redcarpet (~> 3.3.3)
   rspec-rails (~> 3.3.3)
+  rspec-retry (~> 0.4.4)
   sass-rails (~> 5.0)
   selenium-webdriver (~> 2.47.1)
   uglifier (~> 2.7.2)

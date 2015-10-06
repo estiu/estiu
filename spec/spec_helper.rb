@@ -13,10 +13,12 @@ ActiveRecord::Migration.maintain_test_schema!
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
+  
   config.include ActionView::Helpers::TranslationHelper
   config.render_views  
   config.infer_spec_type_from_file_location!
-
+  config.default_retry_count = 2
+  
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
