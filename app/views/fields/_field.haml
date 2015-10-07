@@ -1,6 +1,6 @@
 - locals.merge!(html_opts: {class: "form-control #{locals[:html_class]}"})
 
-.form-group{class: "#{"has-error" if form.object.errors[key]}"}
+.form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
   - if key == :submit
     = render "fields/submit", locals.merge(locals: locals)
   - else
