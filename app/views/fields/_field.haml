@@ -7,4 +7,4 @@
     = form.label key, class: 'control-label', value: t("#{prefix}.#{key}", default: key.to_s)
     = render "fields/#{as}", locals.merge(locals: locals)
   - Array(form.object.errors[key]).each do |error|
-    .help-block= error
+    .help-block{class: "#{key}-error"}= error

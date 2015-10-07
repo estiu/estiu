@@ -14,8 +14,12 @@ describe "Campaign creation", js: true do
     find('table.ui-datepicker-calendar tbody tr:first-child td:last-child').click
   end
   
+  def the_last_field
+    'ends_at'
+  end
+  
   def fill_last
-    find('#campaign_ends_at').click
+    find("#campaign_#{the_last_field}").click
     find('table.ui-datepicker-calendar tbody tr:last-child td:last-child').click
   end
   
@@ -54,7 +58,7 @@ describe "Campaign creation", js: true do
         Campaign.count
       }
       
-      expect(page).to have_content("Ends at can't be blank")
+      expect(find(".help-block.#{the_last_field}-error")).to have_content("can't be blank")
       
     end
     
