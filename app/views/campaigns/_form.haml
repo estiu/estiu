@@ -4,7 +4,7 @@
       = form_fields(f, 'campaigns.form') do |field|
         = field.(:name)
         = field.(:description, as: :textarea)
-        = field.(:goal_cents, as: :currency)
+        = field.(:goal_cents, as: :currency, min: Campaign::MINIMUM_GOAL_AMOUNT, max: Campaign::MAXIMUM_GOAL_AMOUNT)
         = field.(:starts_at, as: :date)
         = field.(:ends_at, as: :date)
         = field.(:submit)

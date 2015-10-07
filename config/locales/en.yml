@@ -1,4 +1,5 @@
 en:
+  money_range: "Must be between %{min} and %{max}"
   campaigns:
       create:
         success: "Succesfully created campaign."

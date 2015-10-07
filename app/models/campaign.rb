@@ -10,12 +10,17 @@ class Campaign < ActiveRecord::Base
   has_many :pledges
   has_one :event
   
+  monetize :goal_cents, subunit_numericality: {
+    greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT,
+    less_than: MAXIMUM_GOAL_AMOUNT,
+    message: I18n.t("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format),
+  }
+  
   BASIC_ATTRS.each do |attr|
     validates attr, presence: true
   end
   
   validates :description, presence: true, length: {minimum: 140}
-  validates :goal_cents, presence: true, numericality: {greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT, less_than: MAXIMUM_GOAL_AMOUNT}
   
   attr_accessor :goal_cents_facade
   

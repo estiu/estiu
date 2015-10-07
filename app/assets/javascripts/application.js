@@ -20,9 +20,18 @@
 $(function(){
   $(".datepicker").datepicker()
   $(".datepicker").datepicker('option', 'dateFormat', 'dd/mm/yy')
-  $('.currency').autoNumeric('init', {
-    aSep: '.',
-    aDec: ',', 
+  $('.currency').each(function(){
+    var options = {
+      aSep: '.',
+      aDec: ','
+    }
+    var min = 0 // $(this).data('min-value') // https://github.com/BobKnothe/autoNumeric/issues/169
+    var max = $(this).data('max-value')
+    if (max){
+      options['vMax'] = max
+    }
+    options['vMin'] = min
+    $(this).autoNumeric('init', options)
   })
   $('.currency').keyup(function(){
     var parent = $(this).closest('.form-group')

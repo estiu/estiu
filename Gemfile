@@ -12,6 +12,7 @@ gem 'bootstrap-sass', '~> 3.3.5'
 gem 'haml-rails', '~> 0.9.0'
 gem 'redcarpet', '~> 3.3.3'
 gem 'high_voltage', '~> 2.4.0'
+gem 'money-rails', '~> 1.4.1'
 
 group :development, :test do
   gem 'pry'
