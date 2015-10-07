@@ -30,7 +30,7 @@ $(function(){
     var val = Number($(this).autoNumeric('get')) * 100
     cents.val(val)
   })
-  $('.has-error input').click(function(){
+  $('.has-error :input').click(function(){
     $('.has-error').removeClass('has-error')
   })
 })
