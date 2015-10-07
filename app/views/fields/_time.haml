@@ -1,0 +1,4 @@
+- hours = form.object.send "#{key}_4i"
+- minutes = form.object.send "#{key}_5i"
+- opts = {ignore_date: true, default: {hour: hours, minute: minutes}}
+= form.time_select key, opts

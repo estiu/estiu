@@ -2,8 +2,11 @@ class Campaign < ActiveRecord::Base
   
   MINIMUM_GOAL_AMOUNT = 100_00
   MAXIMUM_GOAL_AMOUNT = 15_000_00
-  BASIC_ATTRS = %i(name starts_at ends_at)
+  DATE_ATTRS = %i(starts_at ends_at)
+  BASIC_ATTRS = %i(name) + DATE_ATTRS
   CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents]
+  
+  extend ResettableDates
   
   belongs_to :event_promoter
   has_and_belongs_to_many :attendees, join_table: :pledges

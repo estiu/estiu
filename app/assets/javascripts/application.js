@@ -18,8 +18,8 @@
 //= require_tree .
 
 $(function(){
+  $.datepicker.setDefaults({dateFormat: 'dd/mm/yy'})
   $(".datepicker").datepicker()
-  $(".datepicker").datepicker('option', 'dateFormat', 'dd/mm/yy')
   $('.currency').each(function(){
     var options = {
       aSep: '.',

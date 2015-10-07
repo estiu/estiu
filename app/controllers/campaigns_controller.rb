@@ -26,15 +26,10 @@ class CampaignsController < ApplicationController
   end
   
   protected
-  
+
   def campaign_attrs
     v = params.permit(campaign: Campaign::CREATE_ATTRS)[:campaign]
-    if v
-      %i(starts_at ends_at).map do |attr|
-        v[attr] = Date.strptime(v[attr], date_format) if v[attr].present?
-      end
-    end
-    v
+    process_datetime_params v, Campaign::DATE_ATTRS
   end
   
   def load_campaign
