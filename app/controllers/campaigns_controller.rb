@@ -20,7 +20,7 @@ class CampaignsController < ApplicationController
       flash_content(:success, t('.success'))
       redirect_to @campaign
     else
-      flash_content(:error, @campaign)
+      flash_content(:error, t('.error'))
       render :new
     end
   end

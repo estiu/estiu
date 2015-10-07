@@ -2,5 +2,6 @@ en:
   campaigns:
       create:
         success: "Succesfully created campaign."
+        error: "Couldn't create campaign due to the indicated errors."
       form:
         goal_cents: Campaign Goal
