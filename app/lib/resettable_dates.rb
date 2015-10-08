@@ -14,7 +14,7 @@ module ResettableDates
       def resettable_dates
         self.class::DATE_ATTRS.each do |attr|
           if self.send("#{attr}_not_given")
-            self.send("#{attr}=", nil)
+            self.send("#{attr}=", nil) unless Causality.checking?("ResettableDates#resettable_dates")
           end
         end
       end

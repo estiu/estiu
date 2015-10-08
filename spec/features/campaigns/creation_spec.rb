@@ -64,4 +64,54 @@ describe "Campaign creation", js: true do
     
   end
   
+  describe 'date/time fields handling' do
+    
+    describe 'any date field' do
+      
+      def the_starts_at_value
+        page.evaluate_script "$('#campaign_starts_at').val()"
+      end
+      
+      it 'persists across failed submissions' do
+        
+          fill_most # but don't fill_last
+          starts_at_value = the_starts_at_value
+          the_action
+          expect(the_starts_at_value).to eq(starts_at_value)
+        
+      end
+      
+      context 'when no value is passed at submission' do
+        
+        it 'keeps being empty on the next page' do
+          
+          fill_most # but don't fill_last
+          the_action
+          expect(page.evaluate_script("$('##{the_last_field}').val()")).to be_blank
+          
+        end
+        
+      end
+      
+    end
+    
+    describe 'any time field' do
+      
+      def minute_selector
+        find('#campaign_starts_at_5i option:last-child')
+      end
+      
+      it 'persists across failed submissions' do
+        
+        minute_selector.select_option
+        value = minute_selector.value
+        the_action
+        expect(minute_selector.value).to eq value
+        
+      end
+      
+    end
+    
+  end
+  
 end

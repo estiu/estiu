@@ -1,1 +1,2 @@
-= form.text_field key, html_opts.merge(class: "#{html_opts[:class]} datepicker", readonly: true)
+- value = form.object.send(key).try(:send, :strftime, date_format)
+= form.text_field key, html_opts.merge(class: "#{html_opts[:class]} datepicker", readonly: true, value: value)
