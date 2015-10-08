@@ -13,6 +13,7 @@ gem 'haml-rails', '~> 0.9.0'
 gem 'redcarpet', '~> 3.3.3'
 gem 'high_voltage', '~> 2.4.0'
 gem 'money-rails', '~> 1.4.1'
+gem 'devise', '~> 3.5.2'
 
 group :development, :test do
   gem 'pry'
