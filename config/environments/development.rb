@@ -10,4 +10,11 @@ Rails.application.configure do
   config.assets.digest = true
   config.assets.raise_runtime_errors = true
   config.action_view.raise_on_missing_translations = true
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.mandrillapp.com',
+    port: 587,
+    user_name: "vemv@vemv.net",
+    password: ENV['MANDRILL_API_KEY'],
+    authentication: :plain
+  }
 end

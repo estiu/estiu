@@ -22,6 +22,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'better_errors'
   gem 'quiet_assets'
+  gem 'dotenv-rails', '~> 2.0.2'
 end
 
 group :development do

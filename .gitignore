@@ -17,3 +17,4 @@
 /tmp
 .sass-cache
 causality_testing.haml
+.env

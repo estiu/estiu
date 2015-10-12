@@ -1,8 +1,12 @@
 en:
   money_range: "Must be between %{min} and %{max}"
   devise:
+    registrations:
+      new:
+        title: Sign up
+        submit: "Sign up"
     confirmations:
-      new: 
+      new:
         title: Resend confirmation instructions
         submit: Resend confirmation instructions
     passwords:

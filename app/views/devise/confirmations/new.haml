@@ -5,4 +5,3 @@
       = form_fields(f, 'devise.confirmations.new') do |field|
         = field.(:email, autofocus: true, value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email))
         = field.(:submit)
-    = render "devise/shared/links"

@@ -1,6 +1,6 @@
 # https://github.com/plataformatec/devise/blob/master/lib/generators/templates/devise.rb
 Devise.setup do |config|
-  config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
+  config.mailer_sender = 'vemv@vemv.net'
   require 'devise/orm/active_record'
   config.case_insensitive_keys = [:email]
   config.strip_whitespace_keys = [:email]
@@ -10,5 +10,5 @@ Devise.setup do |config|
   config.expire_all_remember_me_on_sign_out = true
   config.password_length = 8..72
   config.reset_password_within = 6.hours
-  config.sign_out_via = :delete
+  config.sign_out_via = :get
 end
