@@ -51,3 +51,15 @@ def controller_ok status=200
   expect(response.status).to be status
   expect(response.body).to be_present
 end
+
+def for_role role_name
+  
+  let(role_name) { FG.create(:user, role_name) }
+  
+  before do
+    user_object = eval(role_name.to_s)
+    user_object.confirm
+    sign_in :user, user_object
+  end
+  
+end
