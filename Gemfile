@@ -31,6 +31,7 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 3.3.3'
+  gem 'shoulda-matchers', '~> 3.0.0'
   gem 'rspec-retry', '~> 0.4.4'
   gem 'webmock', '~> 1.21.0'
   gem 'capybara', '~> 2.5.0'

@@ -47,6 +47,13 @@ RSpec.configure do |config|
 
 end
 
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    with.library :rails
+  end
+end
+
 def controller_ok status=200
   expect(response.status).to be status
   expect(response.body).to be_present
@@ -68,6 +75,7 @@ end
 
 def expect_unauthorized
   expect(subject).to receive(:user_not_authorized).once.with(any_args).and_call_original
+  expect(subject).to rescue_from(Pundit::NotAuthorizedError).with :user_not_authorized
 end
 
 def forbidden_for *role_names
