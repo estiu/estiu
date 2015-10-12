@@ -1,5 +1,12 @@
 describe "Campaign creation", js: true do
   
+  let(:promoter) { FG.create(:user, :event_promoter) }
+  
+  before {
+    promoter.confirm
+    login_as(promoter, scope: :user)
+  }
+  
   let(:campaign){ FG.build :campaign }
   
   before {

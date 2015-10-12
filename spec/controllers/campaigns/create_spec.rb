@@ -1,5 +1,12 @@
 describe CampaignsController do
-
+  
+  let(:promoter) { FG.create(:user, :event_promoter) }
+  
+  before do
+    promoter.confirm
+    sign_in :user, promoter
+  end
+  
   let(:campaign){ FG.build(:campaign) }
   let!(:campaign_params){
     v = {campaign: {}}

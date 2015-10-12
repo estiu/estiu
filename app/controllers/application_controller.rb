@@ -1,6 +1,12 @@
 class ApplicationController < ActionController::Base
   
+  include Pundit
+  
   protect_from_forgery with: :exception
+  
+  after_action :verify_authorized, unless: :devise_controller?
+  
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   
   def flash_content key, object
     target = key == :error ? flash.now : flash
@@ -34,6 +40,11 @@ class ApplicationController < ActionController::Base
       end
     end
     hash
+  end
+  
+  def user_not_authorized
+    flash[:alert] = "You are not authorized to perform this action."
+    redirect_to(request.referrer || root_path)
   end
   
 end

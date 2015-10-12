@@ -16,6 +16,7 @@ RSpec.configure do |config|
   
   config.include ActionView::Helpers::TranslationHelper
   config.include Devise::TestHelpers, type: :controller
+  config.include Warden::Test::Helpers, type: :feature
   config.render_views  
   config.infer_spec_type_from_file_location!
   config.default_retry_count = 2
@@ -36,10 +37,12 @@ RSpec.configure do |config|
   config.before(:each) do |example|
     DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
+    Warden.test_mode!
   end
 
   config.after(:each) do
     DatabaseCleaner.clean
+    Warden.test_reset!
   end
 
 end

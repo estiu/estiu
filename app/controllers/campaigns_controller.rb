@@ -3,18 +3,19 @@ class CampaignsController < ApplicationController
   before_action :load_campaign, only: :show
   
   def index
-    @campaigns = Campaign.all
+    authorize(@campaigns = Campaign.all)
   end
   
   def show
+    authorize @campaign
   end
   
   def new
-    @campaign = Campaign.new
+    authorize(@campaign = Campaign.new)
   end
   
   def create
-    @campaign = Campaign.new(campaign_attrs)
+    authorize(@campaign = Campaign.new(campaign_attrs))
     @campaign.event_promoter = EventPromoter.first || FG.create(:event_promoter)
     if @campaign.save
       flash_content(:success, t('.success'))

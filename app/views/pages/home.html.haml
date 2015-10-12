@@ -1,3 +1,9 @@
+%h1 Welcome!
+%hr
+
 :markdown
   #{link_to "All campaigns", campaigns_path, class: 'btn btn-primary'}
-  #{link_to "New campaign", new_campaign_path, class: 'btn btn-success'}
+
+- if policy(Campaign).new?
+  :markdown
+    #{link_to "New campaign", new_campaign_path, class: 'btn btn-success'}

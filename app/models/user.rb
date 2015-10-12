@@ -10,4 +10,10 @@ class User < ActiveRecord::Base
     true
   end
   
+  Roles.all.each do |role|
+    define_method "#{role}?" do
+      self.role == role.to_s
+    end
+  end
+  
 end
