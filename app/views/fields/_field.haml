@@ -1,5 +1,5 @@
 - locals.merge!(html_opts: {class: "#{"form-control" unless (as == :checkbox || key == :submit)} #{locals[:html_class]}"})
-- [:autofocus].each do |key|
+- %i(autofocus value).each do |key|
   - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?}"}

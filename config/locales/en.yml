@@ -1,6 +1,14 @@
 en:
   money_range: "Must be between %{min} and %{max}"
   devise:
+    confirmations:
+      new: 
+        title: Resend confirmation instructions
+        submit: Resend confirmation instructions
+    passwords:
+      new:
+        title: Reset password
+        submit: Send me reset password instructions
     sessions:
       new:
         title: Log in
