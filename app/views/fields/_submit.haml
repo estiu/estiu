@@ -1,1 +1,2 @@
-= form.submit class: 'btn btn-primary'
+- opts = html_opts.merge(class: "#{html_opts[:class]} btn btn-primary")
+= form.submit opts

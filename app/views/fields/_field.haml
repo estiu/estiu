@@ -1,10 +1,17 @@
-- locals.merge!(html_opts: {class: "form-control #{locals[:html_class]}"})
+- locals.merge!(html_opts: {class: "#{"form-control" unless (as == :checkbox || key == :submit)} #{locals[:html_class]}"})
+- [:autofocus].each do |key|
+  - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
-  - if key == :submit
-    = render "fields/submit", locals.merge(locals: locals)
+  - inferred_type = [:submit, :email, :password].include? key
+  - render_label = !([:submit].include? key)
+  - caption = t("#{prefix}.#{key}", default: key.to_s)
+  - locals[:html_opts].merge!(value: caption) unless render_label
+  - if render_label
+    = form.label key, class: 'control-label', value: caption
+  - if inferred_type
+    = render "fields/#{key}", locals.merge(locals: locals)
   - else
-    = form.label key, class: 'control-label', value: t("#{prefix}.#{key}", default: key.to_s)
     = render "fields/#{as}", locals.merge(locals: locals)
   - Array(form.object.errors[key]).each do |error|
     .help-block{class: "#{key}-error"}= error

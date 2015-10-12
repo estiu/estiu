@@ -1,8 +1,17 @@
 en:
   money_range: "Must be between %{min} and %{max}"
+  devise:
+    sessions:
+      new:
+        title: Log in
+        remember_me: "Remember me?"
+        email: Email
+        password: Password
+        submit: Log in
   campaigns:
       create:
         success: "Succesfully created campaign."
         error: "Couldn't create campaign due to the indicated errors."
       form:
         goal_cents: Campaign Goal
+        submit: "Create"
