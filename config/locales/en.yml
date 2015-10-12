@@ -1,5 +1,8 @@
 en:
   money_range: "Must be between %{min} and %{max}"
+  application:
+    forbidden:
+      "You are not authorized to perform this action."
   devise:
     registrations:
       new:

@@ -2,7 +2,7 @@ describe CampaignsController do
   
   context 'event_promoter role' do
     
-    for_role :event_promoter
+    sign_as :event_promoter
     
     let(:campaign){ FG.build(:campaign) }
     let!(:campaign_params){
@@ -149,6 +149,17 @@ describe CampaignsController do
       end
       
     end
+    
+  end
+  
+  context 'forbidden roles' do
+    
+    before {
+      expect_unauthorized
+      post :create
+    }
+    
+    forbidden_for(nil, :attendee)
     
   end
   

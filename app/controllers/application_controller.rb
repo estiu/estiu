@@ -42,8 +42,8 @@ class ApplicationController < ActionController::Base
     hash
   end
   
-  def user_not_authorized
-    flash[:alert] = "You are not authorized to perform this action."
+  def user_not_authorized *_
+    flash_content(:alert, t('application.forbidden'))
     redirect_to(request.referrer || root_path)
   end
   

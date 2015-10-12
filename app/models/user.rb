@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :registerable
   
+  validates :role, inclusion: Roles.all.map(&:to_s)
+  
   def to_s
     email
   end

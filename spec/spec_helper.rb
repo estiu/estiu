@@ -52,7 +52,9 @@ def controller_ok status=200
   expect(response.body).to be_present
 end
 
-def for_role role_name
+def sign_as role_name=nil
+  
+  return unless role_name # nil means signed out user
   
   let(role_name) { FG.create(:user, role_name) }
   
@@ -60,6 +62,29 @@ def for_role role_name
     user_object = eval(role_name.to_s)
     user_object.confirm
     sign_in :user, user_object
+  end
+  
+end
+
+def expect_unauthorized
+  expect(subject).to receive(:user_not_authorized).once.with(any_args).and_call_original
+end
+
+def forbidden_for *role_names
+
+  role_names.each do |role|
+    
+    context "sign_as #{role || "nil"}" do
+      
+      it 'is forbidden' do
+        
+        expect(response.status).to be 302
+        expect(flash[:alert]).to include(t('application.forbidden'))
+        
+      end
+      
+    end
+    
   end
   
 end

@@ -2,7 +2,7 @@ describe CampaignsController do
   
   context 'event_promoter role' do
     
-    for_role :event_promoter
+    sign_as :event_promoter
 
     after do
       controller_ok
@@ -20,5 +20,16 @@ describe CampaignsController do
     end
   
   end
+  
+  context 'forbidden roles' do
     
+    before {
+      expect_unauthorized
+      get :new
+    }
+    
+    forbidden_for(nil, :attendee)
+    
+  end
+  
 end
