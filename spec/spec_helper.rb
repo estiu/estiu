@@ -15,6 +15,7 @@ WebMock.disable_net_connect!(allow_localhost: true)
 RSpec.configure do |config|
   
   config.include ActionView::Helpers::TranslationHelper
+  config.include Devise::TestHelpers, type: :controller
   config.render_views  
   config.infer_spec_type_from_file_location!
   config.default_retry_count = 2
