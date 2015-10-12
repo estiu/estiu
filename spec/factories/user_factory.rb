@@ -4,11 +4,20 @@ FG.define do
     
     email { "#{SecureRandom.hex 6}@#{SecureRandom.hex 6}.com" }
     password { SecureRandom.hex }
-    role :attendee
+    
+    default_role = :attendee
+    role default_role
+    association default_role
     
     Roles.all.each do |_role|
-      trait _role do
+      trait "#{_role}_role".to_sym do
         role _role
+        association _role
+        after(:build) do |rec, eva|
+          unless _role == default_role
+            rec.send("#{default_role}_id=", nil)
+          end
+        end
       end
     end
     

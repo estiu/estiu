@@ -59,16 +59,20 @@ def controller_ok status=200
   expect(response.body).to be_present
 end
 
-def sign_as role_name=nil
+def sign_as role_name=nil, js=false
   
   return unless role_name # nil means signed out user
   
-  let(role_name) { FG.create(:user, role_name) }
+  let(role_name) { FG.create(:user, "#{role_name}_role".to_sym) }
   
   before do
     user_object = eval(role_name.to_s)
     user_object.confirm
-    sign_in :user, user_object
+    if js
+      login_as(user_object, scope: :user)
+    else
+      sign_in :user, user_object
+    end
   end
   
 end

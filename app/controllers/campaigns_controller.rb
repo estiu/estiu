@@ -16,7 +16,7 @@ class CampaignsController < ApplicationController
   
   def create
     authorize(@campaign = Campaign.new(campaign_attrs))
-    @campaign.event_promoter = EventPromoter.first || FG.create(:event_promoter)
+    @campaign.event_promoter = current_user.event_promoter
     if @campaign.save
       flash_content(:success, t('.success'))
       redirect_to @campaign

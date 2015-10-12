@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151012165838) do
+ActiveRecord::Schema.define(version: 20151012204939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -149,6 +149,10 @@ ActiveRecord::Schema.define(version: 20151012165838) do
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
     t.string   "role"
+    t.integer  "artist_id"
+    t.integer  "artist_promoter_id"
+    t.integer  "event_promoter_id"
+    t.integer  "attendee_id"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
@@ -174,4 +178,8 @@ ActiveRecord::Schema.define(version: 20151012165838) do
   add_foreign_key "pledges", "campaigns"
   add_foreign_key "tickets", "attendees"
   add_foreign_key "tickets", "events"
+  add_foreign_key "users", "artist_promoters"
+  add_foreign_key "users", "artists"
+  add_foreign_key "users", "attendees"
+  add_foreign_key "users", "event_promoters"
 end
