@@ -2,8 +2,8 @@ FG.define do
   
   factory :attendee do
     
-    first_name "Foo"
-    last_name "Bar"
+    first_name { SecureRandom.hex(12) }
+    last_name { SecureRandom.hex(12) }
     
     trait :with_tickets do
       

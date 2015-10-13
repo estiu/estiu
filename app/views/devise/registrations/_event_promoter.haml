@@ -1,0 +1,15 @@
+.row.devise-user-form
+  .col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4.bordered
+    %h3= t 'devise.registrations.new.title'
+    = form_for(resource, as: resource_name, url: event_promoters_sign_up_path) do |f|
+      = form_fields(f, 'devise.registrations.new') do |field|
+        = f.fields_for(:event_promoter, (resource.event_promoter || resource.build_event_promoter)) do |af|
+          = form_fields(af, 'devise.registrations.new.event_promoter') do |field|
+            = field.(:name)
+            = field.(:email)
+            = field.(:website)
+        %hr
+        = field.(:email)
+        = field.(:password)
+        = field.(:password_confirmation, as: :password)
+        = field.(:submit)

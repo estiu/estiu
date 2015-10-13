@@ -8,6 +8,11 @@ en:
       new:
         title: Sign up
         submit: "Sign up"
+        email: Your email
+        event_promoter:
+          email: General email of your company
+          name: Name of your company
+          website: Company website
     confirmations:
       new:
         title: Resend confirmation instructions

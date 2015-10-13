@@ -1,5 +1,3 @@
-# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
-
 en:
   devise:
     confirmations:
@@ -42,8 +40,8 @@ en:
       updated: "Your account has been updated successfully."
     sessions:
       signed_in: ""
-      signed_out: ""
-      already_signed_out: ""
+      signed_out: "You have signed out."
+      already_signed_out: "You have signed out."
     unlocks:
       send_instructions: "You will receive an email with instructions for how to unlock your account in a few minutes."
       send_paranoid_instructions: "If your account exists, you will receive an email with instructions for how to unlock it in a few minutes."

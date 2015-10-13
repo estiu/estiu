@@ -1,4 +1,4 @@
-describe RegistrationsController do
+describe EventPromoterRegistrationsController do
   
   assign_devise_mapping
   
@@ -9,7 +9,7 @@ describe RegistrationsController do
   describe '#create' do
     
     let(:user){ FG.build :user }
-    let(:attendee){ FG.build :attendee }
+    let(:event_promoter){ FG.build :event_promoter }
     
     let(:user_params){
       {
@@ -17,9 +17,10 @@ describe RegistrationsController do
           email: user.email,
           password: user.password,
           password_confirmation: user.password,
-          attendee_attributes: {
-            first_name: attendee.first_name,
-            last_name: attendee.last_name
+          event_promoter_attributes: {
+            name: event_promoter.name,
+            email: event_promoter.email,
+            website: event_promoter.website
           }
         }
       }
@@ -32,7 +33,7 @@ describe RegistrationsController do
       }.to change{
         User.count
       }.by(1).and change{
-        Attendee.count
+        EventPromoter.count
       }.by(1)
       
     end
