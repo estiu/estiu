@@ -24,9 +24,12 @@ class User < ActiveRecord::Base
   
   Roles.with_associated_models.each do |role|
     belongs_to role
+    validates_associated role, if: ->(record){ record.send("#{role}?") }
+    accepts_nested_attributes_for role
   end
   
   def role_object_presence
+    return if role.blank?
     unless self.send(role)
       errors[role] << "Object associated by #{role}_id must be present"
     end

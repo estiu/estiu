@@ -7,7 +7,10 @@ FG.define do
     
     default_role = :attendee
     role default_role
-    association default_role
+    
+    after(:build) do |rec, eva|
+      rec.send("#{rec.role}=", FG.build(rec.role.to_sym))
+    end
     
     Roles.all.each do |_role|
       trait "#{_role}_role".to_sym do

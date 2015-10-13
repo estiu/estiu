@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
-  devise_for :users
+  devise_for :users, controllers: {registrations: 'registrations'}
   resources :campaigns, only: [:new, :create, :show, :index]
   
   get '/pages', to: 'pages#home'

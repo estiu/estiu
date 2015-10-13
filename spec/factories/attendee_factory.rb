@@ -4,7 +4,6 @@ FG.define do
     
     first_name "Foo"
     last_name "Bar"
-    email "foo@bar.com"
     
     trait :with_tickets do
       

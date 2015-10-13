@@ -59,6 +59,12 @@ def controller_ok status=200
   expect(response.body).to be_present
 end
 
+def assign_devise_mapping
+  before {
+    @request.env["devise.mapping"] = Devise.mappings[:user]
+  }
+end
+
 def sign_as role_name=nil, js=false
   
   return unless role_name # nil means signed out user

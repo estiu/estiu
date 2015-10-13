@@ -5,7 +5,7 @@ class Attendee < ActiveRecord::Base
   has_many :tickets
   has_many :pledges
   
-  %i(first_name last_name email).each do |attr|
+  %i(first_name last_name).each do |attr|
     validates attr, presence: true
   end
   

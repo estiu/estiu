@@ -8,7 +8,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
   config.reconfirmable = true
   config.expire_all_remember_me_on_sign_out = true
-  config.password_length = 8..72
+  config.password_length = Rails.env.development? ? 1..72 : 8..72
   config.reset_password_within = 6.hours
   config.sign_out_via = :get
 end
