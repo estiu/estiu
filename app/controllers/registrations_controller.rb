@@ -5,4 +5,9 @@ class RegistrationsController < Devise::RegistrationsController
     super.merge(additional)
   end
   
+  def after_sign_up_path_for
+    path = params[:redirect_to]
+    path.present? ? path : super
+  end
+  
 end 
