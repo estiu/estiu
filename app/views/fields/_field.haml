@@ -4,9 +4,9 @@
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
   - inferred_type = [:submit, :email, :password].include? key
-  - render_label = !([:submit].include? key)
+  - render_label = !([:submit].include? key) && !([:hidden].include? as)
   - caption = t("#{prefix}.#{key}", default: key.to_s)
-  - locals[:html_opts].merge!(value: caption) unless render_label
+  - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
   - if render_label
     = form.label key, class: 'control-label', value: caption
   - if inferred_type
