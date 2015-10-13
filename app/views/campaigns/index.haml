@@ -1,5 +1,8 @@
 %h1 All campaigns
-= link_to "New campaign", new_campaign_path, class: 'btn btn-success'
+  
+- if policy(Campaign).new?
+  = link_to "New campaign", new_campaign_path, class: 'btn btn-success'
+
 %hr
 %ul
   - @campaigns.each do |campaign|
