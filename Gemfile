@@ -19,14 +19,14 @@ gem 'pundit', '~> 1.0.1'
 group :development, :test do
   gem 'pry'
   gem 'pry-rails'
-  gem 'binding_of_caller'
   gem 'awesome_print'
-  gem 'better_errors'
   gem 'quiet_assets'
   gem 'dotenv-rails', '~> 2.0.2'
 end
 
 group :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
 end
 
 group :test do
