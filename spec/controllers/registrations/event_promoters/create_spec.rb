@@ -1,4 +1,4 @@
-describe EventPromoterRegistrationsController do
+describe Registrations::EventPromotersController do
   
   assign_devise_mapping
   

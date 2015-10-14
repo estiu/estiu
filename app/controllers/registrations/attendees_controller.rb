@@ -1,4 +1,4 @@
-class RegistrationsController < Devise::RegistrationsController
+class Registrations::AttendeesController < Devise::RegistrationsController
   
   def sign_up_params
     additional = params.

@@ -6,5 +6,5 @@
   = link_to "Buy my ticket!", '#', class: 'btn btn-success'
 - else  
   = link_to "Sign up for joining this event",
-    new_user_registration_path(user: {attendee_attributes: {entity_type_shown_at_signup: 'campaign', entity_id_shown_at_signup: @campaign.id}}),
+    attendees_sign_up_path(user: {attendee_attributes: {entity_type_shown_at_signup: 'campaign', entity_id_shown_at_signup: @campaign.id}}),
     class: 'btn btn-success', id: 'sign-up-from-campaign'

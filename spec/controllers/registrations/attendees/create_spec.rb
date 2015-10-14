@@ -1,4 +1,4 @@
-describe RegistrationsController do
+describe Registrations::AttendeesController do
   
   assign_devise_mapping
   

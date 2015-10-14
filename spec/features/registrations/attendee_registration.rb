@@ -3,7 +3,7 @@ describe "Attendee registration" do
   let(:user){ FG.build :user, :attendee_role }
   
   before {
-    visit new_user_registration_path
+    visit attendees_sign_up_path
   }
   
   it 'works' do
