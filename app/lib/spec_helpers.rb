@@ -5,13 +5,18 @@ module SpecHelpers
     expect(response.body).to be_present
   end
 
+  def page_ok status=200
+    expect(page.status_code).to be status
+    expect(page.html).to be_present
+  end
+
   def assign_devise_mapping
     before {
       @request.env["devise.mapping"] = Devise.mappings[:user]
     }
   end
 
-  def sign_as role_name=nil, js=false
+  def sign_as role_name=nil, feature=false
     
     return unless role_name # nil means signed out user
     
@@ -20,7 +25,7 @@ module SpecHelpers
     before do
       user_object = eval(role_name.to_s)
       user_object.confirm
-      if js
+      if feature
         login_as(user_object, scope: :user)
       else
         sign_in :user, user_object

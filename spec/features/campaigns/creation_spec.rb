@@ -1,6 +1,6 @@
 describe "Campaign creation", js: true do
   
-  sign_as :event_promoter, :js
+  sign_as :event_promoter, :feature
   
   let(:campaign){ FG.build :campaign }
   

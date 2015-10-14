@@ -1,5 +1,9 @@
 describe 'pages smoke spec' do
   
+  after {
+    page_ok
+  }
+  
   HighVoltage.page_ids.each do |page_id|
     
     describe "page: #{page_id}" do
@@ -7,8 +11,6 @@ describe 'pages smoke spec' do
       it 'loads correctly' do
         
         visit page_path(page_id)
-        expect(page.html).to be_present
-        expect(page.status_code).to be 200
 
       end
       

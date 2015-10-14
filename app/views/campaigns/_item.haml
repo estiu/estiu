@@ -1,8 +1,10 @@
 - if listing
   = link_to campaign.name, campaign, class: 'show-link-title'
 - else
-  %h1= "Campaign: #{campaign.name}"
-%p= campaign.description
+  %h1= t '.title', campaign: campaign.name
+
+%p.bordered.p10= campaign.description
+
 %strong starts at:
 = campaign.starts_at
 %strong ends at:

@@ -29,6 +29,14 @@ en:
         password: Password
         submit: Log in
   campaigns:
+      item:
+        title: "Campaign: %{campaign}"
+      show:
+        title: '%{pledged} pledged'
+        percent: "%{percent}% pledged"
+        goal: "Goal: %{goal}"
+        buy: "Buy my ticket!"
+        sign_up: "Sign up for joining this event"
       create:
         success: "Succesfully created campaign."
         error: "Couldn't create campaign due to the indicated errors."

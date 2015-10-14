@@ -23,8 +23,20 @@ class Campaign < ActiveRecord::Base
     validates attr, presence: true
   end
   
-  validates :description, presence: true, length: {minimum: 140}
+  validates :description, presence: true, length: {minimum: 140, maximum: 1000}
   
   attr_accessor :goal_cents_facade
+  
+  def pledged
+    pledged_cents.to_money
+  end
+  
+  def percent_pledged
+    (pledged_cents.to_f / goal_cents.to_f * 100).round 2
+  end
+  
+  def pledged_cents
+    pledges.sum(:amount_cents)
+  end
   
 end
