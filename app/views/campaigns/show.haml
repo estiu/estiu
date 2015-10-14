@@ -2,8 +2,10 @@
   
 %div{style: 'margin-top: 10px'}
 
+
 - if user_signed_in?
-  = link_to "Buy my ticket!", '#', class: 'btn btn-success'
+  - if current_user.attendee?
+    = link_to "Buy my ticket!", '#', class: 'btn btn-success'
 - else  
   = link_to "Sign up for joining this event",
     attendees_sign_up_path(user: {attendee_attributes: {entity_type_shown_at_signup: 'campaign', entity_id_shown_at_signup: @campaign.id}}),
