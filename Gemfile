@@ -35,6 +35,7 @@ group :test do
   gem 'rspec-retry', '~> 0.4.4'
   gem 'webmock', '~> 1.21.0'
   gem 'capybara', '~> 2.5.0'
+  gem 'launchy', '~> 2.4.3'
   gem 'selenium-webdriver', '~> 2.47.1'
   gem 'database_cleaner', '~> 1.5.0'
 end
