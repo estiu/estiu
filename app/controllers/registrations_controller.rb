@@ -1,13 +1,23 @@
 class RegistrationsController < Devise::RegistrationsController
   
   def sign_up_params
-    additional = params.require(:user).permit(attendee_attributes: [:first_name, :last_name]).merge(role: Roles.attendee)
+    additional = params.
+      require(:user).
+      permit(attendee_attributes: %i(first_name last_name entity_type_shown_at_signup entity_id_shown_at_signup)).
+      merge(role: Roles.attendee)
     super.merge(additional)
   end
   
-  def after_sign_up_path_for
-    path = params[:redirect_to]
-    path.present? ? path : super
+  def after_sign_up_path_for resource
+    attendee_common_path resource
+  end
+  
+  def after_inactive_sign_up_path_for resource
+    attendee_common_path resource
+  end
+  
+  def attendee_common_path resource
+    resource.attendee.after_sign_up_path
   end
   
 end 

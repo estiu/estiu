@@ -7,6 +7,8 @@
           = form_fields(af, 'devise.registrations.new.attendee') do |field|
             = field.(:first_name)
             = field.(:last_name)
+            - %i(entity_type_shown_at_signup entity_id_shown_at_signup).each do |attr|
+              = field.(attr, as: :hidden, value: params.fetch(:user, {}).fetch(:attendee_attributes, {})[attr])
         = field.(:email)
         = field.(:password)
         = field.(:password_confirmation, as: :password)

@@ -8,6 +8,10 @@ class User < ActiveRecord::Base
   validate :role_object_presence, unless: :admin?
   validate :no_unrelated_objects, unless: :admin?
   
+  def self.allow_unconfirmed_access_for
+    90.minutes
+  end
+  
   def to_s
     email
   end
