@@ -9,15 +9,19 @@ class RegistrationsController < Devise::RegistrationsController
   end
   
   def after_sign_up_path_for resource
-    attendee_common_path resource
+    attendee_common_path resource, super
   end
   
   def after_inactive_sign_up_path_for resource
-    attendee_common_path resource
+    attendee_common_path resource, super
   end
   
-  def attendee_common_path resource
-    resource.attendee.after_sign_up_path
+  def attendee_common_path resource, alternative
+    if Causality.checking?("RegistrationsController#attendee_common_path")
+      alternative
+    else
+      resource.attendee.after_sign_up_path
+    end
   end
   
 end 

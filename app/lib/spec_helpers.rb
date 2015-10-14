@@ -52,5 +52,17 @@ module SpecHelpers
     end
     
   end
+  
+  def fill_attendee_signup_form
+    
+    %w(first_name last_name).each do |attr|
+      find("#user_attendee_attributes_#{attr}").set user.attendee.send(attr)
+    end
+    
+    find("#user_email").set user.email
+    find("#user_password").set user.password
+    find("#user_password_confirmation").set user.password
 
+  end
+  
 end
