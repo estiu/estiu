@@ -35,7 +35,6 @@ en:
         title: '%{pledged} pledged'
         percent: "%{percent}% pledged"
         goal: "Goal: %{goal}"
-        buy: "Buy my ticket!"
         sign_up: "Sign up for joining this event"
       create:
         success: "Succesfully created campaign."
@@ -43,3 +42,6 @@ en:
       form:
         goal_cents: Campaign Goal
         submit: "Create"
+  pledges:
+    form:
+      buy: "Buy my ticket!"

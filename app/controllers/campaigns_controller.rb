@@ -1,13 +1,13 @@
 class CampaignsController < ApplicationController
   
-  before_action :load_campaign, only: :show
+  before_action :load_campaign, only: [:show]
+  before_action :authorize_campaign, only: [:show]
   
   def index
     authorize(@campaigns = Campaign.all)
   end
   
   def show
-    authorize @campaign
   end
   
   def new
@@ -33,8 +33,8 @@ class CampaignsController < ApplicationController
     process_datetime_params v, Campaign::DATE_ATTRS
   end
   
-  def load_campaign
-    @campaign = Campaign.find(params[:id])
+  def authorize_campaign
+    authorize @campaign
   end
   
 end

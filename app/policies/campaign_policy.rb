@@ -5,7 +5,7 @@ class CampaignPolicy < ApplicationPolicy
   end
   
   def create?
-    @user.event_promoter?
+    user.event_promoter?
   end
   
   def show?

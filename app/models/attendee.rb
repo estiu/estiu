@@ -19,4 +19,8 @@ class Attendee < ActiveRecord::Base
     end
   end
   
+  def pledged? campaign
+    campaign.pledges.pluck(:attendee_id).include? self.id
+  end
+  
 end

@@ -8,8 +8,12 @@ Rails.application.routes.draw do
       post "#{role}s/sign_up", to: "registrations/#{role}s#create"
     end
   end
-
-  resources :campaigns, only: [:new, :create, :show, :index]
+  
+  resources :campaigns, only: [:new, :create, :show, :index] do
+    member do
+      resources :pledges, only: [:create]
+    end
+  end
   
   get '/pages', to: 'pages#home'
   get "/pages/*id" => 'pages#show', as: :page, format: false

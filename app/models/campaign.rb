@@ -39,4 +39,8 @@ class Campaign < ActiveRecord::Base
     pledges.sum(:amount_cents)
   end
   
+  def active?
+    (starts_at..ends_at).cover?(Time.zone.now)
+  end
+  
 end

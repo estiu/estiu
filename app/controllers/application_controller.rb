@@ -47,4 +47,8 @@ class ApplicationController < ActionController::Base
     redirect_to(request.referrer || root_path)
   end
   
+  def load_campaign
+    @campaign = Campaign.find(params[:id])
+  end
+  
 end
