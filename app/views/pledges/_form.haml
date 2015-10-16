@@ -1,2 +1,9 @@
-= form_tag(pledges_path(id: campaign.id)) do |f|
-   = submit_tag (t '.buy'), class: 'btn btn-success'
+%hr
+  .text-center.top10
+    - if current_user.attendee.pledged?(campaign)
+      %strong= t '.contributed', contributed: current_user.attendee.pledged_for(campaign).format
+    - else
+      = form_tag(pledges_path(id: campaign.id)) do
+        = hidden_field_tag "pledge[amount_cents]", campaign.recommended_pledge_amount_cents
+        %strong.mr10= t '.contribution', contribution: campaign.recommended_pledge_amount.format
+        = submit_tag (t '.buy'), class: 'btn btn-success', style: 'min-width: 140px'

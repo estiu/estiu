@@ -23,4 +23,8 @@ class Attendee < ActiveRecord::Base
     campaign.pledges.pluck(:attendee_id).include? self.id
   end
   
+  def pledged_for campaign
+    (campaign.pledges.where(attendee: self).sum(:amount_cents) / 100.0).to_money
+  end
+  
 end

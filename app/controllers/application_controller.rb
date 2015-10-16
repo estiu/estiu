@@ -8,14 +8,6 @@ class ApplicationController < ActionController::Base
   
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   
-  def flash_content key, object
-    target = key == :error ? flash.now : flash
-    Array(object).each{|err|
-      target[key] ||= []
-      target[key] << err
-    }
-  end
-  
   helper_method :date_format
   def date_format
     Date::DATE_FORMATS[:default]
@@ -43,7 +35,7 @@ class ApplicationController < ActionController::Base
   end
   
   def user_not_authorized *_
-    flash_content(:alert, t('application.forbidden'))
+    flash[:alert] = t('application.forbidden')
     redirect_to(request.referrer || root_path)
   end
   

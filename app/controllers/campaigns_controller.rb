@@ -18,10 +18,10 @@ class CampaignsController < ApplicationController
     authorize(@campaign = Campaign.new(campaign_attrs))
     @campaign.event_promoter = current_user.event_promoter
     if @campaign.save
-      flash_content(:success, t('.success'))
+      flash[:success] = t('.success')
       redirect_to @campaign
     else
-      flash_content(:error, t('.error'))
+      flash.now[:error] = t('.error')
       render :new
     end
   end

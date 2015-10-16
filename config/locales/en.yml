@@ -43,5 +43,10 @@ en:
         goal_cents: Campaign Goal
         submit: "Create"
   pledges:
+    create:
+      success: "You have succesfully pledged for this campaign. Thank you!"
+      error: "Sorry, there has been an error while processing your pledge."
     form:
+      contribution: "Your contribution: %{contribution}"
+      contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"

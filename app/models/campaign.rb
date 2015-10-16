@@ -28,7 +28,7 @@ class Campaign < ActiveRecord::Base
   attr_accessor :goal_cents_facade
   
   def pledged
-    pledged_cents.to_money
+    (pledged_cents / 100.0).to_money
   end
   
   def percent_pledged
@@ -41,6 +41,18 @@ class Campaign < ActiveRecord::Base
   
   def active?
     (starts_at..ends_at).cover?(Time.zone.now)
+  end
+  
+  def recommended_pledge_amount_cents
+    goal_cents / [estimated_minimum_pledges, pledges.count].max
+  end
+  
+  def recommended_pledge_amount
+    (recommended_pledge_amount_cents / 100.0).to_money
+  end
+  
+  def estimated_minimum_pledges # this field meaning has to be refined
+    200
   end
   
 end
