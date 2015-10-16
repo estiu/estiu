@@ -15,6 +15,7 @@ gem 'high_voltage', '~> 2.4.0'
 gem 'money-rails', '~> 1.4.1'
 gem 'devise', '~> 3.5.2'
 gem 'pundit', '~> 1.0.1'
+gem 'sidekiq', '~> 3.5.1'
 
 group :development, :test do
   gem 'pry'

@@ -18,3 +18,4 @@
 .sass-cache
 causality_testing.haml
 .env
+dump.rdb

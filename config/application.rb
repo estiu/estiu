@@ -12,7 +12,8 @@ module Events
       g.test_framework nil
     end
     
-    config.action_mailer.default_url_options = { host: 'localhost', port: 3000 } # devise advises to fill this at some point
+    config.active_job.queue_adapter = :sidekiq
+    config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
     
   end
 end

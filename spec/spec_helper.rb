@@ -7,12 +7,15 @@ require 'rspec/rails'
 require 'webmock/rspec'
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'sidekiq/testing'
 
 include SpecHelpers
 
 ActiveRecord::Migration.maintain_test_schema!
 
 WebMock.disable_net_connect!(allow_localhost: true)
+
+Sidekiq::Testing.inline!
 
 RSpec.configure do |config|
   
