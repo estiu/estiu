@@ -14,7 +14,7 @@ Rails.application.configure do
     address: 'smtp.mandrillapp.com',
     port: 587,
     user_name: "vemv@vemv.net",
-    password: ENV['MANDRILL_API_KEY'],
+    password: Rails.application.secrets.mandrill_api_key,
     authentication: :plain
   }
 end

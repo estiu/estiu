@@ -47,6 +47,7 @@ en:
       success: "You have succesfully pledged for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge."
     form:
-      contribution: "Your contribution: %{contribution}"
+      contribution: "You will contribute: %{contribution}"
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
+      payment_description: Pay to support this campaign

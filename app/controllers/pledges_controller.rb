@@ -4,7 +4,8 @@ class PledgesController < ApplicationController
   before_action :load_pledge, only: [:create]
   
   def create
-    if @pledge.save
+    stripe_token = params[:stripeToken]
+    if @pledge.create_by_charging(stripe_token)
       flash[:notice] = t '.success'
     else
       flash[:error] = t '.error'
@@ -14,7 +15,7 @@ class PledgesController < ApplicationController
   
   def load_pledge
     authorize @campaign, :show?
-    @pledge = Pledge.new(campaign: @campaign, attendee: current_attendee, amount_cents: params.require(:pledge)[:amount_cents])
+    @pledge = Pledge.new(campaign: @campaign, attendee: current_attendee, amount_cents: @campaign.recommended_pledge_amount_cents)
     authorize @pledge
   end
   

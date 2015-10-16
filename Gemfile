@@ -19,6 +19,7 @@ gem 'money-rails', '~> 1.4.1'
 gem 'devise', '~> 3.5.2'
 gem 'pundit', '~> 1.0.1'
 gem 'sidekiq', '~> 3.5.1'
+gem 'stripe', '~> 1.30.2'
 
 group :development, :test do
   gem 'pry'

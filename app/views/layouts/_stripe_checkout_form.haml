@@ -1,0 +1,11 @@
+%form{action: action, method: "POST"}
+  = hidden_field_tag :authenticity_token, form_authenticity_token
+  %script.stripe-button{"data-amount" => amount_cents,
+                        "data-currency" => Pledge::STRIPE_EUR,
+                        "data-description" => description,
+                        "data-image" => image_path,
+                        "data-key" => Rails.application.secrets.stripe_test_publishable_key,
+                        "data-locale" => I18n.locale,
+                        "data-name" => title,
+                        "data-email" => email,
+                        src: "https://checkout.stripe.com/checkout.js"}

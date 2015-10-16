@@ -3,7 +3,17 @@
     - if current_attendee.pledged?(campaign)
       %strong= t '.contributed', contributed: current_user.attendee.pledged_for(campaign).format
     - else
-      = form_tag(pledges_path(id: campaign.id)) do
-        = hidden_field_tag "pledge[amount_cents]", campaign.recommended_pledge_amount_cents
-        %strong.mr10= t '.contribution', contribution: campaign.recommended_pledge_amount.format
-        = submit_tag (t '.buy'), class: 'btn btn-success', style: 'min-width: 140px', id: 'pledge-submit'
+      - if true # use https://stripe.com/docs/checkout#integration-custom for custom (prettier button)
+        = render 'layouts/stripe_checkout_form',
+          action: pledges_path(campaign.id),
+          amount_cents: campaign.recommended_pledge_amount_cents,
+          title: campaign.name,
+          description: t('.payment_description'),
+          email: current_user.email,
+          image_path: nil
+      - else
+        = form_tag(pledges_path(id: campaign.id)) do
+          = hidden_field_tag "pledge[amount_cents]", campaign.recommended_pledge_amount_cents
+          %div.bottom10
+            %strong= t '.contribution', contribution: campaign.recommended_pledge_amount.format
+          = submit_tag (t '.buy'), class: 'btn btn-success', style: 'min-width: 140px', id: 'pledge-submit'
