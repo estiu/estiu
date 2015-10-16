@@ -1,6 +1,9 @@
 source 'https://rubygems.org'
 
 ruby "2.2.3"
+
+# Gemfile.lock should be perdiodically checked against isitvulnerable.com.
+
 gem 'rails', '4.2.4'
 gem 'pg', '~> 0.18.3'
 gem 'sass-rails', '~> 5.0'
