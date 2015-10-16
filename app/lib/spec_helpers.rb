@@ -72,4 +72,8 @@ module SpecHelpers
 
   end
   
+  def sop
+    save_and_open_page
+  end
+  
 end
