@@ -16,14 +16,16 @@ module SpecHelpers
     }
   end
 
-  def sign_as role_name=nil, feature=false
+  def sign_as role_name_or_user_object=nil, feature=false
     
-    return unless role_name # nil means signed out user
+    return unless role_name_or_user_object # nil means signed out user
     
-    let(role_name) { FG.create(:user, "#{role_name}_role".to_sym) }
+    if role_name_or_user_object.is_a?(Symbol)
+      let(role_name_or_user_object) { FG.create(:user, "#{role_name_or_user_object}_role".to_sym) }
+    end
     
     before do
-      user_object = eval(role_name.to_s)
+      user_object = role_name_or_user_object.is_a?(Symbol) ? eval(role_name_or_user_object.to_s) : instance_eval(&role_name_or_user_object)
       user_object.confirm
       if feature
         login_as(user_object, scope: :user)

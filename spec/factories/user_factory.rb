@@ -9,7 +9,7 @@ FG.define do
     role default_role
     
     after(:build) do |rec, eva|
-      rec.send("#{rec.role}=", FG.build(rec.role.to_sym))
+      rec.send("#{rec.role}=", FG.build(rec.role.to_sym)) unless rec.send("#{rec.role}")
     end
     
     Roles.all.each do |_role|

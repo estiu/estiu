@@ -43,4 +43,9 @@ class ApplicationController < ActionController::Base
     @campaign = Campaign.find(params[:id])
   end
   
+  helper_method :current_attendee
+  def current_attendee
+    current_user.try :attendee
+  end
+  
 end

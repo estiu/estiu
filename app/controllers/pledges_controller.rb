@@ -9,12 +9,12 @@ class PledgesController < ApplicationController
     else
       flash[:error] = t '.error'
     end
-    redirect_to :back
+    redirect_to @campaign
   end
   
   def load_pledge
     authorize @campaign, :show?
-    @pledge = Pledge.new(campaign: @campaign, attendee: current_user.attendee, amount_cents: params.require(:pledge)[:amount_cents])
+    @pledge = Pledge.new(campaign: @campaign, attendee: current_attendee, amount_cents: params.require(:pledge)[:amount_cents])
     authorize @pledge
   end
   
