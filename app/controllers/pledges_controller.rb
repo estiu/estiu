@@ -4,7 +4,7 @@ class PledgesController < ApplicationController
   before_action :load_pledge, only: [:create]
   
   def create
-    stripe_token = params[:stripeToken]
+    stripe_token = params.require :stripeToken
     if @pledge.create_by_charging(stripe_token)
       flash[:notice] = t '.success'
     else

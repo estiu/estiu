@@ -18,7 +18,7 @@ class Pledge < ActiveRecord::Base
       amount: amount_cents,
       currency: STRIPE_EUR,
       source: token,
-      description: "Pledge for campaign #{campaign.id}"
+      description: self.class.charge_description_for(campaign)
     )
     # passed this point, the .charge call did't raise anything, that means the charge itself succeeded.
     self.stripe_charge_id = charge.id
@@ -31,6 +31,10 @@ class Pledge < ActiveRecord::Base
   rescue Stripe::CardError => e
     Rails.logger.error e
     return false
+  end
+  
+  def self.charge_description_for campaign
+    "Pledge for campaign #{campaign.id}"
   end
   
 end

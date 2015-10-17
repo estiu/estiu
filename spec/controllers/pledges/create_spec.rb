@@ -1,4 +1,4 @@
-describe PledgesController do # XXX fobidden_for?
+describe PledgesController do
   
   describe '#create' do
     
@@ -7,7 +7,15 @@ describe PledgesController do # XXX fobidden_for?
     }
     
     let(:campaign_params){
-      {id: campaign.id, pledge: {amount_cents: campaign.recommended_pledge_amount_cents}}
+      {
+        id: campaign.id,
+        pledge: {amount_cents: campaign.recommended_pledge_amount_cents},
+        stripeToken: SecureRandom.hex
+      }
+    }
+    
+    let(:charge){
+      double(id: SecureRandom.hex)
     }
     
     def the_action
@@ -19,6 +27,17 @@ describe PledgesController do # XXX fobidden_for?
       context "attendee which hasn't pledged to this campaign" do
         
         sign_as :attendee
+        
+        before {
+          args = {
+            amount: campaign.recommended_pledge_amount_cents,
+            currency: Pledge::STRIPE_EUR,
+            source: campaign_params[:stripeToken],
+            description: Pledge.charge_description_for(campaign)
+          }
+          expect(Stripe::Charge).to receive(:create).once.with(args).and_return(charge)
+          expect(charge).to receive(:id).exactly(2).times
+        }
         
         it 'allows to create a pledge' do
           expect{
