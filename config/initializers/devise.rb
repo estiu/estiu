@@ -11,4 +11,5 @@ Devise.setup do |config|
   config.password_length = Rails.env.development? ? 1..72 : 8..72
   config.reset_password_within = 6.hours
   config.sign_out_via = :get
+  config.secret_key = Rails.application.secrets.devise_secret_key
 end
