@@ -6,7 +6,6 @@ class PledgesController < ApplicationController
   def create
     stripe_token = params.require :stripeToken
     if @pledge.create_by_charging(stripe_token)
-      flash.now[:success] = t '.success'
       render json: {
         pledge_contribution_content: render_to_string(partial: 'pledges/contributed', locals: {campaign: @campaign})
       }.merge(flash_json)

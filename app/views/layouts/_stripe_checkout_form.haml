@@ -14,7 +14,6 @@
       var request = $.ajax("#{action}", {method: 'POST', data: {stripeToken: token['id']}})
       request.done(function(response){
         $('#pledge-contribution').html(response['pledge_contribution_content'])
-        set_flash_messages(response)
       })
       request.fail(function(response){
         set_flash_messages(response)
