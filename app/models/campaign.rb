@@ -74,7 +74,7 @@ class Campaign < ActiveRecord::Base
     200
   end
   
-  def assign_recommended_pledge_cents # https://github.com/RubyMoney/money-rails/issues/380
+  def assign_recommended_pledge_cents # workaround RubyMoney issue which sadly I wasn't able to reproduce in isolation.
     self.recommended_pledge_cents = self.recommended_pledge_cents
   end
   
