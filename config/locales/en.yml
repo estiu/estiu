@@ -48,10 +48,12 @@ en:
         submit: "Create"
   pledges:
     create:
+      error: "Sorry, there has been an error while creating your order. You have not been charged."
+    update:
       success: "You have succesfully pledged for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge."
     form:
-      contribution: "You will contribute: %{contribution}"
+      amount_cents: "You will contribute:"
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
       payment_description: Pay to support this campaign

@@ -11,9 +11,19 @@ class Pledge < ActiveRecord::Base
   monetize :amount_cents
   
   validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
+  validates :stripe_charge_id, presence: true, if: :id
   
-  def create_by_charging(token)
-    return false unless self.valid?
+  default_scope { where.not(stripe_charge_id: nil) }
+  
+  def self.charge_description_for campaign
+    "Pledge for campaign #{campaign.id}"
+  end
+
+  def charged?
+    stripe_charge_id.present?
+  end
+  
+  def charge!(token)
     charge = Stripe::Charge.create(
       amount: amount_cents,
       currency: STRIPE_EUR,
@@ -22,20 +32,16 @@ class Pledge < ActiveRecord::Base
     )
     # passed this point, the .charge call did't raise anything, that means the charge itself succeeded.
     self.stripe_charge_id = charge.id
-    self.save
+    saved = self.save
     Rails.logger.info "Successfully charged a pledge. Charge id: #{charge.id}"
-    unless self.persisted?
-      Rails.logger.error "Pledge charge succeeded, but could not persist object #{self}."
+    unless saved
+      Rails.logger.error "Pledge charge succeeded, but could not update object #{self}."
     end
     return true
   rescue Stripe::CardError => e
     Rails.logger.error e.class
     Rails.logger.error e
     return false
-  end
-  
-  def self.charge_description_for campaign
-    "Pledge for campaign #{campaign.id}"
   end
   
 end

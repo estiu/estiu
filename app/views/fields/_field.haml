@@ -1,5 +1,5 @@
 - locals.merge!(html_opts: {class: "#{"form-control" unless (as == :checkbox || key == :submit)} #{locals[:html_class]}"})
-- %i(autofocus value).each do |key|
+- %i(autofocus value style).each do |key|
   - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
@@ -8,7 +8,10 @@
   - caption = t("#{prefix}.#{key}", default: key.to_s)
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
   - if render_label
-    = form.label key, class: 'control-label', value: caption
+    - label_html = locals.fetch(:label_html, {})
+    - label_html[:class] = "#{label_html[:class]} control-label"
+    - label_html[:value] = caption
+    = form.label key, label_html
     - if locals[:optional]
       = t 'fields.optional'
   - if inferred_type

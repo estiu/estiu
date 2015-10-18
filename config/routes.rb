@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   
   resources :campaigns, only: [:new, :create, :show, :index] do
     member do
-      resources :pledges, only: [:create]
+      resources :pledges, only: [:create, :update], param: :pledge_id
     end
   end
   

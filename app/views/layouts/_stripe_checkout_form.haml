@@ -1,17 +1,31 @@
-#pledge-contribution
-  %div.bottom10
-    %strong= t 'pledges.form.contribution', contribution: campaign.recommended_pledge_amount.format
-  %button#do-pledge.btn.btn-success{style: 'min-width: 140px'}= t 'pledges.form.buy'
+.row#pledge-contribution
+  .col-xs-6
+    = form_for Pledge.new(amount_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right'} do |form|
+      = form_fields(form, 'pledges.form') do |field|
+        = field.(:amount_cents,
+          as: :currency,
+          min: campaign.minimum_pledge_cents,
+          max: campaign.maximum_pledge_cents,
+          style: "width: 70px",
+          label_html: {class: 'mr10'})
+  .col-xs-6{style: 'text-align: left'}
+    %button#do-pledge.btn.btn-success{style: 'min-width: 140px; margin-top: 0'}= t 'pledges.form.buy'
 
 %script{src: 'https://checkout.stripe.com/checkout.js'}
 
 :javascript
+  
+  var pledge_id = null
+  
   var handler = StripeCheckout.configure({
     key: '#{Rails.application.secrets.stripe_publishable_key}',
     image: '#{image_path}',
     locale: '#I18n.locale',
     token: function(token) {
-      var request = $.ajax("#{action}", {method: 'POST', data: {stripeToken: token['id']}})
+      if (!pledge_id){ // Should never happen.
+        return
+      }
+      var request = $.ajax(("#{action}" + '/' + pledge_id), {method: 'PUT', data: {stripeToken: token['id']}})
       request.done(function(response){
         $('#pledge-contribution').html(response['pledge_contribution_content'])
       })
@@ -21,15 +35,27 @@
     }
   });
   
+  var create_pledge_object = function(success){
+    var amount_cents = $('#pledge_amount_cents').val()
+    var request = $.ajax("#{action}", {method: 'POST', data: {pledge: {amount_cents: amount_cents}}})
+    request.done(function(response){
+      pledge_id = response['id']
+      success(amount_cents)
+    })
+    request.fail(function(response){
+      set_flash_messages(response)
+    })
+  }
+  
   $('#do-pledge').on('click', function(e) {
-    handler.open({
-      name: '#{title}',
-      email: '#{email}',
-      description: '#{description}',
-      currency: "#{Pledge::STRIPE_EUR}",
-      amount: #{amount_cents} // variable
-    });
+    create_pledge_object(function(chosen_cents){
+      handler.open({
+        name: '#{title}',
+        email: '#{email}',
+        description: '#{description}',
+        currency: "#{Pledge::STRIPE_EUR}",
+        amount: chosen_cents
+      });
+    })
     e.preventDefault();
   });
-  
-  vemv = handler

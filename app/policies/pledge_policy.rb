@@ -1,7 +1,17 @@
 class PledgePolicy < ApplicationPolicy
   
   def create?
-    user.attendee? && record.campaign.active? && !user.attendee.pledged?(record.campaign)
+    common && !user.attendee.pledged?(record.campaign)
   end
   
+  def update?
+    common && user == record.attendee.user && !record.charged?
+  end
+  
+  private
+  
+  def common
+    user.attendee? && record.campaign.active?
+  end
+
 end
