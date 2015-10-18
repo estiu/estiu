@@ -36,7 +36,11 @@ class ApplicationController < ActionController::Base
   
   def user_not_authorized *_
     flash[:alert] = t('application.forbidden')
-    redirect_to(request.referrer || root_path)
+    if request.xhr?
+      render json: flash_json, status: 403
+    else
+      redirect_to(request.referrer || root_path)
+    end
   end
   
   def load_campaign
