@@ -45,5 +45,5 @@ $(function(){
 })
 
 var set_flash_messages = function(response){
-  $('#all-flash-messages').html(response['flash_content'])
+  $('#all-flash-messages').html(response.responseJSON['flash_content'])
 }
