@@ -29,17 +29,17 @@ describe PledgesController do
       
       context "attendee which hasn't pledged to this campaign" do
         
-        sign_as :attendee
+        sign_as :attendee, false, :user
         
         before {
-          expect(the_count(attendee.attendee)).to be 0
+          expect(the_count(user.attendee)).to be 0
         }
         
         it 'allows to create a pledge' do
           expect{
             the_action
           }.to change {
-            the_count(attendee.attendee)
+            the_count(user.attendee)
           }.by(1)
         end
         
@@ -47,23 +47,21 @@ describe PledgesController do
       
       context "attendee which has created non-charged pledges for this campaign" do
         
-        sign_as ->(*_){ 
+        sign_as(->(*_){ 
           FG.create(:user, :attendee_role, attendee:
             FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents)]))
-        }
+        }, false, :user)
         
         before {
-          attendee = User.last.attendee
-          expect(the_count(attendee)).to be 1
-          expect(attendee.pledged?(campaign)).to be false
+          expect(the_count(user.attendee)).to be 1
+          expect(user.attendee.pledged?(campaign)).to be false
         }
         
         it "is allowed to create a pledge" do
-          attendee = User.last.attendee
           expect{
             the_action
           }.to change {
-            the_count(attendee)
+            the_count(user.attendee)
           }.by(1)
         end
         
@@ -71,12 +69,12 @@ describe PledgesController do
       
       context 'attendee which has been charged already for a pledge to this campaign' do
         
-        sign_as ->(*_){ 
+        sign_as(->(*_){ 
           FG.create(:user, :attendee_role, attendee: FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents, stripe_charge_id: SecureRandom.hex)]))
-        }
+        }, false, :user)
         
         before {
-          expect(User.last.attendee.pledged?(campaign)).to be true
+          expect(user.attendee.pledged?(campaign)).to be true
         }
         
         before {
@@ -84,11 +82,10 @@ describe PledgesController do
         }
         
         it "is forbidden to create a pledge" do
-          attendee = User.last.attendee
           expect{
             the_action
           }.to_not change {
-            the_count(attendee)
+            the_count(user.attendee)
           }
         end
         

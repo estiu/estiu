@@ -68,16 +68,16 @@ describe PledgesController, retry: 0 do
       
       context "attendee which already has been charged for a pledge to this campaign" do
         
-        sign_as ->(*_){ 
+        sign_as(->(*_){ 
           FG.create(:user, :attendee_role, attendee: FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents, stripe_charge_id: SecureRandom.hex)]))
-        }
+        }, false, :user)
         
         let(:pledge){
-          User.last.attendee.pledges.first
+          user.attendee.pledges.first
         }
         
         before {
-          expect(User.last.attendee.pledged?(campaign)).to be true
+          expect(user.attendee.pledged?(campaign)).to be true
         }
         
         before {
@@ -104,13 +104,13 @@ describe PledgesController, retry: 0 do
       
       context "attendee which has an uncharged pledge for this campaign" do
         
-        sign_as ->(*_){ 
+        sign_as(->(*_){ 
           FG.create(:user, :attendee_role, attendee:
             FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents)]))
-        }
+        }, false, :user)
         
         let(:pledge){
-          Pledge.unscoped.where(attendee: User.last.attendee).first
+          Pledge.unscoped.where(attendee: user.attendee).first
         }
         
         before {
