@@ -83,7 +83,8 @@ class Campaign < ActiveRecord::Base
   end
   
   def remaining_amount_cents
-    goal_cents - pledged_cents
+    v = goal_cents - pledged_cents
+    v < 0 ? 0 : v # should never be < 0, but better safe than sorry
   end
   
 end
