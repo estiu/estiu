@@ -1,11 +1,36 @@
-%form{action: action, method: "POST"}
-  = hidden_field_tag :authenticity_token, form_authenticity_token
-  %script.stripe-button{"data-amount" => amount_cents,
-                        "data-currency" => Pledge::STRIPE_EUR,
-                        "data-description" => description,
-                        "data-image" => image_path,
-                        "data-key" => Rails.application.secrets.stripe_publishable_key,
-                        "data-locale" => I18n.locale,
-                        "data-name" => title,
-                        "data-email" => email,
-                        src: "https://checkout.stripe.com/checkout.js"}
+#pledge-contribution
+  %div.bottom10
+    %strong= t 'pledges.form.contribution', contribution: campaign.recommended_pledge_amount.format
+  %button#do-pledge.btn.btn-success{style: 'min-width: 140px'}= t 'pledges.form.buy'
+
+%script{src: 'https://checkout.stripe.com/checkout.js'}
+
+:javascript
+  var handler = StripeCheckout.configure({
+    key: '#{Rails.application.secrets.stripe_publishable_key}',
+    image: '#{image_path}',
+    locale: '#I18n.locale',
+    token: function(token) {
+      var request = $.ajax("#{action}", {method: 'POST', data: {stripeToken: token['id']}})
+      request.done(function(response){
+        $('#pledge-contribution').html(response['pledge_contribution_content'])
+        set_flash_messages(response)
+      })
+      request.fail(function(response){
+        set_flash_messages(response)
+      })
+    }
+  });
+  
+  $('#do-pledge').on('click', function(e) {
+    handler.open({
+      name: '#{title}',
+      email: '#{email}',
+      description: '#{description}',
+      currency: "#{Pledge::STRIPE_EUR}",
+      amount: #{amount_cents} // variable
+    });
+    e.preventDefault();
+  });
+  
+  vemv = handler

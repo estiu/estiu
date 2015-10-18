@@ -43,3 +43,7 @@ $(function(){
     $('.has-error').removeClass('has-error')
   })
 })
+
+var set_flash_messages = function(response){
+  $('#all-flash-messages').html(response['flash_content'])
+}

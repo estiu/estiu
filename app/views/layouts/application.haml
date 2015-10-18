@@ -8,6 +8,7 @@
   %body
     = render "layouts/header"
     #main
-      = render "layouts/flash_messages", flash: flash
+      #all-flash-messages
+        = render "layouts/flash_messages", flash: flash
       = yield
     = render 'layouts/footer'

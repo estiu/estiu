@@ -48,4 +48,8 @@ class ApplicationController < ActionController::Base
     current_user.try :attendee
   end
   
+  def flash_json
+    {flash_content: render_to_string(partial: 'layouts/flash_messages')}
+  end
+  
 end
