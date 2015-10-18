@@ -5,7 +5,9 @@
 
 %p.bordered.p10= campaign.description
 
-%strong starts at:
+%strong= t '.starts_at'
 = campaign.starts_at
-%strong ends at:
+%span.light-grey
+  |
+%strong= t '.ends_at'
 = campaign.ends_at

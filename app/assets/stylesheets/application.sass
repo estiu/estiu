@@ -44,6 +44,8 @@ ul
   font-size: 32px
   color: black
   display: block
+  &:hover
+    text-decoration: none
 
 .inline
   display: inline !important
@@ -66,7 +68,11 @@ input[type="submit"]
 a.btn
   min-width: 160px
 
-$border-style: solid 1px #eaeaea
+$light-grey: #eaeaea
+$border-style: solid 1px $light-grey
+
+.light-grey
+  color: $light-grey
 
 .bordered
   border: $border-style
@@ -100,3 +106,6 @@ $border-style: solid 1px #eaeaea
 
 .white
   color: white
+  
+.campaign-listing-item
+  margin-bottom: 20px
