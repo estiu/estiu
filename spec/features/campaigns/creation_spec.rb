@@ -12,6 +12,7 @@ describe "Campaign creation", js: true do
     find('#campaign_name').set(campaign.name)
     find('#campaign_description').set(campaign.description)
     find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
+    find('#campaign_minimum_pledge_cents_facade').set(campaign.minimum_pledge_cents / 100)
     find('#campaign_starts_at').click
     find('table.ui-datepicker-calendar tbody tr:first-child td:last-child').click
   end

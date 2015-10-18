@@ -9,6 +9,8 @@
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
   - if render_label
     = form.label key, class: 'control-label', value: caption
+    - if locals[:optional]
+      = t 'fields.optional'
   - if inferred_type
     = render "fields/#{key}", locals.merge(locals: locals)
   - else

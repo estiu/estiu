@@ -5,6 +5,8 @@
         = field.(:name)
         = field.(:description, as: :textarea)
         = field.(:goal_cents, as: :currency, min: Campaign::MINIMUM_GOAL_AMOUNT, max: Campaign::MAXIMUM_GOAL_AMOUNT)
+        = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
+        = field.(:recommended_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT, optional: true)
         = field.(:starts_at, as: :datetime)
         = field.(:ends_at, as: :datetime)
         = field.(:submit)

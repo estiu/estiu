@@ -3,6 +3,8 @@ en:
   application:
     forbidden:
       "You are not authorized to perform this action."
+  fields:
+    optional: Optional
   devise:
     registrations:
       new:
@@ -41,6 +43,8 @@ en:
         error: "Couldn't create campaign due to the indicated errors."
       form:
         goal_cents: Campaign Goal
+        recommended_pledge_cents: Recommended pledge
+        minimum_pledge_cents: Minimum pledge
         submit: "Create"
   pledges:
     create:

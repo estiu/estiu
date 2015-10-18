@@ -4,7 +4,7 @@ class Campaign < ActiveRecord::Base
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
   BASIC_ATTRS = %i(name) + DATE_ATTRS
-  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents]
+  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :recommended_pledge_cents, :minimum_pledge_cents]
   
   extend ResettableDates
   
@@ -16,17 +16,25 @@ class Campaign < ActiveRecord::Base
   monetize :goal_cents, subunit_numericality: {
     greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT,
     less_than: MAXIMUM_GOAL_AMOUNT,
-    message: I18n.t("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format),
+    message: I18n.t("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format)
   }
   
-  monetize :recommended_pledge_cents
-  monetize :minimum_pledge_cents
+  monetize :recommended_pledge_cents, subunit_numericality: {
+    allow_nil: true,
+    less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
+  }
+  
+  monetize :minimum_pledge_cents, subunit_numericality: {
+    less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
+  }
   
   BASIC_ATTRS.each do |attr|
     validates attr, presence: true
   end
   
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
+  
+  before_validation :assign_recommended_pledge_cents
   
   attr_accessor :goal_cents_facade
   
@@ -64,6 +72,10 @@ class Campaign < ActiveRecord::Base
   
   def estimated_minimum_pledges # this field meaning has to be refined
     200
+  end
+  
+  def assign_recommended_pledge_cents # https://github.com/RubyMoney/money-rails/issues/380
+    self.recommended_pledge_cents = self.recommended_pledge_cents
   end
   
 end
