@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
-  devise_for :users
+  devise_for :users, controllers: {sessions: "sessions"}
 
   devise_scope :user do
     %i(event_promoter attendee).each do |role|

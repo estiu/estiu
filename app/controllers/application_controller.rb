@@ -52,4 +52,12 @@ class ApplicationController < ActionController::Base
     {flash_content: render_to_string(partial: 'layouts/flash_messages')}
   end
   
+  def after_sign_in_path_for(resource)
+    stored_location_for(:user) || root_path
+  end
+  
+  def after_sign_out_path_for(resource_or_scope)
+    request.referrer || root_path
+  end
+  
 end
