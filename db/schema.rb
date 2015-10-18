@@ -72,9 +72,10 @@ ActiveRecord::Schema.define(version: 20151012204939) do
     t.integer  "minimum_pledge_cents"
     t.datetime "starts_at"
     t.datetime "ends_at"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "event_promoter_id",        null: false
+    t.boolean  "skip_past_date_validations"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "event_promoter_id",          null: false
   end
 
   add_index "campaigns", ["event_promoter_id"], name: "index_campaigns_on_event_promoter_id", using: :btree

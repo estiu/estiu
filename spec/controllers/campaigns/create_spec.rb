@@ -61,8 +61,8 @@ describe CampaignsController do
           {
             "starts_at(4i)" => "18",
             "starts_at(5i)" => "58",
-            "ends_at(4i)" => "18",
-            "ends_at(5i)" => "58"
+            "ends_at(4i)" => "23",
+            "ends_at(5i)" => "59"
           }
         }
         
@@ -72,7 +72,8 @@ describe CampaignsController do
             v = campaign_params
             v[:campaign][:starts_at] = nil
             v[:campaign][:ends_at] = nil
-            v.merge(time_params)
+            v[:campaign].merge!(time_params)
+            v
           }
           
           def the_test(negative=false)
@@ -103,8 +104,9 @@ describe CampaignsController do
         describe 'when date and time are passed' do
           
           let(:starts_at){ DateTime.new(2016, 1, 1, 1, 1) }
+          let(:ends_at){ starts_at.advance(days: 1) }
           
-          let(:distinct_value){ "23" }
+          let(:distinct_value){ "22" }
           
           let(:time_params){{
             "starts_at(4i)" => distinct_value,
@@ -116,6 +118,7 @@ describe CampaignsController do
           let(:params){
             v = campaign_params
             v[:campaign][:starts_at] = starts_at.strftime(Date::DATE_FORMATS[:default])
+            v[:campaign][:ends_at] = ends_at.strftime(Date::DATE_FORMATS[:default])
             v[:campaign].merge!(time_params) unless causality_checking
             v
           }

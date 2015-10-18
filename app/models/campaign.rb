@@ -34,9 +34,15 @@ class Campaign < ActiveRecord::Base
   
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
   
+  validate :valid_date_fields
+  
   before_validation :assign_recommended_pledge_cents
   
   attr_accessor :goal_cents_facade
+  
+  def self.minimum_active_hours
+    1
+  end
   
   def pledged
     (pledged_cents / 100.0).to_money
@@ -53,7 +59,8 @@ class Campaign < ActiveRecord::Base
   end
   
   def active?
-    (starts_at..ends_at).cover?(Time.zone.now) && !fulfilled?
+    active_time = Rails.env.test? && skip_past_date_validations ? true : (starts_at..ends_at).cover?(Time.zone.now)
+    active_time && !fulfilled?
   end
   
   def fulfilled?
@@ -87,6 +94,25 @@ class Campaign < ActiveRecord::Base
   def remaining_amount_cents
     v = goal_cents - pledged_cents
     v < 0 ? 0 : v # should never be < 0, but better safe than sorry
+  end
+  
+  def valid_date_fields
+    if starts_at && ends_at
+      if starts_at > ends_at
+        errors[:starts_at] << I18n.t('campaigns.errors.starts_at.ends_at')
+      end
+      if ends_at.to_i - starts_at.to_i < self.class.minimum_active_hours.hours
+        errors[:ends_at] << I18n.t('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
+      end
+    end
+    if (Rails.env.test? ? !skip_past_date_validations : true)
+      if starts_at && starts_at.to_i - Time.zone.now.to_i < 0
+        errors[:starts_at] << I18n.t('past_date')
+      end
+      if ends_at && ends_at.to_i - Time.zone.now.to_i < 0
+        errors[:ends_at] << I18n.t('past_date')
+      end
+    end
   end
   
 end

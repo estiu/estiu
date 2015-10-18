@@ -106,12 +106,8 @@ describe PledgesController do
     
     context 'inactive campaign' do
       
-      let(:campaign){
-        FG.create :campaign, starts_at: 20.days.ago, ends_at: 10.days.ago
-      }
-      
       before {
-        expect(campaign).to_not be_active
+        allow_any_instance_of(Campaign).to receive(:active?).and_return false
       }
       
       context "attendee which hasn't pledged to this campaign" do

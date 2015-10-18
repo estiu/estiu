@@ -98,8 +98,8 @@ describe PledgesController, retry: 0 do
     
     context 'inactive campaign' do
       
-      let(:campaign){
-        FG.create :campaign, starts_at: 20.days.ago, ends_at: 10.days.ago
+      before {
+        allow_any_instance_of(Campaign).to receive(:active?).and_return false
       }
       
       context "attendee which has an uncharged pledge for this campaign" do

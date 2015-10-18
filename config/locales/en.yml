@@ -1,5 +1,6 @@
 en:
   money_range: "Must be between %{min} and %{max}"
+  past_date: Cannot be in the past
   application:
     forbidden:
       "You are not authorized to perform this action."
@@ -31,6 +32,11 @@ en:
         password: Password
         submit: Log in
   campaigns:
+      errors:
+        starts_at:
+          ends_at: Must be prior to Ends at
+        ends_at:
+          starts_at: The campaign must remain open for at least %{hours} hours.
       item:
         title: "Campaign: %{campaign}"
         starts_at: Starts at
