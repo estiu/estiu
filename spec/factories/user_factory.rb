@@ -4,6 +4,7 @@ FG.define do
     
     email { "#{SecureRandom.hex 6}@#{SecureRandom.hex 6}.com" }
     password { SecureRandom.hex }
+    confirmed_at { DateTime.now }
     
     default_role = :attendee
     role default_role
