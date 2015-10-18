@@ -8,6 +8,7 @@ FG.define do
     starts_at { DateTime.now.beginning_of_day }
     ends_at { 30.days.from_now }
     goal_cents { Random.rand(Campaign::MAXIMUM_GOAL_AMOUNT - Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT}
+    minimum_pledge_cents { 20_00 }
     
   end
   

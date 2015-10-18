@@ -19,6 +19,9 @@ class Campaign < ActiveRecord::Base
     message: I18n.t("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format),
   }
   
+  monetize :recommended_pledge_cents
+  monetize :minimum_pledge_cents
+  
   BASIC_ATTRS.each do |attr|
     validates attr, presence: true
   end
@@ -40,10 +43,18 @@ class Campaign < ActiveRecord::Base
   end
   
   def active?
-    (starts_at..ends_at).cover?(Time.zone.now)
+    (starts_at..ends_at).cover?(Time.zone.now) && !fulfilled?
   end
   
-  def recommended_pledge_amount_cents
+  def fulfilled?
+    goal_cents - pledged_cents < minimum_pledge_cents
+  end
+  
+  def recommended_pledge_cents
+    attributes['recommended_pledge_cents'] || minimum_pledge_cents
+  end
+  
+  def recommended_pledge_amount_cents # XXX kill this method. or maybe use it to suggest it to promoters. <<<<<<<<<<<<<<<<<<<<<<<<<<<
     goal_cents / [estimated_minimum_pledges, pledges.count].max
   end
   
