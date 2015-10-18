@@ -19,7 +19,7 @@ class PledgesController < ApplicationController
     if @pledge.charge!(stripe_token)
       render(json: {
         pledge_contribution_content: render_to_string(partial: 'pledges/contributed', locals: {campaign: @campaign})
-      }.merge(flash_json))
+      })
     else
       flash.now[:error] = t '.error'
       render json: flash_json, status: 422

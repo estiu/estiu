@@ -40,10 +40,23 @@ describe CampaignsController do
         stripe_expectation
       end
       
+      context 'when the attendee created a non-charged pledge' do
+        
+        before {
+          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.recommended_pledge_amount_cents, stripe_charge_id: nil)
+        }
+        
+        it 'renders stripe_checkout_form' do
+          the_action
+          stripe_expectation
+        end
+        
+      end
+      
       context 'when the attendee has already pledged' do
         
         before {
-          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.recommended_pledge_amount_cents)
+          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.recommended_pledge_amount_cents, stripe_charge_id: SecureRandom.hex)
         }
 
         it 'is not possible to pledge again' do

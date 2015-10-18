@@ -10,7 +10,7 @@ describe 'Pledge creation' do
     sign_as :attendee, :feature
     
     before {
-      Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.recommended_pledge_amount_cents)
+      Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.recommended_pledge_amount_cents, stripe_charge_id: SecureRandom.hex)
       visit campaign_path(campaign)
     }
 
