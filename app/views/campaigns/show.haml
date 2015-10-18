@@ -2,11 +2,11 @@
 
   = render 'item', campaign: @campaign, listing: false
   
-  %h3= t '.title', pledged: @campaign.pledged.format
+  %h3#campaign_pledged_title= t '.title', pledged: @campaign.pledged.format
   .row
     - padding = "5px"
     .col-xs-8.bordered-right{style: "padding-right: #{padding}"}
-      = progress_bar @campaign.percent_pledged, t('.percent', percent: @campaign.percent_pledged)
+      = progress_bar @campaign.percent_pledged, t('.percent', percent: @campaign.percent_pledged), nil, 'campaign-progress-bar'
     .col-xs-4{style: "padding-left: #{padding}"}
       = progress_bar 100, t('.goal', goal: @campaign.goal.format), :danger
   

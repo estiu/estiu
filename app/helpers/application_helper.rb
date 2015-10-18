@@ -17,8 +17,8 @@ module ApplicationHelper
     '' # avoid rendering unintended stuff in corner cases
   end
   
-  def progress_bar percent, label, type=nil
-    render 'layouts/progress_bar', percent: percent, label: label, type: type
+  def progress_bar percent, label, type=nil, id=nil
+    render 'layouts/progress_bar', percent: percent, label: label, type: type, id: id
   end
   
   private

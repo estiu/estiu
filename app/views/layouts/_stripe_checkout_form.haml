@@ -6,7 +6,7 @@
           as: :currency,
           min: campaign.minimum_pledge_cents,
           max: campaign.maximum_pledge_cents,
-          style: "width: 70px",
+          style: "width: 80px",
           label_html: {class: 'mr10'})
   .col-xs-6{style: 'text-align: left'}
     %button#do-pledge.btn.btn-success{style: 'min-width: 140px; margin-top: 0'}= t 'pledges.form.buy'
@@ -27,7 +27,13 @@
       }
       var request = $.ajax(("#{action}" + '/' + pledge_id), {method: 'PUT', data: {stripeToken: token['id']}})
       request.done(function(response){
-        $('#pledge-contribution').html(response['pledge_contribution_content'])
+        var json = response
+        var sel = $('#campaign-progress-bar')
+        sel.animate({width: (json['campaign_fulfilled_percent'] + '%')}, {complete: function(){
+          $('#pledge-contribution').html(json['pledge_contribution_content'])
+          sel.text(json['campaign_fulfilled_caption'])
+          $('#campaign_pledged_title').text(json['campaign_pledged_title'])
+        }})
       })
       request.fail(function(response){
         set_flash_messages(response)
