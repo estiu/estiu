@@ -19,10 +19,6 @@ describe PledgesController, retry: 0 do
       }
     }
     
-    let(:charge){
-      double(id: SecureRandom.hex)
-    }
-    
     def the_action
       put :update, campaign_params
     end
@@ -43,6 +39,10 @@ describe PledgesController, retry: 0 do
         
         let(:pledge) {
           Pledge.create!(campaign: campaign, attendee: attendee.attendee, amount_cents: amount_cents)
+        }
+        
+        let(:charge){
+          double(id: SecureRandom.hex)
         }
         
         before {
