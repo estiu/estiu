@@ -6,7 +6,7 @@
       = render 'layouts/stripe_checkout_form',
         campaign: campaign,
         action: pledges_path(campaign.id),
-        amount_cents: campaign.recommended_pledge_amount_cents,
+        amount_cents: campaign.recommended_pledge_cents,
         title: campaign.name,
         description: t('.payment_description'),
         email: current_user.email,

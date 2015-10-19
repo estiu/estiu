@@ -71,12 +71,12 @@ class Campaign < ActiveRecord::Base
     attributes['recommended_pledge_cents'] || minimum_pledge_cents
   end
   
-  def recommended_pledge_amount_cents # XXX kill this method. or maybe use it to suggest it to promoters. <<<<<<<<<<<<<<<<<<<<<<<<<<<
-    goal_cents / [estimated_minimum_pledges, pledges.count].max
+  def recommended_recommended_pledge # the recommended value (to promoters) for them to recommend to attendees.
+    (recommended_recommended_pledge_cents / 100.0).to_money
   end
   
-  def recommended_pledge_amount
-    (recommended_pledge_amount_cents / 100.0).to_money
+  def recommended_recommended_pledge_cents
+    goal_cents / [estimated_minimum_pledges, pledges.count].max
   end
   
   def estimated_minimum_pledges # this field meaning has to be refined

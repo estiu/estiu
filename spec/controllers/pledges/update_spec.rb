@@ -7,7 +7,7 @@ describe PledgesController, retry: 0 do
     }
     
     let(:amount_cents){
-      campaign.recommended_pledge_amount_cents
+      campaign.recommended_pledge_cents
     }
     
     let(:most_campaign_params){
