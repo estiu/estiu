@@ -13,6 +13,12 @@ describe CampaignsController do
       Campaign::DATE_ATTRS.each do |attr|
         v[:campaign][attr] = campaign.send(attr).strftime(Date::DATE_FORMATS[:default])
       end
+      v[:campaign].merge!({
+        "starts_at(4i)" => "23",
+        "starts_at(5i)" => "59",
+        "ends_at(4i)" => "23",
+        "ends_at(5i)" => "59"
+      })
       v
     }
     
