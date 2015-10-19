@@ -27,7 +27,12 @@ class ApplicationController < ActionController::Base
         hash["#{attr}(2i)"] = the_date.month.to_s
         hash["#{attr}(3i)"] = the_date.day.to_s
         (4..5).each do |n|
-          hash["#{attr}_#{n}i"] = hash["#{attr}(#{n}i)"]
+          user_given = hash["#{attr}(#{n}i)"]
+          if user_given # set the attr_accessor fields, as defined in ResettableDates
+            hash["#{attr}_#{n}i"] = user_given
+          else # set the Rails time fields (note the extra parenses in "#{attr}(#{n}i)")
+            hash["#{attr}(#{n}i)"] = DateTime.now.send({4 => :hour, 5 => :minute}[n]).to_s
+          end
         end
       end
     end

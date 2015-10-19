@@ -10,6 +10,9 @@ describe CampaignsController do
       Campaign::CREATE_ATTRS.each do |attr|
         v[:campaign][attr] = campaign.send attr
       end
+      Campaign::DATE_ATTRS.each do |attr|
+        v[:campaign][attr] = campaign.send(attr).strftime(Date::DATE_FORMATS[:default])
+      end
       v
     }
     
