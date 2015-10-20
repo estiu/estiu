@@ -71,7 +71,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def recommended_recommended_pledge_cents # the recommended value (to promoters) for them to recommend to attendees.
-    goal_cents / [estimated_minimum_pledges, pledges.count].max
+    (goal_cents / [estimated_minimum_pledges, pledges.count].max) if goal_cents
   end
   
   def estimated_minimum_pledges # this field meaning has to be refined
