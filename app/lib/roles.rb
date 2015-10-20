@@ -1,7 +1,7 @@
 class Roles
   
   def self.all
-    %i(artist artist_promoter event_promoter attendee admin)
+    %w(artist artist_promoter event_promoter attendee admin)
   end
   
   self.all.each do |role|

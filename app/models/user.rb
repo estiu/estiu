@@ -22,28 +22,29 @@ class User < ActiveRecord::Base
   
   Roles.all.each do |role|
     define_method "#{role}?" do
-      self.roles.include?(role.to_s)
+      self.roles.include?(role)
     end
   end
   
   Roles.with_associated_models.each do |role|
-    belongs_to role
-    validates_associated role, if: ->(record){ record.send("#{role}?") }
-    accepts_nested_attributes_for role
+    belongs_to role.to_sym
+    validates_associated role.to_sym, if: ->(record){ record.send("#{role}?") }
+    accepts_nested_attributes_for role.to_sym
     define_singleton_method "#{role}s" do
       where("'#{role}' = ANY (roles)")
     end
   end
   
   def roles_inclusion
-    all = Roles.all.map(&:to_s)
-    roles.any? && roles.all?{|role| all.include? role }
+    roles.any? && roles.all?{|role| Roles.all.include? role }
   end
   
   def role_object_presence
     roles.each do |role|
-      unless self.send(role)
-        errors[role] << "Object associated by #{role}_id must be present"
+      if Roles.with_associated_models.map.include? role
+        unless self.send(role)
+          errors[role] << "Object associated by #{role}_id must be present"
+        end
       end
     end
   end
