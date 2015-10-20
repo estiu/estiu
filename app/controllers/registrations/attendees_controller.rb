@@ -4,7 +4,7 @@ class Registrations::AttendeesController < Devise::RegistrationsController
     additional = params.
       require(:user).
       permit(attendee_attributes: %i(first_name last_name entity_type_shown_at_signup entity_id_shown_at_signup)).
-      merge(role: Roles.attendee)
+      merge(roles: [Roles.attendee])
     super.merge(additional)
   end
   

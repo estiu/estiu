@@ -30,7 +30,7 @@ describe Registrations::AttendeesController do
       expect {
         post :create, user_params
       }.to change{
-        User.count
+        User.attendees.count
       }.by(1).and change{
         Attendee.count
       }.by(1)

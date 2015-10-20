@@ -4,9 +4,9 @@ class User < ActiveRecord::Base
   
   belongs_to :event_promoter
   
-  validates :role, inclusion: Roles.all.map(&:to_s)
-  validate :role_object_presence, unless: :admin?
-  validate :no_unrelated_objects, unless: :admin?
+  validate :roles_inclusion
+  validate :role_object_presence
+  validate :no_unrelated_objects
   
   def self.allow_unconfirmed_access_for
     90.minutes
@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   
   Roles.all.each do |role|
     define_method "#{role}?" do
-      self.role == role.to_s
+      self.roles.include?(role.to_s)
     end
   end
   
@@ -30,21 +30,28 @@ class User < ActiveRecord::Base
     belongs_to role
     validates_associated role, if: ->(record){ record.send("#{role}?") }
     accepts_nested_attributes_for role
+    define_singleton_method "#{role}s" do
+      where("'#{role}' = ANY (roles)")
+    end
+  end
+  
+  def roles_inclusion
+    all = Roles.all.map(&:to_s)
+    roles.any? && roles.all?{|role| all.include? role }
   end
   
   def role_object_presence
-    return if role.blank?
-    unless self.send(role)
-      errors[role] << "Object associated by #{role}_id must be present"
+    roles.each do |role|
+      unless self.send(role)
+        errors[role] << "Object associated by #{role}_id must be present"
+      end
     end
   end
   
   def no_unrelated_objects
     Roles.with_associated_models.each do |role|
-      unless self.send("#{role}?")
-        if self.send(role)
-          errors[role] << "Unrelated object #{role} associated with user with different role (#{self.role})"
-        end
+      if self.send(role) && !self.send("#{role}?")
+        errors[role] << "Unrelated object #{role} associated with user with different role (#{self.role})"
       end
     end
   end

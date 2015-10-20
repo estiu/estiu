@@ -31,7 +31,7 @@ describe Registrations::EventPromotersController do
       expect {
         post :create, user_params
       }.to change{
-        User.count
+        User.event_promoters.count
       }.by(1).and change{
         EventPromoter.count
       }.by(1)

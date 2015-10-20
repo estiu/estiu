@@ -19,7 +19,7 @@ describe "Event promoter registration" do
     expect {
       find("input[type='submit']").click
     }.to change {
-      User.count
+      User.event_promoters.count
     }.by(1).and change {
       EventPromoter.count
     }.by(1)

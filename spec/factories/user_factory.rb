@@ -7,15 +7,17 @@ FG.define do
     confirmed_at { DateTime.now }
     
     default_role = :attendee
-    role default_role
+    roles [default_role]
     
     after(:build) do |rec, eva|
-      rec.send("#{rec.role}=", FG.build(rec.role.to_sym)) unless rec.send("#{rec.role}")
+      rec.roles.each do |role|
+        rec.send("#{role}=", FG.build(role.to_sym)) unless rec.send(role)
+      end
     end
     
     Roles.all.each do |_role|
       trait "#{_role}_role".to_sym do
-        role _role
+        roles [_role]
         association _role
         after(:build) do |rec, eva|
           unless _role == default_role

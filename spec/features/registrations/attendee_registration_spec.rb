@@ -13,7 +13,7 @@ describe "Attendee registration" do
     expect {
       find("input[type='submit']").click
     }.to change {
-      User.count
+      User.attendees.count
     }.by(1).and change {
       Attendee.count
     }.by(1)

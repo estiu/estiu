@@ -153,7 +153,7 @@ ActiveRecord::Schema.define(version: 20151012204939) do
     t.string   "unconfirmed_email"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
-    t.string   "role"
+    t.string   "roles",                  default: [],              array: true
     t.integer  "artist_id"
     t.integer  "artist_promoter_id"
     t.integer  "event_promoter_id"
