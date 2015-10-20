@@ -28,6 +28,9 @@ class Campaign < ActiveRecord::Base
     less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
   }
   
+  monetize :recommended_recommended_pledge_cents
+  monetize :pledged_cents
+  
   BASIC_ATTRS.each do |attr|
     validates attr, presence: true
   end
@@ -42,10 +45,6 @@ class Campaign < ActiveRecord::Base
   
   def self.minimum_active_hours
     1
-  end
-  
-  def pledged
-    (pledged_cents / 100.0).to_money
   end
   
   def percent_pledged
@@ -71,11 +70,7 @@ class Campaign < ActiveRecord::Base
     attributes['recommended_pledge_cents'] || minimum_pledge_cents
   end
   
-  def recommended_recommended_pledge # the recommended value (to promoters) for them to recommend to attendees.
-    (recommended_recommended_pledge_cents / 100.0).to_money
-  end
-  
-  def recommended_recommended_pledge_cents
+  def recommended_recommended_pledge_cents # the recommended value (to promoters) for them to recommend to attendees.
     goal_cents / [estimated_minimum_pledges, pledges.count].max
   end
   
