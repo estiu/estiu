@@ -2,8 +2,8 @@ en:
   money_range: "Must be between %{min} and %{max}"
   past_date: Cannot be in the past
   application:
-    forbidden:
-      "You are not authorized to perform this action."
+    param_required: "There has been an issue related with fields you left blank. Please try again."
+    forbidden: "You are not authorized to perform this action."
   fields:
     optional: Optional
   devise:

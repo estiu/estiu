@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, unless: :devise_controller?
   
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
-  rescue_from ActionController::ParameterMissing, with: :user_not_authorized
+  rescue_from ActionController::ParameterMissing, with: :param_required
   
   helper_method :date_format
   def date_format
@@ -42,6 +42,15 @@ class ApplicationController < ActionController::Base
   
   def user_not_authorized *_
     flash[:alert] = t('application.forbidden')
+    handle_unauthorized
+  end
+  
+  def param_required *_
+    flash[:alert] = t('application.param_required')
+    handle_unauthorized
+  end
+  
+  def handle_unauthorized
     if request.xhr?
       render json: flash_json, status: 403
     else
@@ -69,5 +78,7 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(resource_or_scope)
     request.referrer || root_path
   end
+  
+  private
   
 end
