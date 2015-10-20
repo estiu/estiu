@@ -26,14 +26,14 @@ describe 'Pledge creation' do
         find('#do-pledge').click
         
         within_frame 'stripe_checkout_app' do
-          4.times { find('#card_number').send_keys "4242" }
+          4.times { find('#card_number').send_keys "4242" } # In test mode, the 4242 4242 4242 4242 card is always valid for Stripe.
           find('#cc-exp').send_keys "12"
           find('#cc-exp').send_keys "20"
           find('#cc-csc').send_keys "999"
           find('#submitButton').click
         end
         
-        sleep 7
+        sleep 7 # wait for Stripe processing + PledgesController#update processing
         
       end
       
