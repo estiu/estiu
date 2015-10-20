@@ -75,41 +75,6 @@ describe CampaignsController do
           }
         }
         
-        describe 'when time params are passed, but no date params are passed' do
-          
-          let(:incomplete_params){
-            v = campaign_params
-            v[:campaign][:starts_at] = nil
-            v[:campaign][:ends_at] = nil
-            v[:campaign].merge!(time_params)
-            v
-          }
-          
-          def the_test(negative=false)
-            expect{
-              post :create, incomplete_params
-            }.send((negative ? :to_not : :to), change{
-              Campaign.count
-            })
-          end
-          
-          
-          it "doesn't result in a campaign being created" do
-            the_test :negative
-          end
-          
-          context 'causality' do
-            
-            before { allow(Causality).to receive(:checking?).exactly(2).times.with('ResettableDates#resettable_dates').and_return(true) }
-            
-            it "exists a relationship between code and test" do
-              the_test
-            end
-            
-          end
-          
-        end
-        
         describe 'when date and time are passed' do
           
           let(:starts_at){ DateTime.new(2016, 1, 1, 1, 1) }

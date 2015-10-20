@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, unless: :devise_controller?
   
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  rescue_from ActionController::ParameterMissing, with: :user_not_authorized
   
   helper_method :date_format
   def date_format

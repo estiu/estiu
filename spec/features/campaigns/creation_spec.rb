@@ -16,25 +16,34 @@ describe "Campaign creation", js: true do
     find('.ui-datepicker-next').click
   end
   
-  def fill_most
-    find('#campaign_name').set(campaign.name)
-    find('#campaign_description').set(campaign.description)
-    find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
-    find('#campaign_minimum_pledge_cents_facade').set(campaign.minimum_pledge_cents / 100)
+  def fill_starts_at
     find('#campaign_starts_at').click
     next_month
     any_day
   end
   
-  def the_last_field
-    'ends_at'
-  end
-  
-  def fill_last
-    find("#campaign_#{the_last_field}").click
+  def fill_ends_at
+    find("#campaign_ends_at").click
     next_month
     next_month
     any_day
+  end
+  
+  def fill_most
+    find('#campaign_name').set(campaign.name)
+    
+    find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
+    find('#campaign_minimum_pledge_cents_facade').set(campaign.minimum_pledge_cents / 100)
+    fill_starts_at
+    fill_ends_at
+  end
+  
+  def the_last_field
+    'description'
+  end
+  
+  def fill_last
+    find("#campaign_#{the_last_field}").set(campaign.description)
   end
   
   def the_action
@@ -72,7 +81,7 @@ describe "Campaign creation", js: true do
         Campaign.count
       }
       
-      expect(find(".help-block.#{the_last_field}-error")).to have_content("can't be blank")
+      expect(find(".help-block.#{the_last_field}-error.error-is-blank")).to have_content(t 'errors.messages.blank')
       
     end
     
