@@ -15,7 +15,7 @@ FG.define do
       end
     end
     
-    Roles.all.each do |_role|
+    Roles.with_associated_models.each do |_role|
       trait "#{_role}_role".to_sym do
         roles [_role]
         association _role
