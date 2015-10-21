@@ -81,7 +81,7 @@ class ApplicationController < ActionController::Base
   end
   
   def ensure_modern_browser
-    unless ci?
+    unless Rails.env.test?
       unless browser.modern?
         flash[:error] = t 'application.modern_browser_required'
         redirect_to page_path(id: 'home')
