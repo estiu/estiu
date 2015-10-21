@@ -9,6 +9,7 @@ class Campaign < ActiveRecord::Base
   extend ResettableDates
   
   belongs_to :event_promoter
+  belongs_to :venue
   has_and_belongs_to_many :attendees, join_table: :pledges
   has_many :pledges
   has_one :event

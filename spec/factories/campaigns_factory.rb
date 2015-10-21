@@ -3,6 +3,7 @@ FG.define do
   factory :campaign do
     
     association :event_promoter
+    association :venue
     name "Fund my party"
     description "I was thinking of throwing the perfect party, in a great open-air venue, at daytime, and with some of the latest and greatest DJs out there."
     starts_at { DateTime.now.beginning_of_day }

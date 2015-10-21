@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151012204939) do
+ActiveRecord::Schema.define(version: 20151021212141) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -76,9 +76,11 @@ ActiveRecord::Schema.define(version: 20151012204939) do
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "event_promoter_id",          null: false
+    t.integer  "venue_id",                   null: false
   end
 
   add_index "campaigns", ["event_promoter_id"], name: "index_campaigns_on_event_promoter_id", using: :btree
+  add_index "campaigns", ["venue_id"], name: "index_campaigns_on_venue_id", using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.string   "first_name"
@@ -87,8 +89,8 @@ ActiveRecord::Schema.define(version: 20151012204939) do
     t.string   "email"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.integer  "contactable_id"
-    t.string   "contactable_type"
+    t.integer  "contactable_id",   null: false
+    t.string   "contactable_type", null: false
   end
 
   add_index "contacts", ["contactable_type", "contactable_id"], name: "index_contacts_on_contactable_type_and_contactable_id", using: :btree
@@ -168,6 +170,7 @@ ActiveRecord::Schema.define(version: 20151012204939) do
     t.string   "name"
     t.string   "address"
     t.text     "description"
+    t.integer  "capacity"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -177,6 +180,7 @@ ActiveRecord::Schema.define(version: 20151012204939) do
   add_foreign_key "artists_events", "artists"
   add_foreign_key "artists_events", "events"
   add_foreign_key "campaigns", "event_promoters"
+  add_foreign_key "campaigns", "venues"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"
   add_foreign_key "pledges", "attendees"
