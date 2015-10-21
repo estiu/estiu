@@ -101,10 +101,10 @@ class Campaign < ActiveRecord::Base
       end
     end
     if (dev_or_test? ? !skip_past_date_validations : true)
-      if starts_at && starts_at.to_i - Time.zone.now.to_i < 0
+      if starts_at && starts_at.to_i - Time.zone.now.to_i < -60
         errors[:starts_at] << I18n.t('past_date')
       end
-      if ends_at && ends_at.to_i - Time.zone.now.to_i < 0
+      if ends_at && ends_at.to_i - Time.zone.now.to_i < -60
         errors[:ends_at] << I18n.t('past_date')
       end
     end
