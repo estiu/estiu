@@ -100,7 +100,7 @@ class Campaign < ActiveRecord::Base
         errors[:ends_at] << I18n.t('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
       end
     end
-    if ((Rails.env.test? || Rails.env.development?) ? !skip_past_date_validations : true)
+    if (dev_or_test? ? !skip_past_date_validations : true)
       if starts_at && starts_at.to_i - Time.zone.now.to_i < 0
         errors[:starts_at] << I18n.t('past_date')
       end
