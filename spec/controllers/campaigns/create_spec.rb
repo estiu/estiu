@@ -11,7 +11,7 @@ describe CampaignsController do
         v[:campaign][attr] = campaign.send attr
       end
       Campaign::DATE_ATTRS.each do |attr|
-        v[:campaign][attr] = campaign.send(attr).strftime(Date::DATE_FORMATS[:default])
+        v[:campaign][attr] = campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
       end
       v[:campaign].merge!({
         "starts_at(4i)" => "23",
@@ -33,7 +33,7 @@ describe CampaignsController do
           
         it 'creates a Campaign' do
           
-          expect(Campaign).to receive(:new).once.and_call_original
+          expect(Campaign).to receive(:new).exactly(2).times.and_call_original
           expect_any_instance_of(Campaign).to receive(:save).once.and_call_original
           expect{
             post :create, campaign_params

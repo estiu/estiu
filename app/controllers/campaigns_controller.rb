@@ -29,6 +29,7 @@ class CampaignsController < ApplicationController
   protected
 
   def campaign_attrs
+    authorize(Campaign.new) # ugly extra call to .authorize for keeping the tests happy
     Campaign::DATE_ATTRS.each{|attr| params.require(:campaign).require attr }
     v = params.permit(campaign: Campaign::CREATE_ATTRS)[:campaign]
     process_datetime_params v, Campaign::DATE_ATTRS
