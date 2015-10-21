@@ -24,7 +24,8 @@ module ApplicationHelper
   private
   
   def form_field form, key, locals={}
-    l = locals.merge(key: key, form: form, as: (locals[:as] || :text))
+    as = locals[:as] || ([:submit, :email, :password].include?(key) ? key : :text)
+    l = locals.merge(key: key, form: form, as: as)
     render 'fields/field', l.merge(locals: l)
   end
   

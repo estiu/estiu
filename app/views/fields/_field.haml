@@ -2,8 +2,9 @@
 - %i(autofocus value style).each do |key|
   - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
+- locals.merge!(required: true) if !locals[:optional] && %i(date text password currency email).include?(as) && !Rails.env.test? # not in test env, so one can test backend validation
+
 .form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
-  - inferred_type = [:submit, :email, :password].include? key
   - render_label = !([:submit].include? key) && !([:hidden].include? as)
   - caption = t("#{prefix}.#{key}", default: key.to_s)
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
@@ -14,9 +15,6 @@
     = form.label key, label_html
     - if locals[:optional]
       = t 'fields.optional'
-  - if inferred_type
-    = render "fields/#{key}", locals.merge(locals: locals)
-  - else
-    = render "fields/#{as}", locals.merge(locals: locals)
+  = render "fields/#{as}", locals.merge(locals: locals)
   - Array(form.object.errors[key]).each do |error|
     .help-block{class: "#{key}-error #{"error-is-blank" if error == t('errors.messages.blank')}"}= error

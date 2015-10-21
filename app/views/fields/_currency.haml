@@ -2,7 +2,7 @@
   %span.input-group-addon
     €
   - value = form.object.send(key)
-  - opts = html_opts.merge(class: "#{html_opts[:class]} currency", value: (value / 100.0 if value), required: !locals[:optional])
+  - opts = html_opts.merge(class: "#{html_opts[:class]} currency", value: (value / 100.0 if value))
   - %i(min max).each do |attr|
     - opts.merge!("data-#{attr}-value" => (locals[attr] / 100.0)) if locals[attr]
   = form.text_field "#{key}_facade".to_sym, opts
