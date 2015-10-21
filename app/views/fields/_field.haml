@@ -2,7 +2,7 @@
 - %i(autofocus value style).each do |key|
   - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
-- locals.merge!(required: true) if !locals[:optional] && %i(date text password currency email).include?(as) && !Rails.env.test? # not in test env, so one can test backend validation
+- locals[:html_opts].merge!(required: true) if !locals[:optional] && %i(date datetime text password currency email).include?(as) && !Rails.env.test? # not in test env, so one can test backend validation
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
   - render_label = !([:submit].include? key) && !([:hidden].include? as)
