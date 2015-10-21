@@ -20,6 +20,7 @@ gem 'devise', '~> 3.5.2'
 gem 'pundit', '~> 1.0.1'
 gem 'sidekiq', '~> 3.5.1'
 gem 'stripe', '~> 1.30.2'
+gem 'browser', '~> 1.0.1'
 
 group :development, :test do
   gem 'pry'

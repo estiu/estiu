@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   
   protect_from_forgery with: :exception
   
+  before_action :ensure_modern_browser
   after_action :verify_authorized, unless: :devise_controller?
   
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -79,6 +80,11 @@ class ApplicationController < ActionController::Base
     request.referrer || root_path
   end
   
-  private
+  def ensure_modern_browser
+    unless browser.modern?
+      flash[:error] = t 'application.modern_browser_required'
+      redirect_to page_path(id: 'home')
+    end
+  end
   
 end
