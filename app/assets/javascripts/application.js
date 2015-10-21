@@ -42,6 +42,10 @@ $(function(){
   $('.has-error :input').click(function(){
     $('.has-error').removeClass('has-error')
   })
+  $('.noinput').
+    keydown(function(e) { e.preventDefault() } ).
+    bind("paste", function(e) { e.preventDefault() } ).
+    focus(function(){ $(this).blur() })
 })
 
 var set_flash_messages = function(response){
