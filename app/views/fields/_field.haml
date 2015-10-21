@@ -18,3 +18,4 @@
   = render "fields/#{as}", locals.merge(locals: locals)
   - Array(form.object.errors[key]).each do |error|
     .help-block{class: "#{key}-error #{"error-is-blank" if error == t('errors.messages.blank')}"}= error
+  = locals[:after]

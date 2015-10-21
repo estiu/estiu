@@ -55,6 +55,13 @@ en:
         recommended_pledge_cents: Recommended pledge
         minimum_pledge_cents: Minimum pledge
         submit: "Create"
+  venues:
+    create:
+      error: "Couldn't create venue."
+    form:
+      id: "Which:"
+      title: Venue
+      other: Other venue
   pledges:
     create:
       error: "Sorry, there has been an error while creating your order. You have not been charged."

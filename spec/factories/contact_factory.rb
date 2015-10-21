@@ -7,6 +7,12 @@ FG.define do
     phone "609929302"
     email "foo@bar.com"
     
+    after(:build) do |rec, eva|
+      unless rec.contactable
+        rec.contactable = FG.build :event_promoter, contacts: [rec]
+      end
+    end
+    
   end
   
 end

@@ -2,8 +2,14 @@ class Venue < ActiveRecord::Base
   
   has_many :events
   
-  %i(name address description capacity).each do |attr|
+  CREATE_ATTRS = %i(name address description capacity)
+  
+  CREATE_ATTRS.each do |attr|
     validates attr, presence: true
+  end
+  
+  def self.for_select
+    pluck :name, :id
   end
   
 end

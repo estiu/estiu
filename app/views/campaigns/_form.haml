@@ -2,6 +2,7 @@
   .col-xs-12.col-sm-8.col-md-6.col-lg-4
     = form_for(campaign, class: 'form-horizontal') do |f|
       = form_fields(f, 'campaigns.form') do |field|
+        = field.(:venue_id, as: :select, values: Venue.for_select, after: link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-primary btn-xs'))
         = field.(:name)
         = field.(:description, as: :textarea)
         = field.(:goal_cents, as: :currency, min: Campaign::MINIMUM_GOAL_AMOUNT, max: Campaign::MAXIMUM_GOAL_AMOUNT)
