@@ -45,7 +45,7 @@ en:
       item:
         title: "Campaign: %{campaign}"
         starts_at: Starts at
-        ends_at: Ends at
+        ends_at: Campaign closes
         venue: Venue
       show:
         title: '%{pledged} pledged'
@@ -86,7 +86,7 @@ en:
       why_pay_more: Why pay more?
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
       why_pay_more_popover_2: Paying more will not give you more tickets in any case.
-      amount_cents: "You will contribute:"
+      amount_cents: "You will pay:"
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
       payment_description: Pay to support this campaign

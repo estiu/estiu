@@ -6,12 +6,8 @@
 %p.bordered.p10= campaign.description
 
 .campaign-venue
-  %strong= t '.venue'
+  %strong= t('.venue') + ':'
   = campaign.venue.name
 
-%strong= t '.starts_at'
-= campaign.starts_at
-%span.light-grey
-  |
-%strong= t '.ends_at'
-= campaign.ends_at
+%strong= t('.ends_at') + ':'
+= l campaign.ends_at, format: :long
