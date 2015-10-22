@@ -11,3 +11,10 @@
 
 %strong= t('.ends_at') + ':'
 = l campaign.ends_at, format: :long
+
+%h3#campaign_pledged_title= t 'campaigns.show.title', pledged: campaign.pledged.format
+.row
+  .col-xs-8.bordered-right.left-column
+    = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
+  .col-xs-4.right-column
+    = progress_bar 100, t('campaigns.show.goal', goal: campaign.goal.format), :danger
