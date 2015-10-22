@@ -3,7 +3,7 @@
 - else
   %h1= t '.title', campaign: campaign.name
 
-%p.bordered.p10= campaign.description
+%p.p10{class: "#{'bordered' unless listing}"}= campaign.description
 
 .campaign-venue
   %strong= t('.venue') + ':'
