@@ -15,6 +15,27 @@ FG.define do
       rec.minimum_pledge_cents = (rec.goal_cents / rec.venue.capacity).ceil
     end
     
+    trait :pledged do
+      
+      goal_cents {
+        max = Campaign::MINIMUM_GOAL_AMOUNT + 100_00
+        Random.rand(Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT
+      }
+      
+      after(:create) do |rec, eva|
+        
+        fail unless rec.active?
+        
+        until rec.fulfilled?
+          
+          rec.pledges << FG.create(:pledge, campaign: rec)
+          
+        end
+      
+      end
+      
+    end
+    
   end
   
 end
