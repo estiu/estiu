@@ -43,7 +43,11 @@ class Campaign < ActiveRecord::Base
   end
   
   def percent_pledged
-    (pledged_cents.to_f / goal_cents.to_f * 100).round 2
+    if fulfilled?
+      100 # no decimal places
+    else
+      (pledged_cents.to_f / goal_cents.to_f * 100).round 2
+    end
   end
   
   def pledged_cents
