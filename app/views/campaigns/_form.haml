@@ -7,7 +7,7 @@
         .row
           .col-xs-6
             = field.(:venue_id, as: :select, values: Venue.for_select)
-          .col-xs-6
+          .col-xs-6.right
             = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-primary btn-xs')
         = field.(:name)
         = field.(:description, as: :textarea)
@@ -22,4 +22,6 @@
             = field.(:starts_at, as: :datetime)
           .col-xs-6
             = field.(:ends_at, as: :datetime)
-        = field.(:submit)
+        %hr
+        .right
+          = field.(:submit)
