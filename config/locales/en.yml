@@ -70,6 +70,9 @@ en:
       title: Venue
       other: Other venue
   pledges:
+    errors:
+      amount_cents:
+        minimum_pledge: You must pledge at least %{amount}.
     create:
       error: "Sorry, there has been an error while creating your order. You have not been charged."
     update:

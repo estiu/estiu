@@ -13,6 +13,8 @@ class Pledge < ActiveRecord::Base
   validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
   validates :stripe_charge_id, presence: true, if: :id
   
+  validate :minimum_pledge
+  
   default_scope { where.not(stripe_charge_id: nil) }
   
   def self.charge_description_for campaign
@@ -30,7 +32,7 @@ class Pledge < ActiveRecord::Base
       source: token,
       description: self.class.charge_description_for(campaign)
     )
-    # passed this point, the .charge call did't raise anything, that means the charge itself succeeded.
+    # past this point, the .charge call did't raise anything, that means the charge itself succeeded.
     self.stripe_charge_id = charge.id
     saved = self.save
     Rails.logger.info "Successfully charged a pledge. Charge id: #{charge.id}"
@@ -42,6 +44,12 @@ class Pledge < ActiveRecord::Base
     Rails.logger.error e.class
     Rails.logger.error e
     return false
+  end
+  
+  def minimum_pledge
+    if amount_cents < campaign.minimum_pledge_cents
+      errors[:amount_cents] << I18n.t("pledges.errors.amount_cents.minimum_pledge", amount: campaign.minimum_pledge.format)
+    end
   end
   
 end
