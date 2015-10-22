@@ -1,4 +1,6 @@
 en:
+  errors:
+    format: "%{message}"
   money_range: "Must be between %{min} and %{max}"
   past_date: Cannot be in the past
   application:
@@ -72,7 +74,7 @@ en:
   pledges:
     errors:
       amount_cents:
-        minimum_pledge: You must pledge at least %{amount}.
+        minimum_pledge: You must contribute at least %{amount}.
     create:
       error: "Sorry, there has been an error while creating your order. You have not been charged."
     update:

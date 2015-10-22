@@ -9,7 +9,7 @@ class PledgesController < ApplicationController
     if @pledge.save
       render json: {id: @pledge.id}
     else
-      flash.now[:error] = t '.error'
+      flash.now[:error] = @pledge.errors.full_messages
       render json: flash_json, status: 422
     end
   end
