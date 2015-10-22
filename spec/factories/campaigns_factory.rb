@@ -36,6 +36,25 @@ FG.define do
       
     end
     
+    trait :almost_fulfilled do
+      
+      goal_cents {
+        max = Campaign::MINIMUM_GOAL_AMOUNT + 100_00
+        Random.rand(Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT
+      }
+      
+      after(:create) do |rec, eva|
+        
+        fail unless rec.active?
+        
+        ((rec.goal_cents.to_f / rec.minimum_pledge_cents.to_f).floor - 1).times {
+          rec.pledges << FG.create(:pledge, campaign: rec)
+        }
+        
+      end
+      
+    end
+    
   end
   
 end

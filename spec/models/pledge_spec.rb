@@ -18,4 +18,51 @@ describe Pledge do
     
   end
   
+  describe '#maybe_mark_campaign_as_fulfilled' do
+    
+    def the_test negative=false
+      expect {
+        subject.save
+      }.send((negative ? :to_not : :to), change {
+        campaign.reload.fulfilled_at
+      })
+    end
+
+    context 'non-fulfilled campaign' do
+      
+      let(:campaign) { FG.create :campaign }
+      
+      subject{ FG.build(:pledge, campaign: campaign) }
+      
+      before {
+        expect(campaign.fulfilled?).to be false
+      }
+      
+      it "does not result in capaign.fulfilled_at being set" do
+        the_test :negative
+      end
+      
+    end
+    
+    context 'almost fulfilled campaign' do
+      
+      let(:campaign) { FG.create :campaign, :almost_fulfilled }
+      
+      subject{ FG.build(:pledge, campaign: campaign) }
+      
+      before {
+        expect(campaign.fulfilled?).to be false
+        threshold = campaign.goal_cents - campaign.minimum_pledge_cents
+        expect(campaign.pledged_cents).to be < threshold
+        expect(campaign.pledged_cents + subject.amount_cents).to be >= threshold
+      }
+      
+      it "results in capaign.fulfilled_at being set" do
+        the_test
+      end
+      
+    end
+    
+  end
+  
 end

@@ -17,6 +17,8 @@ class Pledge < ActiveRecord::Base
   
   default_scope { where.not(stripe_charge_id: nil) }
   
+  around_save :maybe_mark_campaign_as_fulfilled
+  
   def self.charge_description_for campaign
     "Pledge for campaign #{campaign.id}"
   end
@@ -50,6 +52,11 @@ class Pledge < ActiveRecord::Base
     if amount_cents < campaign.minimum_pledge_cents
       errors[:amount_cents] << I18n.t("pledges.errors.amount_cents.minimum_pledge", amount: campaign.minimum_pledge.format)
     end
+  end
+  
+  def maybe_mark_campaign_as_fulfilled
+    yield
+    campaign.maybe_mark_as_fulfilled
   end
   
 end
