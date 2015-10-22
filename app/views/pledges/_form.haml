@@ -1,13 +1,17 @@
 %hr
   .text-center.top10
     - if current_attendee.pledged?(campaign)
-      = render 'pledges/contributed', campaign: campaign
+      - contributed = current_user.attendee.pledged_for(campaign).format
+      %strong= t 'pledges.form.contributed', contributed: contributed
     - else
-      = render 'layouts/stripe_checkout_form',
-        campaign: campaign,
-        action: pledges_path(campaign.id),
-        amount_cents: campaign.minimum_pledge_cents,
-        title: campaign.name,
-        description: t('.payment_description'),
-        email: current_user.email,
-        image_path: nil
+      - if campaign.fulfilled?
+        %strong= t 'pledges.form.fulfilled'
+      - else
+        = render 'layouts/stripe_checkout_form',
+          campaign: campaign,
+          action: pledges_path(campaign.id),
+          amount_cents: campaign.minimum_pledge_cents,
+          title: campaign.name,
+          description: t('.payment_description'),
+          email: current_user.email,
+          image_path: nil

@@ -87,6 +87,7 @@ en:
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
       why_pay_more_popover_2: Paying more will not give you more tickets in any case.
       amount_cents: "You will pay:"
+      fulfilled: "You are viewing a closed campaign, which you didn't participate in. You cannot buy tickets for it anymore."
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
       payment_description: Pay to support this campaign
