@@ -7,7 +7,17 @@
   - if user_signed_in?
     - if current_user.attendee?
       = render 'pledges/form', campaign: @campaign
-  - else  
-    = link_to t('.sign_up'),
+  - else
+    - the_link = link_to t(@campaign.closed? ? '.sign_up_for_closed' : '.sign_up'),
       attendees_sign_up_path(user: {attendee_attributes: {entity_type_shown_at_signup: 'campaign', entity_id_shown_at_signup: @campaign.id}}),
       class: 'btn btn-success', id: 'sign-up-from-campaign'
+    - if @campaign.closed?
+      .alert.alert-info.p10
+        %small
+          %p= t '.closed_sign_up'
+          %p
+            %strong
+              =t '.closed_sign_up_2'
+          = the_link
+    - else 
+      = the_link

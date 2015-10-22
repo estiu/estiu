@@ -65,6 +65,10 @@ class Campaign < ActiveRecord::Base
     goal_cents - pledged_cents < minimum_pledge_cents
   end
   
+  def closed?
+    fulfilled? || !active?
+  end
+  
   def maximum_pledge_cents
     [remaining_amount_cents, Pledge::MAXIMUM_PLEDGE_AMOUNT].min
   end

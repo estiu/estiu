@@ -51,7 +51,10 @@ en:
         title: '%{pledged} paid'
         percent: "%{percent}% reached"
         goal: "Goal: %{goal}"
+        closed_sign_up: "You are viewing a closed campaign, you cannot participate in it anymore."
+        closed_sign_up_2: "Sign up for attending newer events!"
         sign_up: "Sign up for joining this event"
+        sign_up_for_closed: "Sign up"
       create:
         success: "Succesfully created campaign."
         error: "Couldn't create campaign due to the indicated errors."
@@ -87,7 +90,7 @@ en:
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
       why_pay_more_popover_2: Paying more will not give you more tickets in any case.
       amount_cents: "You will pay:"
-      fulfilled: "You are viewing a closed campaign, which you didn't participate in. You cannot buy tickets for it anymore."
+      closed: "You are viewing a closed campaign, which you didn't participate in. You cannot buy tickets for it anymore."
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
       payment_description: Pay to support this campaign

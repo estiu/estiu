@@ -4,8 +4,8 @@
       - contributed = current_user.attendee.pledged_for(campaign).format
       %strong= t 'pledges.form.contributed', contributed: contributed
     - else
-      - if campaign.fulfilled?
-        %strong= t 'pledges.form.fulfilled'
+      - if campaign.closed?
+        %strong= t 'pledges.form.closed'
       - else
         = render 'layouts/stripe_checkout_form',
           campaign: campaign,
