@@ -1,4 +1,5 @@
 Rails.application.configure do
+  config.action_controller.default_url_options[:trailing_slash] = true 
   config.cache_classes = false
   config.eager_load = false
   config.consider_all_requests_local = true
