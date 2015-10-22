@@ -34,6 +34,8 @@ en:
         submit: Log in
   campaigns:
       errors:
+        minimum_pledge_cents:
+          venue: You must set at least %{value}.
         starts_at:
           ends_at: Must be prior to Ends at
         ends_at:
@@ -57,6 +59,7 @@ en:
         recommended_pledge: Recommended minimum pledge
         recommended_pledge_cents: Recommended pledge
         minimum_pledge_cents: Minimum pledge
+        minimum_pledge_cents_short: Minimum pledge
         submit: "Create"
   venues:
     create:

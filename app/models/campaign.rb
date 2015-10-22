@@ -30,6 +30,7 @@ class Campaign < ActiveRecord::Base
   }
   
   monetize :pledged_cents
+  monetize :estimated_minimum_pledge_cents
   
   BASIC_ATTRS.each do |attr|
     validates attr, presence: true
@@ -38,6 +39,7 @@ class Campaign < ActiveRecord::Base
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
   
   validate :valid_date_fields
+  validate :minimum_pledge_according_to_venue, on: :create
   
   before_validation :assign_recommended_pledge_cents
   
@@ -98,6 +100,18 @@ class Campaign < ActiveRecord::Base
       end
       if ends_at && ends_at.to_i - Time.zone.now.to_i < -60
         errors[:ends_at] << I18n.t('past_date')
+      end
+    end
+  end
+  
+  def estimated_minimum_pledge_cents
+    goal_cents / venue.capacity
+  end
+  
+  def minimum_pledge_according_to_venue
+    if minimum_pledge_cents && goal_cents && venue
+      if minimum_pledge_cents < estimated_minimum_pledge_cents
+        errors[:minimum_pledge_cents] << I18n.t("campaigns.errors.minimum_pledge_cents.venue", value: estimated_minimum_pledge.format)
       end
     end
   end
