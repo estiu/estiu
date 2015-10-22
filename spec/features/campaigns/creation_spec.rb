@@ -2,7 +2,7 @@ describe "Campaign creation", js: true do
   
   sign_as :event_promoter, :feature
   
-  let(:campaign){ FG.build :campaign }
+  let!(:campaign){ FG.create :campaign }
   
   before{
     FG.create :venue
@@ -36,8 +36,8 @@ describe "Campaign creation", js: true do
   def fill_most
     find('#campaign_name').set(campaign.name)
     find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
-    find('#campaign_minimum_pledge_cents_facade').set(campaign.minimum_pledge_cents / 100)
-    find('#campaign_venue_id').all('option')[1].select_option
+    find('#campaign_minimum_pledge_cents_facade').send_keys("#{campaign.minimum_pledge.format(symbol: false)}")
+    find('#campaign_venue_id').find("option[value='#{campaign.venue.id}']").select_option
     fill_starts_at
     fill_ends_at
   end

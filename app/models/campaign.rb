@@ -4,7 +4,7 @@ class Campaign < ActiveRecord::Base
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
   BASIC_ATTRS = %i(name) + DATE_ATTRS
-  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :recommended_pledge_cents, :minimum_pledge_cents, :venue_id]
+  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :venue_id]
   
   extend ResettableDates
   
@@ -18,11 +18,6 @@ class Campaign < ActiveRecord::Base
     greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT,
     less_than: MAXIMUM_GOAL_AMOUNT,
     message: I18n.t("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format)
-  }
-  
-  monetize :recommended_pledge_cents, subunit_numericality: {
-    allow_nil: true,
-    less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
   }
   
   monetize :minimum_pledge_cents, subunit_numericality: {
@@ -40,8 +35,6 @@ class Campaign < ActiveRecord::Base
   
   validate :valid_date_fields
   validate :minimum_pledge_according_to_venue, on: :create
-  
-  before_validation :assign_recommended_pledge_cents
   
   attr_accessor :goal_cents_facade
   
@@ -66,14 +59,6 @@ class Campaign < ActiveRecord::Base
   
   def fulfilled?
     goal_cents - pledged_cents < minimum_pledge_cents
-  end
-  
-  def recommended_pledge_cents
-    attributes['recommended_pledge_cents'] || minimum_pledge_cents
-  end
-  
-  def assign_recommended_pledge_cents # workaround RubyMoney issue which I wasn't able to reproduce in isolation.
-    self.recommended_pledge_cents = self.recommended_pledge_cents
   end
   
   def maximum_pledge_cents

@@ -54,7 +54,7 @@ describe 'Pledge creation' do
       }
           
       before {
-        Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.recommended_pledge_cents, stripe_charge_id: SecureRandom.hex)
+        Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.minimum_pledge_cents, stripe_charge_id: SecureRandom.hex)
         visit campaign_path(campaign)
       }
 
