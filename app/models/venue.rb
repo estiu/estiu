@@ -12,4 +12,8 @@ class Venue < ActiveRecord::Base
     pluck :name, :id
   end
   
+  def self.venue_capacities
+    Hash[(pluck :id, :capacity)]
+  end
+  
 end

@@ -51,8 +51,10 @@ en:
         success: "Succesfully created campaign."
         error: "Couldn't create campaign due to the indicated errors."
       form:
+        venue_capacity: 'Capacity'
         title: New campaign
         goal_cents: Campaign Goal
+        recommended_pledge: Recommended minimum pledge
         recommended_pledge_cents: Recommended pledge
         minimum_pledge_cents: Minimum pledge
         submit: "Create"
