@@ -4,10 +4,9 @@
   
   %h3#campaign_pledged_title= t '.title', pledged: @campaign.pledged.format
   .row
-    - padding = "5px"
-    .col-xs-8.bordered-right{style: "padding-right: #{padding}"}
+    .col-xs-8.bordered-right.left-column
       = progress_bar @campaign.percent_pledged, t('.percent', percent: @campaign.percent_pledged), nil, 'campaign-progress-bar'
-    .col-xs-4{style: "padding-left: #{padding}"}
+    .col-xs-4.right-column
       = progress_bar 100, t('.goal', goal: @campaign.goal.format), :danger
   
   .top10
