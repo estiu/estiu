@@ -56,6 +56,9 @@
     var caption = money + " / " + capacity + " = " + result
     $('#recommended-pledge-indicator').html(caption)
   }
+  $('#campaign_goal_cents_facade').keyup(update_recommended_pledge)
+  $('#campaign_goal_cents_facade').keypress(update_recommended_pledge)
   $('#campaign_goal_cents_facade').keydown(update_recommended_pledge)
+  $('#campaign_goal_cents_facade').change(update_recommended_pledge)
   $('#campaign_venue_id').change(update_recommended_pledge)
   update_recommended_pledge()
