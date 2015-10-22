@@ -10,6 +10,15 @@
           label_html: {class: 'mr10'})
   .col-xs-6{style: 'text-align: left'}
     %button#do-pledge.btn.btn-success{style: 'min-width: 140px; margin-top: 0'}= t 'pledges.form.buy'
+.row.top20
+  .col-xs-6.right
+    .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
+  .col-xs-6.left
+    .small
+      - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
+      %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
+        = t 'pledges.form.why_pay_more'
+        
 
 %script{src: 'https://checkout.stripe.com/checkout.js'}
 

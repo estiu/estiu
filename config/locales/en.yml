@@ -82,6 +82,10 @@ en:
       success: "You have succesfully pledged for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge."
     form:
+      can_pay_more: "You can pay the minimum for a ticket (%{price}) or more."
+      why_pay_more: Why pay more?
+      why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
+      why_pay_more_popover_2: Paying more will not give you more tickets in any case.
       amount_cents: "You will contribute:"
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
