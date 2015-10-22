@@ -29,7 +29,6 @@ class Campaign < ActiveRecord::Base
     less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
   }
   
-  monetize :recommended_recommended_pledge_cents
   monetize :pledged_cents
   
   BASIC_ATTRS.each do |attr|
@@ -71,15 +70,7 @@ class Campaign < ActiveRecord::Base
     attributes['recommended_pledge_cents'] || minimum_pledge_cents
   end
   
-  def recommended_recommended_pledge_cents # the recommended value (to promoters) for them to recommend to attendees.
-    (goal_cents / [estimated_minimum_pledges, pledges.count].max) if goal_cents
-  end
-  
-  def estimated_minimum_pledges # this field meaning has to be refined
-    200
-  end
-  
-  def assign_recommended_pledge_cents # workaround RubyMoney issue which sadly I wasn't able to reproduce in isolation.
+  def assign_recommended_pledge_cents # workaround RubyMoney issue which I wasn't able to reproduce in isolation.
     self.recommended_pledge_cents = self.recommended_pledge_cents
   end
   
