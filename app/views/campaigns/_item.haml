@@ -5,6 +5,10 @@
 
 %p.bordered.p10= campaign.description
 
+.campaign-venue
+  %strong= t '.venue'
+  = campaign.venue.name
+
 %strong= t '.starts_at'
 = campaign.starts_at
 %span.light-grey

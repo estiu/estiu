@@ -46,6 +46,7 @@ en:
         title: "Campaign: %{campaign}"
         starts_at: Starts at
         ends_at: Ends at
+        venue: Venue
       show:
         title: '%{pledged} pledged'
         percent: "%{percent}% pledged"
