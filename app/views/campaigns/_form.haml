@@ -1,13 +1,25 @@
 .row
-  .col-xs-12.col-sm-8.col-md-6.col-lg-4
+  .col-xs-12.col-sm-8.col-sm-offset-2.col-md-6.col-md-offset-3.col-lg-4.col-lg-offset-4.bordered
+    %h2= t '.title'
+    %hr
     = form_for(campaign, class: 'form-horizontal') do |f|
       = form_fields(f, 'campaigns.form') do |field|
-        = field.(:venue_id, as: :select, values: Venue.for_select, after: link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-primary btn-xs'))
+        .row
+          .col-xs-6
+            = field.(:venue_id, as: :select, values: Venue.for_select)
+          .col-xs-6
+            = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-primary btn-xs')
         = field.(:name)
         = field.(:description, as: :textarea)
         = field.(:goal_cents, as: :currency, min: Campaign::MINIMUM_GOAL_AMOUNT, max: Campaign::MAXIMUM_GOAL_AMOUNT)
-        = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
-        = field.(:recommended_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT, optional: true)
-        = field.(:starts_at, as: :datetime)
-        = field.(:ends_at, as: :datetime)
+        .row
+          .col-xs-6
+            = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
+          .col-xs-6
+            = field.(:recommended_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT, optional: true)
+        .row
+          .col-xs-6
+            = field.(:starts_at, as: :datetime)
+          .col-xs-6
+            = field.(:ends_at, as: :datetime)
         = field.(:submit)
