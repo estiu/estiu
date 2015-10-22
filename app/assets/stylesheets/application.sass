@@ -5,6 +5,8 @@
 @import "bootstrap-sprockets"
 @import "bootstrap"
 
+$black: rgb(51, 51, 51)
+
 html
   position: relative
   min-height: 100%
@@ -43,6 +45,13 @@ ul
   &:hover
     text-decoration: none
     color: black
+
+h1, h2, h3, h4, h5
+  a
+    color: $black
+    &:hover
+      text-decoration: none
+      color: $black
 
 .inline
   display: inline !important

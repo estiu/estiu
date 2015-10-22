@@ -12,7 +12,12 @@
 %strong= t('.ends_at') + ':'
 = l campaign.ends_at, format: :long
 
-%h3#campaign_pledged_title= t 'campaigns.show.title', pledged: campaign.pledged.format
+- campaign_pledged_title = t 'campaigns.show.title', pledged: campaign.pledged.format
+- if listing
+  %h3
+    = link_to campaign_pledged_title, campaign
+- else
+  %h3#campaign_pledged_title= campaign_pledged_title
 .row
   .col-xs-8.bordered-right.left-column
     = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
