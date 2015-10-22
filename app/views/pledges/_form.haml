@@ -1,8 +1,7 @@
 %hr
   .text-center.top10
     - if current_attendee.pledged?(campaign)
-      - contributed = current_user.attendee.pledged_for(campaign).format
-      %strong= t 'pledges.form.contributed', contributed: contributed
+      = render 'pledges/contributed', campaign: campaign
     - else
       - if campaign.closed?
         %strong= t 'pledges.form.closed'
