@@ -38,6 +38,7 @@ $(function(){
     var cents = parent.find('.cents')
     var val = Number($(this).autoNumeric('get')) * 100
     cents.val(val)
+    $(this).trigger('cents_field_updated')
   })
   $('.has-error :input').click(function(){
     $('.has-error').removeClass('has-error')

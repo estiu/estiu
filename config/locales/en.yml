@@ -54,6 +54,7 @@ en:
         error: "Couldn't create campaign due to the indicated errors."
       form:
         venue_capacity: 'Capacity'
+        maximum_attendance: "Maximum attendance"
         title: New campaign
         goal_cents: Campaign Goal
         recommended_pledge: Recommended minimum pledge
