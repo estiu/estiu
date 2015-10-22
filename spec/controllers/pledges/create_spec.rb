@@ -49,7 +49,7 @@ describe PledgesController do
         
         sign_as(->(*_){ 
           FG.create(:user, :attendee_role, attendee:
-            FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents)]))
+            FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents, stripe_charge_id: nil)]))
         }, false, :user)
         
         before {
