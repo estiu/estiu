@@ -48,8 +48,8 @@ en:
         ends_at: Campaign closes
         venue: Venue
       show:
-        title: '%{pledged} pledged'
-        percent: "%{percent}% pledged"
+        title: '%{pledged} paid'
+        percent: "%{percent}% reached"
         goal: "Goal: %{goal}"
         sign_up: "Sign up for joining this event"
       create:
@@ -79,7 +79,7 @@ en:
     create:
       error: "Sorry, there has been an error while creating your order. You have not been charged."
     update:
-      success: "You have succesfully pledged for this campaign. Thank you!"
+      success: "You have succesfully paid for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge."
     form:
       can_pay_more: "You can pay the minimum for a ticket (%{price}) or more."
