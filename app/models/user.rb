@@ -27,7 +27,7 @@ class User < ActiveRecord::Base
   end
   
   Roles.with_associated_models.each do |role|
-    belongs_to role.to_sym
+    belongs_to role.to_sym, inverse_of: :user
     validates_associated role.to_sym, if: ->(record){ record.send("#{role}?") }
     accepts_nested_attributes_for role.to_sym
     define_singleton_method "#{role}s" do
@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
   def no_unrelated_objects
     Roles.with_associated_models.each do |role|
       if self.send(role) && !self.send("#{role}?")
-        errors[role] << "Unrelated object #{role} associated with user with different role (#{self.role})"
+        errors[role] << "Unrelated object #{role} associated with user with different role (#{self.send(role)})"
       end
     end
   end
