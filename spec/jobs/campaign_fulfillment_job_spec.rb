@@ -1,6 +1,6 @@
 describe CampaignFulfillmentJob do
   
-  let(:campaign) { FG.create :campaign, :pledged }
+  let(:campaign) { FG.create :campaign, :fulfilled }
   
   it 'works' do
     expect(CampaignFulfillment::AttendeeMailer).to receive(:perform).at_least(campaign.pledges.count).times.and_call_original
