@@ -11,6 +11,10 @@ FG.define do
       
       after(:build) do |rec, eva|
         
+        unless rec.user
+          rec.user = FG.build :user, artist: rec, roles: [:artist]
+        end
+
         rec.events << FactoryGirl.build(:event, artists: [rec])
         
       end

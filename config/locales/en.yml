@@ -1,4 +1,22 @@
+mailers_common: &mailers_common
+  campaign_fulfillment:
+    attendee_mailer:
+      perform:
+        subject: "The campaign you have supported has completed its goal!"
+        p1: The campaign you have supported has completed its goal.
+        p2: Now the promoter will create an event which you and the other attendees will have exclusive access to (no tickets are on sale now)
+        p3: You will be notified of the date by email. You can also access localhost for checking any notifications.
+    event_promoter_mailer:
+      perform:
+        subject: "Your campaign has reached its goal!"
+        p1: Your campaign has reached its goal.
+        p2: You must now proceed to create the actual event with a specific date, and send us a copy of the contracts you've signed with the venue, artists, providers and so on.
+        p3: Please contact us for withdrawing the collected funds.
+
 en:
+  mailers:
+    <<: *mailers_common
+  <<: *mailers_common
   errors:
     format: "%{message}"
   money_range: "Must be between %{min} and %{max}"

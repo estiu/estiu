@@ -8,6 +8,10 @@ FG.define do
     
     after(:build) do |rec, eva|
       
+      unless rec.user
+        rec.user = FG.build :user, artist_promoter: rec, roles: [:artist_promoter]
+      end
+
       if rec.contacts.size.zero?
         
         rec.contacts << FG.build(:contact)

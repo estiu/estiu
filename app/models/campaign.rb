@@ -35,8 +35,11 @@ class Campaign < ActiveRecord::Base
   
   validate :valid_date_fields
   validate :minimum_pledge_according_to_venue, on: :create
+  validate :fulfilled_at_truthful
   
   attr_accessor :goal_cents_facade
+  
+  after_commit :send_fulfillment_emails
   
   def self.minimum_active_hours
     1
@@ -120,6 +123,19 @@ class Campaign < ActiveRecord::Base
       self.save
     end
     
+  end
+  
+  def send_fulfillment_emails
+    change = previous_changes[:fulfilled_at]
+    if change && change[0].nil? && change[1].present?
+      CampaignFulfillmentJob.perform_later(self)
+    end
+  end
+  
+  def fulfilled_at_truthful
+    if fulfilled_at && !fulfilled?
+      errors[:fulfilled_at] << "Cannot be set if the campaign isn't actually fulfilled."
+    end
   end
   
 end

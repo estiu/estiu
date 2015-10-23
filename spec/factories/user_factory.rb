@@ -2,7 +2,7 @@ FG.define do
   
   factory :user do
     
-    email { "#{SecureRandom.hex 6}@#{SecureRandom.hex 6}.com" }
+    email { "#{SecureRandom.hex(16)}@mailinator.com" } # mail can be actually checked at mailinator.com.
     password { SecureRandom.hex }
     confirmed_at { DateTime.now }
     
@@ -12,7 +12,7 @@ FG.define do
     after(:build) do |rec, eva|
       rec.roles.each do |role|
         if Roles.with_associated_models.include? role
-          rec.send("#{role}=", FG.build(role.to_sym)) unless rec.send(role)
+          rec.send("#{role}=", FG.build(role.to_sym, user: rec)) unless rec.send(role)
         end
       end
     end

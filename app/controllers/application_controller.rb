@@ -41,12 +41,14 @@ class ApplicationController < ActionController::Base
     hash
   end
   
-  def user_not_authorized *_
+  def user_not_authorized *e
+    logger.info e if dev_or_test?
     flash[:alert] = t('application.forbidden')
     handle_unauthorized
   end
   
-  def param_required *_
+  def param_required *e
+    logger.info e if dev_or_test?
     flash[:alert] = t('application.param_required')
     handle_unauthorized
   end

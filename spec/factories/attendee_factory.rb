@@ -5,6 +5,14 @@ FG.define do
     first_name { SecureRandom.hex(12) }
     last_name { SecureRandom.hex(12) }
     
+    after(:build) do |rec, eva|
+      
+      unless rec.user
+        rec.user = FG.build :user, attendee: rec, roles: [:attendee]
+      end
+      
+    end
+    
     trait :with_tickets do
       
       after(:build) do |rec, eva|
