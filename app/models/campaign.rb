@@ -73,7 +73,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def maximum_pledge_cents
-    [remaining_amount_cents, Pledge::MAXIMUM_PLEDGE_AMOUNT].min
+    Pledge::MAXIMUM_PLEDGE_AMOUNT
   end
   
   def remaining_amount_cents
