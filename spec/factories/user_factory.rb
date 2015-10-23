@@ -20,14 +20,6 @@ FG.define do
     Roles.all.each do |_role|
       trait "#{_role}_role".to_sym do
         roles [_role]
-        if Roles.with_associated_models.include? _role
-          association _role.to_sym
-          after(:build) do |rec, eva|
-            unless _role == default_role
-              rec.send("#{default_role}_id=", nil)
-            end
-          end
-        end
       end
     end
     
