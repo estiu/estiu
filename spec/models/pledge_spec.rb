@@ -20,12 +20,20 @@ describe Pledge do
   
   describe '#maybe_mark_campaign_as_fulfilled' do
     
+    before {
+      expect(campaign).to receive(:maybe_mark_as_fulfilled).and_call_original
+    }
+    
     def the_test negative=false
+      
       expect {
         subject.save
       }.send((negative ? :to_not : :to), change {
         campaign.reload.fulfilled_at
       })
+      
+      expect(campaign.fulfilled_at.present?).to be !negative
+      
     end
 
     context 'non-fulfilled campaign' do

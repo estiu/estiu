@@ -52,4 +52,23 @@ describe Campaign do
     
   end
   
+  describe '#send_fulfillment_emails', truncate: true do
+    
+    subject { FG.create :campaign, :almost_fulfilled }
+    
+    def fulfill
+      expect {
+        Pledge.create!(campaign: subject, attendee: FG.create(:attendee), amount_cents: subject.minimum_pledge_cents, stripe_charge_id: SecureRandom.hex)
+      }.to change {
+        subject.reload.fulfilled?
+      }.from(false).to(true)
+    end
+    
+    it 'works' do
+      expect(CampaignFulfillmentJob).to receive(:perform_later).with(subject.id).once
+      fulfill
+    end
+    
+  end
+  
 end

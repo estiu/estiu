@@ -128,7 +128,7 @@ class Campaign < ActiveRecord::Base
   def send_fulfillment_emails
     change = previous_changes[:fulfilled_at]
     if change && change[0].nil? && change[1].present?
-      CampaignFulfillmentJob.perform_later(self)
+      CampaignFulfillmentJob.perform_later(self.id)
     end
   end
   
