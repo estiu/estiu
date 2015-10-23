@@ -14,6 +14,7 @@ module Events
     
     config.active_job.queue_adapter = :sidekiq
     config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+    config.action_mailer.preview_path = "#{Rails.root}/app/mailer_previews"
     
   end
 end
