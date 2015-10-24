@@ -13,3 +13,9 @@
         = field.(:password)
         = field.(:password_confirmation, as: :password)
         = field.(:submit)
+    %hr
+      %h4.bottom0= t '.maybe_fb'
+      .bottom10
+        %small= t '.maybe_fb_expl'
+      = facebook_connect
+      .bottom20

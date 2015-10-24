@@ -29,6 +29,10 @@ module ApplicationHelper
     "col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3"
   end
   
+  def facebook_connect login=false
+    render 'layouts/facebook_connect', login: login
+  end
+  
   private
   
   def form_field form, key, locals={}
