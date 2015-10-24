@@ -139,12 +139,12 @@ ActiveRecord::Schema.define(version: 20151024021236) do
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                         default: "", null: false
+    t.string   "encrypted_password",            default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          default: 0,  null: false
+    t.integer  "sign_in_count",                 default: 0,  null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
@@ -153,22 +153,22 @@ ActiveRecord::Schema.define(version: 20151024021236) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
-    t.string   "roles",                  default: [],              array: true
+    t.datetime "created_at",                                 null: false
+    t.datetime "updated_at",                                 null: false
+    t.string   "roles",                         default: [],              array: true
     t.integer  "artist_id"
     t.integer  "artist_promoter_id"
     t.integer  "event_promoter_id"
     t.integer  "attendee_id"
-    t.string   "provider"
-    t.string   "uid"
+    t.string   "facebook_user_id"
+    t.boolean  "signed_up_via_facebook"
+    t.string   "facebook_access_token"
+    t.datetime "facebook_access_token_expires"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["provider"], name: "index_users_on_provider", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["uid"], name: "index_users_on_uid", using: :btree
 
   create_table "venues", force: :cascade do |t|
     t.string   "name"

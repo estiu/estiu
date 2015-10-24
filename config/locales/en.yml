@@ -30,6 +30,11 @@ en:
     optional: Optional
   devise:
     registrations:
+      edit:
+        title: Update account data
+        password: New password
+        password_confirmation: Confirm your new password
+        submit: Update
       new:
         title: Sign up
         submit: "Sign up"

@@ -16,6 +16,6 @@ Devise.setup do |config|
     Rails.application.secrets.facebook_app_id,
     Rails.application.secrets.facebook_app_secret,
     scope: 'email',
-    info_fields: 'email, name',
+    info_fields: 'email, first_name, last_name',
     display: :page)
 end
