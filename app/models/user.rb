@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   
   devise :database_authenticatable, :recoverable, :rememberable, :trackable, :validatable, :confirmable, :registerable
+  devise :omniauthable, omniauth_providers: [:facebook]
   
   belongs_to :event_promoter
   
