@@ -10,16 +10,6 @@ class Attendee < ActiveRecord::Base
     validates attr, presence: true
   end
   
-  validates :entity_type_shown_at_signup, inclusion: {in: %w(event campaign), allow_blank: true}
-  
-  def after_sign_up_path
-    if entity_type_shown_at_signup && entity_id_shown_at_signup
-      Rails.application.routes.url_helpers.send("#{entity_type_shown_at_signup}_path", entity_id_shown_at_signup)
-    else
-      Rails.application.routes.url_helpers.root_path
-    end
-  end
-  
   def pledged? campaign
     campaign.pledges.pluck(:attendee_id).include? self.id
   end

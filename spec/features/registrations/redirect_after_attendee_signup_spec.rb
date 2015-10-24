@@ -23,29 +23,12 @@ describe "Attendee registration after viewing a particular campaign" do
       Attendee.count
     }.by(1)
     
-    expect(User.last.attendee.entity_type_shown_at_signup).to eq 'campaign'
-    expect(User.last.attendee.entity_id_shown_at_signup).to eq campaign.id
-    
     expect(current_path).to eq expected_final_path
   
   end
   
   it 'redirects to the viewed campaign after signup' do
     the_test  
-  end
-  
-  context 'causality' do
-    
-    let(:expected_final_path){
-      root_path
-    }
-    
-    before { allow(Causality).to receive(:checking?).exactly(1).times.with('RegistrationsController#attendee_common_path').and_return(true) }
-    
-    it 'relates' do
-      the_test
-    end
-    
   end
   
 end

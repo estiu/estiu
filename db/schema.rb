@@ -58,10 +58,8 @@ ActiveRecord::Schema.define(version: 20151024021236) do
   create_table "attendees", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
-    t.string   "entity_type_shown_at_signup"
-    t.integer  "entity_id_shown_at_signup"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "campaigns", force: :cascade do |t|

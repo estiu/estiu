@@ -9,9 +9,7 @@
       = render 'pledges/form', campaign: @campaign
   - else
     %hr 
-    - the_link = link_to t(@campaign.closed? ? '.sign_up_for_closed' : '.sign_up'),
-      attendees_sign_up_path(user: {attendee_attributes: {entity_type_shown_at_signup: 'campaign', entity_id_shown_at_signup: @campaign.id}}),
-      class: 'btn btn-success', id: 'sign-up-from-campaign'
+    - the_link = link_to t(@campaign.closed? ? '.sign_up_for_closed' : '.sign_up'), attendees_sign_up_path, class: 'btn btn-success', id: 'sign-up-from-campaign'
     - if @campaign.closed?
       .alert.alert-info.p10
         %small
