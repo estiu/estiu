@@ -12,6 +12,7 @@ Devise.setup do |config|
   config.reset_password_within = 6.hours
   config.sign_out_via = :get
   config.secret_key = Rails.application.secrets.devise_secret_key
+  config.remember_for = 6.weeks 
   config.omniauth(:facebook,
     Rails.application.secrets.facebook_app_id,
     Rails.application.secrets.facebook_app_secret,
