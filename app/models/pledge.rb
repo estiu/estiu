@@ -1,5 +1,6 @@
 class Pledge < ActiveRecord::Base
   
+  STRIPE_MINIMUM_PAYMENT = 50
   MAXIMUM_PLEDGE_AMOUNT = 10_000_00 # KYC
   STRIPE_EUR = 'eur'
   

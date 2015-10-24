@@ -21,6 +21,7 @@ class Campaign < ActiveRecord::Base
   }
   
   monetize :minimum_pledge_cents, subunit_numericality: {
+    more_than: Pledge::STRIPE_MINIMUM_PAYMENT,
     less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
   }
   
