@@ -48,11 +48,13 @@ FG.define do
         
         fail unless rec.active?
         pledge_count = 5
-        amount_cents = ((rec.goal_cents.to_f - rec.minimum_pledge_cents) / pledge_count.to_f).floor
+        amount_cents = ((rec.goal_cents - rec.minimum_pledge_cents - 1).to_f / pledge_count.to_f).floor
         
         pledge_count.times {
           rec.pledges << FG.create(:pledge, campaign: rec, amount_cents: amount_cents)
         }
+        
+        fail if rec.fulfilled?
         
       end
       
