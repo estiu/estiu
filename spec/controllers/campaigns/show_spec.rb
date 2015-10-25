@@ -43,7 +43,8 @@ describe CampaignsController do
       context 'when the attendee created a non-charged pledge' do
         
         before {
-          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.minimum_pledge_cents, stripe_charge_id: nil)
+          cents = campaign.minimum_pledge_cents
+          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: nil)
         }
         
         it 'renders payment_form' do
@@ -56,7 +57,8 @@ describe CampaignsController do
       context 'when the attendee has already pledged' do
         
         before {
-          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.minimum_pledge_cents, stripe_charge_id: SecureRandom.hex)
+          cents = campaign.minimum_pledge_cents
+          Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: SecureRandom.hex)
         }
 
         it 'is not possible to pledge again' do

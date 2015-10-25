@@ -96,4 +96,10 @@ module SpecHelpers
     expect(errors.size).to be 0
   end
   
+  def accept_dialog expected_text=false
+    a = page.driver.browser.switch_to.alert
+    expect(a.text).to eq expected_text if expected_text
+    a.accept # or a.dismiss
+  end
+  
 end

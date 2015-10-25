@@ -17,11 +17,6 @@ FG.define do
     
     trait :fulfilled do
       
-      goal_cents {
-        max = Campaign::MINIMUM_GOAL_AMOUNT + 100_00
-        Random.rand(Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT
-      }
-      
       after(:create) do |rec, eva|
         
         fail unless rec.active?
@@ -38,11 +33,6 @@ FG.define do
     end
     
     trait :almost_fulfilled do
-      
-      goal_cents {
-        max = Campaign::MINIMUM_GOAL_AMOUNT + 100_00
-        Random.rand(Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT
-      }
       
       after(:create) do |rec, eva|
         

@@ -58,7 +58,8 @@ describe Campaign do
     
     def fulfill
       expect {
-        Pledge.create!(campaign: subject, attendee: FG.create(:attendee), amount_cents: subject.minimum_pledge_cents, stripe_charge_id: SecureRandom.hex)
+        cents = subject.minimum_pledge_cents
+        Pledge.create!(campaign: subject, attendee: FG.create(:attendee), amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: SecureRandom.hex)
       }.to change {
         subject.reload.fulfilled?
       }.from(false).to(true)

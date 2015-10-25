@@ -55,7 +55,7 @@ en:
     <<: *mailers_common
   <<: *mailers_common
   errors:
-    email_format: "The given email has not an email format."
+    email_format: "The given email doesn't have email format."
     format: "%{message}"
   money_range: "Must be between %{min} and %{max}"
   past_date: Cannot be in the past
@@ -110,6 +110,7 @@ en:
       title: Venue
       other: Other venue
   pledges:
+    discounted_message: "You have been discounted %{discount}!"
     errors:
       referral_email:
         no_user: "No user with that email has paid for this event."
@@ -125,7 +126,7 @@ en:
       why_pay_more: Why pay more?
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
       why_pay_more_popover_2: Paying more will not give you more tickets in any case.
-      amount_cents: "You will pay:"
+      originally_pledged_cents: "You will pay:"
       referral_email: "If someone invited you, put his email here:"
       referral_email_popover: "You can do this in order to get a discount for you, and your friend."
       referral_email_popover_2: "Your friend must already have paid for his ticket. Else, don't fill this field."

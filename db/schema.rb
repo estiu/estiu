@@ -115,13 +115,15 @@ ActiveRecord::Schema.define(version: 20151024021236) do
   add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
 
   create_table "pledges", force: :cascade do |t|
-    t.integer  "attendee_id",      null: false
-    t.integer  "campaign_id",      null: false
+    t.integer  "attendee_id",                          null: false
+    t.integer  "campaign_id",                          null: false
     t.integer  "amount_cents"
+    t.integer  "discount_cents",           default: 0
+    t.integer  "originally_pledged_cents"
     t.string   "stripe_charge_id"
     t.string   "referral_email"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
   end
 
   add_index "pledges", ["attendee_id"], name: "index_pledges_on_attendee_id", using: :btree

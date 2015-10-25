@@ -38,7 +38,7 @@ describe PledgesController, retry: 0 do
         sign_as :attendee
         
         let(:pledge) {
-          Pledge.create!(campaign: campaign, attendee: attendee.attendee, amount_cents: amount_cents)
+          Pledge.create!(campaign: campaign, attendee: attendee.attendee, amount_cents: amount_cents, originally_pledged_cents: amount_cents)
         }
         
         let(:charge){

@@ -6,14 +6,14 @@ describe PledgesController do
       FG.create :campaign
     }
     
-    let(:amount_cents){
+    let(:originally_pledged_cents){
       campaign.minimum_pledge_cents
     }
     
     let(:campaign_params){
       {
         id: campaign.id,
-        pledge: {amount_cents: amount_cents},
+        pledge: {originally_pledged_cents: originally_pledged_cents},
       }
     }
     
@@ -49,7 +49,7 @@ describe PledgesController do
         
         sign_as(->(*_){ 
           FG.create(:user, :attendee_role, attendee:
-            FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents, stripe_charge_id: nil)]))
+            FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: originally_pledged_cents, stripe_charge_id: nil)]))
         }, false, :user)
         
         before {
@@ -70,7 +70,7 @@ describe PledgesController do
       context 'attendee which has been charged already for a pledge to this campaign' do
         
         sign_as(->(*_){ 
-          FG.create(:user, :attendee_role, attendee: FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents, stripe_charge_id: SecureRandom.hex)]))
+          FG.create(:user, :attendee_role, attendee: FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: originally_pledged_cents, stripe_charge_id: SecureRandom.hex)]))
         }, false, :user)
         
         before {

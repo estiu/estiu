@@ -16,16 +16,13 @@ describe 'Pledge creation' do
         double(id: SecureRandom.hex)
       }
       
-      before {
-        expect(Stripe::Charge).to receive(:create).once.with(any_args).and_return(charge)
-        expect(charge).to receive(:id).exactly(2).times
-      }
-      
-      def the_action submit_only=false
+      def the_action submit_only=false, confirm_dialog=false
         
         find('#do-pledge').click
         
         return if submit_only
+        
+        accept_dialog if confirm_dialog
         
         within_frame 'stripe_checkout_app' do
           4.times { find('#card_number').send_keys "4242" } # In test mode, the 4242 4242 4242 4242 card is always valid for Stripe.
@@ -39,27 +36,57 @@ describe 'Pledge creation' do
         
       end
       
-      it 'is possible to create a charge through the Stripe Checkout form' do
-        expect {
-          the_action
-        }.to change {
-          campaign.pledges.count
-        }.by(1)
-        expect(Pledge.last.referral_email.present?).to be false
+      def charge_expectations negative=false
+        if negative
+          expect(Stripe::Charge).to_not receive(:create)
+          expect(charge).to_not receive(:id)
+        else
+          expect(Stripe::Charge).to receive(:create).once.with(any_args).and_return(charge)
+          expect(charge).to receive(:id).exactly(2).times
+        end
+      end
+      
+      context 'no referral_email passed' do
+        
+        before {
+          charge_expectations
+        }
+        
+        it 'is possible to create a charge through the Stripe Checkout form' do
+          expect {
+            the_action
+          }.to change {
+            campaign.pledges.count
+          }.by(1)
+          expect(Pledge.last.referral_email.present?).to be false
+        end
+        
       end
       
       context 'referral_email' do
         
         let(:campaign){ FG.create :campaign, :almost_fulfilled }
         let(:email){ campaign.attendees.first.user.email }
-
-        it 'works' do
-          find('#pledge_referral_email').set email
-          the_action
-          expect(Pledge.last.referral_email).to eq email
+        
+        context 'success' do
+          
+          before {
+            charge_expectations
+          }
+          
+          it 'works' do
+            find('#pledge_referral_email').set email
+            the_action false, :confirm_dialog
+            expect(Pledge.last.referral_email).to eq email
+          end
+          
         end
         
         context 'unrelated email' do
+          
+          before {
+            charge_expectations :negative
+          }
           
           let(:email) { "#{SecureRandom.hex}@#{SecureRandom.hex}.com" }
           
@@ -86,7 +113,8 @@ describe 'Pledge creation' do
       }
           
       before {
-        Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.minimum_pledge_cents, stripe_charge_id: SecureRandom.hex)
+        cents = campaign.minimum_pledge_cents
+        Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: SecureRandom.hex)
         visit campaign_path(campaign)
       }
 

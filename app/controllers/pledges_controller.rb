@@ -6,8 +6,12 @@ class PledgesController < ApplicationController
   before_action :load_pledge, only: [:update]
   
   def create
+    @pledge.calculate_total!
     if @pledge.save
-      render json: {id: @pledge.id}
+      render json: {
+        id: @pledge.id,
+        amount_cents: @pledge.amount_cents,
+        discounted_message: @pledge.discounted_message}
     else
       flash.now[:error] = @pledge.errors.full_messages
       render json: flash_json, status: 422
@@ -37,7 +41,7 @@ class PledgesController < ApplicationController
     @pledge = Pledge.new(
       campaign: @campaign,
       attendee: current_attendee,
-      amount_cents: params.require(:pledge).require(:amount_cents),
+      originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
       referral_email: params.require(:pledge)[:referral_email])
     authorize @pledge
   end
