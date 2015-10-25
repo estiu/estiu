@@ -15,7 +15,7 @@ describe CampaignsController do
   end
   
   def stripe_expectation(negative=false)
-    expect(response).send((negative ? :to_not : :to), render_template(partial: 'layouts/_stripe_checkout_form'))
+    expect(response).send((negative ? :to_not : :to), render_template(partial: 'pledges/_payment_form'))
   end
   
   describe '#show' do
@@ -35,7 +35,7 @@ describe CampaignsController do
       
       sign_as :attendee
       
-      it 'renders stripe_checkout_form' do
+      it 'renders payment_form' do
         the_action
         stripe_expectation
       end
@@ -46,7 +46,7 @@ describe CampaignsController do
           Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: campaign.minimum_pledge_cents, stripe_charge_id: nil)
         }
         
-        it 'renders stripe_checkout_form' do
+        it 'renders payment_form' do
           the_action
           stripe_expectation
         end

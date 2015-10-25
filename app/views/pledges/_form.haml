@@ -6,7 +6,7 @@
       - if campaign.closed?
         %strong= t 'pledges.form.closed'
       - else
-        = render 'layouts/stripe_checkout_form',
+        = render 'pledges/payment_form',
           campaign: campaign,
           action: pledges_path(campaign.id),
           amount_cents: campaign.minimum_pledge_cents,
