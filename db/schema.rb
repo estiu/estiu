@@ -117,9 +117,9 @@ ActiveRecord::Schema.define(version: 20151024021236) do
   create_table "pledges", force: :cascade do |t|
     t.integer  "attendee_id",                          null: false
     t.integer  "campaign_id",                          null: false
-    t.integer  "amount_cents"
+    t.integer  "amount_cents",                         null: false
     t.integer  "discount_cents",           default: 0
-    t.integer  "originally_pledged_cents"
+    t.integer  "originally_pledged_cents",             null: false
     t.string   "stripe_charge_id"
     t.string   "referral_email"
     t.datetime "created_at",                           null: false
