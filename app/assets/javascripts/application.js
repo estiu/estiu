@@ -48,7 +48,7 @@ $(function(){
     keydown(function(e) { e.preventDefault() } ).
     bind("paste", function(e) { e.preventDefault() } ).
     focus(function(){ $(this).blur() })
-  $('[data-toggle="popover"]').popover({trigger: 'hover click', placement: 'bottom'})
+  $('[data-toggle="popover"]').popover({trigger: 'hover click', placement: 'bottom', delay: 200})
 })
 
 var set_flash_messages = function(response){
