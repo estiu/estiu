@@ -45,7 +45,8 @@ RSpec.configure do |config|
     Warden.test_mode!
   end
 
-  config.after(:each) do
+  config.after(:each) do |example|
+    assert_js_ok if example.metadata[:js] 
     DatabaseCleaner.clean
     Warden.test_reset!
   end

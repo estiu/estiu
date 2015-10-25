@@ -1,6 +1,13 @@
 !!!
 %html
   %head
+    - if dev_or_test?
+      :javascript
+        window.errors = []
+        window.onerror = function(a, b, c){
+          window.errors.push([a, b, c]);
+          return false; // false: don't swallow exceptions.
+        }
     %title Crowdfunded events
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
     = stylesheet_link_tag 'application', media: 'all'

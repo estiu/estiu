@@ -5,8 +5,8 @@ module SpecHelpers
     expect(response.body).to be_present
   end
 
-  def page_ok status=200
-    expect(page.status_code).to be status
+  def page_ok status=200, feature=false
+    expect(page.status_code).to be status unless feature
     expect(page.html).to be_present
   end
 
@@ -84,6 +84,16 @@ module SpecHelpers
   
   def sop
     save_and_open_page
+  end
+  
+  def assert_js_ok
+    errors = evaluate_script("window.errors")
+    expect(errors).to be_kind_of(Array)
+    errors.reject!{|a, b, c|
+      # a == "TypeError: e is undefined" # unrelated jQuery error
+    }
+    expect(errors).to eq []
+    expect(errors.size).to be 0
   end
   
 end

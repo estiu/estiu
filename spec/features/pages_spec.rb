@@ -1,17 +1,21 @@
-describe 'pages smoke spec' do
+[true, false].each do |js|
   
-  after {
-    page_ok
-  }
-  
-  HighVoltage.page_ids.each do |page_id|
+  describe "Basic correctness (pages are served without errors) (js: #{js})", js: js do
     
-    describe "page: #{page_id}" do
+    after do
+      page_ok 200, js
+    end
+    
+    HighVoltage.page_ids.each do |page_id|
       
-      it 'loads correctly' do
+      describe "page: #{page_id}" do
         
-        visit page_path(page_id)
+        it 'loads correctly' do
+          
+          visit page_path(page_id)
 
+        end
+        
       end
       
     end
