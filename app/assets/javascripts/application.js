@@ -15,6 +15,7 @@
 //= require jquery-ui/datepicker
 //= require bootstrap
 //= require autonumeric-min
+//= require underscore-min
 //= require_tree .
 
 $(function(){
@@ -51,5 +52,6 @@ $(function(){
 })
 
 var set_flash_messages = function(response){
-  $('#all-flash-messages').html(response.responseJSON['flash_content'])
+  var content = response ? response.responseJSON['flash_content'] : ""
+  $('#all-flash-messages').html(content)
 }

@@ -82,6 +82,10 @@ class Campaign < ActiveRecord::Base
     v < 0 ? 0 : v # should never be < 0, but better safe than sorry
   end
   
+  def user_email_pledged? email
+    Campaign.joins(attendees: :user).where.not(pledges: {stripe_charge_id: nil}).where(users: {email: email}, campaigns: {id: id}).any?
+  end
+  
   def valid_date_fields
     if starts_at && ends_at
       if starts_at > ends_at

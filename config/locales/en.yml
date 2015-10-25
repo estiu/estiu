@@ -55,6 +55,7 @@ en:
     <<: *mailers_common
   <<: *mailers_common
   errors:
+    email_format: "The given email has not an email format."
     format: "%{message}"
   money_range: "Must be between %{min} and %{max}"
   past_date: Cannot be in the past
@@ -110,6 +111,8 @@ en:
       other: Other venue
   pledges:
     errors:
+      referral_email:
+        no_user: "No user with that email has paid for this event."
       amount_cents:
         minimum_pledge: You must contribute at least %{amount}.
     create:
@@ -123,6 +126,9 @@ en:
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
       why_pay_more_popover_2: Paying more will not give you more tickets in any case.
       amount_cents: "You will pay:"
+      referral_email: "If someone invited you, put his email here:"
+      referral_email_popover: "You can do this in order to get a discount for you, and your friend."
+      referral_email_popover_2: "Your friend must already have paid for his ticket. Else, don't fill this field."
       closed: "You are viewing a closed campaign, which you didn't participate in. You cannot buy tickets for it anymore."
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"

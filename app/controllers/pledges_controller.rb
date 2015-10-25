@@ -34,7 +34,11 @@ class PledgesController < ApplicationController
   end
   
   def new_pledge
-    @pledge = Pledge.new(campaign: @campaign, attendee: current_attendee, amount_cents: params.require(:pledge).require(:amount_cents))
+    @pledge = Pledge.new(
+      campaign: @campaign,
+      attendee: current_attendee,
+      amount_cents: params.require(:pledge).require(:amount_cents),
+      referral_email: params.require(:pledge)[:referral_email])
     authorize @pledge
   end
   

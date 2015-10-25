@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 20151024021236) do
     t.integer  "campaign_id",      null: false
     t.integer  "amount_cents"
     t.string   "stripe_charge_id"
+    t.string   "referral_email"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end

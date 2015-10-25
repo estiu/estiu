@@ -4,16 +4,21 @@
 
 - locals[:html_opts].merge!(required: true) if !locals[:optional] && %i(date datetime text password currency email).include?(as) && !Rails.env.test? # not in test env, so one can test backend validation
 
-.form-group{class: "#{"has-error" if form.object.errors[key].present?}"}
+.form-group{class: "#{"has-error" if form.object.errors[key].present?} #{locals[:form_group_class]}"}
   - render_label = !([:submit].include? key) && !([:hidden].include? as)
   - caption = t("#{prefix}.#{key}", default: key.to_s)
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
-  - if render_label
+  - if render_label && !locals[:only_input]
     - label_html = locals.fetch(:label_html, {})
     - label_html[:class] = "#{label_html[:class]} control-label"
     - label_html[:value] = caption
+    - if locals[:popover]
+      - label_html.merge!('data-toggle' => 'popover',
+        'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
+        'data-html' => locals[:popover].keys.include?(:html).to_s)
     = form.label key, label_html
-  = render "fields/#{as}", locals.merge(locals: locals)
+  - unless locals[:only_label]
+    = render "fields/#{as}", locals.merge(locals: locals)
   - if render_label && locals[:optional]
     %span.optional= t 'fields.optional'
   - Array(form.object.errors[key]).each do |error|

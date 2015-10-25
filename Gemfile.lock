@@ -301,6 +301,8 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.1)
+    validates_formatting_of (0.9.0)
+      activemodel
     warden (1.2.3)
       rack (>= 1.0)
     webmock (1.22.1)
@@ -348,6 +350,7 @@ DEPENDENCIES
   sidekiq (~> 3.5)
   stripe (~> 1)
   uglifier (~> 2.7)
+  validates_formatting_of (~> 0.9)
   webmock (~> 1.21)
 
 BUNDLED WITH

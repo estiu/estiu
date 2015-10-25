@@ -14,7 +14,10 @@ class Pledge < ActiveRecord::Base
   validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
   validates :stripe_charge_id, presence: true, if: :id
   
+  validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t('errors.email_format')
+  
   validate :minimum_pledge
+  validate :truthful_referral_email
   
   default_scope { where.not(stripe_charge_id: nil) }
   
@@ -58,6 +61,14 @@ class Pledge < ActiveRecord::Base
   def maybe_mark_campaign_as_fulfilled
     yield
     campaign.maybe_mark_as_fulfilled
+  end
+  
+  def truthful_referral_email
+    if referral_email.present? && errors[:referral_email].blank? # avoid query for non-emails
+      unless campaign.user_email_pledged? referral_email
+        errors[:referral_email] << I18n.t("pledges.errors.referral_email.no_user")
+      end
+    end
   end
   
 end

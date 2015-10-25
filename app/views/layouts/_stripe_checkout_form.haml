@@ -1,24 +1,38 @@
-.row#pledge-contribution
-  .col-xs-8.left-column
-    = form_for Pledge.new(amount_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right'} do |form|
-      = form_fields(form, 'pledges.form') do |field|
+= form_for Pledge.new(amount_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right'} do |form|
+  = form_fields(form, 'pledges.form') do |field|
+    .row.bottom10
+      .col-xs-8.left-column
+        - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} <small>"
+        = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
+      .col-xs-4.right-column.left
+        = field.(:referral_email, as: :email, only_input: true, form_group_class: 'full', html_class: 'full')
+    .row#pledge-contribution
+      .col-xs-8.left-column
         = field.(:amount_cents,
           as: :currency,
+          only_label: true,
+          label_html: {class: 'mr10'})
+      .col-xs-4.right-column.left
+        = field.(:amount_cents,
+          as: :currency,
+          only_input: true,
           min: campaign.minimum_pledge_cents,
           max: campaign.maximum_pledge_cents,
-          style: "width: 80px",
-          label_html: {class: 'mr10'})
-  .col-xs-4.right-column{style: 'text-align: left'}
-    %button#do-pledge.btn.btn-success{style: 'min-width: 140px; margin-top: 0'}= t 'pledges.form.buy'
-.row.top10#pay-more-contribution
-  .col-xs-8.right.left-column
-    .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
-  .col-xs-4.left.right-column
-    .small
-      - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
-      %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
-        = t 'pledges.form.why_pay_more'
-        
+          style: "width: 80px")
+    .row.top10#pay-more-contribution
+      .col-xs-8.right.left-column
+        .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
+      .col-xs-4.left.right-column
+        .small
+          - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
+          %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
+            = t 'pledges.form.why_pay_more'
+    .row
+      .col-xs-offset-8.col-xs-4.right-column.left
+        %hr.top10.bottom15
+    .row
+      .col-xs-offset-8.col-xs-4.right-column.left
+        %button#do-pledge.btn.btn-success.full{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
 
 %script{src: 'https://checkout.stripe.com/checkout.js'}
 
@@ -52,11 +66,15 @@
   });
   
   var create_pledge_object = function(success){
-    var amount_cents = $('#pledge_amount_cents').val()
-    var request = $.ajax("#{action}", {method: 'POST', data: {pledge: {amount_cents: amount_cents}}})
+    var pledge_data = {}
+    _.each(['amount_cents', 'referral_email'], function(attr){
+      pledge_data[attr] = $('#pledge_' + attr).val()
+    })
+    var request = $.ajax("#{action}", {method: 'POST', data: {pledge: pledge_data}})
     request.done(function(response){
       pledge_id = response['id']
-      success(amount_cents)
+      set_flash_messages(null)
+      success(pledge_data['amount_cents'])
     })
     request.fail(function(response){
       set_flash_messages(response)
