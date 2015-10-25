@@ -21,9 +21,11 @@ describe 'Pledge creation' do
         expect(charge).to receive(:id).exactly(2).times
       }
       
-      def the_action
+      def the_action submit_only=false
         
         find('#do-pledge').click
+        
+        return if submit_only
         
         within_frame 'stripe_checkout_app' do
           4.times { find('#card_number').send_keys "4242" } # In test mode, the 4242 4242 4242 4242 card is always valid for Stripe.
@@ -43,6 +45,36 @@ describe 'Pledge creation' do
         }.to change {
           campaign.pledges.count
         }.by(1)
+        expect(Pledge.last.referral_email.present?).to be false
+      end
+      
+      context 'referral_email' do
+        
+        let(:campaign){ FG.create :campaign, :almost_fulfilled }
+        let(:email){ campaign.attendees.first.user.email }
+
+        it 'works' do
+          find('#pledge_referral_email').set email
+          the_action
+          expect(Pledge.last.referral_email).to eq email
+        end
+        
+        context 'unrelated email' do
+          
+          let(:email) { "#{SecureRandom.hex}@#{SecureRandom.hex}.com" }
+          
+          it 'fails' do
+            find('#pledge_referral_email').set email
+            expect {
+              the_action :submit_only
+            }.to_not change {
+              campaign.pledges.count
+            }
+            expect(page).to have_content t('pledges.errors.referral_email.no_user')
+          end
+          
+        end
+        
       end
       
     end
