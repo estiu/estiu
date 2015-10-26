@@ -34,6 +34,9 @@ set :log_level, :info
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+set :bundle_flags, '--deployment' # remove --quiet flag
+set :rbenv_ruby, '2.2.3'
+
 namespace :deploy do
 
   after :restart, :clear_cache do
