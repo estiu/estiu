@@ -34,7 +34,12 @@ set :log_level, :info
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
-set :bundle_flags, '--deployment' # remove --quiet flag
+# remove --quiet flag, replace it for --verbose. Doesn't seem to work. Whatever.
+# remove --deployment flag, so system gems (fetched with Packer) are used instead of installed again.
+# This allows instantiating production-ready images real quick.
+set :bundle_flags, '--verbose'
+set :bundle_path, nil # use system gems
+
 set :rbenv_ruby, '2.2.3'
 
 namespace :deploy do
