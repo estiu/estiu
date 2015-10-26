@@ -27,7 +27,8 @@ gem 'omniauth-facebook', github: 'gioblu/omniauth-facebook', ref: 'eff97bfae32f7
 gem 'validates_formatting_of', '~> 0.9'
 gem 'capistrano', '~> 3.4'
 gem 'capistrano-bundler', '~> 1.1'
-gem 'capistrano-rbenv', '~> 2.0'
+gem 'capistrano-rbenv', '~> 2'
+gem 'capistrano-copy-files', '~> 0'
 gem 'dotenv-rails', '~> 2'
 
 group :development, :test do
