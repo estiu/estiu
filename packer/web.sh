@@ -1,5 +1,5 @@
 #!/bin/bash -x
-# packer build -var "aws_access_key=$AWS_ACCESS_KEY" -var "aws_secret_key=$AWS_SECRET_KEY" web.json
+# packer build -var "aws_access_key=$AWS_ACCESS_KEY" -var "aws_secret_key=$AWS_SECRET_KEY" -var "repo_source=$(echo ~/events)" web.json
 
 sleep 30
 cd
@@ -13,3 +13,5 @@ source ~/.profile
 rbenv install 2.2.3
 rbenv global 2.2.3
 gem install bundler
+cd ~/events_clone_for_bundling
+bundle --without development test
