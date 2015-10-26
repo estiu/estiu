@@ -19,3 +19,4 @@
 causality_testing.haml
 .env
 dump.rdb
+.env.production

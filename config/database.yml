@@ -13,3 +13,6 @@ test:
 production:
   <<: *default
   database: events_production
+  host: <%= ENV['POSTGRESQL_USERNAME'] %>
+  username: <%= ENV['POSTGRESQL_USERNAME'] %>
+  password: <%= ENV['POSTGRESQL_PASSWORD'] %>

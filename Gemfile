@@ -28,13 +28,13 @@ gem 'validates_formatting_of', '~> 0.9'
 gem 'capistrano', '~> 3.4'
 gem 'capistrano-bundler', '~> 1.1'
 gem 'capistrano-rbenv', '~> 2.0'
+gem 'dotenv-rails', '~> 2'
 
 group :development, :test do
   gem 'pry'
   gem 'pry-rails'
   gem 'awesome_print'
   gem 'quiet_assets'
-  gem 'dotenv-rails', '~> 2'
 end
 
 group :development do
