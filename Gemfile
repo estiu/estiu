@@ -6,6 +6,7 @@ ruby "2.2.3"
 
 gem 'rails', '4.2.4'
 gem 'pg', '~> 0.18'
+gem 'therubyracer', '~> 0.12'
 gem 'sass-rails', '~> 5'
 gem 'uglifier', '~> 2.7'
 gem 'jquery-rails', '~> 4'
