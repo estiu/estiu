@@ -15,3 +15,5 @@ rbenv global 2.2.3
 gem install bundler
 cd ~/events_clone_for_bundling
 bundle --without development test
+cd
+rm -rf ~/events_clone_for_bundling # don't leave the source code in the image until it's deployed. Gives additional security.
