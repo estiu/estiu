@@ -45,6 +45,7 @@ namespace :deploy do
       [".env", ".env.#{fetch(:stage)}"].each do |f|
          upload! f, capture("echo -n #{release_path}")
       end
+      execute "echo #{fetch(:stage)} > #{release_path}/RAILS_ENV"
     end
   end
   
