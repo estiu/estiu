@@ -24,6 +24,7 @@ gem 'browser', '~> 1'
 gem 'omniauth', '~> 1.2'
 gem 'omniauth-facebook', github: 'gioblu/omniauth-facebook', ref: 'eff97bfae32f72821cbccf0b48b78351e41eb585'
 gem 'validates_formatting_of', '~> 0.9'
+gem 'capistrano', '~> 3.4'
 
 group :development, :test do
   gem 'pry'
