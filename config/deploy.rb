@@ -13,7 +13,7 @@ set :deploy_to, '~/events'
 # Default value for :format is :pretty
 # set :format, :pretty
 
-set :log_level, :debug
+set :log_level, :info
 
 # Default value for :pty is false
 # set :pty, true
@@ -40,6 +40,14 @@ set :rbenv_ruby, '2.2.3'
 
 namespace :deploy do
 
+  after :updated, :copy_secrets do
+    on roles(:web) do
+      [".env", ".env.#{fetch(:stage)}"].each do |f|
+         upload! f, capture("echo -n #{release_path}")
+      end
+    end
+  end
+  
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
