@@ -38,6 +38,10 @@ set :bundle_path, nil # use system gems
 
 set :rbenv_ruby, '2.2.3'
 
+set :migration_role, :web
+set :keep_assets, 2
+set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
+
 namespace :deploy do
 
   after :updated, :copy_secrets do
