@@ -20,3 +20,6 @@ causality_testing.haml
 .env
 dump.rdb
 .env.production
+shared/log/unicorn.stderr.log
+shared/log/unicorn.stdout.log
+shared/pids/unicorn.pid

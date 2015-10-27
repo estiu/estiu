@@ -29,6 +29,7 @@ gem 'capistrano', '~> 3.4'
 gem 'capistrano-bundler', '~> 1.1'
 gem 'capistrano-rbenv', '~> 2'
 gem 'dotenv-rails', '~> 2'
+gem 'unicorn', '~> 4.9'
 
 group :development, :test do
   gem 'pry'
