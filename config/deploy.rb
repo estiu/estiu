@@ -44,7 +44,7 @@ set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', '
 
 namespace :deploy do
 
-  after :updated, :copy_secrets do
+  before :updated, :copy_secrets do
     on roles(:web) do
       [".env", ".env.#{fetch(:stage)}"].each do |f|
          upload! f, capture("echo -n #{release_path}")
