@@ -43,7 +43,13 @@ set :keep_assets, 2
 set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')
 
 namespace :deploy do
-
+  
+  before :updating, :ensure_unicorn_dirs do
+    on roles(:web) do
+      execute "mkdir -p #{shared_path}/{tmp,pids}"
+    end
+  end
+  
   before :updated, :copy_secrets do
     on roles(:web) do
       [".env", ".env.#{fetch(:stage)}"].each do |f|
