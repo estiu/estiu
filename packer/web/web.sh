@@ -3,11 +3,12 @@
 
 sleep 30
 cd
-sudo mv unicorn_events /etc/init.d/unicorn_events
+sudo cp unicorn/* /etc/init.d
 sudo chmod 755 /etc/init.d/unicorn_events
 sudo update-rc.d unicorn_events defaults
+rm -rf unicorn
 sudo apt-get -y update
-sudo apt-get -y install git zsh build-essential libssl-dev libreadline-dev zlib1g-dev libpq-dev
+sudo apt-get -y install git zsh build-essential libssl-dev libreadline-dev zlib1g-dev libpq-dev tree
 git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
 echo 'eval "$(rbenv init -)"' >> ~/.profile

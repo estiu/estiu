@@ -14,7 +14,7 @@
     "ami_name": "web {{timestamp}}"
   }],
   "provisioners": [
-    {"type": "file", "source": "unicorn_events", "destination": "~/"},
+    {"type": "file", "source": "unicorn", "destination": "~/"},
     {"type": "file", "source": "{{user `repo_source`}}", "destination": "~/events_clone_for_bundling"},
     {"type": "shell", "script": "web.sh"}
   ]
