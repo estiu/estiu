@@ -1,3 +1,18 @@
+require 'aws-sdk'
+
+ids = Aws::AutoScaling::Client.new.describe_auto_scaling_instances[0].select{|i| i.health_status == "HEALTHY" }.map &:instance_id
+instances = Aws::EC2::Client.new.describe_instances({filters: [{name: 'instance-id', values: ids}]}).reservations.map(&:instances).flatten
+ips = instances.select{|i| i.state.name == 'running' }.map(&:public_ip_address) # "Recently terminated instances might appear in the returned results."
+
+fail "No deployable ips found" if ips.size.zero?
+
+instances_info = ips.map{|ip|
+  instance = instances.detect{|i| i.public_ip_address == ip }
+  {instance_id: instance.instance_id, public_ip_address: instance.public_ip_address}
+}
+
+puts "Deploying #{ips.size} machines: #{instances_info}"
+
 # server-based syntax
 # ======================
 # Defines a single server with a list of roles and multiple properties.
@@ -15,9 +30,7 @@
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
-role :web, [
-  "ubuntu@52.16.26.9" # elastic IP
-]
+role :web, ips.map {|ip| "ubuntu@#{ip}" }
 
 # role :app, %w{deploy@example.com}, my_property: :my_value
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value

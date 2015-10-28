@@ -31,6 +31,7 @@ gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-rbenv', '~> 2'
 gem 'dotenv-rails', '~> 2'
 gem 'unicorn', '~> 4.9'
+gem 'aws-sdk', '~> 2.1'
 
 group :development, :test do
   gem 'pry'
