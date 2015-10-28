@@ -59,6 +59,12 @@ namespace :deploy do
     end
   end
   
+  after :published, :restart_unicorn do
+    on roles(:web) do
+      execute "sudo /etc/init.d/unicorn_events restart"
+    end
+  end
+  
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
