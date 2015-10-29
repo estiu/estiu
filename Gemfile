@@ -32,6 +32,7 @@ gem 'capistrano-rbenv', '~> 2'
 gem 'dotenv-rails', '~> 2'
 gem 'unicorn', '~> 4.9'
 gem 'aws-sdk', '~> 2.1'
+gem 'shoryuken', github: 'vemv/shoryuken'
 
 group :development, :test do
   gem 'pry'

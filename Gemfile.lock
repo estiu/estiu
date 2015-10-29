@@ -6,6 +6,14 @@ GIT
     omniauth-facebook (2.1.0)
       omniauth-oauth2 (~> 1.2)
 
+GIT
+  remote: git://github.com/vemv/shoryuken.git
+  revision: bd42f47b5fbffb46f6cb3cfb56c0745de957ae06
+  specs:
+    shoryuken (2.0.2)
+      aws-sdk-core (~> 2)
+      celluloid (~> 0.16)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -390,6 +398,7 @@ DEPENDENCIES
   rspec-retry (~> 0.4.4)
   sass-rails (~> 5)
   selenium-webdriver (~> 2.47)
+  shoryuken!
   shoulda-matchers (~> 3)
   sidekiq (~> 3.5)
   stripe (~> 1)
