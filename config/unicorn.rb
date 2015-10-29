@@ -5,7 +5,7 @@ log_path = (dev_env ? "#{app_dir}/" : shared_dir) + "log"
 pid_file = (dev_env ? "#{app_dir}/tmp/" : shared_dir) + 'pids/unicorn.pid'
 
 working_directory app_dir
-worker_processes 2
+worker_processes (dev_env ? 1 : 2)
 preload_app true
 timeout 60
 listen 3000
