@@ -5,12 +5,14 @@ set -e
 set -u
 sleep 30
 cd
-sudo cp unicorn/* /etc/init.d
+sudo mv files/unicorn_events /etc/init.d
 sudo chmod 755 /etc/init.d/unicorn_events
 sudo update-rc.d unicorn_events defaults
-rm -rf unicorn
 sudo apt-get -y update
-sudo apt-get -y install git zsh build-essential libssl-dev libreadline-dev zlib1g-dev libpq-dev tree
+sudo apt-get -y install git zsh build-essential libssl-dev libreadline-dev zlib1g-dev libpq-dev tree nginx
+sudo update-rc.d nginx defaults
+sudo rm -f /etc/nginx/sites-enabled/default
+sudo mv files/nginx_events /etc/nginx/sites-enabled/default
 git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
 echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
 echo 'eval "$(rbenv init -)"' >> ~/.profile
@@ -23,3 +25,4 @@ cd ~/events_clone_for_bundling
 bundle --without development test
 cd
 rm -rf ~/events_clone_for_bundling # don't leave the source code in the image until it's deployed. Gives additional security.
+rm -rf files
