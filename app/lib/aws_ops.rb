@@ -40,7 +40,7 @@ class AwsOps
     elb_client.configure_health_check({
       load_balancer_name: ELB_NAME,
       health_check: {
-        target: "/",
+        target: "HTTP:80/",
         interval: 7,
         timeout: 5,
         unhealthy_threshold: 2,
@@ -56,7 +56,7 @@ class AwsOps
   
   def self.latest_ami
     # ec2_client.describe_images.filter('web').latest.id
-    'ami-47d10e34'
+    'ami-05c31c76'
   end
   
   def self.delete_launch_configurations

@@ -11,11 +11,10 @@
     "source_ami": "ami-47a23a30",
     "instance_type": "t2.medium",
     "ssh_username": "ubuntu",
-    "ami_name": "web {{timestamp}}"
+    "ami_name": "base {{timestamp}}"
   }],
   "provisioners": [
-    {"type": "file", "source": "files", "destination": "~/"},
     {"type": "file", "source": "{{user `repo_source`}}", "destination": "~/events_clone_for_bundling"},
-    {"type": "shell", "script": "web.sh"}
+    {"type": "shell", "script": "build.sh"}
   ]
 }
