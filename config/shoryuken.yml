@@ -8,5 +8,6 @@ aws:
 concurrency: 4
 delay: 0
 queues:
-  - [mailers, 1]
   - [events, 1]
+  - [mailers, 1]
+  - [default, 1]

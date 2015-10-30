@@ -14,6 +14,7 @@
     "ami_name": "worker {{timestamp}}"
   }],
   "provisioners": [
+    {"type": "file", "source": "files", "destination": "~/"},
     {"type": "shell", "script": "build.sh"}
   ]
 }
