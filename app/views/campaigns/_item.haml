@@ -1,5 +1,16 @@
 - if listing
-  = link_to campaign.name, campaign, class: 'show-link-title'
+  .row
+    .col-xs-10
+      = link_to campaign.name, campaign, class: 'show-link-title'
+    .col-xs-2.dark-grey.right{style: 'padding-top: 12px'}
+      - if current_attendee
+        - if current_attendee.pledged?(campaign)
+          %span.glyphicon.glyphicon-ok-circle{style: 'vertical-align: middle'}
+          %span{style: 'vertical-align: -1px'}= t '.pledged_campaign'
+        - elsif campaign.active?
+          %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+          %span{style: 'vertical-align: -1px'}= t '.open_campaign'
+          
 - else
   %h1= t '.title', campaign: campaign.name
 

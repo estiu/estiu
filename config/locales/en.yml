@@ -77,6 +77,8 @@ en:
         ends_at:
           starts_at: The campaign must remain open for at least %{hours} hours.
       item:
+        open_campaign: 'open'
+        pledged_campaign: 'pledged'
         title: "Campaign: %{campaign}"
         starts_at: Starts at
         ends_at: Campaign closes
