@@ -33,6 +33,7 @@ gem 'dotenv-rails', '~> 2'
 gem 'unicorn', '~> 4.9'
 gem 'aws-sdk', '~> 2.1'
 gem 'shoryuken', github: 'vemv/shoryuken'
+gem 'activerecord-session_store', '~> 0.1'
 
 group :development, :test do
   gem 'pry'
