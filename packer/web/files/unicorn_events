@@ -30,12 +30,6 @@ sig () {
   test -s "$PID" && kill -$1 `cat $PID`
 }
 
-workersig () {
-  workerpid="$PID_DIR/unicorn.$2.pid"
-  
-  test -s "$workerpid" && kill -$1 `cat $workerpid`
-}
-
 run () {
   su - $USER -c "$CMD"
 }
@@ -53,20 +47,11 @@ force-stop)
   sig TERM && exit 0
   echo >&2 "Not running"
   ;;
-kill-worker)
-  workersig QUIT $2 && exit 0
-  echo >&2 "Worker not running"
-  ;;
-restart)
-  sig USR2 && echo reloaded OK && exit 0
-  echo >&2 "Couldn't reload, starting '$CMD' instead"
-  run
-  ;;
 reopen-logs)
   sig USR1
   ;;
 *)
-  echo >&2 "Usage: $0 <start|stop|force-stop|kill-worker|restart|reopen-logs>"
+  echo >&2 "Usage: $0 <start|stop|force-stop|reopen-logs>"
   exit 1
   ;;
 esac
