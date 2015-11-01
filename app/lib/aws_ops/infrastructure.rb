@@ -4,11 +4,12 @@ module AwsOps
     extend AwsOps
     
     def self.security_groups
-      {
+      Hash.new{ raise }.merge({ # TODO - fetch from API. assume key names
+        port_443_public: 'sg-a68a3ac2',    
         port_80_public: "sg-e19e2985",
         port_80_vpc: "sg-fd9e2999",
         ssh: 'sg-ca9e29ae'
-      }
+      })
     end
     
     def self.delete_elbs
@@ -20,19 +21,69 @@ module AwsOps
     end
     
     def self.create_elb
-      elb_client.create_load_balancer({
-        load_balancer_name: ELB_NAME,
-        listeners: [
-          {
-            protocol: "HTTP",
-            load_balancer_port: 80,
-            instance_protocol: "HTTP",
-            instance_port: 80
-          }
-        ],
-        security_groups: [security_groups[:port_80_public]],
-        availability_zones: AVAILABILITY_ZONES
-      })
+      
+      private_key_name = 'private_key'
+      csr_name = 'csr'
+      certificate_name = 'certificate'
+      
+      iam_client.delete_server_certificate({server_certificate_name: certificate_name}) rescue Aws::IAM::Errors::NoSuchEntity
+      
+      `rm -f #{private_key_name}.pem #{csr_name}.pem #{certificate_name}.pem`
+      
+      `openssl genrsa -out #{private_key_name}.pem 2048`
+      `openssl req -sha256 -new -key #{private_key_name}.pem -out #{csr_name}.pem -subj "/C=ES/ST=Barcelona/L=Barcelona/O=vemv/OU=vemv/CN=aws.vemv.net/emailAddress=vemv@vemv.net"`
+      `openssl x509 -req -days 365 -in #{csr_name}.pem -signkey #{private_key_name}.pem -out #{certificate_name}.pem`
+      
+      server_certificate_id = nil
+      
+      begin
+        
+        server_certificate_id = iam_client.upload_server_certificate(
+          server_certificate_name: certificate_name,
+          certificate_body: File.read(File.join Rails.root, "#{certificate_name}.pem"),
+          private_key: File.read(File.join Rails.root, "#{private_key_name}.pem")).
+        server_certificate_metadata.arn
+        
+      rescue Aws::IAM::Errors::EntityAlreadyExists => e
+        n = 10
+        puts "#{e.class} - Sleeping #{n} seconds..."
+        sleep n
+        retry
+      end
+      
+      `rm -f #{private_key_name}.pem #{csr_name}.pem #{certificate_name}.pem`
+      
+      begin
+        
+        elb_client.create_load_balancer({
+          load_balancer_name: ELB_NAME,
+          listeners: [
+            {
+              protocol: "HTTP",
+              load_balancer_port: 80,
+              instance_protocol: "HTTP",
+              instance_port: 80
+            },
+            {
+              protocol: "HTTPS",
+              load_balancer_port: 443,
+              instance_protocol: "HTTP",
+              instance_port: 80,
+              ssl_certificate_id: server_certificate_id
+            }
+          ],
+          security_groups: [security_groups[:port_80_public], security_groups[:port_443_public]],
+          availability_zones: AVAILABILITY_ZONES
+          
+        })
+          
+      rescue Aws::ElasticLoadBalancing::Errors::CertificateNotFound => e
+        n = 10
+        puts "#{e.class} - Sleeping #{n} seconds..."
+        sleep n
+        retry
+      end
+      
       elb_client.configure_health_check({
         load_balancer_name: ELB_NAME,
         health_check: {
@@ -43,6 +94,7 @@ module AwsOps
           healthy_threshold: 2
         }
       })
+      
     end
     
     def self.latest_ami role

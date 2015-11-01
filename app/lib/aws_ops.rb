@@ -15,6 +15,10 @@ module AwsOps
     @@ec2_client ||= Aws::EC2::Client.new
   end
   
+  def iam_client
+    @@iam_client ||= Aws::IAM::Client.new
+  end
+  
   def elb_client
     @@elb_client ||= Aws::ElasticLoadBalancing::Client.new
   end
