@@ -1,1 +1,5 @@
-%strong= t 'pledges.form.contributed', contributed: current_user.attendee.pledged_for(campaign).format
+%strong= t 'pledges.form.contributed', contributed: pledge.amount.format
+- if pledge.referral_email.present?
+  %div
+    %small
+      %strong= t 'pledges.form.referred', referred: pledge.referral_email, discount: pledge.discount.format

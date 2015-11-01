@@ -24,6 +24,7 @@ class Pledge < ActiveRecord::Base
   
   default_scope { where.not(stripe_charge_id: nil) }
   
+  before_validation :nullify_optional_fields
   around_save :maybe_mark_campaign_as_fulfilled
   
   def self.charge_description_for campaign
@@ -106,6 +107,12 @@ class Pledge < ActiveRecord::Base
       
     end
     
+  end
+  
+  def nullify_optional_fields
+    unless self.referral_email.present?
+      self.referral_email = nil
+    end
   end
   
 end

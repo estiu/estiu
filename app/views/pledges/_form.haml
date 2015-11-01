@@ -1,7 +1,8 @@
 %hr
 .text-center.top10#pledge-contribution
-  - if current_attendee.pledged?(campaign)
-    = render 'pledges/contributed', campaign: campaign
+  - pledge = current_attendee.pledge_for(campaign)
+  - if pledge
+    = render 'pledges/contributed', campaign: campaign, pledge: pledge
   - else
     - if campaign.closed?
       %strong= t 'pledges.form.closed'

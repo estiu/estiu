@@ -22,7 +22,7 @@ class PledgesController < ApplicationController
     stripe_token = params.require :stripeToken
     if @pledge.charge!(stripe_token)
       render(json: {
-        pledge_contribution_content: render_to_string(partial: 'pledges/contributed', locals: {campaign: @campaign}),
+        pledge_contribution_content: render_to_string(partial: 'pledges/contributed', locals: {campaign: @campaign, pledge: @pledge}),
         campaign_fulfilled_percent: @campaign.percent_pledged,
         campaign_fulfilled_caption: I18n.t('campaigns.show.percent', percent: @campaign.percent_pledged),
         campaign_pledged_title: I18n.t('campaigns.show.title', pledged: @campaign.pledged.format)

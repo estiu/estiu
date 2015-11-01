@@ -10,12 +10,12 @@ class Attendee < ActiveRecord::Base
     validates attr, presence: true
   end
   
-  def pledged? campaign
-    campaign.pledges.pluck(:attendee_id).include? self.id
+  def pledge_for campaign
+    campaign.pledges.find_by(attendee_id: self.id)
   end
   
-  def pledged_for campaign
-    (campaign.pledges.where(attendee: self).sum(:amount_cents) / 100.0).to_money
+  def pledged? campaign
+    pledge_for(campaign).present?
   end
   
 end

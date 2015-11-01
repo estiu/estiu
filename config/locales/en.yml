@@ -110,7 +110,7 @@ en:
       title: Venue
       other: Other venue
   pledges:
-    discounted_message: "You have been discounted %{discount}!"
+    discounted_message: "You will be discounted %{discount}!"
     errors:
       referral_email:
         no_user: "No user with that email has paid for this event."
@@ -132,6 +132,7 @@ en:
       referral_email_popover_2: "Your friend must already have paid for his ticket. Else, don't fill this field."
       closed: "You are viewing a closed campaign, which you didn't participate in. You cannot buy tickets for it anymore."
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
+      referred: You referred %{referred} while paying, getting a discount of %{discount}.
       buy: "Buy my ticket!"
       error_500: 'Sorry, there has been an unexpected error while processing your payment. We suggest to check whether your bank account has been charged. Apologies for the inconvenience.'
       payment_description: Pay to support this campaign

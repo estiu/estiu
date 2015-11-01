@@ -120,7 +120,7 @@ describe 'Pledge creation' do
 
       it 'is not possible to pledge again' do
       
-        expect(page).to have_content(t 'pledges.form.contributed', contributed: attendee.attendee.pledged_for(Campaign.last).format)
+        expect(page).to have_content(t 'pledges.form.contributed', contributed: attendee.attendee.pledge_for(Campaign.last).amount.format)
         
       end
       
