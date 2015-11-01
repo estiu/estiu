@@ -14,7 +14,10 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
-/tmp
+/tmp/*
+!/tmp/pids
+/tmp/pids/*
+!/tmp/pids/.keep
 .sass-cache
 causality_testing.haml
 .env
