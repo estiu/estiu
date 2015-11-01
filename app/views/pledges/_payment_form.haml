@@ -6,7 +6,7 @@
         = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
       .col-xs-4.right-column.left
         = field.(:referral_email, as: :email, only_input: true, form_group_class: 'full', html_class: 'full')
-    .row#pledge-contribution
+    .row
       .col-xs-8.left-column
         = field.(:originally_pledged_cents,
           as: :currency,
@@ -19,7 +19,7 @@
           min: campaign.minimum_pledge_cents,
           max: campaign.maximum_pledge_cents,
           style: "width: 80px")
-    .row.top10#pay-more-contribution
+    .row.top10
       .col-xs-8.right.left-column
         .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
       .col-xs-4.left.right-column
@@ -56,11 +56,14 @@
           $('#pledge-contribution').html(json['pledge_contribution_content'])
           sel.text(json['campaign_fulfilled_caption'])
           $('#campaign_pledged_title').text(json['campaign_pledged_title'])
-          $('#pay-more-contribution').remove()
         }})
       })
       request.fail(function(response){
-        set_flash_messages(response)
+        if (response.status == 500){
+          set_flash_messages(flash_error("#{t 'pledges.form.error_500'}"))
+        } else {
+          set_flash_messages(response)
+        }
       })
     }
   });

@@ -1,5 +1,5 @@
 %hr
-  .text-center.top10
+  .text-center.top10#pledge-contribution
     - if current_attendee.pledged?(campaign)
       = render 'pledges/contributed', campaign: campaign
     - else

@@ -133,4 +133,5 @@ en:
       closed: "You are viewing a closed campaign, which you didn't participate in. You cannot buy tickets for it anymore."
       contributed: "You have contributed %{contributed} to this campaign. Thank you!"
       buy: "Buy my ticket!"
+      error_500: 'Sorry, there has been an unexpected error while processing your payment. We suggest to check whether your bank account has been charged. Apologies for the inconvenience.'
       payment_description: Pay to support this campaign

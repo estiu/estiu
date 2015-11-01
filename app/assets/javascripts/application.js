@@ -51,6 +51,11 @@ $(function(){
   $('[data-toggle="popover"]').popover({trigger: 'hover click', placement: 'bottom', delay: 200})
 })
 
+var flash_error = function(message){
+  var _ = '<div class="alert fade in alert-danger"><div class="button.close"></div>' + message + '<div>'
+  return {responseJSON: {flash_content: _}}
+}
+
 var set_flash_messages = function(response){
   var content = response ? response.responseJSON['flash_content'] : ""
   $('#all-flash-messages').html(content)
