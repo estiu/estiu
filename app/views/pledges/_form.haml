@@ -1,16 +1,18 @@
 %hr
-  .text-center.top10#pledge-contribution
-    - if current_attendee.pledged?(campaign)
-      = render 'pledges/contributed', campaign: campaign
+.text-center.top10#pledge-contribution
+  - if current_attendee.pledged?(campaign)
+    = render 'pledges/contributed', campaign: campaign
+  - else
+    - if campaign.closed?
+      %strong= t 'pledges.form.closed'
     - else
-      - if campaign.closed?
-        %strong= t 'pledges.form.closed'
-      - else
-        = render 'pledges/payment_form',
-          campaign: campaign,
-          action: pledges_path(campaign.id),
-          amount_cents: campaign.minimum_pledge_cents,
-          title: campaign.name,
-          description: t('.payment_description'),
-          email: current_user.email,
-          image_path: nil
+      .row
+        .col-xs-12
+          = render 'pledges/payment_form',
+            campaign: campaign,
+            action: pledges_path(campaign.id),
+            amount_cents: campaign.minimum_pledge_cents,
+            title: campaign.name,
+            description: t('.payment_description'),
+            email: current_user.email,
+            image_path: nil

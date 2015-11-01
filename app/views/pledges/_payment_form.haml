@@ -1,4 +1,4 @@
-= form_for Pledge.new(originally_pledged_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right'} do |form|
+= form_for Pledge.new(originally_pledged_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
   = form_fields(form, 'pledges.form') do |field|
     .row.bottom10
       .col-xs-8.left-column
@@ -39,16 +39,23 @@
 :javascript
   
   var pledge_id = null
+  var received_stripe_token = false
   
   var handler = StripeCheckout.configure({
     key: '#{Rails.application.secrets.stripe_publishable_key}',
     image: '#{image_path}',
     locale: '#I18n.locale',
+    closed: function(){
+      if (!received_stripe_token){
+        $('.block-ui').remove()
+      }
+    },
     token: function(token) {
       if (!pledge_id){ // Should never happen.
         return
       }
       var request = $.ajax(("#{action}" + '/' + pledge_id), {method: 'PUT', data: {stripeToken: token['id']}})
+      received_stripe_token = true
       request.done(function(response){
         var json = response
         var sel = $('#campaign-progress-bar')
@@ -84,11 +91,17 @@
       success(response['amount_cents'])
     })
     request.fail(function(response){
-      set_flash_messages(response)
+      $('.block-ui').remove()
+      if (response.status == 500){
+        set_flash_messages(flash_error("#{t 'pledges.create.error'}"))
+      } else {
+        set_flash_messages(response)
+      }
     })
   }
   
   $('#do-pledge').on('click', function(e) {
+    $('#payment-form').append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
     create_pledge_object(function(chosen_cents){
       handler.open({
         name: '#{title}',

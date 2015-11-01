@@ -120,7 +120,7 @@ en:
       error: "Sorry, there has been an error while creating your order. You have not been charged."
     update:
       success: "You have succesfully paid for this campaign. Thank you!"
-      error: "Sorry, there has been an error while processing your pledge."
+      error: "Sorry, there has been an error while processing your pledge, which we'll investigate. Your bank account probably hasn't been charged, but please check it."
     form:
       can_pay_more: "You can pay the minimum for a ticket (%{price}) or more."
       why_pay_more: Why pay more?
