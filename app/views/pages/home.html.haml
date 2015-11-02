@@ -1,11 +1,38 @@
 = stylesheet_link_tag 'home', media: 'all'
 
 %header
-  .intro-text
-    .intro-lead-in= t ".the_perfect_event"
-    .intro-heading= t '.just_for_you'
-    = link_to t('.learn_more'), '#what', class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
-    = link_to t('.learn_more'), '#what', class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'
+  .overlay
+    .intro-text
+      .intro-lead-in= t ".the_perfect_event"
+      .intro-heading= t '.just_for_you'
+      = link_to t('.learn_more'), '#services', class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
+      = link_to t('.learn_more'), '#services', class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'
+
+%section#services
+  .container.p30
+    .row
+      .col-lg-12.text-center
+        %h1.section-heading= t '.a_new_way'
+        %h3.section-subheading
+    .row.text-center
+      .col-md-4
+        %span{style: 'font-size: 90px'}
+          😎
+        %h3.service-heading= t '.exclusive_events'
+        %p= t '.can_create'
+        %p.p10= t '.by_inviting'
+      .col-md-4
+        %span{style: 'font-size: 90px'}
+          💰
+        %h3.service-heading= t '.crowdfunded_campaign'
+        %p= t '.every_event'
+        %p.p10= t '.if_the_campaign'
+      .col-md-4
+        %span{style: 'font-size: 90px'}
+          🎉
+        %h3.service-heading= t '.party'
+        %p= t '.enjoy'
+        %p.p10= t '.totally_exclusive'
 
 - if policy(Campaign).new?
   = link_to "New campaign", new_campaign_path, class: 'btn btn-success'

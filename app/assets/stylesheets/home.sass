@@ -6,7 +6,11 @@
 
 =heading-font()
   font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif
-  // text-transform: uppercase
+
+=responsive-background-image()
+  background-repeat: none
+  background-attachment: scroll
+  background-position: center center
 
 .navbar
   margin-bottom: 0 !important
@@ -14,18 +18,20 @@
 #main
   padding: 0 !important
 
-header 
+header
+  height: 100vh
+  +background-cover
+  +responsive-background-image
   background-image: image-url('home.jpg')
-  background-repeat: none
-  background-attachment: scroll
-  background-position: center center
   text-align: center
   color: white
-  +background-cover
+  .overlay
+    background-color: rgba(0, 0, 0, 0.2)
+    width: 100%
+    height: 100%
   .intro-text 
     padding-top: 100px
     padding-bottom: 100px
-    background-color: rgba(0, 0, 0, 0.2)
     +heading-font
     @media(min-width:768px)
       padding-top: 250px
@@ -53,3 +59,39 @@ header
         margin-bottom: 25px
         padding-left: 30px
         padding-right: 30px
+
+section
+  padding: 100px 0
+  @media(min-width:768px)
+    padding: 100px 0
+  h2.section-heading
+    font-size: 40px
+    margin-top: 0
+    margin-bottom: 15px
+  h3.section-subheading
+    font-size: 16px
+    text-transform: none
+    font-style: italic
+    font-weight: 400
+    margin-bottom: 75px
+
+#services
+  +responsive-background-image
+  height: 100vh
+  background-image: image-url('what.jpg')
+  color: white
+  .container
+    background-color: rgba(0, 0, 0, 0.3)
+  .col-md-4 p:first-of-type
+    min-height: 70px
+  .col-md-4 p:last-of-type
+    height: 80px
+    color: #fafafa !important  
+    background-color: rgba(202, 202, 202, 0.4)
+    font-size: 15px
+    vertical-align: middle
+    display: table-cell
+
+.service-heading
+  margin: 0px 0 15px
+  text-transform: none

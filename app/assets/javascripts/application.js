@@ -49,6 +49,13 @@ $(function(){
     bind("paste", function(e) { e.preventDefault() } ).
     focus(function(){ $(this).blur() })
   $('[data-toggle="popover"]').popover({trigger: 'hover click', placement: 'bottom', delay: 200})
+  $('a.page-scroll').bind('click', function(event) {
+    var $anchor = $(this);
+    $('html, body').stop().animate({
+        scrollTop: $($anchor.attr('href')).offset().top
+    }, 500, 'easeInOutExpo');
+    event.preventDefault();
+  });
 })
 
 var flash_error = function(message){
