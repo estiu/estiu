@@ -1,0 +1,55 @@
+=background-cover()
+  -webkit-background-size: cover
+  -moz-background-size: cover
+  background-size: cover
+  -o-background-size: cover
+
+=heading-font()
+  font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif
+  // text-transform: uppercase
+
+.navbar
+  margin-bottom: 0 !important
+
+#main
+  padding: 0 !important
+
+header 
+  background-image: image-url('home.jpg')
+  background-repeat: none
+  background-attachment: scroll
+  background-position: center center
+  text-align: center
+  color: white
+  +background-cover
+  .intro-text 
+    padding-top: 100px
+    padding-bottom: 100px
+    background-color: rgba(0, 0, 0, 0.2)
+    +heading-font
+    @media(min-width:768px)
+      padding-top: 250px
+      padding-bottom: 250px
+    .intro-lead-in
+      font-size: 22px
+      line-height: 22px
+      margin-bottom: 5px
+      @media(min-width:768px)
+        font-size: 40px
+        line-height: 40px
+    .intro-heading 
+      font-weight: 700
+      font-size: 50px
+      line-height: 50px
+      margin-bottom: 20px
+      @media(min-width:768px)
+        font-weight: 700
+        font-size: 75px
+        line-height: 75px
+        margin-bottom: 25px
+    .intro-cta
+      margin-bottom: 0px
+      @media(min-width:768px)
+        margin-bottom: 25px
+        padding-left: 30px
+        padding-right: 30px

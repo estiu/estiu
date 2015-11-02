@@ -138,3 +138,8 @@ en:
       buy: "Buy my ticket!"
       error_500: 'Sorry, there has been an unexpected error while processing your payment. We suggest to check whether your bank account has been charged. Apologies for the inconvenience.'
       payment_description: Pay to support this campaign
+  pages:
+    home:
+      the_perfect_event: "The perfect event,"
+      just_for_you: Just for you
+      learn_more: Learn more

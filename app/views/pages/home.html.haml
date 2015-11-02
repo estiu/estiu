@@ -1,10 +1,11 @@
-%h1 Welcome!
-%hr
+= stylesheet_link_tag 'home', media: 'all'
 
-:markdown
-  Crowdfunded Events is an amazing app. Access exclusive events, invite your friends and earn discounts!
-
-%hr
+%header
+  .intro-text
+    .intro-lead-in= t ".the_perfect_event"
+    .intro-heading= t '.just_for_you'
+    = link_to t('.learn_more'), '#what', class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
+    = link_to t('.learn_more'), '#what', class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'
 
 - if policy(Campaign).new?
   = link_to "New campaign", new_campaign_path, class: 'btn btn-success'
