@@ -1,89 +1,100 @@
 %section#why
-  .container.p30
+  .container
     .row
       .col-lg-12.text-center
         %h2.section-heading= t '.title'
-    .row
-      .col-md-3.col-sm-6.why-item
-        .full
-          %img.img-responsive{:src => image_path("piano_flat.png")}
-        .why-caption
-          %h4= t '.artists_title'
-          %p= t '.artists'
-        %table.table
-          %tody
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                %span= t '.artists1'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                = t '.artists0'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                = t '.artists2'
-      .col-md-3.col-sm-6.why-item
-        .full
-          %img.img-responsive{:src => image_path("jack_flat.png")}
-        .why-caption
-          %h4= t '.venues_title'
-          %p= t '.venues'
-        %table.table
-          %tody
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                %span= t '.venues1'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                = t '.venues2'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                = t '.venues3'
-      .col-md-3.col-sm-6.why-item
-        .full
-          %img.img-responsive{:src => image_path("ticket_flat.png")}
-        .why-caption
-          %h4= t '.tickets_title'
-          %p= t '.tickets'
-        %table.table
-          %tody
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                %span= t '.tickets1'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                %span= t '.tickets3'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                %span= t '.tickets2'
-      .col-md-3.col-sm-6.why-item
-        .full
-          %img.img-responsive{:src => image_path("headphones.png")}
-        .why-caption
-          %h4= t '.often_title'
-          %p= t '.often'
-        %table.table
-          %tody
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                %span= t '.often1'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                = t '.often2'
-            %tr
-              %th
-                %span.glyphicon.glyphicon-ok
-                = t '.often3'
-    .center.top50.bottom50
+    .row.hidden-xs.hidden-sm
+      .col-md-3.col-sm-6
+        = _1 = capture do
+          .why-item
+            .full.hidden-xs.hidden-sm
+              %img.img-responsive{:src => image_path("piano_flat.png")}
+            .why-caption
+              %h4= t '.artists_title'
+              %p= t '.artists'
+            %table.table
+              %tbody
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.artists1'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.artists0'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.artists2'
+      .col-md-3.col-sm-6
+        = _2 = capture do
+          .why-item
+            .full.hidden-xs.hidden-sm
+              %img.img-responsive{:src => image_path("jack_flat.png")}
+            .why-caption
+              %h4= t '.venues_title'
+              %p= t '.venues'
+            %table.table
+              %tbody
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.venues1'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.venues2'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.venues3'
+      .col-md-3.col-sm-6
+        = _3 = capture do
+          .why-item
+            .full.hidden-xs.hidden-sm
+              %img.img-responsive{:src => image_path("ticket_flat.png")}
+            .why-caption
+              %h4= t '.tickets_title'
+              %p= t '.tickets'
+            %table.table
+              %tbody
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.tickets1'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.tickets3'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.tickets2'
+      .col-md-3.col-sm-6
+        = _4 = capture do
+          .why-item
+            .full.hidden-xs.hidden-sm
+              %img.img-responsive{:src => image_path("headphones.png")}
+            .why-caption
+              %h4= t '.often_title'
+              %p= t '.often'
+            %table.table
+              %tbody
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.often1'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.often2'
+                %tr
+                  %th
+                    %span.glyphicon.glyphicon-ok
+                    %span= t '.often3'
+    .row.visible-xs.visible-sm
+      = render 'carousel', sections: [_1, _2, _3, _4], id: 'why_carousel'
+    .center.visible-xs.visible-sm.bottom20
       = link_to t('.sign_up'), new_registration_path(:user), class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
+    .center.hidden-xs.hidden-sm
       = link_to t('.sign_up'), new_registration_path(:user), class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'

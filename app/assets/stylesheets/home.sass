@@ -93,6 +93,8 @@ section
     font-size: 15px
     vertical-align: middle
     display: table-cell
+  .carousel-caption
+    height: 220px
 
 .what-heading
   margin: 0px 0 15px
@@ -106,7 +108,11 @@ section
   color: #585858
   .container
     background-color: rgba(0, 0, 0, 0.3)
-  padding: 50px 0 0 0 !important
+    @media(min-width:768px)
+      padding: 30px
+  padding: 10px 0 0 0 !important
+  @media(min-width:768px)
+    padding: 50px 0 0 0 !important
   height: 100vh
   .full
     background-color: rgb(50, 50, 50)
@@ -117,9 +123,12 @@ section
       vertical-align: middle
       height: 160px
   h2.section-heading
-    margin-bottom: 50px !important
+    @media(min-width:768px)
+      margin-bottom: 50px !important
   table, table *
     border-color: #c7c7c7 !important
+    @media(max-width:767px)
+      margin-bottom: 0
   table tr
     height: 40px
     th
@@ -130,11 +139,14 @@ section
         margin-right: 2px
       span:last-of-type
         vertical-align: -2px
+        color: #585858 !important
+        text-shadow: none !important
   .why-caption, table
     background-color: rgba(255, 255, 255, 0.85)
   .why-item 
-    margin: 0 0 15px
+    margin: 0 auto 15px
     right: 0
+    max-width: 256px
     .why-link 
       display: block
       position: relative
@@ -144,19 +156,23 @@ section
       max-width: 400px
       margin: 0 auto
       text-align: center
-      padding: 15px 25px
+      padding: 15px 25px 15px
+      @media(min-width:768px)
+        padding: 15px 25px
       h4 
         text-transform: none
         margin: 0 0 10px 0
         height: 25px
         color: black
+        text-shadow: none !important
       p 
+        color: #585858 !important
         font-size: 14px
         margin: 0
         height: 80px
+        text-shadow: none !important
 
 .carousel-caption
-  height: 220px
   position: initial
 
 .carousel-indicators
