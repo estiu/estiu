@@ -1,0 +1,28 @@
+%section#services
+  .container.p30
+    .row
+      .col-lg-12.text-center
+        %h1.section-heading= t '.a_new_way'
+        %h3.section-subheading
+    .row.text-center
+      .col-md-4
+        %span{style: 'font-size: 90px'}
+          😎
+        %h3.service-heading= t '.exclusive_events'
+        %p= t '.can_create'
+        %p.p10= t '.by_inviting'
+      .col-md-4
+        %span{style: 'font-size: 90px'}
+          💰
+        %h3.service-heading= t '.crowdfunded_campaign'
+        %p= t '.every_event'
+        %p.p10= t '.if_the_campaign'
+      .col-md-4
+        %span{style: 'font-size: 90px'}
+          🎉
+        %h3.service-heading= t '.party'
+        %p= t '.enjoy'
+        %p.p10= t '.totally_exclusive'
+  .center.top50
+    = link_to t('.why_us'), '#portfolio', class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
+    = link_to t('.why_us'), '#portfolio', class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'

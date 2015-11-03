@@ -139,10 +139,11 @@ en:
       error_500: 'Sorry, there has been an unexpected error while processing your payment. We suggest to check whether your bank account has been charged. Apologies for the inconvenience.'
       payment_description: Pay to support this campaign
   pages:
-    home:
+    hero:
       the_perfect_event: "The perfect event,"
       just_for_you: Just for you
       learn_more: Learn more
+    what:
       a_new_way: A new way to attend electronic music events
       exclusive_events: Exclusive events
       can_create: Artists, record labels and promoters create secret events. They can invite you, and you can invite your friends!
@@ -153,3 +154,26 @@ en:
       enjoy: Enjoy your favorite DJs in our select locations, with amazing soundsystems and no overcrowding.
       totally_exclusive: "Our events are 100% exclusive - entrance is reserved for campaign supporters only!"
       party: Party!
+      why_us: Why use us?
+    why:
+      title: Why us?
+      artists_title: Underground artists
+      artists: We understand dance music as a form of art, so we only make business with the DJs and labels we feel aligned with.
+      artists1: DJs you know and love
+      artists0: International and local artists
+      artists2: Electronic live performances
+      venues_title: Selected venues
+      venues: The perfect party needs the right amount of people, soundystem and personal space for everyone to enjoy.
+      venues1: Middle-sized places
+      venues2: Sometimes open air
+      venues3: Exquisite soundsystems
+      tickets_title: Cheaper tickets
+      tickets: For each friends you invite to an event, you and your friend get a discount.
+      tickets1: Go out with more friends
+      tickets2: Faster campaign completion
+      tickets3: Less strangers, more groups
+      often_title: More parties
+      often: A true music lover doesn't need the friday night ritual to feel comfortable in a club.
+      often1: Daytime parties
+      often2: On weekends or not
+      often3: No overlap with clubs
