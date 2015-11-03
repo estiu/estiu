@@ -19,7 +19,7 @@
   padding: 0 !important
 
 header
-  height: 100vh
+  height: calc(100vh - 54px)
   +background-cover
   +responsive-background-image
   background-image: image-url('home.jpg')
@@ -131,8 +131,6 @@ section
   .why-caption, table
     background-color: rgba(255, 255, 255, 0.85)
   .why-item 
-    @media(min-width:767px) 
-      margin: 0 0 30px
     margin: 0 0 15px
     right: 0
     .why-link 

@@ -24,7 +24,6 @@
               %th
                 %span.glyphicon.glyphicon-ok
                 = t '.artists2'
-        %hr.visible-xs
       .col-md-3.col-sm-6.why-item
         .full
           %img.img-responsive{:src => image_path("jack_flat.png")}
@@ -45,7 +44,6 @@
               %th
                 %span.glyphicon.glyphicon-ok
                 = t '.venues3'
-        %hr.visible-xs
       .col-md-3.col-sm-6.why-item
         .full
           %img.img-responsive{:src => image_path("ticket_flat.png")}
@@ -66,7 +64,6 @@
               %th
                 %span.glyphicon.glyphicon-ok
                 %span= t '.tickets2'
-        %hr.visible-xs
       .col-md-3.col-sm-6.why-item
         .full
           %img.img-responsive{:src => image_path("headphones.png")}
@@ -87,3 +84,6 @@
               %th
                 %span.glyphicon.glyphicon-ok
                 = t '.often3'
+    .center.top50.bottom50
+      = link_to t('.sign_up'), new_registration_path(:user), class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
+      = link_to t('.sign_up'), new_registration_path(:user), class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'
