@@ -1,12 +1,4 @@
 GIT
-  remote: git://github.com/gioblu/omniauth-facebook.git
-  revision: eff97bfae32f72821cbccf0b48b78351e41eb585
-  ref: eff97bfae32f72821cbccf0b48b78351e41eb585
-  specs:
-    omniauth-facebook (2.1.0)
-      omniauth-oauth2 (~> 1.2)
-
-GIT
   remote: git://github.com/vemv/shoryuken.git
   revision: bd42f47b5fbffb46f6cb3cfb56c0745de957ae06
   specs:
@@ -219,6 +211,8 @@ GEM
     omniauth (1.2.2)
       hashie (>= 1.2, < 4)
       rack (~> 1.0)
+    omniauth-facebook (3.0.0)
+      omniauth-oauth2 (~> 1.2)
     omniauth-oauth2 (1.4.0)
       oauth2 (~> 1.0)
       omniauth (~> 1.2)
@@ -391,7 +385,7 @@ DEPENDENCIES
   launchy (~> 2.4)
   money-rails (~> 1.4)
   omniauth (~> 1.2)
-  omniauth-facebook!
+  omniauth-facebook (~> 3)
   pg (~> 0.18)
   pry
   pry-rails
