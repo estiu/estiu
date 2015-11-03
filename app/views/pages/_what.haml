@@ -1,29 +1,35 @@
 %section#what
-  .container.p30
+  .container
     .row
       .col-lg-12.text-center
         %h1.section-heading= t '.a_new_way'
-        %h3.section-subheading
-    .row.text-center
+        %h3.section-subheading.hidden-xs.hidden-sm
+    .row.text-center.hidden-xs.hidden-sm
       .col-md-4
-        %span{style: 'font-size: 90px'}
-          😎
-        %h3.what-heading= t '.exclusive_events'
-        %p= t '.can_create'
-        %p.p10= t '.by_inviting'
+        = _1 = capture do
+          %span.hidden-xs.hidden-sm{style: 'font-size: 90px'}
+            😎
+          %h3.what-heading= t '.exclusive_events'
+          %p= t '.can_create'
+          %p.p10= t '.by_inviting'
       .col-md-4
-        %span{style: 'font-size: 90px'}
-          💰
-        %h3.what-heading= t '.crowdfunded_campaign'
-        %p= t '.every_event'
-        %p.p10= t '.if_the_campaign'
+        = _2 = capture do
+          %span.hidden-xs.hidden-sm{style: 'font-size: 90px'}
+            💰
+          %h3.what-heading= t '.crowdfunded_campaign'
+          %p= t '.every_event'
+          %p.p10= t '.if_the_campaign'
       .col-md-4
-        %span{style: 'font-size: 90px'}
-          🎉
-        %h3.what-heading= t '.party'
-        %p= t '.enjoy'
-        %p.p10= t '.totally_exclusive'
-    .row.bottom50 &nbsp;
-    .center.top50.bottom50
+        = _3 = capture do
+          %span.hidden-xs.hidden-sm{style: 'font-size: 90px'}
+            🎉
+          %h3.what-heading= t '.party'
+          %p= t '.enjoy'
+          %p.p10= t '.totally_exclusive'
+    .row.visible-xs.visible-sm
+      = render 'carousel', sections: [_1, _2, _3]
+    .row.bottom50.hidden-xs.hidden-sm &nbsp;
+    .center#top50.visible-xs.visible-sm.bottom20
       = link_to t('.why_us'), '#why', class: 'page-scroll btn btn-info intro-cta hidden-sm hidden-md hidden-lg'
+    .center#top50.hidden-xs.hidden-sm
       = link_to t('.why_us'), '#why', class: 'page-scroll btn btn-info intro-cta btn-lg visible-sm-inline visible-md-inline visible-lg-inline'
