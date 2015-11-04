@@ -42,7 +42,9 @@ class PledgesController < ApplicationController
       campaign: @campaign,
       attendee: current_attendee,
       originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
-      referral_email: params.require(:pledge)[:referral_email])
+      referral_email: params.require(:pledge)[:referral_email],
+      desired_credit_ids: (params.require(:pledge)[:desired_credit_ids] || []) # ids are validated at model level. this includes consumed or extraneous ids.
+    )
     authorize @pledge
   end
   

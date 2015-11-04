@@ -19,6 +19,7 @@
           min: campaign.minimum_pledge_cents,
           max: campaign.maximum_pledge_cents,
           style: "width: 80px")
+        = field.(:desired_credit_ids, as: :hidden, value: [])
     .row.top10
       .col-xs-8.right.left-column
         .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format

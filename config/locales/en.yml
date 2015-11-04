@@ -117,6 +117,7 @@ en:
   pledges:
     discounted_message: "You will be discounted %{discount}!"
     errors:
+      desired_credit_ids: One or more of the selected discounts are not valid.
       referral_email:
         no_user: "No user with that email has paid for this event."
       amount_cents:

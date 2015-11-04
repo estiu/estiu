@@ -8,6 +8,7 @@ class CreatePledges < ActiveRecord::Migration
       t.integer :originally_pledged_cents, null: false
       t.string :stripe_charge_id
       t.string :referral_email
+      t.integer :desired_credit_ids, array: true, null: false, default: []
 
       t.timestamps null: false
     end

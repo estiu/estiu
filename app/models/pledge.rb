@@ -22,6 +22,7 @@ class Pledge < ActiveRecord::Base
   
   validate :minimum_pledge
   validate :check_truthful_referral_email!
+  validate :check_valid_desired_credit_ids!
   
   default_scope { where.not(stripe_charge_id: nil) }
   
@@ -38,10 +39,17 @@ class Pledge < ActiveRecord::Base
   end
   
   def calculate_discount!
+    
     check_truthful_referral_email!(:check_format)
     if referral_email.present? && errors[:referral_email].blank?
-      self.discount_cents = DISCOUNT_PER_REFERRAL
+      self.discount_cents += DISCOUNT_PER_REFERRAL
     end
+    
+    check_valid_desired_credit_ids!
+    if errors[:desired_credit_ids].blank?
+      self.discount_cents += find_credits(desired_credit_ids).map(&:amount_cents).sum
+    end
+    
   end
   
   def calculate_total!
@@ -50,20 +58,39 @@ class Pledge < ActiveRecord::Base
   end
   
   def charge!(token)
-    charge = Stripe::Charge.create(
-      amount: amount_cents,
-      currency: STRIPE_EUR,
-      source: token,
-      description: self.class.charge_description_for(campaign)
-    )
-    # past this point, the .charge call did't raise anything, that means the charge itself succeeded.
+    
+    valid_credits = nil
+    charge = nil
+    
+    transaction do # note that this is NOT a nested transaction.
+      
+      credits = check_valid_desired_credit_ids! :do_lock
+      valid_credits = errors[:desired_credit_ids].blank?
+      
+      if valid_credits
+        charge = Stripe::Charge.create(
+          amount: amount_cents,
+          currency: STRIPE_EUR,
+          source: token,
+          description: self.class.charge_description_for(campaign)
+        )
+        
+        Rails.logger.info "Successfully charged a pledge. Charge id: #{charge.id}"
+        
+        credits.each {|credit| credit.update_attributes! charged: true }
+      end
+      
+    end
+    
+    return false unless valid_credits
+    
     self.stripe_charge_id = charge.id
     saved = self.save
-    Rails.logger.info "Successfully charged a pledge. Charge id: #{charge.id}"
     unless saved
-      Rails.logger.error "Pledge charge succeeded, but could not update object #{self}."
+      Rails.logger.error "Pledge charge succeeded, but could not update object #{self}. Errors: #{self.errors.full_messages}"
     end
     return true
+    
   rescue Stripe::CardError => e
     Rails.logger.error e.class
     Rails.logger.error e
@@ -82,6 +109,12 @@ class Pledge < ActiveRecord::Base
   
   def observed_value_for_minimum_pledge
     amount_cents + discount_cents # this equals to originally_pledged_cents, but it might not in the future (due to taxes or changes in the business model)
+  end
+  
+  def find_credits id_or_ids
+    Credit.uncached {
+      attendee.credits.find id_or_ids
+    }
   end
   
   def minimum_pledge
@@ -123,6 +156,33 @@ class Pledge < ActiveRecord::Base
       end
       
     end
+    
+  end
+  
+  def check_valid_desired_credit_ids! lock=false
+    
+    credits = []
+    
+    (desired_credit_ids || []).each do |id|
+      
+      credit = find_credits(id)
+      
+      if credit
+        
+        credits << credit
+        credit.lock! if lock
+        
+      else
+        
+        errors[:desired_credit_ids] << I18n.t("pledges.errors.desired_credit_ids")
+        
+        return
+        
+      end
+      
+    end
+    
+    return credits
     
   end
   
