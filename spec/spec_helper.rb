@@ -26,7 +26,6 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :feature
   config.render_views  
   config.infer_spec_type_from_file_location!
-  config.default_retry_count = 2
   
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
@@ -52,7 +51,11 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
     Warden.test_reset!
   end
-
+  
+  config.around :each, :js do |ex|
+    ex.run_with_retry retry: (ci? ? 3 : 2)
+  end
+  
 end
 
 Shoulda::Matchers.configure do |config|
