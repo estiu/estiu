@@ -3,3 +3,13 @@
   %div
     %small
       %strong= t 'pledges.form.referred', referred: pledge.referral_email, discount: pledge.discount.format
+%hr
+%div
+  %p
+    %strong= t '.refer_title'
+  %p= t '.refer_expl', discount: Pledge.discount_per_referral.format
+  %p= t('.refer_expl_2', email: "<strong>#{current_user.email}</strong>").html_safe
+  - unless browser.mobile?
+    %p= t '.refer_expl_fb'
+    %div
+      = link_to t('.invite_cta'), facebook_send_link(campaign_url(id: pledge.campaign.id, referral_email: current_user.email)), class: 'btn btn-primary btn-facebook'

@@ -33,6 +33,10 @@ module ApplicationHelper
     render 'layouts/facebook_connect', login: login
   end
   
+  def facebook_send_link link=request.original_url # the generated dialog needs a real host, localhost will cause a 500 from fb.
+    "http://www.facebook.com/dialog/send?app_id=#{Rails.application.secrets.facebook_app_id}&link=#{link}&redirect_uri=#{link}"
+  end
+  
   private
   
   def form_field form, key, locals={}

@@ -5,7 +5,7 @@
         - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} <small>"
         = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
       .col-xs-4.right-column.left
-        = field.(:referral_email, as: :email, only_input: true, form_group_class: 'full', html_class: 'full')
+        = field.(:referral_email, as: :email, only_input: true, value: params[:referral_email], form_group_class: 'full', html_class: 'full')
     .row
       .col-xs-8.left-column
         = field.(:originally_pledged_cents,

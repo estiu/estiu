@@ -74,6 +74,10 @@ class Pledge < ActiveRecord::Base
     end
   end
   
+  def self.discount_per_referral
+    Money.new(DISCOUNT_PER_REFERRAL)
+  end
+  
   def observed_value_for_minimum_pledge
     amount_cents + discount_cents # this equals to originally_pledged_cents, but it might not in the future (due to taxes or changes in the business model)
   end

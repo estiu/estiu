@@ -126,6 +126,12 @@ en:
     update:
       success: "You have succesfully paid for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge, which we'll investigate. Your bank account probably hasn't been charged, but please check it."
+    contributed:
+      refer_title: Wanna get a discount for your next event?
+      refer_expl: "Get a future discount of %{discount} for each friend that refers you (they get a discount too!)"
+      refer_expl_2: "They have to enter your email (%{email}) at the moment of the purchase."
+      refer_expl_fb: 'You can tell them via Facebook:'
+      invite_cta: Invite my friends
     form:
       can_pay_more: "You can pay the minimum for a ticket (%{price}) or more."
       why_pay_more: Why pay more?
