@@ -5,6 +5,7 @@ class Pledge < ActiveRecord::Base
   MAXIMUM_PLEDGE_AMOUNT = 10_000_00 # KYC
   STRIPE_EUR = 'eur'
   
+  has_one :discount
   belongs_to :attendee
   belongs_to :campaign
   validates_presence_of :attendee_id
@@ -99,7 +100,7 @@ class Pledge < ActiveRecord::Base
       change = changes[:stripe_charge_id]
       if change && change[0].nil? && change[1].present?
         attendee_id = User.find_by_email(referral_email).attendee_id
-        Credit.create!(charged: false, attendee_id: attendee_id, amount_cents: DISCOUNT_PER_REFERRAL)
+        Credit.create!(charged: false, attendee_id: attendee_id, amount_cents: DISCOUNT_PER_REFERRAL, pledge: self)
       end
     end
     yield
