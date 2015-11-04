@@ -20,4 +20,16 @@ describe "Attendee registration" do
     
   end
   
+  context 'facebook signun', js: true do
+  
+    it 'takes the user to facebook.com' do
+    
+      find('.btn-facebook').click
+      expect(current_host).to include 'facebook.com'
+      expect(page).to have_content 'Password'
+      
+    end
+  
+  end
+  
 end

@@ -17,6 +17,8 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 Sidekiq::Testing.inline!
 
+Capybara.server_host = 'localhost' # no 127.0.0.1. Cleaner and FB expects it too
+
 RSpec.configure do |config|
   
   config.include ActionView::Helpers::TranslationHelper

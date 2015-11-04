@@ -17,6 +17,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       if user.save
         sign_in user
       else
+        flash[:error] = t '.error'
         logger.error "Couldn't sign up user via facebook. Errors: #{user.errors}"
       end
     end
