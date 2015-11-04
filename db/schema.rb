@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151101015805) do
+ActiveRecord::Schema.define(version: 20151104104612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,16 @@ ActiveRecord::Schema.define(version: 20151101015805) do
   end
 
   add_index "contacts", ["contactable_type", "contactable_id"], name: "index_contacts_on_contactable_type_and_contactable_id", using: :btree
+
+  create_table "credits", force: :cascade do |t|
+    t.integer  "attendee_id"
+    t.integer  "amount_cents", null: false
+    t.boolean  "charged",      null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "credits", ["attendee_id"], name: "index_credits_on_attendee_id", using: :btree
 
   create_table "event_promoters", force: :cascade do |t|
     t.string   "name"
@@ -196,6 +206,7 @@ ActiveRecord::Schema.define(version: 20151101015805) do
   add_foreign_key "artists_events", "events"
   add_foreign_key "campaigns", "event_promoters"
   add_foreign_key "campaigns", "venues"
+  add_foreign_key "credits", "attendees"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"
   add_foreign_key "pledges", "attendees"

@@ -159,4 +159,74 @@ describe Pledge do
     
   end
   
+  describe '#charge!' do
+    
+    subject { FG.create :pledge, stripe_charge_id: nil }
+    
+    before { expect(subject.stripe_charge_id).to be nil  }
+    
+    let(:token) { SecureRandom.hex }
+
+    let(:charge){
+      double(id: SecureRandom.hex)
+    }
+    
+    before {
+      args = {
+        amount: subject.amount_cents,
+        currency: Pledge::STRIPE_EUR,
+        source: token,
+        description: Pledge.charge_description_for(subject.campaign)
+      }
+      expect(Stripe::Charge).to receive(:create).once.with(args).and_return(charge)
+    }
+    
+    def the_action
+      subject.charge!(token)
+    end
+    
+    it 'works' do
+      
+      expect {
+        the_action
+      }.to change {
+        subject.reload.stripe_charge_id
+      }.from(nil).to(charge.id)
+      
+    end
+    
+    it "doesn't create a Credit" do
+      
+      expect {
+        the_action
+      }.to_not change{
+        Credit.count
+      }
+      
+    end
+    
+    context 'when the pledge refers someone' do
+      
+      let(:campaign) { FG.create :campaign, :almost_fulfilled }
+        
+      let(:email){ campaign.attendees.first.user.email }
+      
+      subject { FG.create :pledge, stripe_charge_id: nil, campaign: campaign, referral_email: email }
+      
+      it "creates a Credit" do
+        
+        expect {
+          the_action
+        }.to change{
+          Credit.count
+        }
+        
+        expect(Credit.last.attendee).to eq User.find_by_email(email).attendee
+        
+      end
+      
+    end
+    
+  end
+  
 end

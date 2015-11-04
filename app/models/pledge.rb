@@ -26,6 +26,7 @@ class Pledge < ActiveRecord::Base
   
   before_validation :nullify_optional_fields
   around_save :maybe_mark_campaign_as_fulfilled
+  around_save :create_credits_for_referred_attendee, on: :update
   
   def self.charge_description_for campaign
     "Pledge for campaign #{campaign.id}"
@@ -91,6 +92,17 @@ class Pledge < ActiveRecord::Base
   def maybe_mark_campaign_as_fulfilled
     yield
     campaign.maybe_mark_as_fulfilled
+  end
+  
+  def create_credits_for_referred_attendee
+    if referral_email.present?
+      change = changes[:stripe_charge_id]
+      if change && change[0].nil? && change[1].present?
+        attendee_id = User.find_by_email(referral_email).attendee_id
+        Credit.create!(charged: false, attendee_id: attendee_id, amount_cents: DISCOUNT_PER_REFERRAL)
+      end
+    end
+    yield
   end
   
   def check_truthful_referral_email! check_format=false
