@@ -48,7 +48,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do |example|
-    assert_js_ok if example.metadata[:js] 
+    assert_js_ok if example.metadata[:js] && !example.metadata[:skip_js_check]
     DatabaseCleaner.clean
     Warden.test_reset!
   end
