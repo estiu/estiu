@@ -59,6 +59,8 @@ class Pledge < ActiveRecord::Base
   
   def charge!(token)
     
+    raise "charge_id already exists" if stripe_charge_id.present?
+    
     valid_credits = nil
     charge = nil
     
