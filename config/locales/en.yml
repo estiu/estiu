@@ -114,6 +114,8 @@ en:
       id: "Which:"
       title: Venue
       other: Other venue
+  credits:
+    to_s: "%{amount} - from %{referrer}"
   pledges:
     discounted_message: "You will be discounted %{discount}!"
     errors:
@@ -134,6 +136,7 @@ en:
       refer_expl_fb: 'You can tell them via Facebook:'
       invite_cta: Invite my friends
     form:
+      desired_credit_ids: "You can choose the following discounts:"
       can_pay_more: "You can pay the minimum for a ticket (%{price}) or more."
       why_pay_more: Why pay more?
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.

@@ -22,4 +22,8 @@ class Credit < ActiveRecord::Base
     
   end
   
+  def to_s
+    I18n.t("credits.to_s", amount: amount.format, referrer: pledge.attendee.first_name)
+  end
+  
 end

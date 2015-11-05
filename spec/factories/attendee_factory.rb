@@ -2,8 +2,8 @@ FG.define do
   
   factory :attendee do
     
-    first_name { SecureRandom.hex(12) }
-    last_name { SecureRandom.hex(12) }
+    first_name { SecureRandom.hex 7 }
+    last_name { SecureRandom.hex 7 }
     
     after(:build) do |rec, eva|
       

@@ -1,5 +1,11 @@
 = form_for Pledge.new(originally_pledged_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
   = form_fields(form, 'pledges.form') do |field|
+    - if current_attendee.credits.any?
+      .row.bottom10
+        .col-xs-8.left-column
+          = field.(:desired_credit_ids, only_label: true, label_html: {class: 'mr10'})
+        .col-xs-4.right-column.left
+          = field.(:desired_credit_ids, as: :checkboxes, values: current_attendee.credits, only_input: true)
     .row.bottom10
       .col-xs-8.left-column
         - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} <small>"
@@ -77,10 +83,19 @@
   });
   
   var create_pledge_object = function(success){
+
     var pledge_data = {}
     _.each(['originally_pledged_cents', 'referral_email'], function(attr){
       pledge_data[attr] = $('#pledge_' + attr).val()
     })
+    
+    var credit_attrs = #{current_attendee.credits.map{|credit| "desired_credit_ids_#{credit.id}" }}
+    pledge_data["desired_credit_ids"] = []
+    
+    _.each(credit_attrs, function(attr){
+      pledge_data["desired_credit_ids"].push($('#pledge_' + attr + ':checked').val())
+    })
+    
     var request = $.ajax("#{action}", {method: 'POST', data: {pledge: pledge_data}})
     request.done(function(response){
       pledge_id = response['id']

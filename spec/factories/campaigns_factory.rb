@@ -78,8 +78,10 @@ FG.define do
         
         fail unless rec.active?
         FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, attendee: eva.referred_attendee)
-        pledge = FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, referral_email: eva.referred_attendee.user.email, stripe_charge_id: nil)
-        pledge.update_attributes!(stripe_charge_id: SecureRandom.hex)
+        2.times {
+          pledge = FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, referral_email: eva.referred_attendee.user.email, stripe_charge_id: nil)
+          pledge.update_attributes!(stripe_charge_id: SecureRandom.hex)
+        }
         fail if rec.fulfilled?
         
       end
