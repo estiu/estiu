@@ -20,7 +20,7 @@ describe "Attendee registration" do
     
   end
   
-  context 'facebook signun', js: true, skip_js_check: true do
+  context 'facebook signup', js: true, skip_js_check: true do
   
     it 'takes the user to facebook.com' do
     
