@@ -5,7 +5,7 @@ class Pledge < ActiveRecord::Base
   MAXIMUM_PLEDGE_AMOUNT = 10_000_00 # KYC
   STRIPE_EUR = 'eur'
   
-  has_one :discount
+  has_one :credit
   belongs_to :attendee
   belongs_to :campaign
   validates_presence_of :attendee_id
