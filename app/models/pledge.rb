@@ -159,20 +159,21 @@ class Pledge < ActiveRecord::Base
     
   end
   
-  def check_valid_desired_credit_ids! lock=false
+  def check_valid_desired_credit_ids! do_lock=false
     
     credits = []
     
     (desired_credit_ids || []).each do |id|
       
-      credit = find_credits(id)
+      credit = nil
       
-      if credit
+      begin
         
+        credit = find_credits(id)
+        credit.lock! if do_lock
         credits << credit
-        credit.lock! if lock
         
-      else
+      rescue ActiveRecord::RecordNotFound
         
         errors[:desired_credit_ids] << I18n.t("pledges.errors.desired_credit_ids")
         
