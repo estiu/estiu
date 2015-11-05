@@ -45,9 +45,9 @@ class Pledge < ActiveRecord::Base
       self.discount_cents += DISCOUNT_PER_REFERRAL
     end
     
-    check_valid_desired_credit_ids!
+    credits = check_valid_desired_credit_ids!
     if errors[:desired_credit_ids].blank?
-      self.discount_cents += find_credits(desired_credit_ids).map(&:amount_cents).sum
+      self.discount_cents += credits.map(&:amount_cents).sum
     end
     
   end
