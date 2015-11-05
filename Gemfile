@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby "2.2.3"
 
-# Gemfile.lock should be perdiodically checked against isitvulnerable.com.
+# Gemfile.lock should be periodically checked against isitvulnerable.com.
 
 gem 'rails', '4.2.4'
 gem 'pg', '~> 0.18'
@@ -30,7 +30,7 @@ gem 'capistrano-bundler', '~> 1.1'
 gem 'capistrano-rails', '~> 1.1'
 gem 'capistrano-rbenv', '~> 2'
 gem 'dotenv-rails', '~> 2'
-gem 'unicorn', '~> 4.9'
+gem 'unicorn', '~> 5'
 gem 'aws-sdk', '~> 2.1'
 gem 'shoryuken', github: 'vemv/shoryuken'
 gem 'activerecord-session_store', '~> 0.1'
