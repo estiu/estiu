@@ -9,15 +9,13 @@ worker_processes (dev_env ? 1 : 2)
 preload_app true
 listen 3000
 pid pid_file
+timeout (dev_env ? 6000 : 60)
 
 unless dev_env
   
   # if logs aren't displayed inline, pry cannot work.
   stderr_path "#{log_path}/unicorn.stderr.log"
   stdout_path "#{log_path}/unicorn.stdout.log"
-  
-  # for pry too
-  timeout 60
   
 end
 
