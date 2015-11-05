@@ -27,7 +27,7 @@ class Pledge < ActiveRecord::Base
   default_scope { where.not(stripe_charge_id: nil) }
   
   before_validation :nullify_optional_fields
-  around_update :maybe_mark_campaign_as_fulfilled
+  around_save :maybe_mark_campaign_as_fulfilled
   around_update :create_credits_for_referred_attendee
   
   def self.charge_description_for campaign
