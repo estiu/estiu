@@ -22,7 +22,7 @@ class Pledge < ActiveRecord::Base
   
   validate :minimum_pledge
   validate :check_truthful_referral_email!
-  validate :check_valid_desired_credit_ids!
+  validate :check_valid_desired_credit_ids!, unless: :stripe_charge_id
   
   default_scope { where.not(stripe_charge_id: nil) }
   

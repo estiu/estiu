@@ -159,7 +159,7 @@ describe Pledge do
     
   end
   
-  describe '#charge!' do
+  describe '#charge! - credit creation' do
     
     subject { FG.create :pledge, stripe_charge_id: nil }
     
@@ -219,7 +219,7 @@ describe Pledge do
           the_action
         }.to change{
           Credit.count
-        }
+        }.by(1)
         
         expect(Credit.last.attendee).to eq User.find_by_email(email).attendee
         
