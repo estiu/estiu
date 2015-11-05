@@ -5,7 +5,7 @@
         .col-xs-8.left-column
           = field.(:desired_credit_ids, only_label: true, label_html: {class: 'mr10'})
         .col-xs-4.right-column.left
-          = field.(:desired_credit_ids, as: :checkboxes, values: current_attendee.credits, only_input: true)
+          = field.(:desired_credit_ids, as: :checkboxes, values: current_attendee.credits, only_input: true, html_class: 'desired_credit_ids')
     .row.bottom10
       .col-xs-8.left-column
         - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} <small>"
@@ -93,7 +93,10 @@
     pledge_data["desired_credit_ids"] = []
     
     _.each(credit_attrs, function(attr){
-      pledge_data["desired_credit_ids"].push($('#pledge_' + attr + ':checked').val())
+      var val = $('#pledge_' + attr + ':checked').val()
+      if (val){
+        pledge_data["desired_credit_ids"].push(val)
+      }
     })
     
     var request = $.ajax("#{action}", {method: 'POST', data: {pledge: pledge_data}})

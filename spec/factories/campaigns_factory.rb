@@ -72,13 +72,14 @@ FG.define do
       
       transient do
         referred_attendee nil
+        referrers_count 2
       end
       
       after(:create) do |rec, eva|
         
         fail unless rec.active?
         FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, attendee: eva.referred_attendee)
-        2.times {
+        eva.referrers_count.times {
           pledge = FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, referral_email: eva.referred_attendee.user.email, stripe_charge_id: nil)
           pledge.update_attributes!(stripe_charge_id: SecureRandom.hex)
         }
