@@ -53,7 +53,7 @@ RSpec.configure do |config|
   end
   
   config.around :each, :js do |ex|
-    ex.run_with_retry retry: (ci? ? 3 : 2)
+    ex.run_with_retry retry: (ci? ? 3 : 2), retry_wait: 3
   end
   
 end
