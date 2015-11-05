@@ -66,7 +66,7 @@ class Pledge < ActiveRecord::Base
     
     transaction do # note that this is NOT a nested transaction.
       
-      credits = check_valid_desired_credit_ids! :do_lock
+      credits = check_valid_desired_credit_ids! :do_lock # the locking is only useful if we are locking reads as well, which can only be accomplished by table locking, with the ACCESS EXCLUSIVE option. maybe there's a better approach?
       valid_credits = errors[:desired_credit_ids].blank?
       
       if valid_credits

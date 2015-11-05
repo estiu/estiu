@@ -68,6 +68,24 @@ FG.define do
       
     end
     
+    trait :with_referred_attendee do
+      
+      transient do
+        referred_attendee nil
+      end
+      
+      after(:create) do |rec, eva|
+        
+        fail unless rec.active?
+        FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, attendee: eva.referred_attendee)
+        pledge = FG.create(:pledge, campaign: rec, amount_cents: rec.minimum_pledge_cents, referral_email: eva.referred_attendee.user.email, stripe_charge_id: nil)
+        pledge.update_attributes!(stripe_charge_id: SecureRandom.hex)
+        fail if rec.fulfilled?
+        
+      end
+      
+    end
+    
   end
   
 end
