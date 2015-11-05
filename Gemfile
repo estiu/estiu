@@ -48,9 +48,9 @@ group :development do
 end
 
 group :test do
-  gem 'rspec-rails', '~> 3.3.3'
+  gem 'rspec-rails', '~> 3.3'
   gem 'shoulda-matchers', '~> 3'
-  gem 'rspec-retry', '~> 0.4.4'
+  gem 'rspec-retry', '~> 0.4'
   gem 'webmock', '~> 1.21'
   gem 'capybara', '~> 2.5'
   gem 'launchy', '~> 2.4'
