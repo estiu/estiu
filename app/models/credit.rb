@@ -5,7 +5,7 @@ class Credit < ActiveRecord::Base
   
   default_scope { where charged: false }
   
-  after_commit :notify_attendee
+  after_commit :notify_attendee, on: :create
   
   monetize :amount_cents, subunit_numericality: {
     greater_than: 0
@@ -19,7 +19,7 @@ class Credit < ActiveRecord::Base
   validates_presence_of :pledge_id
   
   def notify_attendee
-    
+    CreditCreationJob.perform_later(self.id)
   end
   
   def to_s
