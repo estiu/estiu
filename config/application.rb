@@ -4,6 +4,10 @@ require 'rails/all'
 
 Bundler.require(*Rails.groups)
 
+if Rails.env.development?
+  Sidekiq.redis &:info rescue raise "Redis not running."
+end
+
 module Events
   class Application < Rails::Application
     
