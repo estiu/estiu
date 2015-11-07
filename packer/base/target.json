@@ -11,9 +11,12 @@
     "source_ami": "ami-47a23a30",
     "instance_type": "t2.medium",
     "ssh_username": "ubuntu",
-    "ami_name": "base {{timestamp}}"
+    "ami_name": "base {{timestamp}}",
+    "tags": {"type": "base"}
   }],
   "provisioners": [
+    {"type": "shell",
+     "inline": "echo \"{{user `REPO_DEPLOY_PUBLIC_KEY`}}\" > ~/.ssh/deployment_key.pub; echo \"{{user `REPO_DEPLOY_PRIVATE_KEY`}}\" > ~/.ssh/deployment_key; "},
     {"type": "file", "source": "{{user `repo_source`}}", "destination": "~/events_clone_for_bundling"},
     {"type": "shell", "script": "build.sh"}
   ]

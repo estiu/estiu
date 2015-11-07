@@ -97,12 +97,17 @@ module AwsOps
       
     end
     
-    def self.latest_ami role
-      # ec2_client.describe_images.filter('web').latest.id
-      {
-        ASG_WEB_NAME => 'ami-05c31c76',
-        ASG_WORKER_NAME => 'ami-8114cbf2'
-      }[role]
+    def self.latest_ami role=BASE_IMAGE_NAME
+      ec2_client.describe_images(owners: ['self']).images.
+        select{|image|
+          image.tags.detect{|tag|
+            tag.key == 'type' && tag.value == role.to_s
+          }
+        }.sort {|a, b|
+          DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
+        }.
+        last.
+        image_id
     end
     
     def self.delete_launch_configurations

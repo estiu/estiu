@@ -4,6 +4,7 @@ module AwsOps
   
   VPC = '172.32.0.0/16'
   ELB_NAME = 'ELB'
+  BASE_IMAGE_NAME = 'base'
   ASG_WEB_NAME = 'web'
   ASG_WORKER_NAME = 'worker'
   ASG_ROLES = [ASG_WEB_NAME, ASG_WORKER_NAME]
