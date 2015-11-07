@@ -10,7 +10,7 @@ unless ENV["RAILS_ENV"] == "test"
   end
   
   # a file that if exists, proves that this instance of Rails is running in a developer machine.
-  developer_identifying_directories = ['/Users/vemv']
+  developer_identifying_directories = ['/Users/vemv', '/home/rof']
   in_developer_machine = developer_identifying_directories.any?{|a| File.exists? a }
   
   rails_env_file = File.join(Dir.pwd, 'RAILS_ENV')
