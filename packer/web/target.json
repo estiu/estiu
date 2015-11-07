@@ -7,10 +7,10 @@
     "type": "amazon-ebs",
     "access_key": "{{user `aws_access_key`}}",
     "secret_key": "{{user `aws_secret_key`}}",
-    "region": "eu-west-1",
+    "region": "{{user `region`}}",
     "source_ami": "{{user `base_ami`}}",
-    "instance_type": "t2.medium",
-    "ssh_username": "ubuntu",
+    "instance_type": "{{user `instance_type`}}",
+    "ssh_username": "{{user `user`}}",
     "ami_name": "web {{timestamp}}",
     "tags": {"type": "web"}
   }],

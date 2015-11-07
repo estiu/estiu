@@ -97,8 +97,12 @@ module AwsOps
       
     end
     
+    def self.clean_ubuntu_ami
+      'ami-47a23a30'
+    end
+    
     def self.latest_ami role=BASE_IMAGE_NAME
-      ec2_client.describe_images(owners: ['self']).images.
+      latest = ec2_client.describe_images(owners: ['self']).images.
         select{|image|
           image.tags.detect{|tag|
             tag.key == 'type' && tag.value == role.to_s
@@ -106,8 +110,16 @@ module AwsOps
         }.sort {|a, b|
           DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
         }.
-        last.
-        image_id
+        last
+      if latest
+        latest.image_id
+      else
+        if role.to_s == BASE_IMAGE_NAME
+          clean_ubuntu_ami
+        else
+          latest_ami BASE_IMAGE_NAME
+        end
+      end
     end
     
     def self.delete_launch_configurations
@@ -118,16 +130,19 @@ module AwsOps
       names.any?
     end
     
-    def self.create_launch_configurations
-      security_groups_per_worker = {
+    def self.security_groups_per_worker
+      {
         ASG_WEB_NAME => [security_groups[:port_80_vpc], security_groups[:ssh]],
         ASG_WORKER_NAME => [security_groups[:ssh]]
       }
+    end
+    
+    def self.create_launch_configurations
       ASG_ROLES.each do |role|
         auto_scaling_client.create_launch_configuration({
           launch_configuration_name: role,
           image_id: latest_ami(role),
-          instance_type: 't2.micro',
+          instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME
         })

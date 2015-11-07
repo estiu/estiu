@@ -17,7 +17,7 @@ class AwsOps::Capistrano
 
     puts "Role #{role} - deploying #{ips.size} machines: #{instances_info}"
     
-    ips.map {|ip| "ubuntu@#{ip}" }
+    ips.map {|ip| "#{AwsOps::USERNAME}@#{ip}" }
     
   end
   
