@@ -1,6 +1,7 @@
 def rebuild role
   puts "Building image for role #{role}..."
-  system %| \
+  repo_source = ci? ? "~/clone" : "~/events"
+  return system %| \
     cd packer/#{role}; \
     packer build \
       -var "base_ami=#{AwsOps::Infrastructure.latest_ami role}" \
@@ -8,7 +9,7 @@ def rebuild role
       -var "aws_secret_key=$AWS_SECRET_KEY" \
       -var "REPO_DEPLOY_PUBLIC_KEY=$REPO_DEPLOY_PUBLIC_KEY" \
       -var "REPO_DEPLOY_PRIVATE_KEY=$REPO_DEPLOY_PRIVATE_KEY" \
-      -var "repo_source=$(echo ~/events)" \
+      -var "repo_source=$(echo #{repo_source})" \
       -var "instance_type=#{AwsOps::CI_SIZE}" \
       -var "user=#{AwsOps::USERNAME}" \
       -var "region=#{AwsOps::REGION}" \
@@ -25,7 +26,7 @@ task packer: :environment do
   
   rebuild_base = files.map{|f| `#{command} #{f}` }.any?(&:present?)
   
-  rebuild(:base) if rebuild_base
-  rebuild(:web)
+  (rebuild_base ? rebuild(:base) : true) &&
+  rebuild(:web) &&
   rebuild(:worker)
 end
