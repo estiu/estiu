@@ -2,8 +2,15 @@ class AwsOps::Pipeline
   
   extend AwsOps
   
-  def self.schedule_campaign_fulfillment_check campaign
-    name = "campaign_fulfillment_check_#{campaign.id}"
+  def self.unschedule_campaign_unfulfillment_check campaign_id
+    name = id_for campaign_id
+    data_pipeline_client.delete_pipeline({
+      pipeline_id: name
+    })
+  end
+  
+  def self.schedule_campaign_unfulfillment_check campaign
+    name = id_for campaign.id
     data_pipeline_client.create_pipeline({
       name: name,
       unique_id: name
@@ -35,6 +42,10 @@ class AwsOps::Pipeline
         }
       ]
     })
+  end
+  
+  def self.id_for c
+    "campaign_fulfillment_check_#{c}"
   end
   
 end

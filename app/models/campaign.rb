@@ -40,7 +40,9 @@ class Campaign < ActiveRecord::Base
   
   attr_accessor :goal_cents_facade
   
-  after_commit :send_fulfillment_emails
+  after_commit :schedule_unfulfillment_check, on: :create
+  after_commit :unschedule_unfulfillment_check, on: :destroy
+  after_commit :send_fulfillment_emails, on: :update
   
   def self.minimum_active_hours
     1
@@ -141,6 +143,14 @@ class Campaign < ActiveRecord::Base
     if fulfilled_at && !fulfilled?
       errors[:fulfilled_at] << "Cannot be set if the campaign isn't actually fulfilled."
     end
+  end
+  
+  def schedule_unfulfillment_check
+    CampaignUnfulfillmentCheckJob.perform_later(self.id)
+  end
+  
+  def unschedule_unfulfillment_check
+    CampaignUnfulfillmentUnscheduleJob.perform_later(self.id)
   end
   
 end
