@@ -33,10 +33,16 @@ task packer: :environment do
   
   rebuild_base = files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
   
-  (rebuild_base ? rebuild(:base) : true) &&
-  rebuild(:web) &&
-  rebuild(:worker) &&
-  AwsOps::Infrastructure.delete_old_amis
+  all_good =
+    (rebuild_base ? rebuild(:base) : true) &&
+    rebuild(:web) &&
+    rebuild(:worker)
+  
+  if all_good
+    AwsOps::Infrastructure.delete_old_amis
+  else
+    exit 1
+  end
   
 end
 
