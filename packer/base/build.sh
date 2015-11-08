@@ -1,5 +1,8 @@
 #!/bin/bash -x
 
+# Codeship sets this value, which should be blank.
+export GEM_HOME=
+
 set -e
 set -u
 sleep 30

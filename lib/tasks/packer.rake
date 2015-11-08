@@ -5,8 +5,8 @@ def rebuild role
     AwsOps::Infrastructure.latest_ami(role, AwsOps::BUILD_SIZE)
   repo_source = ci? ? "~/clone" : "~/events"
   return system %| \
-    set -e \
-    set -u \
+    set -e \;
+    set -u \;
     cd packer/#{role}; \
     packer build \
       -var "base_ami=#{base_ami}" \
