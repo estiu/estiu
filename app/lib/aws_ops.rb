@@ -11,10 +11,10 @@ module AwsOps
   LOAD_BALANCED_ASGS = [ASG_WEB_NAME]
   AVAILABILITY_ZONES = ['eu-west-1a', 'eu-west-1b', 'eu-west-1c']
   KEYPAIR_NAME = 'eu_west_1'
-  USERNAME='ubuntu'
-  CI_SIZE='t2.medium'
-  PRODUCTION_SIZE='t2.micro'
-  REGION='eu-west-1'
+  USERNAME = 'ubuntu'
+  BUILD_SIZE = 't2.micro'
+  PRODUCTION_SIZE = 't2.micro'
+  REGION = 'eu-west-1'
   
   def ec2_client
     @@ec2_client ||= Aws::EC2::Client.new

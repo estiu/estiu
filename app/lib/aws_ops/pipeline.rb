@@ -33,7 +33,7 @@ class AwsOps::Pipeline
           name: 'Ec2Resource',
           fields: {
             type: 'Ec2Resource',
-            imageId: AwsOps::Infrastructure.latest_ami(AwsOps::ASG_WORKER_NAME),
+            imageId: AwsOps::Infrastructure.latest_ami(AwsOps::ASG_WORKER_NAME, AwsOps::PRODUCTION_SIZE),
             instanceType: AwsOps::PRODUCTION_SIZE,
             keyPair: AwsOps::KEYPAIR_NAME,
             runAsUser: AwsOps::USERNAME,

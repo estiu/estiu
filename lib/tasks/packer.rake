@@ -4,13 +4,13 @@ def rebuild role
   return system %| \
     cd packer/#{role}; \
     packer build \
-      -var "base_ami=#{AwsOps::Infrastructure.latest_ami role}" \
+      -var "base_ami=#{AwsOps::Infrastructure.latest_ami role, AwsOps::BUILD_SIZE}" \
       -var "aws_access_key=$AWS_ACCESS_KEY" \
       -var "aws_secret_key=$AWS_SECRET_KEY" \
       -var "REPO_DEPLOY_PUBLIC_KEY=$REPO_DEPLOY_PUBLIC_KEY" \
       -var "REPO_DEPLOY_PRIVATE_KEY=$REPO_DEPLOY_PRIVATE_KEY" \
       -var "repo_source=$(echo #{repo_source})" \
-      -var "instance_type=#{AwsOps::CI_SIZE}" \
+      -var "instance_type=#{AwsOps::BUILD_SIZE}" \
       -var "user=#{AwsOps::USERNAME}" \
       -var "region=#{AwsOps::REGION}" \
       target.json ;\
@@ -24,7 +24,7 @@ task packer: :environment do
   command = "git diff --name-only HEAD~#{build_commit_count}..HEAD"
   files = ['packer/base', 'lib/tasks/packer.rake', 'Gemfile*']
   
-  rebuild_base = files.map{|f| `#{command} #{f}` }.any?(&:present?)
+  rebuild_base = files.map{|f| `#{command} #{f}` }.any?(&:present?) || (AwsOps::Infrastructure.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Infrastructure.clean_ubuntu_ami)
   
   (rebuild_base ? rebuild(:base) : true) &&
   rebuild(:web) &&

@@ -97,11 +97,14 @@ module AwsOps
       
     end
     
-    def self.clean_ubuntu_ami
-      'ami-47a23a30'
+    def self.clean_ubuntu_ami size
+      Hash.new { raise }.merge({
+        't2.micro' => 'ami-47a23a30',
+        't2.medium' => 'ami-47a23a30' # I think both sizes are fine with the same AMI, but larger need a different ubuntu image.
+      })[size]
     end
     
-    def self.latest_ami role=BASE_IMAGE_NAME
+    def self.latest_ami role=BASE_IMAGE_NAME, size
       latest = ec2_client.describe_images(owners: ['self']).images.
         select{|image|
           image.tags.detect{|tag|
@@ -115,9 +118,9 @@ module AwsOps
         latest.image_id
       else
         if role.to_s == BASE_IMAGE_NAME
-          clean_ubuntu_ami
+          clean_ubuntu_ami size
         else
-          latest_ami BASE_IMAGE_NAME
+          latest_ami BASE_IMAGE_NAME, size
         end
       end
     end
@@ -141,7 +144,7 @@ module AwsOps
       ASG_ROLES.each do |role|
         auto_scaling_client.create_launch_configuration({
           launch_configuration_name: role,
-          image_id: latest_ami(role),
+          image_id: latest_ami(role, PRODUCTION_SIZE),
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME
