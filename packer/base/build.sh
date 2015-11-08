@@ -4,8 +4,8 @@ set -e
 set -u
 sleep 30
 cd
-sudo apt-get -y update
-sudo apt-get -y install git zsh build-essential libssl-dev libreadline-dev zlib1g-dev libpq-dev tree nginx
+sudo apt-get -qq -y update
+sudo apt-get -qq -y install git zsh build-essential libssl-dev libreadline-dev zlib1g-dev libpq-dev tree nginx
 echo -e "Host bitbucket.org\nIdentityFile ~/.ssh/deployment_key\nStrictHostKeyChecking no\nUserKnownHostsFile=/dev/null" >> .ssh/config
 chmod 0600 ~/.ssh/deployment_key*
 git clone git@bitbucket.org:vemv/events.git events_test
