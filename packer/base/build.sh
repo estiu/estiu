@@ -1,7 +1,7 @@
 #!/bin/bash -x
 
-# Codeship sets this value, which should be blank.
-export GEM_HOME=
+# Codeship sets this value, which shouldn't exist.
+unset GEM_HOME
 
 set -e
 set -u
@@ -21,6 +21,7 @@ rbenv install 2.2.3
 rbenv global 2.2.3
 gem install bundler
 cd ~/events_clone_for_bundling
+export GEM_HOME=
 bundle --without development test
 cd
 rm -rf ~/events_clone_for_bundling

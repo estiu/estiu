@@ -98,9 +98,11 @@ module AwsOps
     end
     
     def self.clean_ubuntu_ami size
+      # I think all these sizes are fine with the same AMI, but larger need a different ubuntu image.
       Hash.new { raise }.merge({
         't2.micro' => 'ami-47a23a30',
-        't2.medium' => 'ami-47a23a30' # I think both sizes are fine with the same AMI, but larger need a different ubuntu image.
+        't2.small' => 'ami-47a23a30',
+        't2.medium' => 'ami-47a23a30'
       })[size]
     end
     
@@ -129,11 +131,9 @@ module AwsOps
       IMAGE_TYPES.each do |role|
         images = ec2_client.describe_images(owners: ['self']).images.
         select{|image|
-          newer_too ? # when we want to delete everything, we don't care about tags (sometimes they're not set)
-            true :
-            image.tags.detect{|tag|
-              tag.key == 'type' && tag.value == role.to_s
-            }
+          image.tags.detect{|tag|
+            tag.key == 'type' && tag.value == role.to_s
+          }
         }.sort {|a, b|
           DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
         }

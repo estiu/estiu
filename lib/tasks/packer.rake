@@ -39,7 +39,7 @@ task packer: :environment do
     rebuild(:worker)
   
   if all_good
-    AwsOps::Infrastructure.delete_old_amis
+    AwsOps::Infrastructure.delete_amis
   else
     exit 1
   end
