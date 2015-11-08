@@ -125,6 +125,26 @@ module AwsOps
       end
     end
     
+    def self.delete_amis newer_too=false
+      IMAGE_TYPES.each do |role|
+        images = ec2_client.describe_images(owners: ['self']).images.
+        select{|image|
+          image.tags.detect{|tag|
+            tag.key == 'type' && tag.value == role.to_s
+          }
+        }.sort {|a, b|
+          DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
+        }
+        target = newer_too ? images : images[0...(images.size - 1)]
+        target.each do |image|
+          puts "Deregistering #{image.image_id}"
+          ec2_client.deregister_image({image_id: image.image_id})
+          ec2_client.delete_snapshot({snapshot_id: image.snapshot_id})
+        end
+      end
+    end
+    
+    
     def self.delete_launch_configurations
       names = auto_scaling_client.describe_launch_configurations.launch_configurations.map &:launch_configuration_name
       names.each do |name|

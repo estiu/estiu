@@ -7,6 +7,7 @@ module AwsOps
   BASE_IMAGE_NAME = 'base'
   ASG_WEB_NAME = 'web'
   ASG_WORKER_NAME = 'worker'
+  IMAGE_TYPES = [BASE_IMAGE_NAME, ASG_WEB_NAME, ASG_WORKER_NAME]
   ASG_ROLES = [ASG_WEB_NAME, ASG_WORKER_NAME]
   LOAD_BALANCED_ASGS = [ASG_WEB_NAME]
   AVAILABILITY_ZONES = ['eu-west-1a', 'eu-west-1b', 'eu-west-1c']
