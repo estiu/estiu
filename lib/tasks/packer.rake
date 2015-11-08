@@ -39,3 +39,19 @@ task packer: :environment do
   AwsOps::Infrastructure.delete_old_amis
   
 end
+
+namespace :packer do
+  
+  task clear: :environment do
+    
+    AwsOps::Infrastructure.delete_amis
+    
+  end
+  
+  task clear_all: :environment do
+    
+    AwsOps::Infrastructure.delete_amis :all
+    
+  end
+  
+end

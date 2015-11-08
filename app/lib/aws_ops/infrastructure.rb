@@ -129,9 +129,11 @@ module AwsOps
       IMAGE_TYPES.each do |role|
         images = ec2_client.describe_images(owners: ['self']).images.
         select{|image|
-          image.tags.detect{|tag|
-            tag.key == 'type' && tag.value == role.to_s
-          }
+          newer_too ? # when we want to delete everything, we don't care about tags (sometimes they're not set)
+            true :
+            image.tags.detect{|tag|
+              tag.key == 'type' && tag.value == role.to_s
+            }
         }.sort {|a, b|
           DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
         }
@@ -139,7 +141,7 @@ module AwsOps
         target.each do |image|
           puts "Deregistering #{image.image_id}"
           ec2_client.deregister_image({image_id: image.image_id})
-          ec2_client.delete_snapshot({snapshot_id: image.snapshot_id})
+          ec2_client.delete_snapshot({snapshot_id: image.block_device_mappings.detect(&:ebs).ebs.snapshot_id})
         end
       end
     end
