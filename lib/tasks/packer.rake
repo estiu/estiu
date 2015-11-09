@@ -1,6 +1,8 @@
-def rebuild role
+def rebuild role, force_rebuild
   puts "Building image for role #{role}..."
-  base_ami = AwsOps::Infrastructure.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
+  base_ami = (force_rebuild && role.to_s == AwsOps::BASE_IMAGE_NAME) ?
+    AwsOps::Infrastructure.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
+    AwsOps::Infrastructure.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
   repo_source = ci? ? "~/clone" : "~/events"
   return system %| \
     set -e \;
@@ -32,9 +34,9 @@ def build force_rebuild=false
   rebuild_base = force_rebuild || files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
   
   all_good =
-    (rebuild_base ? rebuild(:base) : true) &&
-    rebuild(:web) &&
-    rebuild(:worker)
+    (rebuild_base ? rebuild(:base, force_rebuild) : true) &&
+    rebuild(:web, force_rebuild) &&
+    rebuild(:worker, force_rebuild)
   
   if all_good
     AwsOps::Infrastructure.delete_amis
