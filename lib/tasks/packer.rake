@@ -1,8 +1,6 @@
 def rebuild role
   puts "Building image for role #{role}..."
-  base_ami = (role.to_s == AwsOps::BASE_IMAGE_NAME) ?
-    AwsOps::Infrastructure.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
-    AwsOps::Infrastructure.latest_ami(role, AwsOps::BUILD_SIZE)
+  base_ami = AwsOps::Infrastructure.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
   repo_source = ci? ? "~/clone" : "~/events"
   return system %| \
     set -e \;
