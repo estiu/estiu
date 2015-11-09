@@ -12,7 +12,7 @@
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `user`}}",
     "ami_name": "web {{timestamp}}",
-    "tags": {"type": "web"}
+    "tags": {"type": "web", "commit": "{{user `commit_sha`}}"}
   }],
   "provisioners": [
     {"type": "file", "source": "files", "destination": "~/"},

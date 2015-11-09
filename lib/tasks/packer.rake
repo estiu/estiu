@@ -18,6 +18,7 @@ def rebuild role, force_rebuild
       -var "instance_type=#{AwsOps::BUILD_SIZE}" \
       -var "user=#{AwsOps::USERNAME}" \
       -var "region=#{AwsOps::REGION}" \
+      -var "commit_sha=#{`git rev-parse HEAD`.split("\n")[0]}" \
       target.json ;\
     cd - \
   |

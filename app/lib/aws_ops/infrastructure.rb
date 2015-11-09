@@ -107,7 +107,7 @@ module AwsOps
       })[size]
     end
     
-    def self.latest_ami role=BASE_IMAGE_NAME, size
+    def self.latest_ami_object role, size
       latest = ec2_client.describe_images(owners: ['self']).images.
         select{|image|
           image.tags.detect{|tag|
@@ -118,7 +118,7 @@ module AwsOps
         }.
         last
       if latest
-        latest.image_id
+        latest
       else
         if role.to_s == BASE_IMAGE_NAME
           clean_ubuntu_ami size
@@ -126,6 +126,11 @@ module AwsOps
           latest_ami BASE_IMAGE_NAME, size
         end
       end
+
+    end
+    
+    def self.latest_ami role=BASE_IMAGE_NAME, size
+      latest_ami_object(role, size).image_id
     end
     
     def self.delete_amis newer_too=false
@@ -187,12 +192,20 @@ module AwsOps
     
     def self.create_asgs
       [ASG_WEB_NAME, ASG_WORKER_NAME].each do |asg_name|
+        ami = latest_ami_object asg_name
+        commit = ami.tags.detect{|t|t.key == 'commit'}.try(&:value)
         opts = {
           auto_scaling_group_name: "#{asg_name} #{SecureRandom.hex 6}",
           launch_configuration_name: asg_name,
           min_size: 1,
           max_size: 1,
-          availability_zones: AVAILABILITY_ZONES
+          availability_zones: AVAILABILITY_ZONES,
+          tags: [
+            {
+              key: 'commit',
+              value: commit
+            }
+          ]
         }
         opts.merge!({load_balancer_names: [ELB_NAME]}) if LOAD_BALANCED_ASGS.include?(asg_name)
         auto_scaling_client.create_auto_scaling_group(opts)

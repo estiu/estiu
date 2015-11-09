@@ -12,7 +12,7 @@
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `user`}}",
     "ami_name": "base {{timestamp}}",
-    "tags": {"type": "base"}
+    "tags": {"type": "base", "commit": "{{user `commit_sha`}}"}
   }],
   "provisioners": [
     {"type": "shell",

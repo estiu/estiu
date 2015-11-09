@@ -22,7 +22,7 @@ gem install bundler
 git clone git@bitbucket.org:vemv/events.git
 cd events
 echo production > RAILS_ENV
-bundle --without development test --path vendor/bundle
+bundle --without development test --path vendor/bundle # extraneous GEM_HOME insists in being there under Codeship, so we install to ~/events/vendor/bundler
 cd
 curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"
 unzip awscli-bundle.zip
