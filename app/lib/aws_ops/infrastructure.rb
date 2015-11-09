@@ -171,7 +171,8 @@ module AwsOps
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn
+          iam_instance_profile: Iam.instance_profile_arn,
+          user_data: File.read(File.join(Rails.root, 'app', 'lib', 'aws_ops', 'init.sh'))
         })
       end
     end
