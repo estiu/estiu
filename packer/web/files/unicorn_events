@@ -13,23 +13,23 @@
 set -e # fail due to return codes
 set -u # fail due to undefined variables
 
-# PATH="/home/$USER/.rbenv/shims:/home/$USER/.rbenv/bin:$PATH" # potentially useful
-# ENV="production"
 USER="ubuntu"
 TIMEOUT=60
 APP_NAME="events"
 APP_ROOT="/home/$USER/$APP_NAME"
 PID_DIR=$APP_ROOT/tmp/pids
 PID=$PID_DIR/unicorn.pid
-CMD="cd $APP_ROOT;  bundle exec unicorn -D -c config/unicorn.rb" # dont pass -E $ENV , let's see if it works
 
 # make sure the app exists
 cd $APP_ROOT || exit 1
 
-while [ ! -f .aws_init_complete ]
-do
-  sleep 1
-done
+CMD="
+  cd $APP_ROOT
+  ruby bin/fetch_env.rb
+  bundle exec rake db:migrate
+  bundle exec rake assets:precompile
+  bundle exec unicorn -D -c config/unicorn.rb
+"
 
 sig () {
   test -s "$PID" && kill -$1 `cat $PID`

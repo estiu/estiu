@@ -10,5 +10,4 @@ files.each do |file|
   else
     exit 1
   end
-  `chmod 777 '#{file}'`
 end

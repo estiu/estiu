@@ -176,8 +176,7 @@ module AwsOps
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn,
-          user_data: Base64.encode64(File.read(File.join(Rails.root, 'app', 'lib', 'aws_ops', 'init.sh')))
+          iam_instance_profile: Iam.instance_profile_arn
         })
       end
     end
@@ -192,7 +191,7 @@ module AwsOps
     
     def self.create_asgs
       [ASG_WEB_NAME, ASG_WORKER_NAME].each do |asg_name|
-        ami = latest_ami_object asg_name
+        ami = latest_ami_object asg_name, AwsOps::PRODUCTION_SIZE
         commit = ami.tags.detect{|t|t.key == 'commit'}.try(&:value)
         opts = {
           auto_scaling_group_name: "#{asg_name} #{SecureRandom.hex 6}",
@@ -226,6 +225,7 @@ module AwsOps
     end
     
     def self.delete!
+      puts "Deleting infrastructure..."
       delete_elbs
       delete_asgs
       delete_launch_configurations
