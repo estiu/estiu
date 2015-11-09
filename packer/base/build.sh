@@ -21,4 +21,5 @@ rbenv global 2.2.3
 gem install bundler
 git clone git@bitbucket.org:vemv/events.git
 cd events
+echo production > RAILS_ENV
 bundle --without development test --path vendor/bundle
