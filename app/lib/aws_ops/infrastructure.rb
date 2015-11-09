@@ -99,10 +99,11 @@ module AwsOps
     
     def self.clean_ubuntu_ami size
       # I think all these sizes are fine with the same AMI, but larger need a different ubuntu image.
+      ami1 = 'ami-47a23a30'
       Hash.new { raise }.merge({
-        't2.micro' => 'ami-47a23a30',
-        't2.small' => 'ami-47a23a30',
-        't2.medium' => 'ami-47a23a30'
+        't2.micro' => ami1,
+        't2.small' => ami1,
+        't2.medium' => ami1
       })[size]
     end
     
@@ -156,10 +157,10 @@ module AwsOps
     end
     
     def self.security_groups_per_worker
-      {
+      Hash.new{raise}.merge({
         ASG_WEB_NAME => [security_groups[:port_80_vpc], security_groups[:ssh]],
         ASG_WORKER_NAME => [security_groups[:ssh]]
-      }
+      })
     end
     
     def self.create_launch_configurations
@@ -169,7 +170,8 @@ module AwsOps
           image_id: latest_ami(role, PRODUCTION_SIZE),
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
-          key_name: KEYPAIR_NAME
+          key_name: KEYPAIR_NAME,
+          iam_instance_profile: Iam.instance_profile_arn
         })
       end
     end
