@@ -23,7 +23,7 @@ def rebuild role
   |
 end
 
-task packer: :environment do
+def build force_rebuild=false
   
   build_commit_count = 1 # sometimes one pushes more than one commit, only the last one gets built
   
@@ -31,7 +31,7 @@ task packer: :environment do
   files = ['packer/base', 'lib/tasks/packer.rake', 'Gemfile*']
   no_base_built = AwsOps::Infrastructure.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Infrastructure.clean_ubuntu_ami(AwsOps::BUILD_SIZE)
   
-  rebuild_base = files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
+  rebuild_base = force_rebuild || files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
   
   all_good =
     (rebuild_base ? rebuild(:base) : true) &&
@@ -46,7 +46,17 @@ task packer: :environment do
   
 end
 
+task packer: :environment do
+  build
+end
+
 namespace :packer do
+  
+  task rebuild: :environment do
+  
+    build :force_rebuild
+    
+  end
   
   task clear: :environment do
     
