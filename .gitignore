@@ -26,3 +26,4 @@ dump.rdb
 shared/log/unicorn.stderr.log
 shared/log/unicorn.stdout.log
 shared/pids/unicorn.pid
+vendor/bundle
