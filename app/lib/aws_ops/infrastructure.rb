@@ -172,7 +172,7 @@ module AwsOps
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
           iam_instance_profile: Iam.instance_profile_arn,
-          user_data: File.read(File.join(Rails.root, 'app', 'lib', 'aws_ops', 'init.sh'))
+          user_data: Base64.encode64(File.read(File.join(Rails.root, 'app', 'lib', 'aws_ops', 'init.sh')))
         })
       end
     end
@@ -188,7 +188,7 @@ module AwsOps
     def self.create_asgs
       [ASG_WEB_NAME, ASG_WORKER_NAME].each do |asg_name|
         opts = {
-          auto_scaling_group_name: asg_name,
+          auto_scaling_group_name: "#{asg_name} #{SecureRandom.hex 6}",
           launch_configuration_name: asg_name,
           min_size: 1,
           max_size: 1,
@@ -205,6 +205,7 @@ module AwsOps
         create_elb
         create_launch_configurations
         create_asgs
+        puts "AWS infrastructure succesfully created."
       rescue Exception => e
         delete!
         raise e
