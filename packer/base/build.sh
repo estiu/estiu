@@ -19,6 +19,6 @@ source ~/.profile
 rbenv install 2.2.3
 rbenv global 2.2.3
 gem install bundler
-git clone git@bitbucket.org:vemv/events.git events_test
-cd events_test
+git clone git@bitbucket.org:vemv/events.git
+cd events
 bundle --without development test --path vendor/bundle
