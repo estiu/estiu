@@ -19,9 +19,9 @@ USER="ubuntu"
 TIMEOUT=60
 APP_NAME="events"
 APP_ROOT="/home/$USER/$APP_NAME"
-PID_DIR=$APP_ROOT/shared/pids
+PID_DIR=$APP_ROOT/tmp/pids
 PID=$PID_DIR/unicorn.pid
-CMD="cd $APP_ROOT/current;  bundle exec unicorn -D -c config/unicorn.rb" # dont pass -E $ENV , let's see if it works
+CMD="cd $APP_ROOT;  bundle exec unicorn -D -c config/unicorn.rb" # dont pass -E $ENV , let's see if it works
 
 # make sure the app exists
 cd $APP_ROOT || exit 1
