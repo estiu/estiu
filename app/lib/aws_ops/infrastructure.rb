@@ -21,61 +21,77 @@ module AwsOps
       names.any?
     end
     
-    def self.create_elb
+    def self.https_elb_setup
       
-      private_key_name = 'private_key'
-      csr_name = 'csr'
-      certificate_name = 'certificate'
-      
-      iam_client.delete_server_certificate({server_certificate_name: certificate_name}) rescue Aws::IAM::Errors::NoSuchEntity
-      
-      `rm -f #{private_key_name}.pem #{csr_name}.pem #{certificate_name}.pem`
-      
-      `openssl genrsa -out #{private_key_name}.pem 2048`
-      `openssl req -sha256 -new -key #{private_key_name}.pem -out #{csr_name}.pem -subj "/C=ES/ST=Barcelona/L=Barcelona/O=vemv/OU=vemv/CN=aws.vemv.net/emailAddress=vemv@vemv.net"`
-      `openssl x509 -req -days 365 -in #{csr_name}.pem -signkey #{private_key_name}.pem -out #{certificate_name}.pem`
-      
-      server_certificate_id = nil
-      
-      begin
+        private_key_name = 'private_key'
+        csr_name = 'csr'
+        certificate_name = 'certificate'
         
-        server_certificate_id = iam_client.upload_server_certificate(
-          server_certificate_name: certificate_name,
-          certificate_body: File.read(File.join Rails.root, "#{certificate_name}.pem"),
-          private_key: File.read(File.join Rails.root, "#{private_key_name}.pem")).
-        server_certificate_metadata.arn
+        iam_client.delete_server_certificate({server_certificate_name: certificate_name}) rescue Aws::IAM::Errors::NoSuchEntity
         
-      rescue Aws::IAM::Errors::EntityAlreadyExists => e
-        n = 10
-        puts "#{e.class} - Sleeping #{n} seconds..."
-        sleep n
-        retry
+        `rm -f #{private_key_name}.pem #{csr_name}.pem #{certificate_name}.pem`
+        
+        `openssl genrsa -out #{private_key_name}.pem 2048`
+        `openssl req -sha256 -new -key #{private_key_name}.pem -out #{csr_name}.pem -subj "/C=ES/ST=Barcelona/L=Barcelona/O=vemv/OU=vemv/CN=aws.vemv.net/emailAddress=vemv@vemv.net"`
+        `openssl x509 -req -days 365 -in #{csr_name}.pem -signkey #{private_key_name}.pem -out #{certificate_name}.pem`
+        
+        server_certificate_id = nil
+        
+        begin
+          
+          server_certificate_id = iam_client.upload_server_certificate(
+            server_certificate_name: certificate_name,
+            certificate_body: File.read(File.join Rails.root, "#{certificate_name}.pem"),
+            private_key: File.read(File.join Rails.root, "#{private_key_name}.pem")).
+          server_certificate_metadata.arn
+          
+        rescue Aws::IAM::Errors::EntityAlreadyExists => e
+          n = 10
+          puts "#{e.class} - Sleeping #{n} seconds..."
+          sleep n
+          retry
+        end
+        
+        `rm -f #{private_key_name}.pem #{csr_name}.pem #{certificate_name}.pem`
+        
+        server_certificate_id
+        
+    end
+    
+    def self.create_elb https=false
+      listeners = [
+        {
+          protocol: "HTTP",
+          load_balancer_port: 80,
+          instance_protocol: "HTTP",
+          instance_port: 80
+        }
+      ]
+      
+      _security_groups = [security_groups[:port_80_public]]
+      
+      if https
+        
+        listeners <<
+          {
+            protocol: "HTTPS",
+            load_balancer_port: 443,
+            instance_protocol: "HTTP",
+            instance_port: 80,
+            ssl_certificate_id: https_elb_setup
+          }
+        
+        _security_groups << security_groups[:port_443_public]
+        
       end
-      
-      `rm -f #{private_key_name}.pem #{csr_name}.pem #{certificate_name}.pem`
       
       begin
         
         elb_client.create_load_balancer({
           load_balancer_name: ELB_NAME,
-          listeners: [
-            {
-              protocol: "HTTP",
-              load_balancer_port: 80,
-              instance_protocol: "HTTP",
-              instance_port: 80
-            },
-            {
-              protocol: "HTTPS",
-              load_balancer_port: 443,
-              instance_protocol: "HTTP",
-              instance_port: 80,
-              ssl_certificate_id: server_certificate_id
-            }
-          ],
-          security_groups: [security_groups[:port_80_public], security_groups[:port_443_public]],
+          listeners: listeners,
+          security_groups: _security_groups,
           availability_zones: AVAILABILITY_ZONES
-          
         })
           
       rescue Aws::ElasticLoadBalancing::Errors::CertificateNotFound => e
@@ -220,8 +236,9 @@ module AwsOps
         create_asgs
         puts "AWS infrastructure succesfully created."
       rescue Exception => e
-        raise e
+        puts "An error ocurred."
         delete!
+        raise e
       end
     end
     
