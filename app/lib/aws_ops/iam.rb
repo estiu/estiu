@@ -30,6 +30,7 @@ module AwsOps
     # arn:aws:iam::320413926189:policy/s3-events-env-vars
     # arn:aws:iam::aws:policy/AWSDataPipelineFullAccess
     # arn:aws:iam::aws:policy/AmazonSQSFullAccess
+    # arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess
     def self.instance_profile_arn
       'arn:aws:iam::320413926189:instance-profile/events'
     end

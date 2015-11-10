@@ -21,24 +21,24 @@ class AwsOps::Pipeline
         {
           id: 'Schedule',
           name: 'Schedule',
-          fields: {
-            type: 'Schedule',
-            occurrences: 1,
-            startDateTime: campaign.ends_at.iso8601,
-            period: '3 years' # doesn't matter given the occurrence value of 1.
-          }
+          fields: [
+            {key: 'type', string_value: 'Schedule'},
+            {key: 'occurrences', string_value: '1'},
+            {key: 'startDateTime', string_value: campaign.ends_at.iso8601},
+            {key: 'period', string_value: '3 years'} # doesn't matter given the occurrence value of 1.
+          ]
         },
         {
           id: 'Ec2Resource',
           name: 'Ec2Resource',
-          fields: {
-            type: 'Ec2Resource',
-            imageId: AwsOps::Infrastructure.latest_ami(AwsOps::ASG_WORKER_NAME, AwsOps::PRODUCTION_SIZE),
-            instanceType: AwsOps::PRODUCTION_SIZE,
-            keyPair: AwsOps::KEYPAIR_NAME,
-            runAsUser: AwsOps::USERNAME,
-            securityGroupIds: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME]
-          }
+          fields: [
+            {key: 'type', string_value: 'Ec2Resource'},
+            {key: 'imageId', string_value: AwsOps::Infrastructure.latest_ami(AwsOps::ASG_WORKER_NAME, AwsOps::PRODUCTION_SIZE)},
+            {key: 'instanceType', string_value: AwsOps::PRODUCTION_SIZE},
+            {key: 'keyPair', string_value: AwsOps::KEYPAIR_NAME},
+            {key: 'runAsUser', string_value: AwsOps::USERNAME},
+            {key: 'securityGroupIds', string_value: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME]}
+          ]
         }
       ]
     })
