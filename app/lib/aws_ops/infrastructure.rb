@@ -13,6 +13,7 @@ module AwsOps
     end
     
     def self.delete_elbs
+      `rm *.pem`
       names = elb_client.describe_load_balancers.load_balancer_descriptions.map &:load_balancer_name
       names.each do |lb|
         elb_client.delete_load_balancer load_balancer_name: lb
@@ -219,8 +220,8 @@ module AwsOps
         create_asgs
         puts "AWS infrastructure succesfully created."
       rescue Exception => e
-        delete!
         raise e
+        delete!
       end
     end
     

@@ -28,7 +28,8 @@ module AwsOps
     
     # Has:
     # arn:aws:iam::320413926189:policy/s3-events-env-vars
-    # arn:aws:iam::aws:policy/service-role/AWSDataPipelineRole
+    # arn:aws:iam::aws:policy/AWSDataPipelineFullAccess
+    # arn:aws:iam::aws:policy/AmazonSQSFullAccess
     def self.instance_profile_arn
       'arn:aws:iam::320413926189:instance-profile/events'
     end

@@ -37,7 +37,7 @@ class AwsOps::Pipeline
             instanceType: AwsOps::PRODUCTION_SIZE,
             keyPair: AwsOps::KEYPAIR_NAME,
             runAsUser: AwsOps::USERNAME,
-            securityGroupIds: wsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME]
+            securityGroupIds: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME]
           }
         }
       ]
