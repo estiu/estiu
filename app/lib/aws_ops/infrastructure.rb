@@ -13,7 +13,7 @@ module AwsOps
     end
     
     def self.delete_elbs
-      `rm *.pem`
+      `rm -f *.pem`
       names = elb_client.describe_load_balancers.load_balancer_descriptions.map &:load_balancer_name
       names.each do |lb|
         elb_client.delete_load_balancer load_balancer_name: lb

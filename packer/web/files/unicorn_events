@@ -26,6 +26,8 @@ cd $APP_ROOT || exit 1
 CMD="
   cd $APP_ROOT
   ruby bin/fetch_env.rb
+  git pull
+  bundle
   bundle exec rake db:migrate
   bundle exec rake assets:precompile
   bundle exec unicorn -D -c config/unicorn.rb
