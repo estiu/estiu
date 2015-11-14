@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20151104104612) do
 
   create_table "campaigns", force: :cascade do |t|
     t.string   "name"
+    t.string   "unfulfillment_check_id"
     t.text     "description"
     t.integer  "goal_cents"
     t.integer  "minimum_pledge_cents"

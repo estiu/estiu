@@ -2,6 +2,7 @@ class CreateCampaigns < ActiveRecord::Migration
   def change
     create_table :campaigns do |t|
       t.string :name
+      t.string :unfulfillment_check_id
       t.text :description
       t.integer :goal_cents
       t.integer :minimum_pledge_cents
