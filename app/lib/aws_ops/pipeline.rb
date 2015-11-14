@@ -3,10 +3,11 @@ class AwsOps::Pipeline
   extend AwsOps
   
   def self.unschedule_campaign_unfulfillment_check campaign_id
-    name = id_for campaign_id
-    data_pipeline_client.delete_pipeline({
-      pipeline_id: name
-    })
+    campaign = Campaign.find campaign_id
+    id = campaign.unfulfillment_check_id
+    Rails.logger.info "Deleting pipeline with id #{id}..."
+    data_pipeline_client.delete_pipeline({pipeline_id: id})
+    Rails.logger.info "Deleted pipeline with id #{id}."
   end
   
   def self.schedule_campaign_unfulfillment_check campaign
@@ -45,16 +46,28 @@ class AwsOps::Pipeline
             {key: 'schedule', ref_value: 'Schedule'},
             {key: 'securityGroupIds', string_value: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME].join(',')}
           ]
+        },
+        {
+          id: 'ShellCommandActivity',
+          name: 'ShellCommandActivity',
+          fields: [
+            {key: 'type', string_value: 'ShellCommandActivity'},
+            {key: 'command', string_value: 'echo 42'},
+            {key: 'runsOn', ref_value: 'Ec2Resource'},
+            {key: 'schedule', ref_value: 'Schedule'}
+          ]
         }
       ]
     })
     
     if output.errored
       raise StandardError.new("validation_errors: #{output.validation_errors}")
+      data_pipeline_client.delete_pipeline({pipeline_id: id})
     else
-      Rails.logger.info "Activating pipeling with id #{id}..."
+      Rails.logger.info "Activating pipeline with id #{id}..."
       data_pipeline_client.activate_pipeline({pipeline_id: id})
       campaign.update_column :unfulfillment_check_id, id
+      Rails.logger.info "Activated pipeline with id #{id}."
     end
     
   end
