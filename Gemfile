@@ -30,6 +30,8 @@ gem 'unicorn', '~> 5'
 gem 'aws-sdk', '~> 2.1'
 gem 'shoryuken', github: 'vemv/shoryuken'
 gem 'activerecord-session_store', '~> 0.1'
+gem 'rollbar', '~> 2.4'
+gem 'oj', '~> 2.12'
 
 group :development, :test do
   gem 'pry'
