@@ -96,6 +96,7 @@ class Pledge < ActiveRecord::Base
   rescue Stripe::CardError => e
     Rails.logger.error e.class
     Rails.logger.error e
+    Rollbar.error e
     return false
   end
   
