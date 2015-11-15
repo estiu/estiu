@@ -8,6 +8,10 @@ namespace :aws_ops do
     AwsOps::Infrastructure.launch_worker!
   end
   
+  task update_env: :environment do
+    AwsOps::S3.update_env_files
+  end
+  
   task delete: :environment do
     AwsOps::Infrastructure.delete!
   end
