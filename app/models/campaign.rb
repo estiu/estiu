@@ -39,6 +39,7 @@ class Campaign < ActiveRecord::Base
   validate :fulfilled_at_truthful
   
   attr_accessor :goal_cents_facade
+  attr_accessor :force_job_running
   
   after_commit :schedule_unfulfillment_check, on: :create
   after_commit :unschedule_unfulfillment_check, on: :destroy
@@ -154,7 +155,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def schedule_unfulfillment_check
-    CampaignUnfulfillmentCheckJob.perform_later(self.id)
+    CampaignUnfulfillmentCheckJob.perform_later(self.id, self.force_job_running)
   end
   
   def unschedule_unfulfillment_check

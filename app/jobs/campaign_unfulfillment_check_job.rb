@@ -1,7 +1,7 @@
 class CampaignUnfulfillmentCheckJob < ActiveJob::Base
   
-  def perform campaign_id
-    return unless Rails.env.production?
+  def perform campaign_id, force_run=false
+    return if !Rails.env.production? && !force_run
     AwsOps::Pipeline.schedule_campaign_unfulfillment_check(Campaign.find(campaign_id))
   end
   
