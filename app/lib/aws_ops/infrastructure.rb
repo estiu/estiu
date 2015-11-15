@@ -185,8 +185,8 @@ module AwsOps
       })
     end
     
-    def self.create_launch_configurations
-      ASG_ROLES.each do |role|
+    def self.create_launch_configurations roles=ASG_ROLES
+      roles.each do |role|
         auto_scaling_client.create_launch_configuration({
           launch_configuration_name: role,
           image_id: latest_ami(role, PRODUCTION_SIZE),
@@ -206,8 +206,8 @@ module AwsOps
       names.any?
     end
     
-    def self.create_asgs
-      [ASG_WEB_NAME, ASG_WORKER_NAME].each do |asg_name|
+    def self.create_asgs roles=[ASG_WEB_NAME, ASG_WORKER_NAME]
+      roles.each do |asg_name|
         ami = latest_ami_object asg_name, AwsOps::PRODUCTION_SIZE
         commit = ami.tags.detect{|t|t.key == 'commit'}.try(&:value)
         opts = {
@@ -235,6 +235,18 @@ module AwsOps
         create_launch_configurations
         create_asgs
         puts "AWS infrastructure succesfully created."
+      rescue Exception => e
+        puts "An error ocurred."
+        delete!
+        raise e
+      end
+    end
+    
+    def self.launch_worker!
+      delete!
+      begin
+        create_launch_configurations [ASG_WORKER_NAME]
+        create_asgs [ASG_WORKER_NAME]
       rescue Exception => e
         puts "An error ocurred."
         delete!
