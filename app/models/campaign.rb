@@ -43,6 +43,7 @@ class Campaign < ActiveRecord::Base
   after_commit :schedule_unfulfillment_check, on: :create
   after_commit :unschedule_unfulfillment_check, on: :destroy
   after_commit :send_fulfillment_emails, on: :update
+  after_commit :check_unfulfilled_at, on: :update
   
   def self.minimum_active_hours
     1
@@ -136,6 +137,13 @@ class Campaign < ActiveRecord::Base
     change = previous_changes[:fulfilled_at]
     if change && change[0].nil? && change[1].present?
       CampaignFulfillmentJob.perform_later(self.id)
+    end
+  end
+  
+  def check_unfulfilled_at
+    change = previous_changes[:unfulfilled_at]
+    if change && change[0].nil? && change[1].present?
+      CampaignUnfulfillmentJob.perform_later(self.id)
     end
   end
   

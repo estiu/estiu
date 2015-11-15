@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20151104104612) do
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.datetime "fulfilled_at"
+    t.datetime "unfulfilled_at"
     t.boolean  "skip_past_date_validations"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false

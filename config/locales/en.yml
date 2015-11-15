@@ -18,6 +18,23 @@ mailers_common: &mailers_common
         p1: Your campaign has reached its goal.
         p2: You must now proceed to create the actual event with a specific date, and send us a copy of the contracts you've signed with the venue, artists, providers and so on.
         p3: Please contact us for withdrawing the collected funds.
+  campaign_unfulfillment:
+    attendee_mailer:
+      perform:
+        subject: "%{first_name}, the campaign you paid for has not reached its goal."
+        campaign_link_caption: campaign
+        another_campaign_link_caption: another campaign
+        p1: "Unfortunately the %{campaign_link} for which you paid %{amount} has not reached its goal, so the event won't be celebrated."
+        p2: "Don't worry, your money is safe with us. You can reuse the funds in %{another_campaign_link}, or get an immediate refund."
+        p3: "Thanks for trusting us."
+    event_promoter_mailer:
+      perform:
+        subject: "Sorry, your campaign has not reached its goal."
+        campaign_link_caption: campaign
+        new_campaign_link_caption: create
+        p1: "Unfortunately your %{campaign_link} only raised %{raised_amount} out of the %{goal_amount} goal, so no money will be transferred for your campaign."
+        p2: "The attendees can reuse their paid money in any other campaign (which you can %{new_campaign_link}), or get an immediate refund."
+        p3: "Thanks for trusting us."
 
 devise: &devise
   devise:
