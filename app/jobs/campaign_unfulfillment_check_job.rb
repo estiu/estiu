@@ -1,4 +1,4 @@
-class CampaignUnfulfillmentCheckJob < ActiveJob::Base
+class CampaignUnfulfillmentCheckJob < ApplicationJob
   
   def perform campaign_id, force_run=false
     return if !Rails.env.production? && !force_run

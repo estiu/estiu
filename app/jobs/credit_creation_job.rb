@@ -1,4 +1,4 @@
-class CreditCreationJob < ActiveJob::Base
+class CreditCreationJob < ApplicationJob
   
   def perform credit_id
     credit = Credit.find credit_id

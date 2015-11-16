@@ -1,4 +1,4 @@
-class CampaignUnfulfillmentJob < ActiveJob::Base
+class CampaignUnfulfillmentJob < ApplicationJob
   
   def perform campaign_id
     campaign = Campaign.find campaign_id

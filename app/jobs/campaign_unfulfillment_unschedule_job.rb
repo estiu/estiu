@@ -1,4 +1,4 @@
-class CampaignUnfulfillmentUnscheduleJob < ActiveJob::Base
+class CampaignUnfulfillmentUnscheduleJob < ApplicationJob
   
   def perform campaign_id
     return unless Rails.env.production?

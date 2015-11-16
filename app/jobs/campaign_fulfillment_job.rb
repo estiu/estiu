@@ -1,4 +1,4 @@
-class CampaignFulfillmentJob < ActiveJob::Base
+class CampaignFulfillmentJob < ApplicationJob
   
   # rendering N mails takes time, which justifies creating a job-creating job.
   def perform campaign_id
