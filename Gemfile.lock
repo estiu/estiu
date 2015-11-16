@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/vemv/shoryuken.git
-  revision: bd42f47b5fbffb46f6cb3cfb56c0745de957ae06
+  remote: git://github.com/phstc/shoryuken.git
+  revision: 81cc5be899198d46a01930c385b01857ac1cf436
+  ref: 81cc5be899198d46a01930c385b01857ac1cf436
   specs:
     shoryuken (2.0.2)
       aws-sdk-core (~> 2)
