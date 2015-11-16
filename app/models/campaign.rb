@@ -34,7 +34,7 @@ class Campaign < ActiveRecord::Base
   
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
   
-  validate :valid_date_fields
+  validate :valid_date_fields, on: :create
   validate :minimum_pledge_according_to_venue, on: :create
   validate :fulfilled_at_truthful
   
