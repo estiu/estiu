@@ -247,6 +247,7 @@ module AwsOps
       begin
         create_launch_configurations [ASG_WORKER_NAME]
         create_asgs [ASG_WORKER_NAME]
+        puts "Worker succesfully launched."
       rescue Exception => e
         puts "An error ocurred."
         delete!

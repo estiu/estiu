@@ -42,7 +42,7 @@ class AwsOps::Pipeline
             {key: 'keyPair', string_value: AwsOps::KEYPAIR_NAME},
             {key: 'runAsUser', string_value: AwsOps::USERNAME},
             {key: 'role', string_value: 'DataPipelineDefaultRole'},
-            {key: 'resourceRole', string_value: 'events'},
+            {key: 'resourceRole', string_value: 'DataPipelineDefaultResourceRole'},
             {key: 'schedule', ref_value: 'Schedule'},
             {key: 'securityGroupIds', string_value: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME].join(',')}
           ]
