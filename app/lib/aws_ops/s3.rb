@@ -8,4 +8,8 @@ class AwsOps::S3
     end
   end
   
+  def self.touch_and_clear_pipeline_log
+    s3_client.put_object bucket: 'events-datapipeline', key: 'error_logs', body: '', acl: 'private', server_side_encryption: 'AES256'
+  end
+  
 end

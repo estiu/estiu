@@ -23,6 +23,13 @@ class AwsOps::Pipeline
       pipeline_id: id,
       pipeline_objects: [
         {
+          id: 'Default',
+          name: 'Default',
+          fields: [
+            {key: 'pipelineLogUri', string_value: 's3://events-datapipeline/error_logs'}
+          ]
+        },
+        {
           id: 'Schedule',
           name: 'Schedule',
           fields: [
