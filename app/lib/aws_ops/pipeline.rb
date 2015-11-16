@@ -26,7 +26,9 @@ class AwsOps::Pipeline
           id: 'Default',
           name: 'Default',
           fields: [
-            {key: 'pipelineLogUri', string_value: 's3://events-datapipeline/error_logs'}
+            {key: 'pipelineLogUri', string_value: 's3://events-datapipeline'},
+            {key: 'failureAndRerunMode', string_value: 'cascade'},
+            {key: 'scheduleType', string_value: 'cron'}
           ]
         },
         {
