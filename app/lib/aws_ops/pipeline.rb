@@ -10,9 +10,9 @@ class AwsOps::Pipeline
     Rails.logger.info "Deleted pipeline with id #{id}."
   end
   
-  def self.schedule_campaign_unfulfillment_check campaign
+  def self.schedule_campaign_unfulfillment_check campaign, test=false
     
-    name = id_for campaign.id
+    name = test ? SecureRandom.hex : id_for(campaign.id)
     
     id = data_pipeline_client.create_pipeline({
       name: name,
@@ -40,7 +40,7 @@ class AwsOps::Pipeline
           fields: [
             {key: 'type', string_value: 'Schedule'},
             {key: 'occurrences', string_value: '1'},
-            {key: 'startDateTime', string_value: campaign.ends_at.utc.iso8601.split("Z")[0]},
+            {key: 'startDateTime', string_value: (test ? 90.seconds.from_now : campaign.ends_at).utc.iso8601.split("Z")[0]},
             {key: 'period', string_value: '3 years'} # doesn't matter given the occurrence value of 1.
           ]
         },
@@ -62,7 +62,7 @@ class AwsOps::Pipeline
           name: 'ShellCommandActivity',
           fields: [
             {key: 'type', string_value: 'ShellCommandActivity'},
-            {key: 'command', string_value: 'set -e; cd ~/events && git pull && bundle --without development test --path vendor/bundle && ruby bin/fetch_env.rb && bundle exec rake mark_unfulfilled_at'},
+            {key: 'command', string_value: (test ? 'echo 42' : 'set -e; cd ~/events && git pull && bundle --without development test --path vendor/bundle && ruby bin/fetch_env.rb && bundle exec rake mark_unfulfilled_at')},
             {key: 'runsOn', ref_value: 'Ec2Resource'}
           ]
         }
