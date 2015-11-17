@@ -13,7 +13,7 @@ module AwsOps
   LOAD_BALANCED_ASGS = [ASG_WEB_NAME]
   AVAILABILITY_ZONES = ['eu-west-1a', 'eu-west-1b', 'eu-west-1c']
   KEYPAIR_NAME = 'eu_west_1'
-  USERNAME = 'ubuntu'
+  USERNAME = 'ec2-user'
   BUILD_SIZE = 't2.micro'
   PRODUCTION_SIZE = 't2.micro'
   REGION = 'eu-west-1'

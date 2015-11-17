@@ -16,6 +16,9 @@ def rebuild role, force_rebuild
       -var "REPO_DEPLOY_PRIVATE_KEY=$REPO_DEPLOY_PRIVATE_KEY" \
       -var "repo_source=$(echo #{repo_source})" \
       -var "instance_type=#{AwsOps::BUILD_SIZE}" \
+      -var "user_data_file=#{File.join(Rails.root, 'packer', 'base', 'user_data')}" \
+      -var "ssh_keypair_name=#{AwsOps::KEYPAIR_NAME}" \
+      -var "ssh_private_key_file=/Users/vemv/.ssh/eu_west_1.pem" \
       -var "user=#{AwsOps::USERNAME}" \
       -var "region=#{AwsOps::REGION}" \
       -var "commit_sha=#{`git rev-parse HEAD`.split("\n")[0]}" \

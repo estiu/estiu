@@ -5,7 +5,7 @@ upstream unicorn {
 server {
   server_name _;
   listen 80;
-  root /home/ubuntu/events/public;
+  root /home/ec2-user/events/public;
 
   location ^~ /assets/ {
     gzip_static on;

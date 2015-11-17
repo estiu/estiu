@@ -75,7 +75,7 @@ class AwsOps::Pipeline
     else
       Rails.logger.info "Activating pipeline with id #{id}..."
       data_pipeline_client.activate_pipeline({pipeline_id: id})
-      campaign.update_column :unfulfillment_check_id, id
+      campaign.update_column :unfulfillment_check_id, id unless test
       Rails.logger.info "Activated pipeline with id #{id}."
     end
     

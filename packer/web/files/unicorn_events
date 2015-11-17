@@ -13,7 +13,7 @@
 set -e # fail due to return codes
 set -u # fail due to undefined variables
 
-USER="ubuntu"
+USER="ec2-user"
 TIMEOUT=60
 APP_NAME="events"
 APP_ROOT="/home/$USER/$APP_NAME"

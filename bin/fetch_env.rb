@@ -2,7 +2,7 @@
 # aws s3api put-object --bucket events-env-vars --key .env --body .env
 # aws s3api put-object --bucket events-env-vars --key .env.production --body .env.production
 
-files = [".env", ".env.#{`cat /home/ubuntu/events/RAILS_ENV`.split("\n")[0]}"]
+files = [".env", ".env.#{`cat /home/ec2-user/events/RAILS_ENV`.split("\n")[0]}"]
 all_ok = true
 files.each do |file|
   if all_ok
