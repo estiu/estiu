@@ -11,13 +11,12 @@
     "source_ami": "{{user `base_ami`}}",
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `user`}}",
-    "ami_name": "worker {{timestamp}}",
+    "ami_name": "pipeline {{timestamp}}",
     "ssh_keypair_name": "eu_west_1",
     "ssh_private_key_file": "/Users/vemv/.ssh/eu_west_1.pem",
-    "tags": {"type": "worker", "commit": "{{user `commit_sha`}}"}
+    "tags": {"type": "pipeline", "commit": "{{user `commit_sha`}}"}
   }],
   "provisioners": [
-    {"type": "file", "source": "files", "destination": "~/"},
     {"type": "shell", "script": "build.sh"}
   ]
 }

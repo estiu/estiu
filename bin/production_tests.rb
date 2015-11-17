@@ -1,3 +1,3 @@
-FG.create :campaign, starts_at: 10.seconds.from_now, ends_at: 3611.seconds.from_now, skip_past_date_validations: true
+FG.create :campaign, starts_at: 2.seconds.from_now, ends_at: 90.seconds.from_now
 
 # k aws_ops:launch_worker

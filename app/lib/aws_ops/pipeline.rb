@@ -26,8 +26,11 @@ class AwsOps::Pipeline
           id: 'Default',
           name: 'Default',
           fields: [
-            # {key: 'pipelineLogUri', string_value: 's3://events-datapipeline'},
+            {key: 'pipelineLogUri', string_value: 's3://events-datapipeline'},
             {key: 'failureAndRerunMode', string_value: 'cascade'},
+            {key: 'role', string_value: 'DataPipelineDefaultRole'},
+            {key: 'resourceRole', string_value: 'DataPipelineDefaultResourceRole'},
+            {key: 'schedule', ref_value: 'Schedule'},
             {key: 'scheduleType', string_value: 'cron'}
           ]
         },
@@ -46,13 +49,11 @@ class AwsOps::Pipeline
           name: 'Ec2Resource',
           fields: [
             {key: 'type', string_value: 'Ec2Resource'},
-            {key: 'imageId', string_value: AwsOps::Infrastructure.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::PRODUCTION_SIZE)},
+            {key: 'imageId', string_value: AwsOps::Infrastructure.latest_ami(AwsOps::PIPELINE_IMAGE_NAME, AwsOps::PRODUCTION_SIZE)},
             {key: 'instanceType', string_value: AwsOps::PRODUCTION_SIZE},
             {key: 'keyPair', string_value: AwsOps::KEYPAIR_NAME},
+            {key: 'terminateAfter', string_value: '1 hour'},
             {key: 'runAsUser', string_value: AwsOps::USERNAME},
-            {key: 'role', string_value: 'DataPipelineDefaultRole'},
-            {key: 'resourceRole', string_value: 'DataPipelineDefaultResourceRole'},
-            {key: 'schedule', ref_value: 'Schedule'},
             {key: 'securityGroupIds', string_value: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME].join(',')}
           ]
         },
@@ -62,8 +63,7 @@ class AwsOps::Pipeline
           fields: [
             {key: 'type', string_value: 'ShellCommandActivity'},
             {key: 'command', string_value: 'set -e; cd ~/events && git pull && bundle --without development test --path vendor/bundle && ruby bin/fetch_env.rb && bundle exec rake mark_unfulfilled_at'},
-            {key: 'runsOn', ref_value: 'Ec2Resource'},
-            {key: 'schedule', ref_value: 'Schedule'}
+            {key: 'runsOn', ref_value: 'Ec2Resource'}
           ]
         }
       ]

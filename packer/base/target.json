@@ -12,6 +12,8 @@
     "instance_type": "{{user `instance_type`}}",
     "ssh_username": "{{user `user`}}",
     "ami_name": "base {{timestamp}}",
+    "ssh_keypair_name": "eu_west_1",
+    "ssh_private_key_file": "/Users/vemv/.ssh/eu_west_1.pem",
     "tags": {"type": "base", "commit": "{{user `commit_sha`}}"}
   }],
   "provisioners": [
