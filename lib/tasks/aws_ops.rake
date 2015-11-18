@@ -5,7 +5,7 @@ def reset_state silent=false
   if silent
     `#{command}`
   else
-    system command || fail
+    system(command) || fail
   end
 end
 
@@ -28,7 +28,12 @@ namespace :aws_ops do
   
   task delete: :environment do
     AwsOps::Infrastructure.delete!
+    sleep 60
     reset_state :silent
+  end
+  
+  task seed: :environment do
+    FG.create :campaign, :almost_fulfilled, starts_at: 5.seconds.from_now, ends_at: 120.seconds.from_now
   end
   
 end
