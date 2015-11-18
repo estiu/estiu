@@ -54,7 +54,7 @@ class AwsOps::Pipeline
             {key: 'keyPair', string_value: AwsOps::KEYPAIR_NAME},
             {key: 'terminateAfter', string_value: '1 hour'},
             {key: 'runAsUser', string_value: AwsOps::USERNAME},
-            {key: 'securityGroupIds', string_value: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME].join(',')}
+            {key: 'securityGroupIds', string_value: AwsOps::Infrastructure.security_groups_per_worker[AwsOps::PIPELINE_IMAGE_NAME].join(',')}
           ]
         },
         {

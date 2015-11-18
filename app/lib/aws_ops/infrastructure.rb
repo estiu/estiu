@@ -182,7 +182,8 @@ module AwsOps
     def self.security_groups_per_worker
       Hash.new{raise}.merge({
         ASG_WEB_NAME => [security_groups[:port_80_vpc], security_groups[:ssh]],
-        ASG_WORKER_NAME => [security_groups[:ssh], security_groups[:smtp]]
+        ASG_WORKER_NAME => [security_groups[:ssh], security_groups[:smtp]],
+        PIPELINE_IMAGE_NAME => [security_groups[:ssh]]
       })
     end
     
