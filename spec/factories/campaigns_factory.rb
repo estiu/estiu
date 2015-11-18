@@ -19,7 +19,7 @@ FG.define do
       
       after(:create) do |rec, eva|
         
-        fail unless rec.active?
+        fail if rec.fulfilled?
         
         pledge_count = 5
         amount_cents = (rec.goal_cents.to_f / pledge_count.to_f).floor
@@ -36,7 +36,7 @@ FG.define do
       
       after(:create) do |rec, eva|
         
-        fail unless rec.active?
+        fail if rec.fulfilled?
         pledge_count = 5
         amount_cents = ((rec.goal_cents - rec.minimum_pledge_cents - 1).to_f / pledge_count.to_f).floor
         
@@ -54,7 +54,7 @@ FG.define do
       
       after(:create) do |rec, eva|
         
-        fail unless rec.active?
+        fail if rec.fulfilled?
         pledge_count = 5
         amount_cents = ((rec.goal_cents - rec.minimum_pledge_cents - 1).to_f / pledge_count.to_f).floor
         
