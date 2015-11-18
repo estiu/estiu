@@ -13,4 +13,11 @@ Rails.application.configure do
   config.log_formatter = ::Logger::Formatter.new
   config.active_record.dump_schema_after_migration = false
   config.active_job.queue_adapter = :shoryuken
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.mandrillapp.com',
+    port: 587,
+    user_name: "vemv@vemv.net",
+    password: Rails.application.secrets.mandrill_api_key,
+    authentication: :plain
+  }
 end
