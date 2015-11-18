@@ -2,6 +2,7 @@ ENV['BUNDLE_GEMFILE'] ||= File.expand_path('../../Gemfile', __FILE__)
 
 require 'bundler/setup' # Set up gems listed in the Gemfile.
 require 'rails/commands/server' # require rails, for `if Rails.env.development? || Rails.env.test?` below
+require_relative '../app/lib/developer_machine'
 
 unless ENV["RAILS_ENV"] == "test"
   
@@ -9,9 +10,7 @@ unless ENV["RAILS_ENV"] == "test"
     raise 'Please start Rails from the project root directory.'
   end
   
-  # a file that if exists, proves that this instance of Rails is running in a developer machine.
-  developer_identifying_directories = ['/Users/vemv', '/home/rof']
-  in_developer_machine = developer_identifying_directories.any?{|a| File.exists? a }
+  in_developer_machine = DeveloperMachine.running_in_developer_machine?
   
   rails_env_file = File.join(Dir.pwd, 'RAILS_ENV')
   

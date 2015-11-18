@@ -96,7 +96,9 @@ class Campaign < ActiveRecord::Base
         errors[:starts_at] << I18n.t('campaigns.errors.starts_at.ends_at')
       end
       if ends_at.to_i - starts_at.to_i < self.class.minimum_active_hours.hours
-        errors[:ends_at] << I18n.t('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
+        unless Rails.env.production? && DeveloperMachine.running_in_developer_machine? # sometimes one runs production in a developer machine.
+          errors[:ends_at] << I18n.t('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
+        end
       end
     end
     if (dev_or_test? ? !skip_past_date_validations : true)
