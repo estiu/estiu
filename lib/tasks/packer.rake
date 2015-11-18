@@ -37,10 +37,21 @@ def build force_rebuild=false
   
   rebuild_base = force_rebuild || files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
   
-  all_good =
-    (rebuild_base ? rebuild(:base, force_rebuild) : true) &&
-    rebuild(:web, force_rebuild) &&
-    rebuild(:worker, force_rebuild)
+  all_good = true
+  
+  AwsOps::IMAGE_TYPES.each_with_index do |image, i|
+    
+    fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
+    
+    all_good = if image == AwsOps::BASE_IMAGE_NAME
+      (rebuild_base ? rebuild(image, force_rebuild) : true)
+    else
+      rebuild(image, force_rebuild)
+    end
+    
+    all_good || fail # prevent additional builds
+    
+  end
   
   if all_good
     AwsOps::Infrastructure.delete_amis

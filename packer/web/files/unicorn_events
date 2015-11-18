@@ -25,9 +25,9 @@ cd $APP_ROOT || exit 1
 
 CMD="
   cd $APP_ROOT
-  ruby bin/fetch_env.rb
   git reset --hard origin/master
   git pull
+  ruby bin/fetch_env.rb
   bundle
   bundle exec rake db:migrate
   bundle exec rake assets:precompile
