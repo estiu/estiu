@@ -8,7 +8,8 @@ module AwsOps
         port_443_public: 'sg-a68a3ac2',    
         port_80_public: "sg-e19e2985",
         port_80_vpc: "sg-fd9e2999",
-        ssh: 'sg-ca9e29ae'
+        ssh: 'sg-ca9e29ae',
+        smtp: 'sg-5abc313e'
       })
     end
     
@@ -181,7 +182,7 @@ module AwsOps
     def self.security_groups_per_worker
       Hash.new{raise}.merge({
         ASG_WEB_NAME => [security_groups[:port_80_vpc], security_groups[:ssh]],
-        ASG_WORKER_NAME => [security_groups[:ssh]]
+        ASG_WORKER_NAME => [security_groups[:ssh], security_groups[:smtp]]
       })
     end
     
