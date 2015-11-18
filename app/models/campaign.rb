@@ -37,6 +37,7 @@ class Campaign < ActiveRecord::Base
   validate :valid_date_fields, on: :create
   validate :minimum_pledge_according_to_venue, on: :create
   validate :fulfilled_at_truthful
+  validate :unfulfilled_at_truthful
   
   attr_accessor :goal_cents_facade
   attr_accessor :force_job_running
@@ -153,6 +154,13 @@ class Campaign < ActiveRecord::Base
   def fulfilled_at_truthful
     if fulfilled_at && !fulfilled?
       errors[:fulfilled_at] << "Cannot be set if the campaign isn't actually fulfilled."
+    end
+  end
+  
+  
+  def unfulfilled_at_truthful
+    if unfulfilled_at && fulfilled?
+      errors[:unfulfilled_at] << "Cannot be set if the campaign is actually fulfilled."
     end
   end
   
