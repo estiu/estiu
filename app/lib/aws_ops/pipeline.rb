@@ -82,7 +82,7 @@ class AwsOps::Pipeline
   end
   
   def self.id_for c
-    "campaign_fulfillment_check_#{c}"
+    "campaign_fulfillment_check_#{c}_#{SecureRandom.hex(8)}"
   end
   
 end
