@@ -70,7 +70,7 @@
     var goal = $('#campaign_goal_cents').val()
     var pledge = $('#campaign_minimum_pledge_cents').val()
     var value = ""
-    if (goal && pledge) {
+    if (goal && pledge && pledge != "0") { // "0": because of autonumeric's min.
       value = Math.floor(goal / pledge)
     }
     $('#attendance-indicator').html(caption + ": " + value)
