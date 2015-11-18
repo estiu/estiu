@@ -230,7 +230,6 @@ module AwsOps
     end
     
     def self.create!
-      delete!
       begin
         create_elb
         create_launch_configurations

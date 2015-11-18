@@ -1,6 +1,13 @@
+def reset_state
+  AwsOps::SQS.drain_all_queues!
+  system 'RAILS_ENV=production bundle exec rake db:drop db:create db:migrate' || fail
+end
+
 namespace :aws_ops do
   
   task create: :environment do
+    AwsOps::Infrastructure.delete!
+    reset_state
     AwsOps::Infrastructure.create!
   end
   
@@ -14,6 +21,7 @@ namespace :aws_ops do
   
   task delete: :environment do
     AwsOps::Infrastructure.delete!
+    reset_state
   end
   
 end

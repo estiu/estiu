@@ -42,4 +42,9 @@ module AwsOps
     @@data_pipeline_client ||= Aws::DataPipeline::Client.new
   end
   
+  
+  def sqs_client
+    @@sqs_client ||= Aws::SQS::Client.new
+  end
+  
 end
