@@ -1,5 +1,8 @@
 %header
   .overlay
+    #all-flash-messages
+      %div{style: 'position: absolute; width: 100%'}
+        = render "layouts/flash_messages", flash: flash
     .intro-text
       .intro-lead-in= t ".the_perfect_event"
       .intro-heading= t '.just_for_you'

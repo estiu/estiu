@@ -16,7 +16,8 @@
   %body
     = render "layouts/header"
     #main
-      #all-flash-messages
-        = render "layouts/flash_messages", flash: flash
+      - unless home_page?
+        #all-flash-messages
+          = render "layouts/flash_messages", flash: flash
       = yield
     -# = render 'layouts/footer'

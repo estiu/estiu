@@ -96,4 +96,9 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  helper_method :home_page?
+  def home_page?
+    params[:controller] == 'pages' && params[:id] == 'home'
+  end
+  
 end
