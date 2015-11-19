@@ -103,7 +103,8 @@ class ApplicationController < ActionController::Base
   
   helper_method :public_home_page?
   def public_home_page?
-    params[:controller] == 'pages' && params[:id] == 'home'
+    (params[:controller] == 'pages' && params[:id] == 'home') ||
+    (params[:controller] == 'application' && params[:action] == 'home')
   end
   
   def home
