@@ -11,8 +11,9 @@
       %ul.nav.navbar-nav
         %li
           = link_to t(".campaigns"), campaigns_path
-        %li
-          = link_to t(".events"), '#'
+        - if policy(Event).index?
+          %li
+            = link_to t(".events"), events_path
         %li.dropdown
           %a{"data-toggle" => "dropdown", "role" => "button", "aria-haspopup" => "true"}
             For promoters

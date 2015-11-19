@@ -65,9 +65,13 @@ class ApplicationController < ActionController::Base
     @campaign = Campaign.find(params[:id])
   end
   
-  helper_method :current_attendee
-  def current_attendee
-    current_user.try :attendee
+  Roles.all.each do |role|
+    
+    helper_method "current_#{role}".to_sym
+    define_method "current_#{role}" do
+      current_user.try role
+    end
+    
   end
   
   def flash_json

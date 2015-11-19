@@ -1,9 +1,9 @@
 %div{class: centered_wider}
   
-  %h1 All campaigns
+  %h1=t '.title'
     
   - if policy(Campaign).new?
-    = link_to "New campaign", new_campaign_path, class: 'btn btn-success'
+    = link_to t(".new"), new_campaign_path, class: 'btn btn-success'
 
   %hr
   %ul

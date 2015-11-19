@@ -40,7 +40,7 @@ class ApplicationPolicy
   end
 
   class Scope
-    attr_reader :user, :scope
+    attr_accessor :user, :scope
 
     def initialize(user, scope)
       self.user = user

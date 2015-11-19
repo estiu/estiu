@@ -100,6 +100,16 @@ en:
       artist_promoters: Artist Promoters
       logout: Logout
       login: Login
+  events:
+    index:
+      title: My events
+      empty_admin: "There are no events to display."
+      empty_event_promoter: "You haven't campaigns with active events."
+      empty_attendee: "There aren't any active events you have bought tickets for."
+      empty2_event_promoter: "For having an event going, you can %{link}!"
+      empty2_attendee: "Check out our %{link} for joining an event!"
+      campaigns: campaigns
+      new_campaign: create a campaign
   omniauth_callbacks:
     facebook:
       error: 'Sorry, there has been an unexpected error while trying to login via Facebook. We will look at it.'
@@ -111,6 +121,9 @@ en:
           ends_at: Must be prior to Ends at
         ends_at:
           starts_at: The campaign must remain open for at least %{hours} hours.
+      index:
+        title: All campaigns
+        new: New campaign
       item:
         open_campaign: 'open'
         pledged_campaign: 'pledged'

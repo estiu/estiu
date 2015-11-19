@@ -15,6 +15,8 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :events, only: [:index]
+  
   resources :venues, only: [:create]
   
   get '/pages', to: 'pages#home'

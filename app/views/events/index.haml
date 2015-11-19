@@ -1,0 +1,19 @@
+%div{class: centered_wider}
+  
+  %h1=t '.title'
+    
+  %hr
+  - if @events.count.zero?
+    - if current_admin
+      %p= t('.empty_admin')      
+    - elsif current_event_promoter
+      %p= t('.empty_event_promoter')
+      %p= t('.empty2_event_promoter', link: link_to(t('.new_campaign'), new_campaign_path)).html_safe
+    - elsif current_attendee
+      %p= t('.empty_attendee')
+      %p= t('.empty2_attendee', link: link_to(t('.campaigns'), campaigns_path)).html_safe
+  - else
+    %ul
+      - @events.each do |event|
+        %li.bordered.p10
+          = render 'item', event: event, listing: true
