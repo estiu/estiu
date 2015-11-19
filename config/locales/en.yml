@@ -91,6 +91,15 @@ en:
   fields:
     optional: Optional
   <<: *devise
+  layouts:
+    header:
+      title: Crowdfunded events
+      campaigns: Campaigns
+      events: My events
+      event_promoters: Event Promoters
+      artist_promoters: Artist Promoters
+      logout: Logout
+      login: Login
   omniauth_callbacks:
     facebook:
       error: 'Sorry, there has been an unexpected error while trying to login via Facebook. We will look at it.'
