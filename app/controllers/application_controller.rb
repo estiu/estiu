@@ -69,7 +69,8 @@ class ApplicationController < ActionController::Base
     
     helper_method "current_#{role}".to_sym
     define_method "current_#{role}" do
-      current_user.try role
+      key = "@current_#{role}_cache".to_sym
+      instance_variable_get(key) || instance_variable_set(key, current_user.try(role))
     end
     
   end
