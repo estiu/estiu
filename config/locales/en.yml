@@ -93,6 +93,7 @@ en:
   <<: *devise
   layouts:
     header:
+      for_promoters: For promoters
       title: Estiu
       campaigns: Campaigns
       events: My events
