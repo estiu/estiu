@@ -2,12 +2,13 @@
   
   %h1
     =t(in_mine_page? ? '.title_mine' : '.title')
-    %span.float-right
-      - opts = {class: "btn btn-info btn-xs"}
-      - if in_mine_page?
-        = link_to t('.all'), campaigns_path, opts
-      - else
-        = link_to t('.mine'), mine_campaigns_path, opts
+    - if current_user
+      %span.float-right
+        - opts = {class: "btn btn-info btn-xs"}
+        - if in_mine_page?
+          = link_to t('.all'), campaigns_path, opts
+        - else
+          = link_to t('.mine'), mine_campaigns_path, opts
     
   - if policy(Campaign).new?
     .right
