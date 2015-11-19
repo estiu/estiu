@@ -129,7 +129,10 @@ en:
           starts_at: The campaign must remain open for at least %{hours} hours.
       index:
         title: All campaigns
+        title_mine: My campaigns
         new: New campaign
+        all: View all
+        mine: View only mine
       item:
         open_campaign: 'open'
         pledged_campaign: 'pledged'

@@ -10,7 +10,7 @@
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
       %ul.nav.navbar-nav
         %li
-          = link_to t(".campaigns"), campaigns_path
+          = link_to t(".campaigns"), (current_event_promoter ? mine_campaigns_path : campaigns_path)
         - if policy(Event).index?
           %li
             = link_to t(".events"), events_path

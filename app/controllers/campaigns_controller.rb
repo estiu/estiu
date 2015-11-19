@@ -7,6 +7,20 @@ class CampaignsController < ApplicationController
     authorize(@campaigns = Campaign.all)
   end
   
+  def mine
+    @campaigns = (
+      if current_event_promoter
+        Campaign.visible_for_event_promoter current_event_promoter
+      elsif current_attendee
+        Campaign.visible_for_attendee current_attendee
+      else
+        Campaign.all
+      end
+    )
+    authorize @campaigns
+    render 'index'
+  end
+  
   def show
   end
   
@@ -24,6 +38,11 @@ class CampaignsController < ApplicationController
       flash.now[:error] = t('.error')
       render :new
     end
+  end
+  
+  helper_method :in_mine_page?
+  def in_mine_page?
+    params[:action] == 'mine'
   end
   
   protected

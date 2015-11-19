@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   end
   
   resources :campaigns, only: [:new, :create, :show, :index] do
+    collection do
+      get :mine
+    end
     member do
       resources :pledges, only: [:create, :update], param: :pledge_id
     end

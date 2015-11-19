@@ -4,6 +4,10 @@ class CampaignPolicy < ApplicationPolicy
     true
   end
   
+  def mine?
+    user.id.present?
+  end
+  
   def create?
     user.event_promoter?
   end
