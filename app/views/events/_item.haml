@@ -1,0 +1,16 @@
+- if listing
+  = link_to event.name, event, class: 'show-link-title'
+- else
+  %h1= t '.title', name: event.name
+
+%p{class: "#{'p10 bordered' unless listing}", style: 'font-size: 16px'}= t('.artists', artists: event.artists.join(', '))
+  
+%p
+  %strong= t('.venue') + ':'
+  = event.venue
+%p
+  %strong= t('.starts_at') + ':'
+  = l event.starts_at, format: :long
+%p
+  %strong= t('.duration') + ':'
+  = distance_of_time_in_words(Time.now, event.duration.seconds.from_now)

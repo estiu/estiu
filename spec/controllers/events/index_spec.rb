@@ -24,7 +24,7 @@ describe EventsController do
         context "with #{"no" unless with_events}events" do
           
           before {
-            Event.all.each(&:destroy) unless with_events
+            Event.all.each(&:destroy!) unless with_events
             expect(Event.count).send((with_events ? :to_not : :to), be(0))
           }
           
@@ -42,6 +42,13 @@ describe EventsController do
             
             sign_as :event_promoter
             
+            before {
+              if with_events
+                event = FG.create :event, event_promoter_id: event_promoter.event_promoter.id
+                expect(Pundit.policy_scope(event_promoter, Event)).to include event
+              end
+            }
+            
             it 'works' do
               get :index
             end
@@ -51,6 +58,13 @@ describe EventsController do
           context 'attendee role' do
             
             sign_as :attendee
+            
+            before {
+              if with_events
+                event = FG.create :event, campaign: FG.create(:campaign, :fulfilled, including_attendees: [attendee.attendee])
+                expect(Pundit.policy_scope(attendee, Event)).to include event
+              end
+            }
             
             it 'works' do
               get :index

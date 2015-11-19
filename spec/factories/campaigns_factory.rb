@@ -17,6 +17,10 @@ FG.define do
     
     trait :fulfilled do
       
+      transient do
+        including_attendees []
+      end
+      
       after(:create) do |rec, eva|
         
         fail if rec.fulfilled?
@@ -24,10 +28,14 @@ FG.define do
         pledge_count = 5
         amount_cents = (rec.goal_cents.to_f / pledge_count.to_f).floor
         
-        pledge_count.times {
+        (pledge_count - eva.including_attendees.size).times {
           rec.pledges << FG.create(:pledge, campaign: rec, amount_cents: amount_cents)
         }
-      
+        
+        eva.including_attendees.each do |attendee|
+          rec.pledges << FG.create(:pledge, campaign: rec, amount_cents: amount_cents, attendee: attendee)
+        end
+        
       end
       
     end

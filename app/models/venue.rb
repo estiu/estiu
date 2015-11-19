@@ -16,4 +16,8 @@ class Venue < ActiveRecord::Base
     Hash[(pluck :id, :capacity)]
   end
   
+  def to_s
+    name
+  end
+  
 end

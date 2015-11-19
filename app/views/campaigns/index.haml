@@ -8,5 +8,5 @@
   %hr
   %ul
     - @campaigns.each do |campaign|
-      %li.campaign-listing-item.bordered.p10
+      %li.listing-item.bordered.p10
         = render 'item', campaign: campaign, listing: true

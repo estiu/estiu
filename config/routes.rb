@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :events, only: [:index]
+  resources :events, only: [:index, :show]
   
   resources :venues, only: [:create]
   

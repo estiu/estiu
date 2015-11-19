@@ -10,4 +10,12 @@ class Event < ActiveRecord::Base
     validates attr, presence: true
   end
   
+  def self.visible_for_event_promoter event_promoter
+    joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
+  end
+  
+  def self.visible_for_attendee attendee
+    joins(campaign: :pledges).where(pledges: {attendee_id: attendee.id})
+  end
+  
 end

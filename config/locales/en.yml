@@ -93,7 +93,7 @@ en:
   <<: *devise
   layouts:
     header:
-      title: Crowdfunded events
+      title: Estiu
       campaigns: Campaigns
       events: My events
       event_promoters: Event Promoters
@@ -101,6 +101,12 @@ en:
       logout: Logout
       login: Login
   events:
+    item:
+      title: "Event: %{name}"
+      venue: Venue
+      starts_at: Starts at
+      duration: Duration
+      artists: "With %{artists}"
     index:
       title: My events
       empty_admin: "There are no events to display."
