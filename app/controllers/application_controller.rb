@@ -101,9 +101,18 @@ class ApplicationController < ActionController::Base
     end
   end
   
-  helper_method :home_page?
-  def home_page?
+  helper_method :public_home_page?
+  def public_home_page?
     params[:controller] == 'pages' && params[:id] == 'home'
+  end
+  
+  def home
+    skip_authorization
+    if current_user
+      redirect_to (current_event_promoter ? mine_campaigns_path : campaigns_path)
+    else
+      render 'pages/home'
+    end
   end
   
 end

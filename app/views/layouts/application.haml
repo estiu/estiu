@@ -16,7 +16,7 @@
   %body
     = render "layouts/header"
     #main
-      - unless home_page?
+      - unless public_home_page?
         #all-flash-messages
           = render "layouts/flash_messages", flash: flash
       = yield

@@ -25,6 +25,6 @@ Rails.application.routes.draw do
   
   get '/pages', to: 'pages#home'
   get "/pages/*id" => 'pages#show', as: :page, format: false
-  root to: 'pages#show', id: 'home'
+  root to: 'application#home'
   
 end

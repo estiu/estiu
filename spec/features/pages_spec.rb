@@ -6,6 +6,14 @@
       page_ok 200, js
     end
     
+    describe 'root route' do
+      
+      it 'loads correctly' do
+        visit root_path
+      end
+      
+    end
+    
     HighVoltage.page_ids.each do |page_id|
       
       describe "page: #{page_id}" do
