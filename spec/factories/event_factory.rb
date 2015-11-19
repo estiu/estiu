@@ -2,7 +2,7 @@ FG.define do
   
   factory :event do
     
-    name "Best party ever"
+    name { ["Best party ever", 'Super outdoor event', 'House party', 'Club night', 'Rave in the woods', 'Boat party', 'Mega festival'].sample }
     starts_at {Date.tomorrow}
     duration {6.hours}
     association :venue
