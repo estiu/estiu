@@ -135,6 +135,8 @@ en:
         all: View all
         mine: View only mine
       item:
+        fulfilled_campaign: 'goal reached'
+        unfulfilled_campaign: 'goal not reached'
         open_campaign: 'open'
         pledged_campaign: 'pledged'
         title: "Campaign: %{campaign}"

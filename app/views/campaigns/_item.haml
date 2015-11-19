@@ -1,9 +1,15 @@
 - if listing
   .row
-    .col-xs-10
+    .col-xs-9
       = link_to campaign.name, campaign, class: 'show-link-title'
-    .col-xs-2.dark-grey.right{style: 'padding-top: 12px'}
-      - if current_attendee
+    .col-xs-3.dark-grey.right{style: 'padding-top: 12px'}
+      - if campaign.fulfilled_at
+        %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px'}= t '.fulfilled_campaign'
+      - elsif campaign.unfulfilled_at
+        %span.glyphicon.glyphicon-remove-circle{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px'}= t '.unfulfilled_campaign'
+      - elsif current_attendee
         - if current_attendee.pledged?(campaign)
           %span.glyphicon.glyphicon-ok-circle{style: 'vertical-align: middle'}
           %span{style: 'vertical-align: -1px'}= t '.pledged_campaign'
