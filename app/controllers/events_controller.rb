@@ -12,6 +12,16 @@ class EventsController < ApplicationController
   def show
   end
   
+  def new
+    authorize(@event = Event.new(campaign: Campaign.find(params[:id])))
+  end
+  
+  def create
+    authorize(@event = Event.new(event_attrs))
+  end
+  
+  protected
+  
   def load_events
     authorize Event
     @events = policy_scope Event
@@ -19,6 +29,10 @@ class EventsController < ApplicationController
   
   def load_event
     authorize(@event = Event.find(params[:id]))
+  end
+  
+  def event_attrs
+    
   end
   
 end

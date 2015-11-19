@@ -15,10 +15,11 @@ Rails.application.routes.draw do
     end
     member do
       resources :pledges, only: [:create, :update], param: :pledge_id
+      get 'create_event', to: 'events#new'
     end
   end
   
-  resources :events, only: [:index, :show]
+  resources :events, only: [:index, :show, :create]
   
   resources :venues, only: [:create]
   

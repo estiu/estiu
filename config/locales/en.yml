@@ -15,9 +15,10 @@ mailers_common: &mailers_common
     event_promoter_mailer:
       perform:
         subject: "Your campaign has reached its goal!"
-        p1: Your campaign has reached its goal.
-        p2: You must now proceed to create the actual event with a specific date, and send us a copy of the contracts you've signed with the venue, artists, providers and so on.
-        p3: Please contact us for withdrawing the collected funds.
+        p1: Congratulations! Your campaign has reached its goal.
+        p2: "You must now create the corresponding event with a specific date, including a copy of the contracts you've signed with the venue, artists, providers and so on:"
+        cta: Create the event for this campaign
+        p3: After you create the event and it is approved, we will transfer the collected funds so you can pay your providers.
   campaign_unfulfillment:
     attendee_mailer:
       perform:
@@ -151,6 +152,9 @@ en:
         closed_sign_up_2: "Sign up for attending newer events!"
         sign_up: "Sign up for joining this event"
         sign_up_for_closed: "Sign up"
+        your_event_fulfilled: Your event has reached its goal, and we are ready to transfer its funds.
+        must_create_event: "First, you must %{link}."
+        new_event: create the corresponding event
       create:
         success: "Succesfully created campaign."
         error: "Couldn't create campaign due to the indicated errors."

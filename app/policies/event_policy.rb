@@ -1,5 +1,9 @@
 class EventPolicy < ApplicationPolicy
   
+  def new?
+    user.event_promoter? && record.campaign.event_promoter == user.event_promoter
+  end
+  
   def index?
     user.admin? || user.event_promoter? || user.attendee?
   end

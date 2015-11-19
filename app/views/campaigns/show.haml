@@ -5,7 +5,16 @@
   .top10
   
   - if user_signed_in?
-    - if current_user.attendee?
+    - if should_create_event?
+      %hr
+      .alert.alert-warning{style: 'color: black'}
+        %p
+          %strong
+            = t('.your_event_fulfilled')
+        %p
+          %strong
+            = t('.must_create_event', link: link_to(t('.new_event'), create_event_campaign_path(id: @campaign.id))).html_safe
+    - elsif current_attendee
       = render 'pledges/form', campaign: @campaign
   - else
     %hr 

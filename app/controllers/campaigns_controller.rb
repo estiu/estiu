@@ -45,6 +45,11 @@ class CampaignsController < ApplicationController
     params[:action] == 'mine'
   end
   
+  helper_method :should_create_event?
+  def should_create_event?
+    (@campaign.event_promoter == current_event_promoter) && @campaign.fulfilled_at && !@campaign.event
+  end
+  
   protected
 
   def campaign_attrs
