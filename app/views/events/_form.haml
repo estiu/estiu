@@ -6,9 +6,17 @@
     = form_for(event, url: create_event_campaign_path(id: event.campaign.id)) do |f|
       = form_fields(f, 'events.form') do |field|
         = field.(:name)
+        = field.(:venue_id, as: :select, values: Venue.for_select)
         = field.(:starts_at, as: :date)
         = field.(:duration)
+        %h3
+          = t '.artists'
+          - Array(event.errors[:resident_advisor_paths]).each do |error|
+            .float-right
+              %span.collection-error.f14
+                = error
         = f.fields_for(:resident_advisor_paths, event.resident_advisor_paths.any? ? event.resident_advisor_paths : [ResidentAdvisorPath.new]) do |f|
           = form_fields(f, 'events.form.resident_advisor_paths') do |field|
             = field.(:value)
+        %hr
         = field.(:submit)

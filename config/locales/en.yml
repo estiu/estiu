@@ -105,13 +105,21 @@ en:
   resident_advisor_paths:
     errors:
       value_format: "Please use the specified format. (found: %{found})"
-      dj: "The value must start with 'dj/', for example dj/dixon"
+      dj: "The value must start with '%{prefix}', for example dj/dixon"
       html_code: "extraneous html code"
   events:
+    errors:
+      at_least_one_resident_advisor_path: 'There must be at least one artist.'
+    create:
+      success: "Event succesfully created."
+      error: "Couldn't create event due to the indicated errors."
     form:
       title: 'Create event'
       for_campaign: "For campaign: %{link}"
       submit: 'Create'
+      venue_id: 'Venue'
+      name: 'Event name'
+      artists: Artists
       starts_at: 'Date'
       resident_advisor_paths:
         value: "Resident Advisor path"

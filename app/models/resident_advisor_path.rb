@@ -3,13 +3,15 @@ class ResidentAdvisorPath < ActiveRecord::Base
   before_validation :value_format
   validates :value, presence: true, uniqueness: true
   
+  PREFIX = 'dj/'
+  
   def value_format
     
     return if self.value.blank?
     
     %w(http https www residentadvisor .net).each do |fragment|
       if self.value.include?(fragment)
-        errors[:value] << I18n.t("artists.errors.value_format", found: fragment)
+        errors[:value] << I18n.t("resident_advisor_paths.errors.value_format", found: fragment)
         return
       end
     end
@@ -17,7 +19,7 @@ class ResidentAdvisorPath < ActiveRecord::Base
     sanitized = Rails::Html::FullSanitizer.new.sanitize self.value
     
     if self.value != sanitized
-      errors[:value] << I18n.t("artists.errors.value_format", found: I18n.t("artists.errors.html_code"))
+      errors[:value] << I18n.t("resident_advisor_paths.errors.value_format", found: I18n.t("resident_advisor_paths.errors.html_code"))
       return
     end
     
@@ -29,8 +31,8 @@ class ResidentAdvisorPath < ActiveRecord::Base
       self.value = self.value[0..(self.value.size - 2)]
     end
     
-    unless self.value.start_with?('dj/')
-      errors[:self.value] << I18n.t("artists.errors.dj")
+    unless self.value.start_with?(PREFIX)
+      errors[:value] << I18n.t("resident_advisor_paths.errors.dj", prefix: PREFIX)
       return
     end
     

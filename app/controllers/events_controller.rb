@@ -18,7 +18,13 @@ class EventsController < ApplicationController
   
   def create
     authorize(@event = Event.new(event_attrs))
-    render 'new'
+    if @event.save
+      flash[:success] = t('.success')
+      redirect_to @event
+    else
+      flash.now[:error] = t('.error')
+      render :new
+    end
   end
   
   protected
@@ -33,8 +39,9 @@ class EventsController < ApplicationController
   end
   
   def event_attrs
-    params.permit(event: Event::CREATE_ATTRS)[:event].
-    merge(campaign_id: params[:id])
+    params.
+      permit(event: (Event::CREATE_ATTRS + [{resident_advisor_paths_attributes: %i(value)}]))[:event].
+      merge(campaign_id: params[:id])
   end
   
 end
