@@ -6,7 +6,7 @@ FG.define do
     website "innervisions.com"
     email 'dixon@innervisions.com'
     telephone "609929302"
-    association :resident_advisor_path
+    association :ra_artist
     
     trait :with_events do
       

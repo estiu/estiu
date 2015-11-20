@@ -11,12 +11,12 @@
         = field.(:duration)
         %h3
           = t '.artists'
-          - Array(event.errors[:resident_advisor_paths]).each do |error|
+          - Array(event.errors[:ra_artists]).each do |error|
             .float-right
               %span.collection-error.f14
                 = error
-        = f.fields_for(:resident_advisor_paths, event.resident_advisor_paths.any? ? event.resident_advisor_paths : [ResidentAdvisorPath.new]) do |f|
-          = form_fields(f, 'events.form.resident_advisor_paths') do |field|
-            = field.(:value)
+        = f.fields_for(:ra_artists, event.ra_artists.any? ? event.ra_artists : [RaArtist.new]) do |f|
+          = form_fields(f, 'events.form.ra_artists') do |field|
+            = field.(:artist_path)
         %hr
         = field.(:submit)

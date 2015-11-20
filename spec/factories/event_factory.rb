@@ -19,10 +19,10 @@ FG.define do
         rec.campaign = FG.build(:campaign, opts)
       end
       
-      if rec.resident_advisor_paths.size.zero?
+      if rec.ra_artists.size.zero?
         
         3.times {
-          rec.resident_advisor_paths << FG.build(:resident_advisor_path)
+          rec.ra_artists << FG.build(:ra_artist)
         }
         
       end

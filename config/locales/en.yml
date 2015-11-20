@@ -102,14 +102,14 @@ en:
       artist_promoters: Artist Promoters
       logout: Logout
       login: Login
-  resident_advisor_paths:
+  ra_artists:
     errors:
       value_format: "Please use the specified format. (found: %{found})"
       dj: "The value must start with '%{prefix}', for example dj/dixon"
       html_code: "extraneous html code"
   events:
     errors:
-      at_least_one_resident_advisor_path: 'There must be at least one artist.'
+      at_least_one_ra_artist: 'There must be at least one artist.'
     create:
       success: "Event succesfully created."
       error: "Couldn't create event due to the indicated errors."
@@ -121,8 +121,8 @@ en:
       name: 'Event name'
       artists: Artists
       starts_at: 'Date'
-      resident_advisor_paths:
-        value: "Resident Advisor path"
+      ra_artists:
+        artist_path: "Resident Advisor path"
     item:
       title: "Event: %{name}"
       venue: Venue

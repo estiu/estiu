@@ -1,13 +1,13 @@
 FG.define do
   
-  factory :resident_advisor_path do
+  factory :ra_artist do
     
-    value { "dj/#{SecureRandom.hex}" }
+    artist_path { "dj/#{SecureRandom.hex}" }
     
     after(:build) do |rec, eva|
       
       unless rec.artist_name
-        rec.artist_name = rec.value
+        rec.artist_name = rec.artist_path
       end
       
     end

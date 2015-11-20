@@ -41,12 +41,12 @@ ActiveRecord::Schema.define(version: 20151120083430) do
     t.string   "telephone"
     t.string   "email"
     t.string   "website"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.integer  "resident_advisor_path_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "ra_artist_id"
   end
 
-  add_index "artists", ["resident_advisor_path_id"], name: "index_artists_on_resident_advisor_path_id", using: :btree
+  add_index "artists", ["ra_artist_id"], name: "index_artists_on_ra_artist_id", using: :btree
 
   create_table "attendees", force: :cascade do |t|
     t.string   "first_name"
@@ -121,15 +121,15 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_index "events", ["campaign_id"], name: "index_events_on_campaign_id", using: :btree
   add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
 
-  create_table "events_resident_advisor_paths", force: :cascade do |t|
+  create_table "events_ra_artists", force: :cascade do |t|
     t.integer  "event_id"
-    t.integer  "resident_advisor_path_id"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "ra_artist_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  add_index "events_resident_advisor_paths", ["event_id"], name: "index_events_resident_advisor_paths_on_event_id", using: :btree
-  add_index "events_resident_advisor_paths", ["resident_advisor_path_id"], name: "index_events_resident_advisor_paths_on_resident_advisor_path_id", using: :btree
+  add_index "events_ra_artists", ["event_id"], name: "index_events_ra_artists_on_event_id", using: :btree
+  add_index "events_ra_artists", ["ra_artist_id"], name: "index_events_ra_artists_on_ra_artist_id", using: :btree
 
   create_table "pledges", force: :cascade do |t|
     t.integer  "attendee_id",                           null: false
@@ -147,16 +147,16 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_index "pledges", ["attendee_id"], name: "index_pledges_on_attendee_id", using: :btree
   add_index "pledges", ["campaign_id"], name: "index_pledges_on_campaign_id", using: :btree
 
-  create_table "resident_advisor_paths", force: :cascade do |t|
-    t.string   "value",                       null: false
+  create_table "ra_artists", force: :cascade do |t|
+    t.string   "artist_path",                 null: false
     t.string   "artist_name",                 null: false
     t.boolean  "top1000",     default: false, null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
   end
 
-  add_index "resident_advisor_paths", ["artist_name"], name: "index_resident_advisor_paths_on_artist_name", unique: true, using: :btree
-  add_index "resident_advisor_paths", ["value"], name: "index_resident_advisor_paths_on_value", unique: true, using: :btree
+  add_index "ra_artists", ["artist_name"], name: "index_ra_artists_on_artist_name", unique: true, using: :btree
+  add_index "ra_artists", ["artist_path"], name: "index_ra_artists_on_artist_path", unique: true, using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
@@ -220,15 +220,15 @@ ActiveRecord::Schema.define(version: 20151120083430) do
 
   add_foreign_key "artist_catalog_entries", "artist_promoters"
   add_foreign_key "artist_catalog_entries", "artists"
-  add_foreign_key "artists", "resident_advisor_paths"
+  add_foreign_key "artists", "ra_artists"
   add_foreign_key "campaigns", "event_promoters"
   add_foreign_key "campaigns", "venues"
   add_foreign_key "credits", "attendees"
   add_foreign_key "credits", "pledges"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"
-  add_foreign_key "events_resident_advisor_paths", "events"
-  add_foreign_key "events_resident_advisor_paths", "resident_advisor_paths"
+  add_foreign_key "events_ra_artists", "events"
+  add_foreign_key "events_ra_artists", "ra_artists"
   add_foreign_key "pledges", "attendees"
   add_foreign_key "pledges", "campaigns"
   add_foreign_key "tickets", "attendees"

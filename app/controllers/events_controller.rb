@@ -40,7 +40,7 @@ class EventsController < ApplicationController
   
   def event_attrs
     params.
-      permit(event: (Event::CREATE_ATTRS + [{resident_advisor_paths_attributes: %i(value)}]))[:event].
+      permit(event: (Event::CREATE_ATTRS + [{ra_artists_attributes: %i(artist_path)}]))[:event].
       merge(campaign_id: params[:id])
   end
   
