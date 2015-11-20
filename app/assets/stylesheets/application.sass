@@ -6,6 +6,8 @@
 @import "bootstrap"
 
 $black: rgb(51, 51, 51)
+$light-grey: #eaeaea
+$border-style: solid 1px $light-grey
 
 html
   position: relative
@@ -13,6 +15,9 @@ html
 
 body
   font-size: 15px
+  
+.navbar-header
+  border-right: $border-style
 
 .footer
   position: absolute
@@ -81,9 +86,6 @@ a.btn
 
 .btn-facebook
   background-color: rgb(59, 89, 152)
-
-$light-grey: #eaeaea
-$border-style: solid 1px $light-grey
 
 .light-grey
   color: $light-grey
