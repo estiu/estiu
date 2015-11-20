@@ -1,6 +1,6 @@
 set -e
-
-wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/8u65-b17/jre-8u65-linux-x64.tar.gz
+# NOTE: as of today java 7 must be used, not 8. With 8 the pipeline works, but logging to S3 not.
+wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" http://download.oracle.com/otn-pub/java/jdk/7u80-b15/jre-7u80-linux-x64.tar.gz
 sudo mv jre-* /usr/local/
 cd /usr/local/
 sudo chmod a+x jre-*

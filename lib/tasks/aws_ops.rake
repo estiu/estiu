@@ -1,6 +1,5 @@
 def reset_state silent=false
   AwsOps::Ec2.wait_until_all_instances_terminated
-  # TODO clear Data Pipeline
   AwsOps::SQS.drain_all_queues!
   command = 'RAILS_ENV=production bundle exec rake db:drop db:create db:migrate'
   if silent
