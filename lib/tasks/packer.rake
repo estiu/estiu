@@ -1,3 +1,5 @@
+require_relative '../../app/lib/aws_ops.rb'
+
 def rebuild role, force_rebuild
   puts "Building image for role #{role}..."
   base_ami = (force_rebuild && role.to_s == AwsOps::BASE_IMAGE_NAME) ?
@@ -27,7 +29,7 @@ def rebuild role, force_rebuild
   |
 end
 
-def build force_rebuild=false
+def build force_rebuild=false, images=AwsOps::IMAGE_TYPES
   
   build_commit_count = 1 # sometimes one pushes more than one commit, only the last one gets built
   
@@ -39,7 +41,7 @@ def build force_rebuild=false
   
   all_good = true
   
-  AwsOps::IMAGE_TYPES.each_with_index do |image, i|
+  images.each_with_index do |image, i|
     
     fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
     
@@ -70,6 +72,16 @@ namespace :packer do
   task rebuild: :environment do
   
     build :force_rebuild
+    
+  end
+  
+  (AwsOps::IMAGE_TYPES - [AwsOps::BASE_IMAGE_NAME]).each do |image|
+    
+    task("rebuild_#{image}".to_sym => :environment) do
+      
+      build false, [AwsOps::BASE_IMAGE_NAME, image]
+      
+    end
     
   end
   
