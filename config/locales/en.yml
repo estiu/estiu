@@ -165,6 +165,9 @@ en:
         ends_at: Campaign closes
         venue: Venue
       show:
+        event_created: This campaign has become an event!
+        view_event_created: "View the details %{link}."
+        view_event_created_link: here
         title: '%{pledged} paid'
         percent: "%{percent}% reached"
         goal: "Goal: %{goal}"

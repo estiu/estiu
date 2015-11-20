@@ -3,7 +3,7 @@
 - else
   %h1= t '.title', name: event.name
 
-%p{class: "#{'p10 bordered' unless listing}", style: 'font-size: 16px'}= t('.artists', artists: event.artists.join(', '))
+%p{class: "#{'p10 bordered' unless listing}", style: 'font-size: 16px'}= t('.artists', artists: event.artists_to_display)
   
 %p
   %strong= t('.venue') + ':'

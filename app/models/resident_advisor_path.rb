@@ -1,9 +1,13 @@
 class ResidentAdvisorPath < ActiveRecord::Base
   
+  PREFIX = 'dj/'
+  
   before_validation :value_format
   validates :value, presence: true, uniqueness: true
+  validates :artist_name, presence: true, uniqueness: true
   
-  PREFIX = 'dj/'
+  before_validation :copy_artist_name
+  after_commit :create_artist, on: :create
   
   def value_format
     
@@ -37,5 +41,15 @@ class ResidentAdvisorPath < ActiveRecord::Base
     end
     
   end
-
+  
+  def create_artist
+    ArtistCreationJob.perform_later(self.id)
+  end
+  
+  def copy_artist_name
+    unless self.artist_name.present?
+      self.artist_name = self.value.gsub(PREFIX, '')
+    end
+  end
+  
 end

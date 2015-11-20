@@ -8,14 +8,6 @@ FG.define do
     telephone "609929302"
     association :resident_advisor_path
     
-    after(:build) do |rec, eva|
-      
-      unless rec.user
-        rec.user = FG.build :user, artist: rec, roles: [:artist]
-      end
-
-    end
-    
     trait :with_events do
       
       after(:build) do |rec, eva|

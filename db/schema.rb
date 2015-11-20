@@ -48,16 +48,6 @@ ActiveRecord::Schema.define(version: 20151120083430) do
 
   add_index "artists", ["resident_advisor_path_id"], name: "index_artists_on_resident_advisor_path_id", using: :btree
 
-  create_table "artists_events", force: :cascade do |t|
-    t.integer  "artist_id",  null: false
-    t.integer  "event_id",   null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  add_index "artists_events", ["artist_id"], name: "index_artists_events_on_artist_id", using: :btree
-  add_index "artists_events", ["event_id"], name: "index_artists_events_on_event_id", using: :btree
-
   create_table "attendees", force: :cascade do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -158,10 +148,15 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_index "pledges", ["campaign_id"], name: "index_pledges_on_campaign_id", using: :btree
 
   create_table "resident_advisor_paths", force: :cascade do |t|
-    t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "value",                       null: false
+    t.string   "artist_name",                 null: false
+    t.boolean  "top1000",     default: false, null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
   end
+
+  add_index "resident_advisor_paths", ["artist_name"], name: "index_resident_advisor_paths_on_artist_name", unique: true, using: :btree
+  add_index "resident_advisor_paths", ["value"], name: "index_resident_advisor_paths_on_value", unique: true, using: :btree
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
@@ -201,7 +196,6 @@ ActiveRecord::Schema.define(version: 20151120083430) do
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
     t.string   "roles",                         default: [],              array: true
-    t.integer  "artist_id"
     t.integer  "artist_promoter_id"
     t.integer  "event_promoter_id"
     t.integer  "attendee_id"
@@ -227,8 +221,6 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_foreign_key "artist_catalog_entries", "artist_promoters"
   add_foreign_key "artist_catalog_entries", "artists"
   add_foreign_key "artists", "resident_advisor_paths"
-  add_foreign_key "artists_events", "artists"
-  add_foreign_key "artists_events", "events"
   add_foreign_key "campaigns", "event_promoters"
   add_foreign_key "campaigns", "venues"
   add_foreign_key "credits", "attendees"
@@ -242,7 +234,6 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_foreign_key "tickets", "attendees"
   add_foreign_key "tickets", "events"
   add_foreign_key "users", "artist_promoters"
-  add_foreign_key "users", "artists"
   add_foreign_key "users", "attendees"
   add_foreign_key "users", "event_promoters"
 end

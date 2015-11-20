@@ -1,6 +1,5 @@
 class Event < ActiveRecord::Base
   
-  has_and_belongs_to_many :artists
   has_and_belongs_to_many :resident_advisor_paths
   has_and_belongs_to_many :attendees, join_table: :tickets
   belongs_to :campaign
@@ -35,9 +34,16 @@ class Event < ActiveRecord::Base
   end
   
   def find_ra_paths
-    self.resident_advisor_paths = self.resident_advisor_paths.map do |ra|
-      ResidentAdvisorPath.where(value: ra.value).first_or_initialize
+    new_value = self.resident_advisor_paths.map do |ra|
+      v = ResidentAdvisorPath.where(value: ra.value).first_or_initialize
+      v
     end
+    association(:resident_advisor_paths).send(:through_association).target.clear
+    self.resident_advisor_paths = new_value
+  end
+  
+  def artists_to_display
+    resident_advisor_paths.pluck(:artist_name).join(', ')
   end
   
 end

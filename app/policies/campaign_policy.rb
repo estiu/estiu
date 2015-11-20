@@ -8,7 +8,7 @@ class CampaignPolicy < ApplicationPolicy
     user.id.present?
   end
   
-  def create?
+  def new?
     user.event_promoter?
   end
   

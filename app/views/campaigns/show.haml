@@ -5,7 +5,16 @@
   .top10
   
   - if user_signed_in?
-    - if should_create_event?
+    - if @campaign.event && policy(@campaign.event).show?
+      %hr
+      .alert.alert-info{style: 'color: black'}
+        %p
+          %strong
+            = t '.event_created'
+        %p
+          %strong
+            = t('.view_event_created', link: link_to(t('.view_event_created_link'), event_path(@campaign.event))).html_safe
+    - elsif should_create_event?
       %hr
       .alert.alert-warning{style: 'color: black'}
         %p
