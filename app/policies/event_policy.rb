@@ -10,11 +10,21 @@ class EventPolicy < ApplicationPolicy
   
   def show?
     if user.admin?
-      scope.all
+      true
     elsif user.event_promoter?
       scope.visible_for_event_promoter(user.event_promoter).include? record
     elsif user.attendee?
       scope.visible_for_attendee(user.attendee).include? record
+    else
+      false
+    end
+  end
+  
+  def edit?
+    if user.admin?
+      true
+    elsif user.event_promoter?
+      scope.visible_for_event_promoter(user.event_promoter).include? record
     else
       false
     end

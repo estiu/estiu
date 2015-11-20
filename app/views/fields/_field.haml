@@ -6,7 +6,7 @@
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?} #{locals[:form_group_class]}"}
   - render_label = !([:submit].include? key) && !([:hidden].include? as)
-  - caption = t("#{prefix}.#{key}", default: key.to_s)
+  - caption = t("#{prefix}.#{key}", default: key.to_s.capitalize)
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
   - if render_label && !locals[:only_input]
     - label_html = locals.fetch(:label_html, {})
@@ -16,7 +16,7 @@
       - label_html.merge!('data-toggle' => 'popover',
         'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
         'data-html' => locals[:popover].keys.include?(:html).to_s)
-    = form.label key, label_html
+    = form.label key, caption, label_html
   - unless locals[:only_label]
     = render "fields/#{as}", locals.merge(locals: locals)
   - if render_label && locals[:optional]

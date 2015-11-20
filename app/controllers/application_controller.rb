@@ -112,7 +112,11 @@ class ApplicationController < ActionController::Base
     if current_user
       redirect_to (current_event_promoter ? mine_campaigns_path : campaigns_path)
     else
-      render 'pages/home'
+      if Rails.env.development?
+        redirect_to new_user_session_path
+      else
+        render 'pages/home'
+      end
     end
   end
   

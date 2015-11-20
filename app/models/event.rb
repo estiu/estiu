@@ -1,12 +1,17 @@
 class Event < ActiveRecord::Base
   
   has_and_belongs_to_many :artists
+  has_and_belongs_to_many :resident_advisor_paths
   has_and_belongs_to_many :attendees, join_table: :tickets
   belongs_to :campaign
   belongs_to :venue
   has_many :tickets
   
-  %i(name starts_at duration).each do |attr|
+  accepts_nested_attributes_for :resident_advisor_paths, allow_destroy: false
+  
+  CREATE_ATTRS = %i(name starts_at duration)
+  
+  CREATE_ATTRS.each do |attr|
     validates attr, presence: true
   end
   

@@ -102,7 +102,19 @@ en:
       artist_promoters: Artist Promoters
       logout: Logout
       login: Login
+  resident_advisor_paths:
+    errors:
+      value_format: "Please use the specified format. (found: %{found})"
+      dj: "The value must start with 'dj/', for example dj/dixon"
+      html_code: "extraneous html code"
   events:
+    form:
+      title: 'Create event'
+      for_campaign: "For campaign: %{link}"
+      submit: 'Create'
+      starts_at: 'Date'
+      resident_advisor_paths:
+        value: "Resident Advisor path"
     item:
       title: "Event: %{name}"
       venue: Venue

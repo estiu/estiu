@@ -13,7 +13,7 @@
             = t('.your_event_fulfilled')
         %p
           %strong
-            = t('.must_create_event', link: link_to(t('.new_event'), create_event_campaign_path(id: @campaign.id))).html_safe
+            = t('.must_create_event', link: link_to(t('.new_event'), new_event_campaign_path(id: @campaign.id))).html_safe
     - elsif current_attendee
       = render 'pledges/form', campaign: @campaign
   - else

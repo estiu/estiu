@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151104104612) do
+ActiveRecord::Schema.define(version: 20151120083430) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,9 +41,12 @@ ActiveRecord::Schema.define(version: 20151104104612) do
     t.string   "telephone"
     t.string   "email"
     t.string   "website"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "resident_advisor_path_id"
   end
+
+  add_index "artists", ["resident_advisor_path_id"], name: "index_artists_on_resident_advisor_path_id", using: :btree
 
   create_table "artists_events", force: :cascade do |t|
     t.integer  "artist_id",  null: false
@@ -128,6 +131,16 @@ ActiveRecord::Schema.define(version: 20151104104612) do
   add_index "events", ["campaign_id"], name: "index_events_on_campaign_id", using: :btree
   add_index "events", ["venue_id"], name: "index_events_on_venue_id", using: :btree
 
+  create_table "events_resident_advisor_paths", force: :cascade do |t|
+    t.integer  "event_id"
+    t.integer  "resident_advisor_path_id"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "events_resident_advisor_paths", ["event_id"], name: "index_events_resident_advisor_paths_on_event_id", using: :btree
+  add_index "events_resident_advisor_paths", ["resident_advisor_path_id"], name: "index_events_resident_advisor_paths_on_resident_advisor_path_id", using: :btree
+
   create_table "pledges", force: :cascade do |t|
     t.integer  "attendee_id",                           null: false
     t.integer  "campaign_id",                           null: false
@@ -143,6 +156,12 @@ ActiveRecord::Schema.define(version: 20151104104612) do
 
   add_index "pledges", ["attendee_id"], name: "index_pledges_on_attendee_id", using: :btree
   add_index "pledges", ["campaign_id"], name: "index_pledges_on_campaign_id", using: :btree
+
+  create_table "resident_advisor_paths", force: :cascade do |t|
+    t.string   "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
@@ -207,6 +226,7 @@ ActiveRecord::Schema.define(version: 20151104104612) do
 
   add_foreign_key "artist_catalog_entries", "artist_promoters"
   add_foreign_key "artist_catalog_entries", "artists"
+  add_foreign_key "artists", "resident_advisor_paths"
   add_foreign_key "artists_events", "artists"
   add_foreign_key "artists_events", "events"
   add_foreign_key "campaigns", "event_promoters"
@@ -215,6 +235,8 @@ ActiveRecord::Schema.define(version: 20151104104612) do
   add_foreign_key "credits", "pledges"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"
+  add_foreign_key "events_resident_advisor_paths", "events"
+  add_foreign_key "events_resident_advisor_paths", "resident_advisor_paths"
   add_foreign_key "pledges", "attendees"
   add_foreign_key "pledges", "campaigns"
   add_foreign_key "tickets", "attendees"

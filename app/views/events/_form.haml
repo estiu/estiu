@@ -1,0 +1,14 @@
+.row
+  .bordered{class: centered}
+    %h2= t '.title'
+    %h5= t('.for_campaign', link: link_to(event.campaign.name, event.campaign)).html_safe
+    %hr
+    = form_for(event, url: create_event_campaign_path(id: event.campaign.id)) do |f|
+      = form_fields(f, 'events.form') do |field|
+        = field.(:name)
+        = field.(:starts_at, as: :date)
+        = field.(:duration)
+        = f.fields_for(:resident_advisor_paths, event.resident_advisor_paths.any? ? event.resident_advisor_paths : [ResidentAdvisorPath.new]) do |f|
+          = form_fields(f, 'events.form.resident_advisor_paths') do |field|
+            = field.(:value)
+        = field.(:submit)

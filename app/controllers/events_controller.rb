@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   
-  before_action :load_event, only: [:show]
+  before_action :load_event, only: [:show, :edit]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -18,6 +18,7 @@ class EventsController < ApplicationController
   
   def create
     authorize(@event = Event.new(event_attrs))
+    render 'new'
   end
   
   protected
@@ -32,7 +33,8 @@ class EventsController < ApplicationController
   end
   
   def event_attrs
-    
+    params.permit(event: Event::CREATE_ATTRS)[:event].
+    merge(campaign_id: params[:id])
   end
   
 end

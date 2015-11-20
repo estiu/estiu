@@ -6,6 +6,7 @@ FG.define do
     website "innervisions.com"
     email 'dixon@innervisions.com'
     telephone "609929302"
+    association :resident_advisor_path
     
     after(:build) do |rec, eva|
       
