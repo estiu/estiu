@@ -4,6 +4,10 @@
 
 - locals[:html_opts].merge!(required: true) if !locals[:optional] && %i(date datetime text password currency email).include?(as) && !Rails.env.test? # not in test env, so one can test backend validation
 
+- if locals.keys.include?(:name_prefix)
+  - locals[:html_opts].merge!(name: "#{name_prefix}[#{key}]")
+  - locals[:html_opts].merge!(id: "#{name_prefix}[#{key}]".gsub('[', '_').gsub(']', ''))
+
 .form-group{class: "#{"has-error" if form.object.errors[key].present?} #{locals[:form_group_class]}"}
   - render_label = !([:submit].include? key) && !([:hidden].include? as)
   - caption = t("#{prefix}.#{key}", default: key.to_s.capitalize)
@@ -12,6 +16,7 @@
     - label_html = locals.fetch(:label_html, {})
     - label_html[:class] = "#{label_html[:class]} control-label"
     - label_html[:value] = caption
+    - (label_html[:for] = locals[:html_opts][:id]) if locals[:html_opts][:id].present?
     - if locals[:popover]
       - label_html.merge!('data-toggle' => 'popover',
         'data-content' => (locals[:popover][:text] || locals[:popover][:html]),

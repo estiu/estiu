@@ -37,6 +37,11 @@ module ApplicationHelper
     "http://www.facebook.com/dialog/send?app_id=#{Rails.application.secrets.facebook_app_id}&link=#{link}&redirect_uri=#{link}"
   end
   
+  def partial_to_js_template partial_name, locals
+    template = controller.render_to_string(partial: partial_name, locals: locals).gsub("\n", '').gsub("\"", "\\\"")
+    ('_.template("' + template + '", {interpolate: /\{\{(.+?)\}\}/g})').html_safe
+  end
+  
   private
   
   def form_field form, key, locals={}

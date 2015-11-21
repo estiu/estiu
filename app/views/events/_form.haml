@@ -1,3 +1,8 @@
+- add_another_artist = 'add-another-ra-artist'
+- all_artists = 'all-ra-artists'
+- artist_template = 'RA_ARTIST_TEMPLATE'
+- artist_index = 'ra_artist_index'
+
 .row
   .bordered{class: centered}
     %h2= t '.title'
@@ -11,12 +16,30 @@
         = field.(:duration)
         %h3
           = t '.artists'
+          .float-right.noinput{id: add_another_artist}
+            +
           - Array(event.errors[:ra_artists]).each do |error|
             .float-right
               %span.collection-error.f14
                 = error
-        = f.fields_for(:ra_artists, event.ra_artists.any? ? event.ra_artists : [RaArtist.new]) do |f|
-          = form_fields(f, 'events.form.ra_artists') do |field|
-            = field.(:artist_path)
+        - ra_artists = event.ra_artists.any? ? event.ra_artists : [event.ra_artists.build]
+        - name_prefix = "#{f.object_name}[ra_artists_attributes]"
+        %div{id: all_artists}
+          - ra_artists.each_with_index do |ra_artist, index|
+            = f.fields_for(:ra_artists, ra_artist) do |f|
+              = form_fields(f, 'events.form.ra_artists', name_prefix: "#{name_prefix}[#{index}]") do |field|
+                = render 'ra_artist', field: field
+        = f.fields_for(:ra_artists, event.ra_artists.build) do |f|
+          = form_fields(f, 'events.form.ra_artists', name_prefix: "#{name_prefix}[{{#{artist_index}}}]") do |field|
+            :javascript
+              #{artist_index} = #{event.ra_artists.size - 2}
+              #{artist_template} = #{partial_to_js_template('ra_artist', field: field)}
+        :javascript
+          $("##{add_another_artist}").click(function(){
+            $('##{all_artists}').append(
+              #{artist_template}({#{artist_index}: (#{artist_index} += 1)})
+            )
+            return false
+          })
         %hr
         = field.(:submit)
