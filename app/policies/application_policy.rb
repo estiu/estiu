@@ -52,4 +52,10 @@ class ApplicationPolicy
     end
   end
   
+  protected
+  
+  def logged_in?
+    user.id.present?
+  end
+  
 end

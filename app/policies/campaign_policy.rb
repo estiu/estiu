@@ -1,11 +1,11 @@
 class CampaignPolicy < ApplicationPolicy
   
   def index?
-    true
+    logged_in?
   end
   
   def mine?
-    user.id.present?
+    logged_in?
   end
   
   def new?
