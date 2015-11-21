@@ -59,6 +59,10 @@ class Campaign < ActiveRecord::Base
     joins(:pledges).where(pledges: {attendee_id: attendee.id})
   end
   
+  def self.without_event
+    joins('left outer join events on campaigns.id = events.campaign_id').where(events: {campaign_id: nil})
+  end
+  
   def percent_pledged
     if fulfilled?
       100 # no decimal places

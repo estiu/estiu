@@ -4,17 +4,18 @@ class CampaignsController < ApplicationController
   before_action :authorize_campaign, only: [:show]
   
   def index
-    authorize(@campaigns = Campaign.all)
+    authorize(@campaigns = listing_scope)
   end
   
   def mine
+    scope = listing_scope
     @campaigns = (
       if current_event_promoter
-        Campaign.visible_for_event_promoter current_event_promoter
+        scope.visible_for_event_promoter current_event_promoter
       elsif current_attendee
-        Campaign.visible_for_attendee current_attendee
+        scope.visible_for_attendee current_attendee
       else
-        Campaign.all
+        scope
       end
     )
     authorize @campaigns
@@ -51,7 +52,11 @@ class CampaignsController < ApplicationController
   end
   
   protected
-
+  
+  def listing_scope
+    Campaign.without_event
+  end
+  
   def campaign_attrs
     authorize(Campaign.new) # ugly extra call to .authorize for keeping the tests happy
     Campaign::DATE_ATTRS.each{|attr| params.require(:campaign).require attr }
