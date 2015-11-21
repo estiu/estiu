@@ -3,19 +3,20 @@
     .col-xs-9
       = link_to campaign.name, campaign, class: 'show-link-title'
     .col-xs-3.dark-grey.right{style: 'padding-top: 12px'}
-      - if campaign.fulfilled_at
-        %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
-        %span{style: 'vertical-align: -1px'}= t '.fulfilled_campaign'
-      - elsif campaign.unfulfilled_at
-        %span.glyphicon.glyphicon-remove-circle{style: 'vertical-align: middle'}
-        %span{style: 'vertical-align: -1px'}= t '.unfulfilled_campaign'
-      - elsif current_attendee
-        - if current_attendee.pledged?(campaign)
-          %span.glyphicon.glyphicon-ok-circle{style: 'vertical-align: middle'}
-          %span{style: 'vertical-align: -1px'}= t '.pledged_campaign'
-        - elsif campaign.active?
+      = link_to campaign, {class: 'dark-grey'} do
+        - if campaign.fulfilled_at
           %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
-          %span{style: 'vertical-align: -1px'}= t '.open_campaign'
+          %span{style: 'vertical-align: -1px'}= t '.fulfilled_campaign'
+        - elsif campaign.unfulfilled_at
+          %span.glyphicon.glyphicon-remove-circle{style: 'vertical-align: middle'}
+          %span{style: 'vertical-align: -1px'}= t '.unfulfilled_campaign'
+        - elsif current_attendee
+          - if current_attendee.pledged?(campaign)
+            %span.glyphicon.glyphicon-ok-circle{style: 'vertical-align: middle'}
+            %span{style: 'vertical-align: -1px'}= t '.pledged_campaign'
+          - elsif campaign.active?
+            %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+            %span{style: 'vertical-align: -1px'}= t '.open_campaign'
           
 - else
   %h1= t '.title', campaign: campaign.name
