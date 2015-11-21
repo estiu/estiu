@@ -10,21 +10,23 @@
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?} #{locals[:form_group_class]}"}
   - render_label = !([:submit].include? key) && !([:hidden, :nested_attributes].include? as)
-  - caption = t("#{prefix}.#{key}", default: key.to_s.capitalize)
+  - caption = t("#{prefix}.#{key}", default: key.to_s.humanize)
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
   - if render_label && !locals[:only_input]
     - label_html = locals.fetch(:label_html, {})
     - label_html[:class] = "#{label_html[:class]} control-label"
     - label_html[:value] = caption
+    - label_html[:style] = "#{label_html[:style]}; width: 100%"
     - (label_html[:for] = locals[:html_opts][:id]) if locals[:html_opts][:id].present?
     - if locals[:popover]
       - label_html.merge!('data-toggle' => 'popover',
         'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
         'data-html' => locals[:popover].keys.include?(:html).to_s)
-    = form.label key, caption, label_html
-  - if locals[:remove_button]
-    %span.remove-nested-attribute-item
-      = remove_button
+    = form.label key, label_html do
+      = caption
+      - if locals[:remove_button]
+        %span.remove-nested-attribute-item.float-right{style: 'color: black'}
+          = remove_button
   - unless locals[:only_label]
     = render "fields/#{as}", locals.merge(locals: locals)
   - if render_label && locals[:optional]

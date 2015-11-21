@@ -10,7 +10,8 @@
   - objects.each_with_index do |object, index|
     = form.fields_for(key, object) do |f|
       = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[#{index}]") do |field|
-        = render locals[:partial], field: field, first: index.zero?
+        %span{class: item_wrapper}
+          = render locals[:partial], field: field, first: index.zero?
 = form.fields_for(key, form.object.send(key).build) do |f|
   = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[{{#{object_index}}}]") do |field|
     :javascript
