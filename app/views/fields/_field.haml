@@ -9,7 +9,7 @@
   - locals[:html_opts].merge!(id: "#{name_prefix}[#{key}]".gsub('[', '_').gsub(']', ''))
 
 .form-group{class: "#{"has-error" if form.object.errors[key].present?} #{locals[:form_group_class]}"}
-  - render_label = !([:submit].include? key) && !([:hidden].include? as)
+  - render_label = !([:submit].include? key) && !([:hidden, :nested_attributes].include? as)
   - caption = t("#{prefix}.#{key}", default: key.to_s.capitalize)
   - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
   - if render_label && !locals[:only_input]
