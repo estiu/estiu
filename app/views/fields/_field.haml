@@ -22,6 +22,9 @@
         'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
         'data-html' => locals[:popover].keys.include?(:html).to_s)
     = form.label key, caption, label_html
+  - if locals[:remove_button]
+    %span.remove-nested-attribute-item
+      = remove_button
   - unless locals[:only_label]
     = render "fields/#{as}", locals.merge(locals: locals)
   - if render_label && locals[:optional]

@@ -1,5 +1,6 @@
 - add_another = locals[:add_another]
 - all_objects_wrapper = "all-#{key.to_s.gsub('_', '-')}"
+- item_wrapper = 'nested-attributes-item-wrapper'
 - object_template = "object_template_for_#{key}"
 - object_index = "object_index_for_#{key}"
 - objects = form.object.send(key).any? ? form.object.send(key) : [form.object.send(key).build]
@@ -9,16 +10,21 @@
   - objects.each_with_index do |object, index|
     = form.fields_for(key, object) do |f|
       = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[#{index}]") do |field|
-        = render locals[:partial], field: field
+        = render locals[:partial], field: field, first: index.zero?
 = form.fields_for(key, form.object.send(key).build) do |f|
   = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[{{#{object_index}}}]") do |field|
     :javascript
       #{object_index} = #{form.object.send(key).size - 2}
-      #{object_template} = #{partial_to_js_template(locals[:partial], field: field)}
+      #{object_template} = #{partial_to_js_template(locals[:partial], field: field, first: false)}
 :javascript
   $("##{add_another}").click(function(){
     $('##{all_objects_wrapper}').append(
-      #{object_template}({#{object_index}: (#{object_index} += 1)})
+      "<div class='#{item_wrapper}'>" +
+      #{object_template}({#{object_index}: (#{object_index} += 1)}) +
+      "</div>"
     )
     return false
+  })
+  $(document).on('click', '.remove-nested-attribute-item, .remove-nested-attribute-item *', function(){
+    $(this).closest('.#{item_wrapper}').remove()
   })

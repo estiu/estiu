@@ -1,1 +1,7 @@
-= field.(:artist_path)
+- remove_button = capture do
+  .float-right
+    %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
+
+- opts = {}
+- opts.merge!(remove_button: remove_button) unless first
+= field.(:artist_path, opts)
