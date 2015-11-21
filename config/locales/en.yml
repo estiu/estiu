@@ -130,6 +130,7 @@ en:
       duration: Duration
       artists: "With %{artists}"
     index:
+      should_create_events: "There are fulfilled campaigns for which you must create the corresponding event now:"
       title: My events
       empty_admin: "There are no events to display."
       empty_event_promoter: "You haven't campaigns with active events."

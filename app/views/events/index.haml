@@ -3,6 +3,15 @@
   %h1=t '.title'
     
   %hr
+  
+  - if @campaigns_with_pending_events.any?
+    .alert.alert-warning.black
+      %strong
+        = t '.should_create_events'
+        - @campaigns_with_pending_events.each_with_index do |campaign, i|
+          %p.bottom5{class: "#{'top5' if i.zero?}"}
+            = link_to campaign.name, campaign
+  
   - if @events.count.zero?
     - if current_admin
       %p= t('.empty_admin')      
