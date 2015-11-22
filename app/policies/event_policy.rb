@@ -22,16 +22,6 @@ class EventPolicy < ApplicationPolicy
     end
   end
   
-  def edit?
-    if user.admin?
-      true
-    elsif user.event_promoter?
-      scope.visible_for_event_promoter(user.event_promoter).include? record
-    else
-      false
-    end
-  end
-  
   class Scope < Scope
     def resolve
       if user.admin?

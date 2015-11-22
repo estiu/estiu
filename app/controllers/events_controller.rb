@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
   
-  before_action :load_event, only: [:show, :edit]
+  before_action :load_event, only: [:show]
   
   with_events = [:index]
   before_action :load_events, only: with_events
