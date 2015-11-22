@@ -39,7 +39,10 @@ class Event < ActiveRecord::Base
       v
     end
     association(:ra_artists).send(:through_association).target.clear
-    self.ra_artists = new_value
+    association(:ra_artists).target.clear
+    new_value.each do |ra_artist|
+      self.ra_artists << ra_artist
+    end
   end
   
   def artists_to_display

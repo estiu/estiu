@@ -6,23 +6,9 @@
   
   - if user_signed_in?
     - if @campaign.event && policy(@campaign.event).show?
-      %hr
-      .alert.alert-info{style: 'color: black'}
-        %p
-          %strong
-            = t '.event_created'
-        %p
-          %strong
-            = t('.view_event_created', link: link_to(t('.view_event_created_link'), event_path(@campaign.event))).html_safe
+      = render 'event_created', campaign: @campaign
     - elsif should_create_event?
-      %hr
-      .alert.alert-warning{style: 'color: black'}
-        %p
-          %strong
-            = t('.your_event_fulfilled')
-        %p
-          %strong
-            = t('.must_create_event', link: link_to(t('.new_event'), new_event_campaign_path(id: @campaign.id))).html_safe
+      = render 'must_create_event', campaign: @campaign
     - elsif current_attendee
       = render 'pledges/form', campaign: @campaign
   - else

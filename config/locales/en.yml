@@ -165,10 +165,11 @@ en:
         starts_at: Starts at
         ends_at: Campaign closes
         venue: Venue
-      show:
+      event_created:
         event_created: This campaign has become an event!
         view_event_created: "View the details %{link}."
         view_event_created_link: here
+      show:
         title: '%{pledged} paid'
         percent: "%{percent}% reached"
         goal: "Goal: %{goal}"
@@ -176,6 +177,7 @@ en:
         closed_sign_up_2: "Sign up for attending newer events!"
         sign_up: "Sign up for joining this event"
         sign_up_for_closed: "Sign up"
+      must_create_event:
         your_event_fulfilled: Your event has reached its goal, and we are ready to transfer its funds.
         must_create_event: "First, you must %{link}."
         new_event: create the corresponding event

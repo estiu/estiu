@@ -31,6 +31,36 @@ describe CampaignsController do
       
     end
     
+    context "event_promoter" do
+      
+      sign_as :event_promoter
+      
+      let(:campaign){ FG.create :campaign, :fulfilled, event_promoter_id: event_promoter.event_promoter_id }
+      
+      context "campaign with event from this event_promoter" do
+        
+        before {
+          FG.create :event, campaign: campaign
+        }
+        
+        it "renders the right partial" do
+          the_action
+          expect(response).to render_template(partial: 'campaigns/_event_created')
+        end
+        
+      end
+      
+      context "campaign needing to have an event created" do
+        
+        it "renders the right partial" do
+          the_action
+          expect(response).to render_template(partial: 'campaigns/_must_create_event')
+        end
+        
+      end
+      
+    end
+    
     context 'attendee' do
       
       sign_as :attendee

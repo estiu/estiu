@@ -1,0 +1,8 @@
+%hr
+.alert.alert-warning{style: 'color: black'}
+  %p
+    %strong
+      = t('.your_event_fulfilled')
+  %p
+    %strong
+      = t('.must_create_event', link: link_to(t('.new_event'), new_event_campaign_path(id: campaign.id))).html_safe

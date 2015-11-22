@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   after_action :verify_policy_scoped, only: with_events
   
   def index
-    @campaigns_with_pending_events = current_event_promoter ? Campaign.without_event.where(event_promoter_id: current_event_promoter.id) : []
+    @campaigns_with_pending_events = current_event_promoter ? Campaign.without_event.where(event_promoter_id: current_event_promoter.id).all : []
   end
   
   def show
