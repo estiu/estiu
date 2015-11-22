@@ -50,7 +50,12 @@ module SpecHelpers
     expect(subject).to receive(:user_not_authorized).once.with(any_args).and_call_original
     expect(subject).to rescue_from(Pundit::NotAuthorizedError).with :user_not_authorized
   end
-
+  
+  def forbidden_expectation
+    expect(response.status).to be 302
+    expect(flash[:alert]).to include(t('application.forbidden'))
+  end
+  
   def forbidden_for *role_names
 
     role_names.each do |role|
@@ -58,10 +63,7 @@ module SpecHelpers
       context "sign_as #{role || "nil"}" do
         
         it 'is forbidden' do
-          
-          expect(response.status).to be 302
-          expect(flash[:alert]).to include(t('application.forbidden'))
-          
+          forbidden_expectation
         end
         
       end
