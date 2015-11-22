@@ -5,6 +5,7 @@ describe CampaignsController do
     sign_as :event_promoter
     
     let(:campaign){ FG.build(:campaign) }
+    
     let!(:campaign_params){
       v = {campaign: {}}
       Campaign::CREATE_ATTRS.each do |attr|
