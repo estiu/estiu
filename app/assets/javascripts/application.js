@@ -18,6 +18,8 @@
 //= require underscore-min
 //= require_tree .
 
+DEFAULT_POPOVER_OPTIONS = {trigger: 'hover click', placement: 'bottom', delay: 200}
+
 $(function(){
   $.datepicker.setDefaults({dateFormat: 'dd/mm/yy'})
   $(".datepicker").datepicker()
@@ -48,7 +50,7 @@ $(function(){
     keydown(function(e) { e.preventDefault() } ).
     bind("paste", function(e) { e.preventDefault() } ).
     focus(function(){ $(this).blur() })
-  $('[data-toggle="popover"]').popover({trigger: 'hover click', placement: 'bottom', delay: 200})
+  $('[data-toggle="popover"]').popover(DEFAULT_POPOVER_OPTIONS)
   $('a.page-scroll').bind('click', function(event) {
     var $anchor = $(this);
     $('html, body').stop().animate({

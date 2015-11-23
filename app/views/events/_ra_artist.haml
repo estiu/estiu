@@ -2,6 +2,7 @@
   .float-right
     %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
 
-- opts = {}
+- popover_caption = "#{t('.popover1')} <br> <small> #{t('.popover2')} </small>"
+- opts = {popover: {html: popover_caption}}
 - opts.merge!(remove_button: remove_button) unless first
 = field.(:artist_path, opts)

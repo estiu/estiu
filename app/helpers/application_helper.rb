@@ -42,6 +42,10 @@ module ApplicationHelper
     ('_.template("' + template + '", {interpolate: /\{\{(.+?)\}\}/g})').html_safe
   end
   
+  def activate_popover
+    ".find('label span').popover(DEFAULT_POPOVER_OPTIONS)"
+  end
+  
   private
   
   def form_field form, key, locals={}

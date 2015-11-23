@@ -24,6 +24,7 @@
       #{object_template}({#{object_index}: (#{object_index} += 1)}) +
       "</div>"
     )
+    $('.#{item_wrapper}').last()#{locals[:on_added]}
     return false
   })
   $(document).on('click', '.remove-nested-attribute-item, .remove-nested-attribute-item *', function(){

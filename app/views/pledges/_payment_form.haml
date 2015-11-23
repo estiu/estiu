@@ -8,7 +8,7 @@
           = field.(:desired_credit_ids, as: :checkboxes, values: current_attendee.credits, only_input: true, html_class: 'desired_credit_ids')
     .row.bottom10
       .col-xs-8.left-column
-        - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} <small>"
+        - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} </small>"
         = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
       .col-xs-4.right-column.left
         = field.(:referral_email, as: :email, only_input: true, value: params[:referral_email], form_group_class: 'full', html_class: 'full')

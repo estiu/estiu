@@ -18,12 +18,14 @@
     - label_html[:value] = caption
     - label_html[:style] = "#{label_html[:style]}; width: 100%"
     - (label_html[:for] = locals[:html_opts][:id]) if locals[:html_opts][:id].present?
-    - if locals[:popover]
-      - label_html.merge!('data-toggle' => 'popover',
-        'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
-        'data-html' => locals[:popover].keys.include?(:html).to_s)
     = form.label key, label_html do
-      = caption
+      - if locals[:popover]
+        %span{'data-toggle' => 'popover',
+          'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
+          'data-html' => locals[:popover].keys.include?(:html).to_s}
+          = caption
+      - else
+        = caption
       - if locals[:remove_button]
         %span.remove-nested-attribute-item.float-right{style: 'color: black'}
           = remove_button

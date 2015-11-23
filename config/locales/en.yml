@@ -108,6 +108,9 @@ en:
       dj: "The value must start with '%{prefix}', for example dj/dixon"
       html_code: "extraneous html code"
   events:
+    ra_artist:
+      popover1: The url fragment which identifies the artist on residentadvisor.com.
+      popover2: "Example: dj/locodice or dj/bicep"
     errors:
       at_least_one_ra_artist: 'There must be at least one artist.'
     create:
@@ -121,6 +124,8 @@ en:
       name: 'Event name'
       artists: Artists
       starts_at: 'Date'
+      popover1: The artist(s) which will play at the event.
+      popover2: For identifying them, we use Resident Advisor url fragments.
       ra_artists:
         artist_path: "Resident Advisor path"
     item:
