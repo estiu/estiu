@@ -1,6 +1,8 @@
 class EventsController < ApplicationController
   
-  before_action :load_event, only: [:show]
+  before_action :initialize_event, only: [:new]
+  before_action :initialize_uploader, only: [:show, :render_uploader]
+  before_action :load_event, only: [:show, :render_uploader]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -14,7 +16,10 @@ class EventsController < ApplicationController
   end
   
   def new
-    authorize(@event = Event.new(campaign: Campaign.find(params[:id])))
+  end
+  
+  def render_uploader
+    render partial: 'layouts/uploader', layout: false, locals: {first: false, submit: false}
   end
   
   def create
@@ -28,7 +33,21 @@ class EventsController < ApplicationController
     end
   end
   
+  helper_method :should_upload_documents?
+  def should_upload_documents?
+    current_event_promoter && !@event.approved_at
+  end
+  
   protected
+  
+  def initialize_uploader
+    @uploader = EventDocument.new.filename
+    @uploader.success_action_redirect = 'XXX'
+  end
+  
+  def initialize_event
+    authorize(@event = Event.new(campaign: Campaign.find(params[:id])))
+  end
   
   def load_events
     authorize Event

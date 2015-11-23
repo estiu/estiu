@@ -31,7 +31,9 @@ gem 'aws-sdk', '~> 2.1'
 gem 'shoryuken', github: 'phstc/shoryuken', ref: '81cc5be899198d46a01930c385b01857ac1cf436'
 gem 'activerecord-session_store', '~> 0.1'
 gem 'rollbar', '~> 2.4'
-gem 'oj', '~> 2.12'
+gem 'oj', '~> 2.12' # for rollbar
+gem 'carrierwave', '~> 0.10'
+gem 'carrierwave_direct', '~> 0'
 
 group :development, :test do
   gem 'pry'

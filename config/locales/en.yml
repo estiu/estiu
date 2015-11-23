@@ -1,4 +1,4 @@
-mailers_common: &mailers_common
+fmailers_common: &mailers_common
   credit_creation_mailer:
     perform:
       subject: "You have been credited %{amount}!"
@@ -116,6 +116,14 @@ en:
     create:
       success: "Event succesfully created."
       error: "Couldn't create event due to the indicated errors."
+    documents_form:
+      submit: Upload
+    upload_documents:
+      documents: Documents
+      upload_all: 'Upload'
+    show:
+      is_draft: This event is currently a draft.
+      draft: Now you must upload the documents (contracts) you have signed with your providers.
     form:
       title: 'Create event'
       for_campaign: "For campaign: %{link}"

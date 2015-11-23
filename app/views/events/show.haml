@@ -1,2 +1,14 @@
+- if should_upload_documents?
+  %div{class: centered_wider}
+    .alert.alert-info
+      %p
+        %strong
+          = t '.is_draft'
+      %p
+        = t '.draft'
+
 %div{class: centered_wider}
   = render 'item', event: @event, listing: false
+
+- if should_upload_documents?
+  = render 'upload_documents'

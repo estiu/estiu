@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151120083430) do
+ActiveRecord::Schema.define(version: 20151123190146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,15 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_index "credits", ["attendee_id"], name: "index_credits_on_attendee_id", using: :btree
   add_index "credits", ["pledge_id"], name: "index_credits_on_pledge_id", using: :btree
 
+  create_table "event_documents", force: :cascade do |t|
+    t.integer  "event_promoter_id"
+    t.string   "filename"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  add_index "event_documents", ["event_promoter_id"], name: "index_event_documents_on_event_promoter_id", using: :btree
+
   create_table "event_promoters", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
@@ -116,6 +125,7 @@ ActiveRecord::Schema.define(version: 20151120083430) do
     t.datetime "updated_at",  null: false
     t.integer  "campaign_id", null: false
     t.integer  "venue_id",    null: false
+    t.datetime "approved_at"
   end
 
   add_index "events", ["campaign_id"], name: "index_events_on_campaign_id", using: :btree
@@ -225,6 +235,7 @@ ActiveRecord::Schema.define(version: 20151120083430) do
   add_foreign_key "campaigns", "venues"
   add_foreign_key "credits", "attendees"
   add_foreign_key "credits", "pledges"
+  add_foreign_key "event_documents", "event_promoters"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"
   add_foreign_key "events_ra_artists", "events"

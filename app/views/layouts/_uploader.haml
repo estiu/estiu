@@ -1,0 +1,10 @@
+= direct_upload_form_for @uploader do |f|
+  = form_fields(f, 'events.documents_form') do |field|
+    - unless first
+      .float-right.remove-this-file-upload
+        %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
+    = f.file_field :filename
+    - if submit
+      %br
+      = field.(:submit)
+    %hr

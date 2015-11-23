@@ -20,7 +20,11 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :events, only: [:index, :show, :create]
+  resources :events, only: [:index, :show, :create] do
+    member do
+      get :render_uploader
+    end
+  end
   
   resources :venues, only: [:create]
   

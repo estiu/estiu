@@ -1,0 +1,42 @@
+.bordered{class: centered_wider}
+  %h2
+    =t '.documents'
+    %span.float-right#add-another-document.noinput
+      +
+  %hr
+  .all-documents
+    .file-upload-item-wrapper
+      = render 'layouts/uploader', first: true, submit: false
+  .btn.btn-primary.upload-all= t '.upload_all'
+  .bottom20
+  
+:javascript
+  $('#add-another-document').click(function(){
+    // XXX lock UI
+    var request = $.ajax("#{render_uploader_event_path(id: @event.id)}", {method: 'GET'})
+    request.done(function(response){
+      $('.all-documents').append(
+        "<div class='file-upload-item-wrapper'>" +
+        response +
+        "</div>"
+      )
+    })
+    request.fail(function(){
+      // XXX unlock UI
+    })
+  })
+  $(document).on('click', '.remove-this-file-upload, .remove-this-file-upload *', function(){
+    $(this).closest('.file-upload-item-wrapper').remove()
+  })
+  $('.upload-all').click(function(){
+    // XXX lock UI
+    var forms = _.map($(".all-documents form"), function(e){
+      var form = $(e)
+      return {url: form.attr('action'), data: form.serialize()}
+    })
+    
+    _.each(forms, function(form){
+      $.ajax(form.url, form.data)
+    })
+    
+  })
