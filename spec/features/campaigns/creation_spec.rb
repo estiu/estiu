@@ -12,14 +12,6 @@ describe "Campaign creation", js: true do
     visit new_campaign_path
   }
   
-  def any_day
-    find('table.ui-datepicker-calendar tbody tr:nth-child(2) td:first-child').click
-  end
-  
-  def next_month
-    find('.ui-datepicker-next').click
-  end
-  
   def fill_starts_at
     find('#campaign_starts_at').click
     next_month

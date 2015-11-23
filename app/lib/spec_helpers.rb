@@ -116,4 +116,12 @@ module SpecHelpers
     
   end
   
+  def any_day
+    find('table.ui-datepicker-calendar tbody tr:nth-child(2) td:first-child').click
+  end
+  
+  def next_month
+    find('.ui-datepicker-next').click
+  end
+  
 end
