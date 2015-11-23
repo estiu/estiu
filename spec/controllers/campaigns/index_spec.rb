@@ -16,7 +16,7 @@ describe CampaignsController do
       
       it 'works' do
         
-        expect(Campaign).to receive(:all).once.and_call_original
+        expect(Campaign).to receive(:all).at_least(1).times.and_call_original
         the_action
         
       end
