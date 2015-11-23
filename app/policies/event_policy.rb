@@ -1,6 +1,6 @@
 class EventPolicy < ApplicationPolicy
   
-  def new?
+  def new_or_create?
     user.event_promoter? &&
     record.campaign.event_promoter == user.event_promoter &&
     !Event.where(campaign_id: record.campaign.id).exists?

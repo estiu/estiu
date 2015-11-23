@@ -8,7 +8,7 @@ class CampaignPolicy < ApplicationPolicy
     logged_in?
   end
   
-  def new?
+  def new_or_create?
     user.event_promoter?
   end
   

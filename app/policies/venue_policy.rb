@@ -1,6 +1,6 @@
 class PledgePolicy < ApplicationPolicy
   
-  def create?
+  def new_or_create?
     user.event_promoter?
   end
 

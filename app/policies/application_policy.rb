@@ -14,21 +14,29 @@ class ApplicationPolicy
   def show?
     scope.where(id: record.id).exists?
   end
-
+  
+  def new_or_create?
+    false
+  end
+  
   def create?
-    new?
+    new_or_create?
   end
 
   def new?
-    create?
+    new_or_create?
   end
-
+  
+  def edit_or_update?
+    false
+  end
+  
   def update?
-    edit?
+    edit_or_update?
   end
 
   def edit?
-    update?
+    edit_or_update?
   end
 
   def destroy?
