@@ -4,14 +4,15 @@
     %hr
     = form_for(campaign, class: 'form-horizontal') do |f|
       = form_fields(f, 'campaigns.form') do |field|
-        .row
-          .col-xs-4
-            = field.(:venue_id, as: :select, values: Venue.for_select)
-          .col-xs-4.venue-capacity.f13{style: 'margin-top: 3px'}
+        - venue_capacity = capture do
+          .venue-capacity.f13{style: 'margin-top: 3px'}
             %strong
               = (t '.venue_capacity') + ":"
               %span#venue-capacity-indicator
-          .col-xs-4.right
+        .row
+          .col-xs-6
+            = field.(:venue_id, as: :select, values: Venue.for_select, after: venue_capacity)
+          .col-xs-6.right
             = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-info btn-xs')
         = field.(:name)
         = field.(:description, as: :textarea)
