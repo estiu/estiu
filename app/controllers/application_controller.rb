@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   before_action :ensure_modern_browser
+  before_action :prepare_campaign_notification_value
+  before_action :prepare_event_notification_value
   after_action :verify_authorized, unless: :devise_controller?
   
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
@@ -118,6 +120,38 @@ class ApplicationController < ActionController::Base
         render 'pages/home'
       end
     end
+  end
+  
+  def prepare_campaign_notification_value
+    cache_key = "prepare_campaign_notification_value_#{current_user.try(:id)}"
+    @campaign_notification_value = if current_event_promoter
+      0
+    elsif current_attendee
+      Rails.cache.fetch(cache_key, notification_cache_options){
+        Campaign.visible_for_attendee(current_attendee).fulfilled.without_event.count
+      }
+    else
+      0
+    end
+  end
+  
+  def prepare_event_notification_value
+    cache_key = "prepare_event_notification_value_#{current_user.try(:id)}"
+    @event_notification_value = if current_event_promoter
+      Rails.cache.fetch(cache_key, notification_cache_options){
+        Campaign.visible_for_event_promoter(current_event_promoter).without_event.count
+      }
+    elsif current_attendee
+      Rails.cache.fetch(cache_key, notification_cache_options){
+        Event.visible_for_attendee(current_attendee).not_celebrated.count
+      }
+    else
+      0
+    end
+  end
+  
+  def notification_cache_options
+    {expires_in: (dev_or_test? ? 0 : 90).seconds}
   end
   
 end

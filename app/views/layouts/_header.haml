@@ -10,10 +10,18 @@
       %ul.nav.navbar-nav
         - if current_user
           %li
-            = link_to t(".campaigns"), (current_event_promoter ? mine_campaigns_path : campaigns_path)
+            = link_to (current_event_promoter ? mine_campaigns_path : campaigns_path) do
+              = t(".campaigns")
+              - unless @campaign_notification_value.zero?
+                %span.header-notification
+                  = @campaign_notification_value
         - if policy(Event).index?
           %li
-            = link_to t(".events"), events_path
+            = link_to events_path do
+              = t(".events")
+              - unless @event_notification_value.zero?
+                %span.header-notification
+                  = @event_notification_value
         - unless current_user
           %li.dropdown
             %a{"data-toggle" => "dropdown", "role" => "button", "aria-haspopup" => "true"}
