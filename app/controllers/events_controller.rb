@@ -42,6 +42,7 @@ class EventsController < ApplicationController
   
   def initialize_uploader
     @uploader = EventDocument.new.filename
+    @uploader.success_action_status = '201'
     @uploader.success_action_redirect = 'XXX'
   end
   

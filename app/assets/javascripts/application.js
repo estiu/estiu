@@ -16,6 +16,7 @@
 //= require bootstrap
 //= require autonumeric-min
 //= require underscore-min
+//= require jquery-fileupload/basic
 //= require_tree .
 
 DEFAULT_POPOVER_OPTIONS = {trigger: 'hover click', placement: 'bottom', delay: 200}
@@ -57,6 +58,20 @@ $(function(){
         scrollTop: $($anchor.attr('href')).offset().top
     }, 800, 'easeInOutExpo');
     event.preventDefault();
+  });
+  $('.jquery-file-upload').fileupload({
+    forceIframeTransport: true,
+    autoUpload: true,
+    add: function(event, data){
+      data.submit();
+    },
+    send: function(e, data){
+      // lock UI
+    },
+    fail: function(e, data){
+    },
+    done: function(event, data){
+    }
   });
 })
 

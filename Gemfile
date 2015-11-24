@@ -34,6 +34,7 @@ gem 'rollbar', '~> 2.4'
 gem 'oj', '~> 2.12' # for rollbar
 gem 'carrierwave', '~> 0.10'
 gem 'carrierwave_direct', '~> 0'
+gem 'jquery-fileupload-rails', '0.4.6' # exact version - we don't want JS files to be auto updated
 
 group :development, :test do
   gem 'pry'

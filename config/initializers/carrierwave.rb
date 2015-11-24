@@ -15,5 +15,6 @@ CarrierWave.configure do |config|
   config.fog_directory = AwsOps::UPLOADS_BUCKET
   config.validate_unique_filename = false
   config.max_file_size 20.megabytes
+  config.use_action_status = true
   
 end

@@ -1,13 +1,13 @@
 .bordered{class: centered_wider}
   %h2
     =t '.documents'
-    %span.float-right#add-another-document.noinput
-      +
+    -# %span.float-right#add-another-document.noinput
+      -# +
   %hr
   .all-documents
     .file-upload-item-wrapper
       = render 'layouts/uploader', first: true, submit: false
-  .btn.btn-primary.upload-all= t '.upload_all'
+  -# .btn.btn-primary.upload-all= t '.upload_all'
   .bottom20
   
 :javascript
