@@ -19,7 +19,29 @@
 //= require jquery-fileupload/basic
 //= require_tree .
 
+function lock_uploader_ui(){
+  $('.file-uploader').attr('disabled', true)
+}
+
+function unlock_uploader_ui(){
+  $('.file-uploader').removeAttr('disabled')
+}
+
 DEFAULT_POPOVER_OPTIONS = {trigger: 'hover click', placement: 'bottom', delay: 200}
+DEFAULT_UPLOAD_OPTIONS = {
+  // forceIframeTransport: true, // if true, we cannot get XML data back from AWS. So it cannot be used.
+  autoUpload: true,
+  dataType: 'xml', // essential for getting the key/url after successful upload.
+  paramName: 'file', // avoid problematic names, containing e.g '['
+  add: function(event, data){
+    data.submit();
+  },
+  send: lock_uploader_ui,
+  fail: function(e, data){
+    alert("<%= I18n.t 'javascript.errors.uploader' %>")
+  },
+  always: unlock_uploader_ui
+}
 
 $(function(){
   $.datepicker.setDefaults({dateFormat: 'dd/mm/yy'})
@@ -59,20 +81,7 @@ $(function(){
     }, 800, 'easeInOutExpo');
     event.preventDefault();
   });
-  $('.jquery-file-upload').fileupload({
-    forceIframeTransport: true,
-    autoUpload: true,
-    add: function(event, data){
-      data.submit();
-    },
-    send: function(e, data){
-      // lock UI
-    },
-    fail: function(e, data){
-    },
-    done: function(event, data){
-    }
-  });
+  // 
 })
 
 var flash_error = function(message){

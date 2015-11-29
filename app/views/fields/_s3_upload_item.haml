@@ -1,0 +1,9 @@
+- remove_button = capture do
+  .float-right
+    %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
+
+= field.(:filename, as: :hidden, value: "{{filename}}")
+= field.(:key, as: :hidden, value: "{{key}}")
+= field.(:filename, only_label: true, remove_button: remove_button, caption: '{{visible_name}}')
+  
+%hr

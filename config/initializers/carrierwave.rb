@@ -16,5 +16,6 @@ CarrierWave.configure do |config|
   config.validate_unique_filename = false
   config.max_file_size 20.megabytes
   config.use_action_status = true
+  config.upload_expiration = 30.days # avoid hard-to-reproduce issue (https://github.com/dwilkie/carrierwave_direct/issues/191 )
   
 end

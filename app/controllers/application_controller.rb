@@ -103,6 +103,13 @@ class ApplicationController < ActionController::Base
     end
   end
   
+  def ensure_ajax_uploading
+    if browser.ie? || browser.opera?
+      flash[:error] = t 'application.ensure_ajax_uploading'
+      redirect_to root_path
+    end
+  end
+  
   helper_method :public_home_page?
   def public_home_page?
     (params[:controller] == 'pages' && params[:id] == 'home') ||

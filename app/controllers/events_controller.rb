@@ -1,8 +1,8 @@
 class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
-  before_action :initialize_uploader, only: [:show, :render_uploader]
   before_action :load_event, only: [:show, :render_uploader]
+  before_action :initialize_uploader, only: [:show, :render_uploader]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -41,7 +41,8 @@ class EventsController < ApplicationController
   protected
   
   def initialize_uploader
-    @uploader = EventDocument.new.filename
+    ensure_ajax_uploading
+    @uploader = EventDocument.new(event: @event).filename
     @uploader.success_action_status = '201'
     @uploader.success_action_redirect = 'XXX'
   end

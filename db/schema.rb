@@ -101,13 +101,14 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "credits", ["pledge_id"], name: "index_credits_on_pledge_id", using: :btree
 
   create_table "event_documents", force: :cascade do |t|
-    t.integer  "event_promoter_id"
-    t.string   "filename"
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
+    t.integer  "event_id"
+    t.string   "filename",   null: false
+    t.string   "key",        null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
-  add_index "event_documents", ["event_promoter_id"], name: "index_event_documents_on_event_promoter_id", using: :btree
+  add_index "event_documents", ["event_id"], name: "index_event_documents_on_event_id", using: :btree
 
   create_table "event_promoters", force: :cascade do |t|
     t.string   "name"
@@ -235,7 +236,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_foreign_key "campaigns", "venues"
   add_foreign_key "credits", "attendees"
   add_foreign_key "credits", "pledges"
-  add_foreign_key "event_documents", "event_promoters"
+  add_foreign_key "event_documents", "events"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"
   add_foreign_key "events_ra_artists", "events"

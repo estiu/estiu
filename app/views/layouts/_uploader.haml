@@ -1,13 +1,3 @@
 = direct_upload_form_for @uploader, html: {class: 'jquery-file-upload'} do |f|
   = form_fields(f, 'events.documents_form') do |field|
-    - unless first
-      .float-right.remove-this-file-upload
-        %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
-    .fileupload-content
-      .fileupload-progress
-    .file-upload
-      = f.file_field :filename, use_action_status: true
-    - if submit
-      %br
-      = field.(:submit)
-    %hr
+    = field.(:event_documents, as: :s3_upload, all_objects_wrapper: all_objects_wrapper, target: target)
