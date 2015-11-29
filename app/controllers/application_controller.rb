@@ -161,4 +161,10 @@ class ApplicationController < ActionController::Base
     {expires_in: (dev_or_test? ? 0 : 90).seconds}
   end
   
+  def initialize_uploader
+    ensure_ajax_uploading
+    @uploader = MountedUploader.new.uploader
+    @uploader.success_action_status = '201'
+  end
+  
 end

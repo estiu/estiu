@@ -4,12 +4,12 @@
   %h2
     =t '.documents'
   %hr
-  = direct_upload_form_for @uploader, html: {class: 'jquery-file-upload'} do |f|
+  = direct_upload_form_for @uploader, as: 'uploader', html: {class: 'jquery-file-upload'} do |f|
     = form_fields(f, '') do |field|
       = field.(:event_documents, as: :s3_upload, all_objects_wrapper: ".#{all_objects_wrapper}", target: @event)
   .bottom20
   %hr
-  = form_for(@event, url: create_event_campaign_path(id: @event.campaign.id)) do |f|
-    = form_fields(f, 'events.form') do |field|
+  = form_for(@event, url: submit_documents_event_path(id: @event.id), html: {method: :post}) do |f|
+    = form_fields(f, 'events.form.submit_documents') do |field|
       %div{class: all_objects_wrapper}
       = field.(:submit)

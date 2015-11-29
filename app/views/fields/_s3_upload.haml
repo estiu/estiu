@@ -1,7 +1,7 @@
 - item_wrapper = 's3-upload-item-wrapper'
 - object_template = "object_template_for_#{key}"
 - object_index = "object_index_for_#{key}"
-- name_prefix = "#{form.object_name}[#{key}_attributes]"
+- name_prefix = "#{target.class.to_s.underscore}[#{key}_attributes]"
 
 .fileupload-content
   .fileupload-progress

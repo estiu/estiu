@@ -22,6 +22,12 @@ class EventPolicy < ApplicationPolicy
     end
   end
   
+  def submit_documents?
+    user.event_promoter? &&
+    record.campaign.event_promoter == user.event_promoter &&
+    !record.approved_at
+  end
+  
   class Scope < Scope
     def resolve
       if user.admin?

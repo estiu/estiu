@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
-  before_action :load_event, only: [:show]
+  before_action :load_event, only: [:show, :submit_documents]
   before_action :initialize_uploader, only: [:show]
   
   with_events = [:index]
@@ -29,19 +29,17 @@ class EventsController < ApplicationController
     end
   end
   
+  def submit_documents
+    @event.assign_attributes document_attrs
+    redirect_to @event
+  end
+  
   helper_method :should_upload_documents?
   def should_upload_documents?
     current_event_promoter && !@event.approved_at
   end
   
   protected
-  
-  def initialize_uploader
-    ensure_ajax_uploading
-    @uploader = EventDocument.new(event: @event).filename
-    @uploader.success_action_status = '201'
-    @uploader.success_action_redirect = 'XXX'
-  end
   
   def initialize_event
     authorize(@event = Event.new(campaign: Campaign.find(params[:id])))
@@ -60,6 +58,10 @@ class EventsController < ApplicationController
     params.
       permit(event: (Event::CREATE_ATTRS + [{ra_artists_attributes: %i(artist_path)}]))[:event].
       merge(campaign_id: params[:id])
+  end
+  
+  def document_attrs
+    params.permit(event: [{event_documents_attributes: %i(filename key)}])[:event]
   end
   
 end

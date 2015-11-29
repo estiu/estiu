@@ -139,6 +139,8 @@ en:
       starts_at: 'Date'
       popover1: The artist(s) which will play at the event.
       popover2: For identifying them, we use Resident Advisor url fragments.
+      submit_documents:
+        submit: Submit
       ra_artists:
         artist_path: "Resident Advisor path"
     item:

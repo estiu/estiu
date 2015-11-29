@@ -6,6 +6,4 @@ class EventDocument < ActiveRecord::Base
   validates :filename, presence: true
   validates :key, presence: true
   
-  mount_uploader :filename, BaseUploader
-  
 end
