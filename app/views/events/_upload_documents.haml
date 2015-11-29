@@ -31,5 +31,6 @@
   %hr
   = form_for(@event, url: submit_documents_event_path(id: @event.id), html: {method: :post}) do |f|
     = form_fields(f, 'events.form.submit_documents') do |field|
-      = field.(:documents_confirmation, as: :checkbox) # XXX needs popover
+      - popover_caption = "#{t('.popover1')} <br> <small> #{t('.popover2')} </small>"
+      = field.(:documents_confirmation, as: :checkbox, popover: {html: popover_caption})
       = field.(:submit)

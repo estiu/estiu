@@ -125,6 +125,8 @@ en:
     documents_form:
       submit: Upload
     upload_documents:
+      popover1: By checking this checkbox, you confirm that all contracts (artists, venue...) are included, forgetting none.
+      popover2: Not including all contracts constitutes a violation of our Terms and Conditions.
       documents: Documents
       upload_all: 'Upload'
     show:
