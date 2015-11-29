@@ -2,6 +2,6 @@
   .float-right
     %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
 
-.s3-upload-item-wrapper
+.s3-upload-item-wrapper{'data-upload-item-id' => id}
   = field.(:id, as: :hidden, value: id)
   = field.(:filename, only_label: true, remove_button: remove_button, caption: visible_name)

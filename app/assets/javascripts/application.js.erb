@@ -19,6 +19,8 @@
 //= require jquery-fileupload/basic
 //= require_tree .
 
+_.templateSettings.interpolate = /\{\{(.+?)\}\}/g;
+
 function lock_uploader_ui(){
   $('.file-uploader').attr('disabled', true)
 }
@@ -29,6 +31,10 @@ function unlock_uploader_ui(){
 
 function notify_uploader_ui_problem(){
   alert("<%= I18n.t 'javascript.errors.uploader' %>")
+}
+
+function notify_uploader_deletion_problem(){
+  alert("<%= I18n.t 'javascript.errors.uploader_deletion' %>")
 }
 
 DEFAULT_POPOVER_OPTIONS = {trigger: 'hover click', placement: 'bottom', delay: 200}

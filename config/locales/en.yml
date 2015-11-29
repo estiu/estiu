@@ -81,6 +81,7 @@ en:
   javascript:
     errors:
       uploader: Sorry, there has been a problem uploading your file. Please try again.
+      uploader_deletion: Sorry, there has been a problem deleting your uploaded file. Please try again.
   errors:
     email_format: "The given email doesn't have email format."
     format: "%{message}"

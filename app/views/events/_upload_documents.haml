@@ -6,6 +6,12 @@
     })
     request.fail(fail)
   }
+  ON_FILE_REMOVAL = function(id, done, fail){
+    var path = "#{CGI::unescape(event_document_path id: @event.id, event_document_id: '{{id}}')}"
+    var request = $.ajax(_.template(path)({id: id}), {method: 'DELETE'})
+    request.done(done)
+    request.fail(fail)
+  }
 
 - all_objects_wrapper = 'chosen-files'
 

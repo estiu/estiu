@@ -23,6 +23,7 @@ Rails.application.routes.draw do
   resources :events, only: [:index, :show, :create] do
     member do
       post :submit_documents
+      resources :event_documents, only: [:destroy], param: :event_document_id
     end
   end
   

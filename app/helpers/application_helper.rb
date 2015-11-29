@@ -39,7 +39,7 @@ module ApplicationHelper
   
   def partial_to_js_template partial_name, locals
     template = controller.render_to_string(partial: partial_name, locals: locals).gsub("\n", '').gsub("\"", "\\\"")
-    ('_.template("' + template + '", {interpolate: /\{\{(.+?)\}\}/g})').html_safe
+    ('_.template("' + template + '")').html_safe
   end
   
   def activate_popover
