@@ -86,6 +86,7 @@ en:
     format: "%{message}"
   money_range: "Must be between %{min} and %{max}"
   past_date: Cannot be in the past
+  add_a_file: 'Add a file...'
   application:
     param_required: "There has been an issue related with fields you left blank. Please try again."
     forbidden: "You are not authorized to perform this action."

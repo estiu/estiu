@@ -1,3 +1,0 @@
-= direct_upload_form_for @uploader, html: {class: 'jquery-file-upload'} do |f|
-  = form_fields(f, 'events.documents_form') do |field|
-    = field.(:event_documents, as: :s3_upload, all_objects_wrapper: all_objects_wrapper, target: target)
