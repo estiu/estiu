@@ -119,9 +119,13 @@ en:
       popover2: "Example: dj/locodice or dj/bicep"
     errors:
       at_least_one_ra_artist: 'There must be at least one artist.'
+      ensure_at_least_one_event_document: "At least one document must be uploaded."
     create:
       success: "Event succesfully created."
       error: "Couldn't create event due to the indicated errors."
+    submit:
+      success: "Event successfully submitted for review. Once it's approved, the campaign funds will be transfered to your account."
+      error: "Sorry, there has been a problem submitting your event. Please try again or contact us."
     documents_form:
       submit: Upload
     upload_documents:

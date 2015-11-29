@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
-  before_action :load_event, only: [:show, :submit_documents]
+  before_action :load_event, only: [:show, :submit_documents, :submit]
   before_action :initialize_uploader, only: [:show]
   
   with_events = [:index]
@@ -13,6 +13,9 @@ class EventsController < ApplicationController
   end
   
   def show
+    if @event.submitted_at && !@event.approved_at
+      flash.now[:success] = t('events.submit.success')
+    end
   end
   
   def new
@@ -29,6 +32,16 @@ class EventsController < ApplicationController
     end
   end
   
+  def submit
+    @event.submitted_at = DateTime.now
+    if @event.save
+      # no flash needed.
+    else
+      flash[:error] = t('.error')
+    end
+    redirect_to @event
+  end
+  
   def submit_documents
     document = EventDocument.new(event_document_attrs)
     if document.save
@@ -40,7 +53,7 @@ class EventsController < ApplicationController
   
   helper_method :should_upload_documents?
   def should_upload_documents?
-    current_event_promoter && !@event.approved_at
+    current_event_promoter && !@event.submitted_at
   end
   
   protected

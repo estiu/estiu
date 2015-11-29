@@ -123,11 +123,12 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.string   "name"
     t.datetime "starts_at"
     t.integer  "duration"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.integer  "campaign_id", null: false
-    t.integer  "venue_id",    null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "campaign_id",  null: false
+    t.integer  "venue_id",     null: false
     t.datetime "approved_at"
+    t.datetime "submitted_at"
   end
 
   add_index "events", ["campaign_id"], name: "index_events_on_campaign_id", using: :btree

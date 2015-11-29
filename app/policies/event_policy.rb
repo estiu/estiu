@@ -22,10 +22,18 @@ class EventPolicy < ApplicationPolicy
     end
   end
   
+  def submit?
+    promoter_has_not_submitted?
+  end
+  
   def submit_documents?
+    promoter_has_not_submitted?
+  end
+  
+  def promoter_has_not_submitted?
     user.event_promoter? &&
     record.campaign.event_promoter == user.event_promoter &&
-    !record.approved_at
+    !record.submitted_at
   end
   
   class Scope < Scope

@@ -29,7 +29,7 @@
         = form_fields(form, '') do |field|
           = render 'fields/s3_upload_item', field: field, id: event_document.id, visible_name: event_document.visible_name
   %hr
-  = form_for(@event, url: submit_documents_event_path(id: @event.id), html: {method: :post}) do |f|
+  = form_for(@event, url: submit_event_path(id: @event.id), html: {method: :post}) do |f|
     = form_fields(f, 'events.form.submit_documents') do |field|
       - popover_caption = "#{t('.popover1')} <br> <small> #{t('.popover2')} </small>"
       = field.(:documents_confirmation, as: :checkbox, popover: {html: popover_caption})
