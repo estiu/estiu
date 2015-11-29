@@ -12,7 +12,7 @@
   = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[{{#{object_index}}}]") do |field|
     :javascript
       #{object_index} = #{target.send(key).size - 2}
-      #{object_template} = #{partial_to_js_template('fields/s3_upload_item', field: field, visible_name: '{{visible_name}}', id: '{{id}}')}
+      #{object_template} = #{partial_to_js_template('fields/s3_upload_item', field: field, visible_name: '{{visible_name}}', id: '{{id}}', display_removal: true)}
 
 :javascript
   $('.jquery-file-upload').fileupload(

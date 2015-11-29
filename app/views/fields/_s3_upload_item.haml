@@ -2,6 +2,9 @@
   .float-right
     %span.glyphicon.glyphicon-remove.f12{style: 'vertical-align: middle'}
 
+- opts = {only_label: true, caption: visible_name}
+- opts.merge!(remove_button: remove_button) if display_removal
+
 .s3-upload-item-wrapper{'data-upload-item-id' => id}
   = field.(:id, as: :hidden, value: id)
-  = field.(:filename, only_label: true, remove_button: remove_button, caption: visible_name)
+  = field.(:filename, opts)

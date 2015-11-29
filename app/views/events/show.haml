@@ -7,7 +7,7 @@
       %p
         = t '.draft'
 
-- if should_upload_documents?
+- if display_event_documents?
   = render 'upload_documents'
 
 %div{class: centered_wider}

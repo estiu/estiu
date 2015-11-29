@@ -56,6 +56,11 @@ class EventsController < ApplicationController
     current_event_promoter && !@event.submitted_at
   end
   
+  helper_method :display_event_documents?
+  def display_event_documents?
+    (current_event_promoter == @event.campaign.event_promoter) && !@event.approved_at
+  end
+  
   protected
   
   def initialize_event
