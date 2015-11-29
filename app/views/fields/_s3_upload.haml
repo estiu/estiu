@@ -8,7 +8,7 @@
 .file-upload
   = form.label :filename, t('add_a_file'), class: 'btn btn-info'
   = form.file_field :filename, use_action_status: true, class: 'file-uploader', style: 'display: none'
-= form.fields_for(key, target.send(key).build) do |f|
+= form.fields_for(key, item) do |f|
   = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[{{#{object_index}}}]") do |field|
     :javascript
       #{object_index} = #{target.send(key).size - 2}

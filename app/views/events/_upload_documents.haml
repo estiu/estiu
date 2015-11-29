@@ -21,17 +21,13 @@
   %hr
   = direct_upload_form_for @uploader, as: 'uploader', html: {class: 'jquery-file-upload'} do |f|
     = form_fields(f, '') do |field|
-      = field.(:event_documents, as: :s3_upload, all_objects_wrapper: ".#{all_objects_wrapper}", target: @event)
+      = field.(:event_documents, as: :s3_upload, all_objects_wrapper: ".#{all_objects_wrapper}", target: @event, item: EventDocument.new)
   .bottom20
   %div{class: all_objects_wrapper}
-    - captures = [] # for some reason one additional item is rendered. the `captures` object helps avoiding this.
     - @event.event_documents.each do |event_document|
-      - form_for(event_document, url: '#') do |form|
-        - form_fields(form, '') do |field|
-          - captures << capture do
-            = render 'fields/s3_upload_item', field: field, id: event_document.id, visible_name: event_document.visible_name
-    - captures[0..(captures.size - 2)].each do |capture|
-      = capture
+      = form_for(event_document, url: '#') do |form|
+        = form_fields(form, '') do |field|
+          = render 'fields/s3_upload_item', field: field, id: event_document.id, visible_name: event_document.visible_name
   %hr
   = form_for(@event, url: submit_documents_event_path(id: @event.id), html: {method: :post}) do |f|
     = form_fields(f, 'events.form.submit_documents') do |field|
