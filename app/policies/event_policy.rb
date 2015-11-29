@@ -22,10 +22,6 @@ class EventPolicy < ApplicationPolicy
     end
   end
   
-  def render_uploader?
-    show? && user.event_promoter
-  end
-  
   class Scope < Scope
     def resolve
       if user.admin?

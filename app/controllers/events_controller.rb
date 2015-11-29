@@ -1,8 +1,8 @@
 class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
-  before_action :load_event, only: [:show, :render_uploader]
-  before_action :initialize_uploader, only: [:show, :render_uploader]
+  before_action :load_event, only: [:show]
+  before_action :initialize_uploader, only: [:show]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -16,10 +16,6 @@ class EventsController < ApplicationController
   end
   
   def new
-  end
-  
-  def render_uploader
-    render partial: 'layouts/uploader', layout: false, locals: {first: false, submit: false}
   end
   
   def create
