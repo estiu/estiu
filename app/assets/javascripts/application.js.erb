@@ -27,6 +27,10 @@ function unlock_uploader_ui(){
   $('.file-uploader').removeAttr('disabled')
 }
 
+function notify_uploader_ui_problem(){
+  alert("<%= I18n.t 'javascript.errors.uploader' %>")
+}
+
 DEFAULT_POPOVER_OPTIONS = {trigger: 'hover click', placement: 'bottom', delay: 200}
 DEFAULT_UPLOAD_OPTIONS = {
   // forceIframeTransport: true, // if true, we cannot get XML data back from AWS. So it cannot be used.
@@ -37,9 +41,7 @@ DEFAULT_UPLOAD_OPTIONS = {
     data.submit();
   },
   send: lock_uploader_ui,
-  fail: function(e, data){
-    alert("<%= I18n.t 'javascript.errors.uploader' %>")
-  },
+  fail: notify_uploader_ui_problem,
   always: unlock_uploader_ui
 }
 

@@ -140,6 +140,7 @@ en:
       popover1: The artist(s) which will play at the event.
       popover2: For identifying them, we use Resident Advisor url fragments.
       submit_documents:
+        documents_confirmation: I confirm that these contracts are all the needed ones for this event to be celebrated.
         submit: Submit
       ra_artists:
         artist_path: "Resident Advisor path"

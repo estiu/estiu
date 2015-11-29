@@ -4,6 +4,7 @@ class CreateEventDocuments < ActiveRecord::Migration
       t.references :event, index: true, foreign_key: true
       t.string :filename, null: false
       t.string :key, null: false
+      t.string :visible_name, null: false
 
       t.timestamps null: false
     end

@@ -30,8 +30,12 @@ class EventsController < ApplicationController
   end
   
   def submit_documents
-    @event.assign_attributes document_attrs
-    redirect_to @event
+    document = EventDocument.new(event_document_attrs)
+    if document.save
+      render json: {id: document.id}, status: 200
+    else
+      head 422
+    end
   end
   
   helper_method :should_upload_documents?
@@ -60,8 +64,8 @@ class EventsController < ApplicationController
       merge(campaign_id: params[:id])
   end
   
-  def document_attrs
-    params.permit(event: [{event_documents_attributes: %i(filename key)}])[:event]
+  def event_document_attrs
+    params.permit(event_document: %i(filename key visible_name))[:event_document].merge(event: @event)
   end
   
 end

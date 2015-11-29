@@ -102,10 +102,11 @@ ActiveRecord::Schema.define(version: 20151123190146) do
 
   create_table "event_documents", force: :cascade do |t|
     t.integer  "event_id"
-    t.string   "filename",   null: false
-    t.string   "key",        null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "filename",     null: false
+    t.string   "key",          null: false
+    t.string   "visible_name", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   add_index "event_documents", ["event_id"], name: "index_event_documents_on_event_id", using: :btree

@@ -7,6 +7,8 @@ class Event < ActiveRecord::Base
   has_many :tickets
   has_many :event_documents
   
+  attr_accessor :documents_confirmation
+  
   accepts_nested_attributes_for :ra_artists, allow_destroy: false, reject_if: ->(object){ object[:artist_path].blank? }
   accepts_nested_attributes_for :event_documents, allow_destroy: false, reject_if: ->(object){ object[:filename].blank? }
   validate :at_least_one_ra_artist

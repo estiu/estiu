@@ -1,3 +1,12 @@
+:javascript
+  ON_FILE_UPLOAD = function(data, done, fail){
+    var request = $.ajax("#{submit_documents_event_path(@event)}", {method: "POST", data: {event_document: data}})
+    request.done(function(response){
+      done(response['id'])
+    })
+    request.fail(fail)
+  }
+
 - all_objects_wrapper = 'chosen-files'
 
 .bordered{class: centered_wider}
@@ -8,8 +17,17 @@
     = form_fields(f, '') do |field|
       = field.(:event_documents, as: :s3_upload, all_objects_wrapper: ".#{all_objects_wrapper}", target: @event)
   .bottom20
+  %div{class: all_objects_wrapper}
+    - captures = [] # for some reason one additional item is rendered. the `captures` object helps avoiding this.
+    - @event.event_documents.each do |event_document|
+      - form_for(event_document, url: '#') do |form|
+        - form_fields(form, '') do |field|
+          - captures << capture do
+            = render 'fields/s3_upload_item', field: field, id: event_document.id, visible_name: event_document.visible_name
+    - captures[0..(captures.size - 2)].each do |capture|
+      = capture
   %hr
   = form_for(@event, url: submit_documents_event_path(id: @event.id), html: {method: :post}) do |f|
     = form_fields(f, 'events.form.submit_documents') do |field|
-      %div{class: all_objects_wrapper}
+      = field.(:documents_confirmation, as: :checkbox) # XXX needs popover
       = field.(:submit)
