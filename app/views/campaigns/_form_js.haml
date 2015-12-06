@@ -3,7 +3,9 @@
   window.venue_capacities = #{Venue.venue_capacities.to_json}
   
   $('#campaign_venue_id').change(function(){
-    $("#venue-capacity-indicator").text(window.venue_capacities[$(this).val()] || "")
+    var val = window.venue_capacities[$(this).val()]
+    var caption = val ? "#{t('campaigns.form.venue_capacity')}: " + val : ""
+    $("#venue-capacity-indicator").text(caption)
   }).change()
   
   function update_recommended_pledge(){
