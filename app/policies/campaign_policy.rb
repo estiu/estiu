@@ -28,4 +28,12 @@ class CampaignPolicy < ApplicationPolicy
     end
   end
   
+  class Scope < Scope
+    def resolve
+      scope.select {|campaign|
+        CampaignPolicy.new(user, campaign).show?
+      }
+    end
+  end
+  
 end

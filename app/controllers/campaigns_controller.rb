@@ -4,10 +4,12 @@ class CampaignsController < ApplicationController
   before_action :authorize_campaign, only: [:show]
   
   def index
-    authorize(@campaigns = listing_scope)
+    authorize Campaign
+    @campaigns = policy_scope listing_scope
   end
   
   def mine
+    authorize Campaign
     scope = listing_scope
     @campaigns = (
       if current_event_promoter
@@ -15,10 +17,9 @@ class CampaignsController < ApplicationController
       elsif current_attendee
         scope.visible_for_attendee current_attendee
       else
-        scope
+        policy_scope scope
       end
     )
-    authorize @campaigns
     render 'index'
   end
   
