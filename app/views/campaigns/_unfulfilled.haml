@@ -1,0 +1,13 @@
+%hr
+.top10.center
+  %strong
+    = t '.caption'
+  - if current_attendee
+    - amount = current_attendee.refundable_amount_for(campaign)
+    - if amount
+      %p= t '.refundable', amount: amount.format
+      .row.top15
+        .col-xs-6.right
+          = link_to t('.money_back'), '#', class: 'btn btn-info'
+        .col-xs-6.left
+          = link_to t('.credits'), '#', class: 'btn btn-success'

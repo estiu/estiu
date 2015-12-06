@@ -1,4 +1,4 @@
-fmailers_common: &mailers_common
+mailers_common: &mailers_common
   credit_creation_mailer:
     perform:
       subject: "You have been credited %{amount}!"
@@ -183,6 +183,11 @@ en:
           starts_at: The campaign must remain open for at least %{hours} hours.
         generate_invite_link: If the event is invite only, then a link must be generated.
         generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
+      unfulfilled:
+        caption: This event didn't reach its goal.
+        refundable: "We got you covered. Choose what to do with your %{amount}:"
+        money_back: Get my money back
+        credits: Get credits for next events
       share:
         app_with_no_invite_token: "Keep in mind: this campaign/event is only visible to Estiu members (it's not public)."
         invite: "Keep in mind - this campaign/event is %{invite_only}! Only users having the %{secret_link} can access it."

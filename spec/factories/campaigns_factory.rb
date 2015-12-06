@@ -60,6 +60,38 @@ FG.define do
       
     end
     
+    trait :unfulfilled do
+      
+      transient do
+        including_attendees []
+      end
+      
+      starts_at { 30.days.ago }
+      ends_at { 2.days.ago }
+      
+      after(:create) do |rec, eva|
+        
+        pledge_count = 5
+        amount_cents = ((rec.goal_cents - rec.minimum_pledge_cents - 1).to_f / pledge_count.to_f).floor
+        
+        (pledge_count - eva.including_attendees.size).times {
+          rec.pledges << FG.create(:pledge, campaign: rec, amount_cents: amount_cents)
+        }
+        
+        eva.including_attendees.each do |attendee|
+          rec.pledges << FG.create(:pledge, campaign: rec, amount_cents: amount_cents, attendee: attendee)
+        end
+        
+      end
+      
+      after(:create) do |rec, eva|
+        fail if rec.fulfilled?
+        CampaignUnfulfillmentCheck.run
+        fail unless rec.reload.unfulfilled_at
+      end
+      
+    end
+    
     trait :with_one_pledge do
       
       after(:create) do |rec, eva|

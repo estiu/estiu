@@ -2,6 +2,7 @@ class Credit < ActiveRecord::Base
   
   belongs_to :attendee
   belongs_to :pledge
+  belongs_to :refunded_pledge, class_name: Pledge
   
   default_scope { where charged: false }
   
@@ -13,10 +14,9 @@ class Credit < ActiveRecord::Base
   
   validates :charged, inclusion: [true, false]
   
-  validates_presence_of :attendee
-  validates_presence_of :attendee_id
-  validates_presence_of :pledge
-  validates_presence_of :pledge_id
+  validates :attendee, presence: true
+  validates :pledge, presence: true, unless: :refunded_pledge
+  validates :refunded_pledge, presence: true, unless: :pledge
   
   def notify_attendee
     CreditCreationJob.perform_later(self.id)

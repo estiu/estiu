@@ -94,14 +94,16 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   create_table "credits", force: :cascade do |t|
     t.integer  "attendee_id"
     t.integer  "pledge_id"
-    t.integer  "amount_cents", null: false
-    t.boolean  "charged",      null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.integer  "amount_cents",       null: false
+    t.boolean  "charged",            null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.integer  "refunded_pledge_id"
   end
 
   add_index "credits", ["attendee_id"], name: "index_credits_on_attendee_id", using: :btree
   add_index "credits", ["pledge_id"], name: "index_credits_on_pledge_id", using: :btree
+  add_index "credits", ["refunded_pledge_id"], name: "index_credits_on_refunded_pledge_id", using: :btree
 
   create_table "event_documents", force: :cascade do |t|
     t.integer  "event_id"
@@ -154,6 +156,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.integer  "discount_cents",           default: 0,  null: false
     t.integer  "originally_pledged_cents",              null: false
     t.string   "stripe_charge_id"
+    t.string   "stripe_refund_id"
     t.string   "referral_email"
     t.integer  "desired_credit_ids",       default: [], null: false, array: true
     t.datetime "created_at",                            null: false
@@ -241,6 +244,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_foreign_key "campaigns", "venues"
   add_foreign_key "credits", "attendees"
   add_foreign_key "credits", "pledges"
+  add_foreign_key "credits", "pledges", column: "refunded_pledge_id"
   add_foreign_key "event_documents", "events"
   add_foreign_key "events", "campaigns"
   add_foreign_key "events", "venues"

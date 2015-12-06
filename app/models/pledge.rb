@@ -6,6 +6,7 @@ class Pledge < ActiveRecord::Base
   STRIPE_EUR = 'eur'
   
   has_one :credit
+  has_one :refund_credit, class_name: Credit, foreign_key: :refunded_pledge_id
   belongs_to :attendee
   belongs_to :campaign
   validates_presence_of :attendee_id
@@ -36,6 +37,10 @@ class Pledge < ActiveRecord::Base
 
   def charged?
     stripe_charge_id.present?
+  end
+  
+  def refunded?
+    stripe_refund_id || refund_credit
   end
   
   def calculate_discount!
@@ -77,7 +82,7 @@ class Pledge < ActiveRecord::Base
           description: self.class.charge_description_for(campaign)
         )
         
-        Rails.logger.info "Successfully charged a pledge. Charge id: #{charge.id}"
+        Rails.logger.info "Successfully charged pledge with id #{pledge.id}. Charge id: #{charge.id}"
         
         credits.each {|credit| credit.update_attributes! charged: true }
       end
@@ -89,7 +94,9 @@ class Pledge < ActiveRecord::Base
     self.stripe_charge_id = charge.id
     saved = self.save
     unless saved
-      Rails.logger.error "Pledge charge succeeded, but could not update object #{self}. Errors: #{self.errors.full_messages}"
+      message = "Pledge charge succeeded, but could not update object with id #{self.id}. Errors: #{self.errors.full_messages}"
+      Rails.logger.error message
+      Rollbar.error message
     end
     return true
     
@@ -98,6 +105,29 @@ class Pledge < ActiveRecord::Base
     Rails.logger.error e
     Rollbar.error e
     return false
+  end
+  
+  def refund!
+    return false if campaign.fulfilled_at
+    return false if campaign.fulfilled_at
+    return false if stripet_charge_id.blank?
+    return false if stripe_refund_id.present?
+    return false if refund_credit
+    refund_id = Stripe::Refund.create(charge: stripe_charge_id).id
+    Rails.logger.info "Successfully refunded pledge with id #{pledge.id}. Refund id: #{refund_id}"
+    self.stripe_refund_id = refund_id
+    saved = self.save
+    unless saved
+      message = "Pledge refund succeeded, but could not update object with id #{self.id}. Errors: #{self.errors.full_messages}"
+      Rails.logger.error message
+      Rollbar.error message
+    end
+    true
+  rescue Stripe::InvalidRequestError => e
+    Rails.logger.error e.class
+    Rails.logger.error e
+    Rollbar.error e
+    false
   end
   
   def discounted_message

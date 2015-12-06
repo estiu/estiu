@@ -2,6 +2,9 @@
 
   = render 'item', campaign: @campaign, listing: false
   
+  - if @campaign.unfulfilled_at
+    = render 'unfulfilled', campaign: @campaign
+  
   .top10
   
   - if user_signed_in?
@@ -10,21 +13,24 @@
     - elsif should_create_event?
       = render 'must_create_event', campaign: @campaign
     - elsif current_attendee
-      = render 'pledges/form', campaign: @campaign
+      - unless @campaign.unfulfilled_at
+        = render 'pledges/form', campaign: @campaign
   - else
     %hr 
     - the_link = link_to t(@campaign.closed? ? '.sign_up_for_closed' : '.sign_up'), attendees_sign_up_path, class: 'btn btn-success', id: 'sign-up-from-campaign'
     - if @campaign.closed?
       .alert.alert-info.p10
         %small
-          %p= t '.closed_sign_up'
+          - unless @campaign.unfulfilled_at
+            %p= t '.closed_sign_up'
           %p
             %strong
               =t '.closed_sign_up_2'
           = the_link
+          = facebook_connect
     - else 
       = the_link
-    = facebook_connect
+      = facebook_connect
   
   - unless @campaign.visibility == Campaign::PUBLIC_VISIBILITY
     %hr

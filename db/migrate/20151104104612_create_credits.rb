@@ -8,5 +8,7 @@ class CreateCredits < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_reference :credits, :refunded_pledge, references: :pledge, index: true
+    add_foreign_key :credits, :pledges, column: :refunded_pledge_id
   end
 end

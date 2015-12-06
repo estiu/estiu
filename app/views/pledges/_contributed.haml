@@ -3,13 +3,15 @@
   %div
     %small
       %strong= t 'pledges.form.referred', referred: pledge.referral_email, discount: pledge.discount.format
-%hr
-%div
-  %p
-    %strong= t '.refer_title'
-  %p= t '.refer_expl', discount: Pledge.discount_per_referral.format
-  %p= t('.refer_expl_2', email: "<strong>#{current_user.email}</strong>").html_safe
-  - unless browser.mobile?
-    %p= t '.refer_expl_fb'
-    %div
-      = link_to t('.invite_cta'), facebook_send_link(pledge.campaign.shareable_url(current_user, :include_referral_email)), class: 'btn btn-primary btn-facebook'
+      
+- if campaign.active?
+  %hr
+  %div
+    %p
+      %strong= t '.refer_title'
+    %p= t '.refer_expl', discount: Pledge.discount_per_referral.format
+    %p= t('.refer_expl_2', email: "<strong>#{current_user.email}</strong>").html_safe
+    - unless browser.mobile?
+      %p= t '.refer_expl_fb'
+      %div
+        = link_to t('.invite_cta'), facebook_send_link(pledge.campaign.shareable_url(current_user, :include_referral_email)), class: 'btn btn-primary btn-facebook'
