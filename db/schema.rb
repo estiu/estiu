@@ -19,8 +19,8 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   create_table "artist_catalog_entries", force: :cascade do |t|
     t.integer  "artist_id",          null: false
     t.integer  "artist_promoter_id", null: false
-    t.integer  "price_cents"
-    t.integer  "act_duration"
+    t.integer  "price_cents",        null: false
+    t.integer  "act_duration",       null: false
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
   end
@@ -29,18 +29,18 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "artist_catalog_entries", ["artist_promoter_id"], name: "index_artist_catalog_entries_on_artist_promoter_id", using: :btree
 
   create_table "artist_promoters", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "website"
+    t.string   "name",       null: false
+    t.string   "email",      null: false
+    t.string   "website",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "artists", force: :cascade do |t|
-    t.string   "name"
-    t.string   "telephone"
-    t.string   "email"
-    t.string   "website"
+    t.string   "name",         null: false
+    t.string   "telephone",    null: false
+    t.string   "email",        null: false
+    t.string   "website",      null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "ra_artist_id"
@@ -49,20 +49,20 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "artists", ["ra_artist_id"], name: "index_artists_on_ra_artist_id", using: :btree
 
   create_table "attendees", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
+    t.string   "first_name", null: false
+    t.string   "last_name",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "campaigns", force: :cascade do |t|
-    t.string   "name"
+    t.string   "name",                       null: false
     t.string   "unfulfillment_check_id"
     t.text     "description"
     t.integer  "goal_cents"
     t.integer  "minimum_pledge_cents"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
+    t.datetime "starts_at",                  null: false
+    t.datetime "ends_at",                    null: false
     t.datetime "fulfilled_at"
     t.datetime "unfulfilled_at"
     t.boolean  "skip_past_date_validations"
@@ -79,10 +79,10 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "campaigns", ["venue_id"], name: "index_campaigns_on_venue_id", using: :btree
 
   create_table "contacts", force: :cascade do |t|
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "phone"
-    t.string   "email"
+    t.string   "first_name",       null: false
+    t.string   "last_name",        null: false
+    t.string   "phone",            null: false
+    t.string   "email",            null: false
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "contactable_id",   null: false
@@ -115,17 +115,17 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "event_documents", ["event_id"], name: "index_event_documents_on_event_id", using: :btree
 
   create_table "event_promoters", force: :cascade do |t|
-    t.string   "name"
-    t.string   "email"
-    t.string   "website"
+    t.string   "name",       null: false
+    t.string   "email",      null: false
+    t.string   "website",    null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "starts_at"
-    t.integer  "duration"
+    t.string   "name",         null: false
+    t.datetime "starts_at",    null: false
+    t.integer  "duration",     null: false
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "campaign_id",  null: false
@@ -151,7 +151,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.integer  "attendee_id",                           null: false
     t.integer  "campaign_id",                           null: false
     t.integer  "amount_cents",                          null: false
-    t.integer  "discount_cents",           default: 0
+    t.integer  "discount_cents",           default: 0,  null: false
     t.integer  "originally_pledged_cents",              null: false
     t.string   "stripe_charge_id"
     t.string   "referral_email"
@@ -195,8 +195,8 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                         default: "", null: false
-    t.string   "encrypted_password",            default: "", null: false
+    t.string   "email",                                      null: false
+    t.string   "encrypted_password",                         null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -211,7 +211,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.string   "unconfirmed_email"
     t.datetime "created_at",                                 null: false
     t.datetime "updated_at",                                 null: false
-    t.string   "roles",                         default: [],              array: true
+    t.string   "roles",                         default: [], null: false, array: true
     t.integer  "artist_promoter_id"
     t.integer  "event_promoter_id"
     t.integer  "attendee_id"
@@ -226,10 +226,10 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "venues", force: :cascade do |t|
-    t.string   "name"
-    t.string   "address"
-    t.text     "description"
-    t.integer  "capacity"
+    t.string   "name",        null: false
+    t.string   "address",     null: false
+    t.text     "description", null: false
+    t.integer  "capacity",    null: false
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end

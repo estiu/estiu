@@ -4,7 +4,7 @@ class CreatePledges < ActiveRecord::Migration
       t.references :attendee, index: true, foreign_key: true, null: false
       t.references :campaign, index: true, foreign_key: true, null: false
       t.integer :amount_cents, null: false
-      t.integer :discount_cents, default: 0
+      t.integer :discount_cents, default: 0, null: false
       t.integer :originally_pledged_cents, null: false
       t.string :stripe_charge_id
       t.string :referral_email
