@@ -10,6 +10,8 @@ FG.define do
     ends_at { 30.days.from_now }
     goal_cents { Random.rand(Campaign::MAXIMUM_GOAL_AMOUNT - Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT}
     skip_past_date_validations true
+    visibility Campaign::PUBLIC_VISIBILITY
+    generate_invite_link false
     
     after(:build) do |rec, eva|
       rec.minimum_pledge_cents = [(rec.goal_cents / rec.venue.capacity).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max

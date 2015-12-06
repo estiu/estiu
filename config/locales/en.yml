@@ -85,6 +85,7 @@ en:
   errors:
     email_format: "The given email doesn't have email format."
     format: "%{message}"
+    inclusion: "Please choose."
   money_range: "Must be between %{min} and %{max}"
   past_date: Cannot be in the past
   add_a_file: 'Add a file...'
@@ -97,6 +98,8 @@ en:
   fb_sign_up: "Sign up with Facebook"
   fields:
     optional: Optional
+    'yes': "Yes"
+    'no': 'No'
   <<: *devise
   layouts:
     header:
@@ -178,6 +181,8 @@ en:
           ends_at: Must be prior to Ends at
         ends_at:
           starts_at: The campaign must remain open for at least %{hours} hours.
+        generate_invite_link: If the event is invite only, then a link must be generated.
+        generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
       index:
         title: All campaigns
         title_mine: My campaigns
@@ -214,6 +219,15 @@ en:
         error: "Couldn't create campaign due to the indicated errors."
       form:
         venue_capacity: 'Capacity'
+        visibility: Campaign/event visibility
+        public_visibility: Public
+        app_visibility: Confirmed Estiu members
+        invite_visibility: By invitation only
+        generate_invite_link: Generate invite link?
+        visibility_popover: Select to which users the campaign will be visible.
+        visibility_popover_2: This determines how public/secret the campaign is.
+        generate_invite_link_popover: If yes, a secret link will be generated, which users with access can share.
+        generate_invite_link_popover_2:  Anyone receiving the secret link will be able to view/participate in the campaign.
         maximum_attendance: "Maximum attendance"
         title: New campaign
         goal_cents: Campaign Goal

@@ -66,6 +66,9 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "fulfilled_at"
     t.datetime "unfulfilled_at"
     t.boolean  "skip_past_date_validations"
+    t.string   "visibility",                 null: false
+    t.boolean  "generate_invite_link",       null: false
+    t.string   "invite_token"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "event_promoter_id",          null: false

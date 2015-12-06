@@ -32,6 +32,8 @@ describe "Campaign creation", js: true do
     find('#campaign_venue_id').find("option[value='#{campaign.venue.id}']").select_option
     fill_starts_at
     fill_ends_at
+    find('#campaign_visibility').find("option[value='public']").select_option
+    find('#campaign_generate_invite_link').find("option[value='false']").select_option
   end
   
   def the_last_field

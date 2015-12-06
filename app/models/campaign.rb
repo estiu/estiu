@@ -3,8 +3,12 @@ class Campaign < ActiveRecord::Base
   MINIMUM_GOAL_AMOUNT = 100_00
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
-  BASIC_ATTRS = %i(name) + DATE_ATTRS
-  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :venue_id]
+  BASIC_ATTRS = %i(name venue_id) + DATE_ATTRS
+  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :generate_invite_link, :visibility]
+  PUBLIC_VISIBILITY = 'public'
+  APP_VISIBILITY = 'app'
+  INVITE_VISIBILITY = 'invite'
+  VISIBILITIES = [PUBLIC_VISIBILITY, APP_VISIBILITY, INVITE_VISIBILITY]
   
   extend ResettableDates
   
@@ -32,6 +36,21 @@ class Campaign < ActiveRecord::Base
     validates attr, presence: true
   end
   
+  validates :invite_token, presence: true, if: :generate_invite_link
+  validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}
+  validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}
+  validates :generate_invite_link,
+    inclusion: {in: [true], message: I18n.t('campaigns.errors.generate_invite_link')},
+    if: ->(record){
+      record.generate_invite_link == false && # check false, not nil
+      record.visibility == INVITE_VISIBILITY
+    }
+  validates :generate_invite_link,
+    inclusion: {in: [false], message: I18n.t('campaigns.errors.generate_invite_link_false')},
+    if: ->(record){
+      record.generate_invite_link &&
+      record.visibility == PUBLIC_VISIBILITY
+    }
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
   
   validate :valid_date_fields, on: :create
@@ -41,6 +60,8 @@ class Campaign < ActiveRecord::Base
   
   attr_accessor :goal_cents_facade
   attr_accessor :force_job_running
+  
+  before_validation :do_generate_invite_link, on: :create
   
   after_commit :schedule_unfulfillment_check, on: :create
   after_commit :unschedule_unfulfillment_check, on: :destroy
@@ -65,6 +86,12 @@ class Campaign < ActiveRecord::Base
   
   def self.fulfilled
     where.not(fulfilled_at: nil)
+  end
+  
+  def self.visibility_select
+    VISIBILITIES.map{|value|
+      [I18n.t("campaigns.form.#{value}_visibility"), value]
+    }
   end
   
   def percent_pledged
@@ -129,7 +156,11 @@ class Campaign < ActiveRecord::Base
   end
   
   def estimated_minimum_pledge_cents
-    goal_cents / venue.capacity
+    if venue
+      goal_cents / venue.capacity
+    else
+      nil
+    end
   end
   
   def minimum_pledge_according_to_venue
@@ -186,6 +217,12 @@ class Campaign < ActiveRecord::Base
   
   def unschedule_unfulfillment_check
     CampaignUnfulfillmentUnscheduleJob.perform_later(self.id)
+  end
+  
+  def do_generate_invite_link
+    if generate_invite_link
+      self.invite_token = SecureRandom.hex(6)
+    end
   end
   
 end

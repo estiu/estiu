@@ -46,6 +46,10 @@ module ApplicationHelper
     ".find('label span').popover(DEFAULT_POPOVER_OPTIONS)"
   end
   
+  def popover_html key
+    "#{t key + '_popover'} <br> <small> #{t key + '_popover_2'} </small>"
+  end
+  
   private
   
   def form_field form, key, locals={}

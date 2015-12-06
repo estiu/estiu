@@ -11,6 +11,9 @@ class CreateCampaigns < ActiveRecord::Migration
       t.datetime :fulfilled_at
       t.datetime :unfulfilled_at
       t.boolean :skip_past_date_validations
+      t.string :visibility, null: false
+      t.boolean :generate_invite_link, null: false
+      t.string :invite_token
       t.timestamps null: false
     end
   end
