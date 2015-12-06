@@ -184,7 +184,7 @@ en:
         generate_invite_link: If the event is invite only, then a link must be generated.
         generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
       share:
-        app_with_no_invite_token: 'Keep in mind: this campaign/event is only visible to confirmed Estiu members.'
+        app_with_no_invite_token: "Keep in mind: this campaign/event is only visible to Estiu members (it's not public)."
         invite: "Keep in mind - this campaign/event is %{invite_only}! Only users having the %{secret_link} can access it."
         link: secret link
         invite_only: invite only

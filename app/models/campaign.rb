@@ -61,6 +61,7 @@ class Campaign < ActiveRecord::Base
   
   attr_accessor :goal_cents_facade
   attr_accessor :force_job_running
+  attr_accessor :passed_invite_token
   
   before_validation :do_generate_invite_link
   

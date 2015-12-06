@@ -65,6 +65,7 @@ class ApplicationController < ActionController::Base
   
   def load_campaign
     @campaign = Campaign.find(params[:id])
+    @campaign.passed_invite_token = params[:invite_token]
   end
   
   Roles.all.each do |role|
