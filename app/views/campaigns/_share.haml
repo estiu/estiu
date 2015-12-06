@@ -1,0 +1,4 @@
+- if campaign.invite_token
+  = t(".invite", invite_only: content_tag(:b, t('.invite_only')), secret_link: link_to(t(".link"), campaign.shareable_url(current_user), class: 'black bold')).html_safe
+- else
+  = t ".#{campaign.visibility}_with_no_invite_token"

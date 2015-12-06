@@ -8,7 +8,7 @@ class Campaign < ActiveRecord::Base
   PUBLIC_VISIBILITY = 'public'
   APP_VISIBILITY = 'app'
   INVITE_VISIBILITY = 'invite'
-  VISIBILITIES = [PUBLIC_VISIBILITY, APP_VISIBILITY, INVITE_VISIBILITY]
+  VISIBILITIES = [APP_VISIBILITY, INVITE_VISIBILITY, PUBLIC_VISIBILITY]
   
   extend ResettableDates
   
@@ -37,6 +37,7 @@ class Campaign < ActiveRecord::Base
   end
   
   validates :invite_token, presence: true, if: :generate_invite_link
+  validates :invite_token, inclusion: [nil], unless: :generate_invite_link
   validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}
   validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}
   validates :generate_invite_link,
@@ -61,7 +62,7 @@ class Campaign < ActiveRecord::Base
   attr_accessor :goal_cents_facade
   attr_accessor :force_job_running
   
-  before_validation :do_generate_invite_link, on: :create
+  before_validation :do_generate_invite_link
   
   after_commit :schedule_unfulfillment_check, on: :create
   after_commit :unschedule_unfulfillment_check, on: :destroy
@@ -220,8 +221,18 @@ class Campaign < ActiveRecord::Base
   end
   
   def do_generate_invite_link
-    if generate_invite_link
+    if generate_invite_link && changes[:generate_invite_link]
       self.invite_token = SecureRandom.hex(6)
+    end
+  end
+  
+  def shareable_url current_user, include_referral_email=false
+    opts = {id: id}
+    opts.merge!({referral_email: current_user.email}) if include_referral_email
+    if invite_token
+      Rails.application.routes.url_helpers.show_with_invite_token_campaign_url(opts.merge(invite_token: invite_token))
+    else
+      Rails.application.routes.url_helpers.campaign_url(opts)
     end
   end
   

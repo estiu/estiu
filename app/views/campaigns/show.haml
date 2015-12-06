@@ -25,3 +25,10 @@
     - else 
       = the_link
     = facebook_connect
+  
+  - unless @campaign.visibility == Campaign::PUBLIC_VISIBILITY
+    %hr
+    .top10
+    .alert.alert-info.center
+      .small
+        = render 'share', campaign: @campaign

@@ -183,6 +183,11 @@ en:
           starts_at: The campaign must remain open for at least %{hours} hours.
         generate_invite_link: If the event is invite only, then a link must be generated.
         generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
+      share:
+        app_with_no_invite_token: 'Keep in mind: this campaign/event is only visible to confirmed Estiu members.'
+        invite: "Keep in mind - this campaign/event is %{invite_only}! Only users having the %{secret_link} can access it."
+        link: secret link
+        invite_only: invite only
       index:
         title: All campaigns
         title_mine: My campaigns
@@ -231,6 +236,8 @@ en:
         maximum_attendance: "Maximum attendance"
         title: New campaign
         goal_cents: Campaign Goal
+        starts_at: Campaign starts at
+        ends_at: Campaign ends at
         recommended_pledge: Recommended minimum pledge
         recommended_pledge_cents: Recommended pledge
         minimum_pledge_cents: Minimum pledge
@@ -259,7 +266,7 @@ en:
       success: "You have succesfully paid for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge, which we'll investigate. Your bank account probably hasn't been charged, but please check it."
     contributed:
-      refer_title: Wanna get a discount for your next event?
+      refer_title: Want a discount for your next event?
       refer_expl: "Get a future discount of %{discount} for each friend that refers you (they get a discount too!)"
       refer_expl_2: "They have to enter your email (%{email}) at the moment of the purchase."
       refer_expl_fb: 'You can tell them via Facebook:'

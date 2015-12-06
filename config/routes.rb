@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       resources :pledges, only: [:create, :update], param: :pledge_id
       get 'create_event', to: 'events#new', as: 'new_event'
       post 'create_event', to: 'events#create', as: 'create_event'
-      get ':invite_token', to: 'campaigns#show'
+      get ':invite_token', to: 'campaigns#show', as: 'show_with_invite_token'
     end
   end
   
