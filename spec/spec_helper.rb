@@ -1,3 +1,10 @@
+if (RSpec.configuration.instance_variable_get :@files_or_directories_to_run) == ['spec']
+  unless ENV['CODESHIP']
+    require 'simplecov'
+    SimpleCov.start 'rails'
+  end
+end
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?

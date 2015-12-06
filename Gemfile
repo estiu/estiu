@@ -58,4 +58,5 @@ group :test do
   gem 'launchy', '~> 2.4'
   gem 'selenium-webdriver', '~> 2.47'
   gem 'database_cleaner', '~> 1.5'
+  gem 'simplecov', '~> 0.10', require: false
 end
