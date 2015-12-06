@@ -86,9 +86,24 @@ describe CampaignsController do
         sign_as :attendee
         
         context "without passing the invite link" do
+          
           it "is forbidden" do
             forbidden
           end
+          
+          context "having pledged to this campaign" do
+            
+            before {
+              FG.create :pledge, attendee: attendee.attendee, campaign: campaign
+            }
+            
+            it "is permitted" do
+              the_action
+              controller_ok
+            end
+            
+          end
+          
         end
         
         context "passing the invite link" do
