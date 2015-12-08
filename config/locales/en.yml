@@ -96,6 +96,7 @@ en:
     ensure_ajax_uploading: 'The page you attempted to visit cannot be viewed with Internet Explorer or Opera.'
   fb_login: "Log in with Facebook"
   fb_sign_up: "Sign up with Facebook"
+  'or': 'or'
   fields:
     optional: Optional
     'yes': "Yes"
@@ -187,7 +188,11 @@ en:
         caption: This event didn't reach its goal.
         refundable: "We got you covered. Choose what to do with your %{amount}:"
         money_back: Get my money back
+        money_back_popover: Choose this for your credit card payment to be refunded.
+        money_back_popover_2: Refunds can take up to 10 days to complete.
         credits: Get credits for next events
+        credits_popover: Choose this for getting %{amount} in credits for other events.
+        credits_popover_2: You can use them immediately in current and future campaigns.
       share:
         app_with_no_invite_token: "Keep in mind: this campaign/event is only visible to Estiu members (it's not public)."
         invite: "Keep in mind - this campaign/event is %{invite_only}! Only users having the %{secret_link} can access it."

@@ -5,9 +5,20 @@
   - if current_attendee
     - amount = current_attendee.refundable_amount_for(campaign)
     - if amount
+      - link1 = link_to t('.money_back'), '#', class: 'btn btn-info unfulfilled-refund-option', data: {toggle: 'popover', content: popover_html('.money_back'), html: 'true'}
+      - link2 = link_to t('.credits'), '#', class: 'btn btn-success unfulfilled-refund-option', data: {toggle: 'popover', content: popover_html('.credits', amount: amount.format), html: 'true'}
       %p= t '.refundable', amount: amount.format
-      .row.top15
-        .col-xs-6.right
-          = link_to t('.money_back'), '#', class: 'btn btn-info'
-        .col-xs-6.left
-          = link_to t('.credits'), '#', class: 'btn btn-success'
+      .row.top20.bordered.p20
+        .col-sm-5.right.hidden-xs
+          = link1
+        .col-xs-12.visible-xs
+          = link1
+        .col-sm-2.col-xs-12
+          .top5
+          %strong
+            = t 'or'
+          .bottom5.visible-xs
+        .col-sm-5.left.hidden-xs
+          = link2
+        .col-xs-12.visible-xs
+          = link2
