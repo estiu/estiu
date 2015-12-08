@@ -5,7 +5,7 @@ class Pledge < ActiveRecord::Base
   MAXIMUM_PLEDGE_AMOUNT = 10_000_00 # KYC
   STRIPE_EUR = 'eur'
   
-  has_one :credit
+  has_one :referral_credit, class_name: Credit, foreign_key: :referral_pledge_id
   has_one :refund_credit, class_name: Credit, foreign_key: :refunded_pledge_id
   belongs_to :attendee
   belongs_to :campaign
@@ -82,7 +82,7 @@ class Pledge < ActiveRecord::Base
           description: self.class.charge_description_for(campaign)
         )
         
-        Rails.logger.info "Successfully charged pledge with id #{pledge.id}. Charge id: #{charge.id}"
+        Rails.logger.info "Successfully charged pledge with id #{id}. Charge id: #{charge.id}"
         
         credits.each {|credit| credit.update_attributes! charged: true }
       end
@@ -114,7 +114,7 @@ class Pledge < ActiveRecord::Base
     return false if stripe_refund_id.present?
     return false if refund_credit
     refund_id = Stripe::Refund.create(charge: stripe_charge_id).id
-    Rails.logger.info "Successfully refunded pledge with id #{pledge.id}. Refund id: #{refund_id}"
+    Rails.logger.info "Successfully refunded pledge with id #{id}. Refund id: #{refund_id}"
     self.stripe_refund_id = refund_id
     saved = self.save
     unless saved
@@ -166,7 +166,7 @@ class Pledge < ActiveRecord::Base
       change = changes[:stripe_charge_id]
       if change && change[0].nil? && change[1].present?
         attendee_id = User.find_by_email(referral_email).attendee_id
-        Credit.create!(charged: false, attendee_id: attendee_id, amount_cents: DISCOUNT_PER_REFERRAL, pledge: self)
+        Credit.create!(charged: false, attendee_id: attendee_id, amount_cents: DISCOUNT_PER_REFERRAL, referral_pledge: self)
       end
     end
     yield

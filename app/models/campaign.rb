@@ -116,7 +116,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def fulfilled?
-    fulfilled_at || (goal_cents - pledged_cents < minimum_pledge_cents)
+    (!!fulfilled_at) || (goal_cents - pledged_cents < minimum_pledge_cents)
   end
   
   def closed?

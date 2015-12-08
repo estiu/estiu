@@ -31,7 +31,7 @@ describe Pledge do
       pledge.charge! token
       pledge
     }
-    let(:credit){ referrer_pledge.credit }
+    let(:credit){ referrer_pledge.referral_credit }
     
     def the_action
       subject.charge!(token)

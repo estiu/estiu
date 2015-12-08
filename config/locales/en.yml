@@ -256,7 +256,11 @@ en:
       title: Venue
       other: Other venue
   credits:
-    to_s: "%{amount} - from %{referrer}"
+    to_s: 
+      referral_pledge:
+        "%{amount} - from %{referrer}"
+      refunded_pledge:
+        "%{amount} - refunded from a campaign"
   pledges:
     discounted_message: "You will be discounted %{discount}!"
     errors:
