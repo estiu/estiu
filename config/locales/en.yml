@@ -279,6 +279,12 @@ en:
     update:
       success: "You have succesfully paid for this campaign. Thank you!"
       error: "Sorry, there has been an error while processing your pledge, which we'll investigate. Your bank account probably hasn't been charged, but please check it."
+    refund_payment:
+      success: Your credit card payment has been refunded %{amount}! Refunds can take up to 10 days to complete.
+      error: Sorry, there has been an error while refunding your card. Please try again or contact us if the issue persists.
+    create_refund_credit:
+      success: "%{amount} in credits have been created for you! You can use them in any current or future campaign."
+      error: Sorry, there has been an error while creating the credits. Please try again or contact us if the issue persists.
     contributed:
       refer_title: Want a discount for your next event?
       refer_expl: "Get a future discount of %{discount} for each friend that refers you (they get a discount too!)"

@@ -44,7 +44,16 @@ class Pledge < ActiveRecord::Base
   end
   
   def refunded?
-    !!(stripe_refund_id || refund_credit_charged?)
+    reload
+    stripe_refund_id.present? || refund_credit_charged?
+  end
+  
+  def refundable?
+    return false if campaign.fulfilled_at
+    return false if stripe_charge_id.blank?
+    return false if campaign.active?
+    return false if refunded?
+    return true
   end
   
   def calculate_discount!
@@ -111,12 +120,8 @@ class Pledge < ActiveRecord::Base
     return false
   end
   
-  def refund!
-    return false if campaign.fulfilled_at
-    return false if campaign.fulfilled_at
-    return false if stripet_charge_id.blank?
-    return false if stripe_refund_id.present?
-    return false if refund_credit_charged?
+  def refund_payment!
+    return false unless refundable?
     refund_id = Stripe::Refund.create(charge: stripe_charge_id).id
     Rails.logger.info "Successfully refunded pledge with id #{id}. Refund id: #{refund_id}"
     self.stripe_refund_id = refund_id
@@ -132,6 +137,19 @@ class Pledge < ActiveRecord::Base
     Rails.logger.error e
     Rollbar.error e
     false
+  end
+  
+  def create_refund_credit!
+    return false unless refundable?
+    credit = Credit.new(amount_cents: amount_cents, refunded_pledge: self, attendee: attendee, charged: false)
+    if credit.save
+      true
+    else
+      message = "`create_refund_credit!` failed. Errors: #{credit.errors.full_messages}"
+      Rails.logger.error message
+      Rollbar.error message
+      false
+    end
   end
   
   def discounted_message

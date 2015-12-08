@@ -1,9 +1,8 @@
 class PledgesController < ApplicationController
   
-  before_action :load_campaign, only: [:create, :update]
-  before_action :authorize_campaign, only: [:create, :update]
+  before_action :authorize_campaign
   before_action :new_pledge, only: [:create]
-  before_action :load_pledge, only: [:update]
+  before_action :load_pledge, only: %i(update refund_payment create_refund_credit)
   
   def create
     @pledge.calculate_total!
@@ -33,7 +32,27 @@ class PledgesController < ApplicationController
     end
   end
   
+  def refund_payment
+    refund_common :refund_payment!
+  end
+  
+  def create_refund_credit
+    refund_common :create_refund_credit!
+  end
+  
+  protected
+  
+  def refund_common method
+    if @pledge.send(method)
+      flash[:success] = t '.success', amount: @pledge.amount.format
+    else
+      flash[:error] = t '.error'
+    end
+    redirect_to @campaign
+  end
+  
   def authorize_campaign
+    load_campaign
     authorize @campaign, :show?
   end
   

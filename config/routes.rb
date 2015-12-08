@@ -14,7 +14,12 @@ Rails.application.routes.draw do
       get :mine
     end
     member do
-      resources :pledges, only: [:create, :update], param: :pledge_id
+      resources :pledges, only: [:create, :update], param: :pledge_id do
+        member do
+          post :refund_payment
+          post :create_refund_credit
+        end
+      end
       get 'create_event', to: 'events#new', as: 'new_event'
       post 'create_event', to: 'events#create', as: 'create_event'
       get ':invite_token', to: 'campaigns#show', as: 'show_with_invite_token'

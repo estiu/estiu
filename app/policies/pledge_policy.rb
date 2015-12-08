@@ -8,10 +8,26 @@ class PledgePolicy < ApplicationPolicy
     common && user == record.attendee.user && !record.charged?
   end
   
+  def refund_payment?
+    refundable?
+  end
+  
+  def create_refund_credit
+    refundable?
+  end
+  
   private
   
+  def refundable?
+    _common && !record.refunded?
+  end
+  
+  def _common
+    user.attendee?
+  end
+  
   def common
-    user.attendee? && record.campaign.active?
+    _common && record.campaign.active?
   end
 
 end
