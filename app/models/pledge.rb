@@ -39,8 +39,12 @@ class Pledge < ActiveRecord::Base
     stripe_charge_id.present?
   end
   
+  def refund_credit_charged?
+    Credit.unscoped{ refund_credit }.present?
+  end
+  
   def refunded?
-    stripe_refund_id || refund_credit
+    !!(stripe_refund_id || refund_credit_charged?)
   end
   
   def calculate_discount!
@@ -112,7 +116,7 @@ class Pledge < ActiveRecord::Base
     return false if campaign.fulfilled_at
     return false if stripet_charge_id.blank?
     return false if stripe_refund_id.present?
-    return false if refund_credit
+    return false if refund_credit_charged?
     refund_id = Stripe::Refund.create(charge: stripe_charge_id).id
     Rails.logger.info "Successfully refunded pledge with id #{id}. Refund id: #{refund_id}"
     self.stripe_refund_id = refund_id
