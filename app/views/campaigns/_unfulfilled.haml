@@ -5,7 +5,19 @@
   - if current_attendee
     - pledge = current_attendee.refundable_pledge_for(campaign)
     - if pledge
-      - links = %w(money_back credits).map{|x| link_to t(".#{x}"), '#', class: 'btn btn-success unfulfilled-refund-option', data: {toggle: 'popover', content: render("campaigns/unfulfilled/#{x}", pledge: pledge, campaign: campaign, amount: pledge.amount.format).gsub("\"", "'"), html: 'true'} }
+      :ruby
+        links = %w(money_back credits).map{|x|
+          content_tag :a, # <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
+            class: 'btn btn-success unfulfilled-refund-option',
+            tabindex: '0',
+            role: 'button',
+            data: {
+              toggle: 'popover',
+              placement: 'top',
+              content: render("campaigns/unfulfilled/#{x}", pledge: pledge, campaign: campaign, amount: pledge.amount.format).gsub("\"", "'"), html: 'true'} do
+            t(".#{x}")
+          end
+        }
       %p= t '.refundable', amount: pledge.amount.format
       .row.top20.bordered.p20
         .col-sm-5.right.hidden-xs
