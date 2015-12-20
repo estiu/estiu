@@ -13,8 +13,8 @@ echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.profile
 echo 'eval "$(rbenv init -)"' >> ~/.profile
 git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
 source ~/.profile
-rbenv install 2.2.3
-rbenv global 2.2.3
+rbenv install 2.2.4
+rbenv global 2.2.4
 gem install bundler
 git clone git@bitbucket.org:vemv/events.git
 cd events
