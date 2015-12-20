@@ -4,15 +4,15 @@ default: &default
 
 development:
   <<: *default
-  database: events_development
+  database: estiu_development
 
 test:
   <<: *default
-  database: events_test
+  database: estiu_test
 
 production:
   <<: *default
-  database: events_production
+  database: estiu_production
   host: <%= ENV['POSTGRESQL_HOST'] %>
   username: <%= ENV['POSTGRESQL_USERNAME'] %>
   password: <%= ENV['POSTGRESQL_PASSWORD'] %>

@@ -69,7 +69,7 @@ class AwsOps::Pipeline
           name: 'ShellCommandActivity',
           fields: [
             {key: 'type', string_value: 'ShellCommandActivity'},
-            {key: 'command', string_value: (test ? 'echo 42' : 'set -e; cd ~/events && git pull && bundle --without development test --path vendor/bundle && ruby bin/fetch_env.rb && bundle exec rake mark_unfulfilled_at')},
+            {key: 'command', string_value: (test ? 'echo 42' : 'set -e; cd ~/estiu && git pull && bundle --without development test --path vendor/bundle && ruby bin/fetch_env.rb && bundle exec rake mark_unfulfilled_at')},
             {key: 'runsOn', ref_value: 'Ec2Resource'}
           ]
         }

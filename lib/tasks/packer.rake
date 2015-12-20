@@ -5,7 +5,7 @@ def rebuild role, force_rebuild
   base_ami = (force_rebuild && role.to_s == AwsOps::BASE_IMAGE_NAME) ?
     AwsOps::Infrastructure.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
     AwsOps::Infrastructure.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
-  repo_source = ci? ? "~/clone" : "~/events"
+  repo_source = ci? ? "~/clone" : "~/estiu"
   return system %| \
     set -e \;
     set -u \;

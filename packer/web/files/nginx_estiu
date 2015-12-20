@@ -5,7 +5,7 @@ upstream unicorn {
 server {
   server_name _;
   listen 80;
-  root /home/ec2-user/events/public;
+  root /home/ec2-user/estiu/public;
 
   location ^~ /assets/ {
     gzip_static on;

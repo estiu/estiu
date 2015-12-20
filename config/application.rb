@@ -8,7 +8,7 @@ if Rails.env.development?
   Sidekiq.redis &:info rescue raise "Redis not running."
 end
 
-module Events
+module Estiu
   class Application < Rails::Application
     
     def self.host

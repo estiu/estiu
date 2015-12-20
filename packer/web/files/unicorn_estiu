@@ -15,7 +15,7 @@ set -u # fail due to undefined variables
 
 USER="ec2-user"
 TIMEOUT=60
-APP_NAME="events"
+APP_NAME="estiu"
 APP_ROOT="/home/$USER/$APP_NAME"
 PID_DIR=$APP_ROOT/tmp/pids
 PID=$PID_DIR/unicorn.pid
