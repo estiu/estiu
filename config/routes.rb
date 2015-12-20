@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       member do
         post :submit_documents
         post :submit
+        get :submit, to: 'events#show' # in case user tries to visit address bar location after validation errors
         resources :event_documents, only: [:destroy], param: :event_document_id
       end
     end

@@ -2,7 +2,6 @@ class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
   before_action :load_event, only: [:show, :submit_documents, :submit]
-  before_action :initialize_uploader, only: [:show]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -13,7 +12,8 @@ class EventsController < ApplicationController
   end
   
   def show
-    if @event.submitted_at && !@event.approved_at
+    initialize_uploader
+    if (params[:action] == 'show') && @event.submitted_at && !@event.approved_at
       flash.now[:success] = t('events.submit.success')
     end
   end
@@ -36,10 +36,13 @@ class EventsController < ApplicationController
     @event.submitted_at = DateTime.now
     if @event.save
       # no flash needed.
+      redirect_to @event
     else
-      flash[:error] = t('.error')
+      @event.submitted_at = nil
+      (flash[:error] = t('.error')) unless @event.errors[:event_documents].present?
+      show
+      render 'show'
     end
-    redirect_to @event
   end
   
   def submit_documents

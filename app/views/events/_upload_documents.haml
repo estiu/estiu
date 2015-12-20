@@ -18,6 +18,11 @@
 .bordered{class: centered_wider}
   %h2
     =t '.documents'
+  
+  - Array(@event.errors[:event_documents]).each do |error|
+    %span.collection-error.f14.bold
+      = error
+    
   - if should_upload_documents?
     %hr
     = direct_upload_form_for @uploader, as: 'uploader', html: {class: 'jquery-file-upload'} do |f|
