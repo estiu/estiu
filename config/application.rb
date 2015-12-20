@@ -30,6 +30,14 @@ module Estiu
       end
     end
     
+    def nginx_prefix
+      if Rails.env.development?
+        '/estiu'
+      else
+        ''
+      end
+    end
+    
     def self.protocol
       'http'
     end
@@ -45,7 +53,7 @@ module Estiu
     config.action_mailer.default_url_options[:host] = host
     config.action_mailer.default_url_options[:port] = port if port
     config.action_mailer.preview_path = "#{Rails.root}/app/mailer_previews"
-    config.asset_host = "#{self.protocol}://#{self.host}#{":" + self.port.to_s if self.port}"
+    config.asset_host = "#{self.protocol}://#{self.host}#{":" + self.port.to_s if self.port}#{nginx_prefix}"
     Rails.application.routes.default_url_options[:host] = host
     Rails.application.routes.default_url_options[:port] = port if port
     

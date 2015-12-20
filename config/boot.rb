@@ -27,3 +27,11 @@ unless ENV["RAILS_ENV"] == "test"
   end
   
 end
+
+module Rails
+  class Server
+    def default_options
+      super.merge(Port: 4000)
+    end
+  end
+end
