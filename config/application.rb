@@ -16,7 +16,7 @@ module Estiu
       when 'production', 'staging'
         'estiu.com'
       when 'test', 'development'
-        'localhost'
+        true ? 'localhost' : '192.168.1.33' # for mobile access
       end
     end
     
