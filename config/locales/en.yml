@@ -112,6 +112,7 @@ en:
       artist_promoters: Artist Promoters
       logout: Logout
       login: Login
+  confirm: 'Confirm'
   ra_artists:
     errors:
       value_format: "Please use the specified format. (found: %{found})"

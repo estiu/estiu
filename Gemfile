@@ -44,7 +44,7 @@ group :development, :test do
 end
 
 group :development do
-  gem 'better_errors'
+  # gem 'better_errors' # disabled until nginx fixed
   gem 'binding_of_caller'
   gem 'sql-logging'
 end

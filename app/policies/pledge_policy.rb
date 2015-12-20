@@ -12,7 +12,7 @@ class PledgePolicy < ApplicationPolicy
     refundable?
   end
   
-  def create_refund_credit
+  def create_refund_credit?
     refundable?
   end
   

@@ -32,12 +32,10 @@ class PledgesController < ApplicationController
     end
   end
   
-  def refund_payment
-    refund_common :refund_payment!
-  end
-  
-  def create_refund_credit
-    refund_common :create_refund_credit!
+  %i(refund_payment create_refund_credit).each do |method|
+    define_method method do
+      refund_common "#{method}!"
+    end
   end
   
   protected

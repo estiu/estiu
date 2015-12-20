@@ -18,8 +18,8 @@ Rails.application.routes.draw do
       member do
         resources :pledges, only: [:create, :update], param: :pledge_id do
           member do
-            post :refund_payment
-            post :create_refund_credit
+            get :refund_payment
+            get :create_refund_credit
           end
         end
         get 'create_event', to: 'events#new', as: 'new_event'

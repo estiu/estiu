@@ -3,22 +3,21 @@
   %strong
     = t '.caption'
   - if current_attendee
-    - amount = current_attendee.refundable_amount_for(campaign)
-    - if amount
-      - link1 = link_to t('.money_back'), '#', class: 'btn btn-info unfulfilled-refund-option', data: {toggle: 'popover', content: popover_html('.money_back'), html: 'true'}
-      - link2 = link_to t('.credits'), '#', class: 'btn btn-success unfulfilled-refund-option', data: {toggle: 'popover', content: popover_html('.credits', amount: amount.format), html: 'true'}
-      %p= t '.refundable', amount: amount.format
+    - pledge = current_attendee.refundable_pledge_for(campaign)
+    - if pledge
+      - links = %w(money_back credits).map{|x| link_to t(".#{x}"), '#', class: 'btn btn-success unfulfilled-refund-option', data: {toggle: 'popover', content: render("campaigns/unfulfilled/#{x}", pledge: pledge, campaign: campaign, amount: pledge.amount.format).gsub("\"", "'"), html: 'true'} }
+      %p= t '.refundable', amount: pledge.amount.format
       .row.top20.bordered.p20
         .col-sm-5.right.hidden-xs
-          = link1
+          = links[0]
         .col-xs-12.visible-xs
-          = link1
+          = links[0]
         .col-sm-2.col-xs-12
           .top5
           %strong
             = t 'or'
           .bottom5.visible-xs
         .col-sm-5.left.hidden-xs
-          = link2
+          = links[1]
         .col-xs-12.visible-xs
-          = link2
+          = links[1]

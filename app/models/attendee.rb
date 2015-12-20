@@ -19,13 +19,13 @@ class Attendee < ActiveRecord::Base
     pledge_for(campaign).present?
   end
   
-  def refundable_amount_for campaign
+  def refundable_pledge_for campaign
     pledge = pledge_for campaign
     return false unless pledge
     if pledge.refunded?
       false
     else
-      pledge.amount
+      pledge
     end
   end
   
