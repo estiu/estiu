@@ -15,8 +15,12 @@ module Estiu
       case Rails.env
       when 'production', 'staging'
         'estiu.com'
-      when 'test', 'development'
-        true ? 'localhost' : '192.168.1.33' # for mobile access
+      when 'development'
+        true ?
+          Socket.ip_address_list.detect{|intf| intf.ipv4_private?}.ip_address : # for mobile access
+          'localhost'
+      when 'test'
+        'localhost'
       end
     end
     
