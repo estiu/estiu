@@ -22,7 +22,7 @@ module Estiu
     
     def self.port
       if Rails.env.development?
-        3000
+        8080
       elsif Rails.env.test?
         56866
       else
@@ -30,6 +30,10 @@ module Estiu
       end
     end
     
+    def self.protocol
+      'http'
+    end
+
     config.active_record.raise_in_transactional_callbacks = true
     config.generators do |g|
       g.test_framework nil
@@ -41,6 +45,7 @@ module Estiu
     config.action_mailer.default_url_options[:host] = host
     config.action_mailer.default_url_options[:port] = port if port
     config.action_mailer.preview_path = "#{Rails.root}/app/mailer_previews"
+    config.asset_host = "#{self.protocol}://#{self.host}#{":" + self.port.to_s if self.port}"
     Rails.application.routes.default_url_options[:host] = host
     Rails.application.routes.default_url_options[:port] = port if port
     
