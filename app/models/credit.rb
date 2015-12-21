@@ -17,6 +17,8 @@ class Credit < ActiveRecord::Base
   validates :attendee, presence: true
   validates :referral_pledge, presence: true, unless: :refunded_pledge
   validates :refunded_pledge, presence: true, unless: :referral_pledge
+  validates :referral_pledge_id, inclusion: [nil], if: :refunded_pledge
+  validates :refunded_pledge_id, inclusion: [nil], if: :referral_pledge
   
   def notify_attendee
     CreditCreationJob.perform_later(self.id)
