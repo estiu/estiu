@@ -2,9 +2,15 @@ mailers_common: &mailers_common
   credit_creation_mailer:
     perform:
       subject: "You have been credited %{amount}!"
-      p1: "Your friend %{referrer} referred you while purchasing his/her ticket, which we compensate you with a credit of %{amount}."
-      p2: This credit can be applied to any future purchase of yours. You can accumulate as many credits as you wish in a single purchase - just get people to refer you!
-      p3: Thank you.
+      p1:
+        referral_pledge: "Your friend %{referrer} referred you while purchasing his/her ticket, which we compensate you with a credit of %{amount}."
+        refunded_pledge: "As you chose, we have refunded you with a credit with value of %{amount}."
+      p2:
+        referral_pledge: This credit can be applied to any future purchase of yours. You can accumulate as many credits as you wish in a single purchase - just get people to refer you!
+        refunded_pledge: This credit can be applied to any future purchase of yours. You also can accumulate this credit with the credits we give you when inviting your friends!
+      p3:
+        referral_pledge: Thank you.
+        refunded_pledge: "Thank you."
   campaign_fulfillment:
     attendee_mailer:
       perform:
