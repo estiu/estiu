@@ -9,8 +9,14 @@ mailers_common: &mailers_common
         referral_pledge: This credit can be applied to any future purchase of yours. You can accumulate as many credits as you wish in a single purchase - just get people to refer you!
         refunded_pledge: This credit can be applied to any future purchase of yours. You also can accumulate this credit with the credits we give you when inviting your friends!
       p3:
-        referral_pledge: Thank you.
+        referral_pledge: "Thank you."
         refunded_pledge: "Thank you."
+  payment_refund_confirmation_mailer:
+    perform:
+      subject: "You have been refunded %{amount}!"
+      p1: "As you chose, your credit card payment of %{amount} has been refunded."
+      p2: "Note that refunds take up to 10 days to complete."
+      p3: "Thanks for trusting us! Your money is always safe with us - for each payment you make, you get either a ticket or a refund if finally there's no event."
   campaign_fulfillment:
     attendee_mailer:
       perform:

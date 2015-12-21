@@ -10,7 +10,11 @@ FG.define do
       rec.amount_cents = rec.originally_pledged_cents = rec.campaign.minimum_pledge_cents unless rec.amount_cents
       rec.originally_pledged_cents = rec.amount_cents unless rec.originally_pledged_cents
     end
-      
+    
+    trait :payment_refunded do
+      stripe_refund_id { SecureRandom.hex }
+    end
+    
   end
   
 end

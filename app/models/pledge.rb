@@ -126,7 +126,9 @@ class Pledge < ActiveRecord::Base
     Rails.logger.info "Successfully refunded pledge with id #{id}. Refund id: #{refund_id}"
     self.stripe_refund_id = refund_id
     saved = self.save
-    unless saved
+    if saved
+      PaymentRefundConfirmationJob.perform_later self.id
+    else
       message = "Pledge refund succeeded, but could not update object with id #{self.id}. Errors: #{self.errors.full_messages}"
       Rails.logger.error message
       Rollbar.error message
