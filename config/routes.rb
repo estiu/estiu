@@ -11,6 +11,11 @@ Rails.application.routes.draw do
       end
     end
     
+    if Rails.env.development?
+      get '/mailer_previews', to: "rails/mailers#index"
+      get '/mailer_previews/*path', to: "rails/mailers#preview"
+    end
+    
     resources :campaigns, only: [:new, :create, :show, :index] do
       collection do
         get :mine
