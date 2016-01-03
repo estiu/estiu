@@ -1,7 +1,14 @@
 - uploaded_document_class = 'uploaded_document'
 - submit_form_class = 'submit_event'
+- submit_form_button_class = 'submit_event_button'
+- submittable = @event.event_documents.size > 0
 
 :javascript
+  $(function(){
+    $('#event_documents_confirmation').change(function(){
+      $('.#{submit_form_button_class}').attr('disabled', !$(this).is(':checked'))
+    })
+  })
   ON_FILE_UPLOAD = function(data, done, fail){
     var request = $.ajax("#{submit_documents_event_path(@event)}", {method: "POST", data: {event_document: data}})
     request.done(function(response){
@@ -48,9 +55,9 @@
         = form_fields(form, '') do |field|
           = render 'fields/s3_upload_item', field: field, id: event_document.id, visible_name: event_document.visible_name, display_removal: should_upload_documents?
   - if should_upload_documents?
-    = form_for(@event, url: submit_event_path(id: @event.id), html: {method: :post, class: submit_form_class, style: "#{jquery_hidden if @event.event_documents.size.zero?}"}) do |f|
+    = form_for(@event, url: submit_event_path(id: @event.id), html: {method: :post, class: submit_form_class, style: "#{jquery_hidden unless submittable}"}) do |f|
       %hr
       = form_fields(f, 'events.form.submit_documents') do |field|
         - popover_caption = "#{t('.popover1')} <br> <small> #{t('.popover2')} </small>"
         = field.(:documents_confirmation, as: :checkbox, popover: {html: popover_caption})
-        = field.(:submit)
+        = field.(:submit, disabled: !@event.documents_confirmation, html_class: submit_form_button_class)
