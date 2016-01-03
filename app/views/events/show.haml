@@ -8,7 +8,7 @@
         = t '.draft'
 
 - if display_event_documents?
-  = render 'upload_documents'
+  = render 'upload_documents', campaign: @event.campaign
 
 %div{class: centered_wider}
   = render 'item', event: @event, listing: false

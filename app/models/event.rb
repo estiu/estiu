@@ -25,6 +25,7 @@ class Event < ActiveRecord::Base
   validates_numericality_of :duration, greater_than_or_equal_to: 3600
   validates :submitted_at, presence: true, if: :approved_at
   validates :approved_at, inclusion: [nil], if: :submitted_at
+  validate :campaign_was_fulfilled
   
   def self.visible_for_event_promoter event_promoter
     joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
@@ -63,6 +64,12 @@ class Event < ActiveRecord::Base
   def ensure_at_least_one_event_document
     if event_documents.size.zero?
       errors[:event_documents] << I18n.t("events.errors.ensure_at_least_one_event_document")
+    end
+  end
+  
+  def campaign_was_fulfilled
+    unless campaign.fulfilled_at
+      errors[:campaign] << 'campaign.fulfilled_at must be present.'
     end
   end
   

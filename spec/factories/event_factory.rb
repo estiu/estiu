@@ -16,7 +16,7 @@ FG.define do
       unless rec.campaign
         opts = {}
         opts.merge!(event_promoter_id: eva.event_promoter_id) if eva.event_promoter_id
-        rec.campaign = FG.build(:campaign, opts)
+        rec.campaign = FG.create(:campaign, :fulfilled, opts)
       end
       
       if rec.ra_artists.size.zero?

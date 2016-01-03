@@ -19,13 +19,11 @@
     - label_html[:style] = "#{label_html[:style]}; width: 100%"
     - (label_html[:for] = locals[:html_opts][:id]) if locals[:html_opts][:id].present?
     = form.label key, label_html do
+      = caption
       - if locals[:popover]
-        %span{'data-toggle' => 'popover',
+        %span.glyphicon.glyphicon-question-sign{'data-toggle' => 'popover',
           'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
           'data-html' => locals[:popover].keys.include?(:html).to_s}
-          = caption
-      - else
-        = caption
       - if locals[:remove_button]
         %span.remove-nested-attribute-item.float-right{style: 'color: black'}
           = remove_button

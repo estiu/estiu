@@ -28,7 +28,7 @@ mailers_common: &mailers_common
       perform:
         subject: "Your campaign has reached its goal!"
         p1: Congratulations! Your campaign has reached its goal.
-        p2: "You must now create the corresponding event with a specific date, including a copy of the contracts you've signed with the venue, artists, providers and so on:"
+        p2: "You must now create the corresponding event with a specific date, including a copy of the contracts/invoices you've signed with the venue, artists, providers and so on:"
         cta: Create the event for this campaign
         p3: After you create the event and it is approved, we will transfer the collected funds so you can pay your providers.
   campaign_unfulfillment:
@@ -146,13 +146,16 @@ en:
     documents_form:
       submit: Upload
     upload_documents:
-      popover1: By checking this checkbox, you confirm that all contracts (artists, venue...) are included, forgetting none.
-      popover2: Not including all contracts constitutes a violation of our Terms and Conditions.
+      popover1: By checking this checkbox, you confirm that all contracts/invoices (artists, venue...) are included, forgetting none.
+      popover2: Not including all contracts/invoices constitutes a violation of our Terms and Conditions.
       documents: Documents
+      documents_explanation: Please use clear, understandable file names for each invoice and contract (rename the files before uploading them if necessary).
+      documents_explanation_2: If you intend to make a profit out of this event, please include an invoice so we can pay it.
+      documents_explanation_3: 'The sum of all the invoices amounts must add up to %{amount} (or less).'
       upload_all: 'Upload'
     show:
       is_draft: This event is currently a draft.
-      draft: Now you must upload the documents (contracts) you have signed with your providers.
+      draft: Now you must upload the documents (contracts and invoices) you have signed with your providers.
     form:
       title: 'Create event'
       for_campaign: "For campaign: %{link}"
@@ -164,7 +167,7 @@ en:
       popover1: The artist(s) which will play at the event.
       popover2: For identifying them, we use Resident Advisor url fragments.
       submit_documents:
-        documents_confirmation: I confirm that these contracts are all the needed ones for this event to be celebrated.
+        documents_confirmation: I confirm that these contracts/invoices are all the needed ones for this event to be celebrated.
         submit: Submit
       ra_artists:
         artist_path: "Resident Advisor path"
