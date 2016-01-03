@@ -50,6 +50,14 @@ module ApplicationHelper
     "#{t((key + '_popover'), locals)} <br> <small> #{t((key + '_popover_2'), locals)} </small>"
   end
   
+  def jquery_hidden
+    'display: none'
+  end
+  
+  def s3_item_wrapper_class
+    's3-upload-item-wrapper'
+  end
+  
   private
   
   def form_field form, key, locals={}
