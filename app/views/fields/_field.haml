@@ -21,9 +21,13 @@
     = form.label key, label_html do
       = caption
       - if locals[:popover]
-        %span.glyphicon.glyphicon-question-sign{'data-toggle' => 'popover',
+        -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
+        %a{'data-toggle' => 'popover',
           'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
-          'data-html' => locals[:popover].keys.include?(:html).to_s}
+          'data-html' => locals[:popover].keys.include?(:html).to_s,
+          tabindex: '0',
+          role: 'button'}
+          %span.glyphicon.glyphicon-question-sign.black
       - if locals[:remove_button]
         %span.remove-nested-attribute-item.float-right{style: 'color: black'}
           = remove_button
