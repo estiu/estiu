@@ -1,4 +1,6 @@
-%strong= t 'pledges.form.contributed', contributed: pledge.amount.format
+- discount_info = pledge.discount_cents.zero? ? '' : t('pledges.form.discount_info', amount: pledge.amount.format)
+
+%strong= t 'pledges.form.contributed', contributed: pledge.originally_pledged.format, discount_info: discount_info
 - if pledge.referral_email.present?
   %div
     %small
