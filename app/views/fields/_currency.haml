@@ -4,6 +4,6 @@
   - value = form.object.send(key)
   - opts = html_opts.merge(class: "#{html_opts[:class]} currency", value: (value / 100.0 if value))
   - %i(min max).each do |attr|
-    - opts.merge!("data-#{attr}-value" => (locals[attr] / 100.0)) if locals[attr]
+    - opts.merge!("data-#{attr}-value" => (locals[attr] / 100.0).to_s.gsub(/(\.|,)(\d)$/, '\1\29')) if locals[attr]
   = form.text_field "#{key}_facade".to_sym, opts
 = form.hidden_field key, html_opts.merge(class: "#{html_opts[:class]} cents")
