@@ -106,7 +106,7 @@ class Campaign < ActiveRecord::Base
   
   def pledged_cents
     Pledge.uncached {
-      pledges.sum(:amount_cents)
+      pledges.sum(:originally_pledged_cents)
     }
   end
   

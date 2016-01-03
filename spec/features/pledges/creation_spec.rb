@@ -105,17 +105,18 @@ describe 'Pledge creation' do
       after {
         page_ok
       }
-          
+      
+      let(:cents){ campaign.minimum_pledge_cents }
+      
+      let!(:pledge){ Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: SecureRandom.hex) }
+      
       before {
-        cents = campaign.minimum_pledge_cents
-        Pledge.create!(attendee: attendee.attendee, campaign: campaign, amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: SecureRandom.hex)
         visit campaign_path(campaign)
       }
 
       it 'is not possible to pledge again' do
-      
-        expect(page).to have_content(t 'pledges.form.contributed', contributed: attendee.attendee.pledge_for(Campaign.last).amount.format)
-        
+        discount_info = pledge.discount_cents.zero? ? '' : t('pledges.form.discount_info', amount: pledge.amount.format)
+        expect(page).to have_content(t 'pledges.form.contributed', contributed: pledge.originally_pledged.format, discount_info: discount_info)
       end
       
     end
