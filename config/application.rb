@@ -16,7 +16,7 @@ module Estiu
       when 'production', 'staging'
         'estiu.com'
       when 'development'
-        true ?
+        false ?
           Socket.ip_address_list.detect{|intf| intf.ipv4_private?}.ip_address : # for mobile access
           'localhost'
       when 'test'

@@ -1,11 +1,11 @@
 class PledgePolicy < ApplicationPolicy
   
   def new_or_create?
-    common && !user.attendee.pledged?(record.campaign)
+    can_participate? && !user.attendee.pledged?(record.campaign)
   end
   
   def update?
-    common && user == record.attendee.user && !record.charged?
+    can_participate? && user == record.attendee.user && !record.charged?
   end
   
   def refund_payment?
@@ -26,7 +26,7 @@ class PledgePolicy < ApplicationPolicy
     user.attendee?
   end
   
-  def common
+  def can_participate?
     _common && record.campaign.active?
   end
 
