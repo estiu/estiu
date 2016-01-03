@@ -3,4 +3,4 @@
 %small
   = t 'campaigns.unfulfilled.money_back_popover_2'
 .center.top10
-  = link_to(t('confirm'), refund_payment_pledge_path(id: campaign.id, pledge_id: pledge.id), class: 'btn btn-primary')
+  = link_to(t('confirm'), refund_payment_pledge_path(id: campaign.id, pledge_id: pledge.id), class: 'btn btn-primary refund-action')

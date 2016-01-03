@@ -8,7 +8,7 @@
       :ruby
         links = %w(money_back credits).map{|x|
           content_tag :a, # <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
-            class: 'btn btn-success unfulfilled-refund-option',
+            class: "btn btn-success unfulfilled-refund-option unfulfilled-refund-option-#{x}",
             tabindex: '0',
             role: 'button',
             data: {
