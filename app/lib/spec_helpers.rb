@@ -124,4 +124,8 @@ module SpecHelpers
     find('.ui-datepicker-next').click
   end
   
+  def attach_s3_file path=Rails.root.join('spec', 'factories', 'empty.pdf')
+    page.driver.instance_variable_get('@browser').find_elements(class: 'file-uploader').map{|i| i.send_keys path }
+  end
+  
 end

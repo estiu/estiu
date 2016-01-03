@@ -17,7 +17,7 @@ module AwsOps
   BUILD_SIZE = 't2.micro'
   PRODUCTION_SIZE = 't2.micro'
   REGION = 'eu-west-1'
-  UPLOADS_BUCKET = 'events-uploads'
+  UPLOADS_BUCKET = "events-uploads-#{Rails.env}"
   
   def ec2_client
     @@ec2_client ||= Aws::EC2::Client.new

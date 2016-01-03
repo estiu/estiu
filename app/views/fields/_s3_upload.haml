@@ -7,7 +7,7 @@
   .fileupload-progress
 .file-upload
   = form.label :filename, t('add_a_file'), class: 'btn btn-info'
-  = form.file_field :filename, use_action_status: true, class: 'file-uploader', style: 'display: none'
+  = form.file_field :filename, use_action_status: true, class: 'file-uploader', style: ("display: none" unless Rails.env.test?)
 = form.fields_for(key, item) do |f|
   = form_fields(f, locals[:translations], name_prefix: "#{name_prefix}[{{#{object_index}}}]") do |field|
     :javascript
