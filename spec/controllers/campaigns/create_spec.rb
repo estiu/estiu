@@ -78,7 +78,7 @@ describe CampaignsController do
         
         describe 'when date and time are passed' do
           
-          let(:starts_at){ DateTime.new(2016, 1, 1, 1, 1) }
+          let(:starts_at){ DateTime.new(2020, 1, 1, 1, 1) }
           let(:ends_at){ starts_at.advance(days: 1) }
           
           let(:distinct_value){ "22" }
