@@ -61,7 +61,7 @@ describe EventsController do
             
             before {
               if with_events
-                event = FG.create :event, campaign: FG.create(:campaign, :fulfilled, including_attendees: [attendee.attendee])
+                event = FG.create :event, :submitted, :approved, campaign: FG.create(:campaign, :fulfilled, including_attendees: [attendee.attendee])
                 expect(Pundit.policy_scope(attendee, Event)).to include event
               end
             }

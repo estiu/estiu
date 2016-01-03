@@ -47,7 +47,7 @@ describe EventsController do
         
         let(:campaign){ FG.create :campaign, :fulfilled, including_attendees: [attendee.attendee] }
         
-        let(:event){ FG.create :event, campaign: campaign }
+        let(:event){ FG.create :event, :submitted, :approved, campaign: campaign }
         
         it "is permitted" do
           controller_ok

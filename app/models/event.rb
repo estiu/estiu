@@ -5,7 +5,7 @@ class Event < ActiveRecord::Base
   belongs_to :campaign
   belongs_to :venue
   has_many :tickets
-  has_many :event_documents
+  has_many :event_documents, dependent: :destroy
   
   attr_accessor :documents_confirmation
   

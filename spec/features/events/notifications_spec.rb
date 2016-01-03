@@ -10,7 +10,7 @@ describe 'Header notifications' do
     
     def setup starts_at=30.days.from_now
       campaign = FG.create :campaign, :fulfilled, including_attendees: [attendee.attendee]
-      FG.create :event, campaign: campaign, starts_at: starts_at
+      FG.create :event, :submitted, :approved, campaign: campaign, starts_at: starts_at
       visit '/'
     end
     
