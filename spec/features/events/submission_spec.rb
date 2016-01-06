@@ -9,15 +9,19 @@ describe 'Event submission', js: true do
     visit event_path(event)
   }
   
-  it 'is possible to submit an event' do
+  unless ci?
     
-    attach_s3_file
-    find('#event_documents_confirmation').click
-    expect {
-      find('.submit_event_button').click
-    }.to change {
-      event.reload.submitted_at.nil?
-    }.from(true).to(false)
+    it 'is possible to submit an event' do
+      
+      attach_s3_file
+      find('#event_documents_confirmation').click
+      expect {
+        find('.submit_event_button').click
+      }.to change {
+        event.reload.submitted_at.nil?
+      }.from(true).to(false)
+      
+    end
     
   end
   
