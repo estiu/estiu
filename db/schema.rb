@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.integer  "campaign_id",  null: false
     t.integer  "venue_id",     null: false
     t.datetime "approved_at"
+    t.datetime "rejected_at"
     t.datetime "submitted_at"
   end
 

@@ -24,9 +24,13 @@ class Event < ActiveRecord::Base
   
   validates_numericality_of :duration, greater_than_or_equal_to: 3600
   validates :submitted_at, presence: true, if: :approved_at
+  validates :submitted_at, presence: true, if: :rejected_at
   validates :approved_at, inclusion: [nil], unless: :submitted_at
+  validates :approved_at, inclusion: [nil], if: :rejected_at
+  validates :rejected_at, inclusion: [nil], unless: :submitted_at
+  validates :rejected_at, inclusion: [nil], if: :approved_at
   validate :campaign_was_fulfilled
-  validate :approved_at_nil_when_submitting
+  validate :approved_at_and_rejected_at_nil_when_submitting
   
   def self.visible_for_event_promoter event_promoter
     joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
@@ -74,11 +78,14 @@ class Event < ActiveRecord::Base
     end
   end
   
-  def approved_at_nil_when_submitting
+  def approved_at_and_rejected_at_nil_when_submitting
     change = previous_changes[:submitted_at]
     if change && change[0].nil? && change[1].present?
       if approved_at
         errors[:approved_at] << 'Cannot be present when setting submitted_at'
+      end
+      if rejected_at
+        errors[:rejected_at] << 'Cannot be present when setting submitted_at'
       end
     end
   end
