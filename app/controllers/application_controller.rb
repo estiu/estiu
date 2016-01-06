@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
         if role == Roles.admin 
           value = current_user.admin? ? current_user : false
         else
-          value = current_user.try :role
+          value = current_user.try role
         end
         instance_variable_set(key, value)
         value
