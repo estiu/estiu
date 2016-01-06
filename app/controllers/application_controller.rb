@@ -73,7 +73,18 @@ class ApplicationController < ActionController::Base
     helper_method "current_#{role}".to_sym
     define_method "current_#{role}" do
       key = "@current_#{role}_cache".to_sym
-      instance_variable_get(key) || instance_variable_set(key, current_user.try(role))
+      value = instance_variable_get(key)
+      if value != nil # use cached `false` values
+        value
+      else
+        if role == Roles.admin 
+          value = current_user.admin? ? current_user : false
+        else
+          value = current_user.try :role
+        end
+        instance_variable_set(key, value)
+        value
+      end
     end
     
   end
