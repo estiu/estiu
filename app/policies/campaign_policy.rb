@@ -16,14 +16,17 @@ class CampaignPolicy < ApplicationPolicy
     
     active_time = record.active_time?
     attendee_did_pledge = user.attendee ? user.attendee.pledged?(record) : false
+    is_the_event_promoter = user.event_promoter ? record.event_promoter == user.event_promoter : false
+    
+    generic = active_time || attendee_did_pledge || is_the_event_promoter
     
     if record.visibility == Campaign::PUBLIC_VISIBILITY
-      active_time || attendee_did_pledge
+      generic
     elsif record.invite_token && (record.invite_token == record.passed_invite_token)
-      active_time || attendee_did_pledge
+      generic
     elsif record.visibility == Campaign::APP_VISIBILITY
-      (active_time && logged_in?) || attendee_did_pledge
-    elsif user.event_promoter? && (record.event_promoter == user.event_promoter)
+      generic && logged_in?
+    elsif user.event_promoter? && is_the_event_promoter
       true
     elsif attendee_did_pledge
       true
