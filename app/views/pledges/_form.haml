@@ -4,7 +4,9 @@
   - if pledge
     = render 'pledges/contributed', campaign: campaign, pledge: pledge
   - else
-    - if campaign.closed?
+    - if campaign.not_open_yet?
+      %strong= t 'pledges.form.not_open_yet', starts_at: campaign.starts_at
+    - elsif campaign.closed?
       %strong= t 'pledges.form.closed'
     - else
       .row

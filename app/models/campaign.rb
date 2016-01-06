@@ -123,6 +123,10 @@ class Campaign < ActiveRecord::Base
     fulfilled? || !active?
   end
   
+  def not_open_yet?
+    (Time.zone.now..starts_at).cover?(Time.zone.now)
+  end
+  
   def maximum_pledge_cents
     Pledge::MAXIMUM_PLEDGE_AMOUNT
   end
