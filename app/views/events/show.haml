@@ -11,6 +11,11 @@
   = render 'upload_documents', campaign: @event.campaign
   .top30{class: centered_wider}
     %hr
+    
+- if should_review_documents?
+  = render 'review_documents', campaign: @event.campaign
+  .top30{class: centered_wider}
+    %hr
 
 %div{class: centered_wider}
   = render 'item', event: @event, listing: false

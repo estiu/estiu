@@ -44,6 +44,10 @@ class Event < ActiveRecord::Base
     where("events.starts_at > ?", DateTime.now)
   end
   
+  def must_be_reviewed?
+    submitted_at && (!approved_at && !rejected_at)
+  end
+  
   def at_least_one_ra_artist
     if ra_artists.size.zero?
       errors[:ra_artists] << I18n.t("events.errors.at_least_one_ra_artist")

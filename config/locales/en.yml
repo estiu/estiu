@@ -145,6 +145,8 @@ en:
       error: "Sorry, there has been a problem submitting your event. Please try again or contact us."
     documents_form:
       submit: Upload
+    review_documents:
+      documents: 'Documents'
     upload_documents:
       popover1: By checking this checkbox, you confirm that all contracts/invoices (artists, venue...) are included, forgetting none.
       popover2: Not including all contracts/invoices constitutes a violation of our Terms and Conditions.
@@ -154,6 +156,7 @@ en:
       documents_explanation_3: 'The sum of all the invoices amounts must add up to %{amount} (or less).'
       upload_all: 'Upload'
     show:
+      must_approve_or_reject: This event has been submitted by the promoter. Now you must approve or reject it.
       is_draft: This event is currently a draft.
       draft: Now you must upload the documents (contracts and invoices) you have signed with your providers.
     form:

@@ -13,8 +13,14 @@ class EventsController < ApplicationController
   
   def show
     initialize_uploader
-    if (params[:action] == 'show') && @event.submitted_at && !@event.approved_at
-      flash.now[:success] = t('events.submit.success')
+    if (params[:action] == 'show')
+      if @event.must_be_reviewed?
+        if current_admin
+          flash.now[:success] = t('events.show.must_approve_or_reject')
+        elsif current_event_promoter
+          flash.now[:success] = t('events.submit.success')
+        end
+      end
     end
   end
   
@@ -59,9 +65,14 @@ class EventsController < ApplicationController
     current_event_promoter && !@event.submitted_at
   end
   
+  helper_method :should_review_documents?
+  def should_review_documents?
+    current_admin && @event.must_be_reviewed?
+  end
+  
   helper_method :display_event_documents?
   def display_event_documents?
-    (current_event_promoter == @event.campaign.event_promoter) && !@event.approved_at
+    (current_event_promoter == @event.campaign.event_promoter) && !@event.approved_at && !should_review_documents?
   end
   
   protected

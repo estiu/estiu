@@ -1,0 +1,8 @@
+.bordered{class: centered_wider}
+  %h2
+    =t '.documents'
+    
+  .bottom20
+    - @event.event_documents.each do |event_document|
+      .bottom5
+        = link_to event_document.visible_name, event_document.filename
