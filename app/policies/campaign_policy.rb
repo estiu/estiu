@@ -13,21 +13,26 @@ class CampaignPolicy < ApplicationPolicy
   end
   
   def show?
+    
+    active_time = record.active_time?
+    attendee_did_pledge = user.attendee ? user.attendee.pledged?(record) : false
+    
     if record.visibility == Campaign::PUBLIC_VISIBILITY
-      true
+      active_time || attendee_did_pledge
     elsif record.invite_token && (record.invite_token == record.passed_invite_token)
-      true
+      active_time || attendee_did_pledge
     elsif record.visibility == Campaign::APP_VISIBILITY
-      logged_in?
+      (active_time && logged_in?) || attendee_did_pledge
     elsif user.event_promoter? && (record.event_promoter == user.event_promoter)
       true
-    elsif user.attendee? && user.attendee.pledged?(record)
+    elsif attendee_did_pledge
       true
     elsif user.admin?
       true
     else
       false
     end
+    
   end
   
   class Scope < Scope

@@ -110,9 +110,12 @@ class Campaign < ActiveRecord::Base
     }
   end
   
+  def active_time?
+    Rails.env.test? && skip_past_date_validations ? true : (starts_at..ends_at).cover?(Time.zone.now)
+  end
+  
   def active?
-    active_time = Rails.env.test? && skip_past_date_validations ? true : (starts_at..ends_at).cover?(Time.zone.now)
-    active_time && !fulfilled? && !unfulfilled_at
+    active_time? && !fulfilled? && !unfulfilled_at
   end
   
   def fulfilled?
