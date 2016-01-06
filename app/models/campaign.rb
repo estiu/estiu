@@ -127,7 +127,8 @@ class Campaign < ActiveRecord::Base
   end
   
   def not_open_yet?
-    (Time.zone.now..starts_at).cover?(Time.zone.now)
+    now = Time.zone.now
+    (now..starts_at).cover?(now)
   end
   
   def maximum_pledge_cents

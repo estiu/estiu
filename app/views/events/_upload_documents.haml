@@ -35,9 +35,10 @@
   %h2
     =t '.documents'
   
-  %p.text-muted= t '.documents_explanation'
-  %p.text-muted= t '.documents_explanation_2'
-  %p.text-muted= t '.documents_explanation_3', amount: campaign.pledged.format
+  - if should_upload_documents?
+    %p.text-muted= t '.documents_explanation'
+    %p.text-muted= t '.documents_explanation_2'
+    %p.text-muted= t '.documents_explanation_3', amount: campaign.pledged.format
   
   - Array(@event.errors[:event_documents]).each do |error|
     %span.collection-error.f14.bold

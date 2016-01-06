@@ -1,7 +1,9 @@
 - if listing
   = link_to event.name, event, class: 'show-link-title'
 - else
-  %h1= t '.title', name: event.name
+  %h1
+    = t '.title', name: event.name
+    %small.f14= t('.from_campaign', campaign_link: link_to("##{event.campaign.id}", campaign_path(event.campaign))).html_safe
 
 %p{class: "#{'p10 bordered' unless listing}", style: 'font-size: 16px'}= t('.artists', artists: event.artists_to_display)
   

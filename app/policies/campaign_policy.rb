@@ -24,9 +24,9 @@ class CampaignPolicy < ApplicationPolicy
       generic
     elsif record.invite_token && (record.invite_token == record.passed_invite_token)
       generic
-    elsif record.visibility == Campaign::APP_VISIBILITY
-      generic && logged_in?
-    elsif user.event_promoter? && is_the_event_promoter
+    elsif (record.visibility == Campaign::APP_VISIBILITY) && logged_in?
+      generic
+    elsif is_the_event_promoter
       true
     elsif attendee_did_pledge
       true
