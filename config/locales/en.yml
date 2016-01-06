@@ -264,10 +264,10 @@ en:
         goal_cents: Campaign Goal
         starts_at: Campaign starts at
         ends_at: Campaign ends at
-        recommended_pledge: Recommended minimum pledge
-        recommended_pledge_cents: Recommended pledge
-        minimum_pledge_cents: Minimum pledge
-        minimum_pledge_cents_short: Minimum pledge
+        recommended_pledge: Recommended minimum payment
+        recommended_pledge_cents: Recommended payment
+        minimum_pledge_cents: Minimum payment
+        minimum_pledge_cents_short: Minimum payment
         submit: "Create"
   venues:
     create:
