@@ -9,7 +9,7 @@ describe EventsController do
     it "works" do
       
       expect {
-        post :approve, id: event.id
+        get :approve, id: event.id
       }.to change {
         event.reload.approved_at.nil?
       }.from(true).to(false)

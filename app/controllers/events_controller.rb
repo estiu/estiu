@@ -71,14 +71,14 @@ class EventsController < ApplicationController
     current_event_promoter && !@event.submitted_at
   end
   
-  helper_method :should_review_documents?
-  def should_review_documents?
+  helper_method :should_review_event?
+  def should_review_event?
     current_admin && @event.must_be_reviewed?
   end
   
   helper_method :display_event_documents?
   def display_event_documents?
-    (current_event_promoter == @event.campaign.event_promoter) && !@event.approved_at && !should_review_documents?
+    (current_event_promoter == @event.campaign.event_promoter) && !@event.approved_at && !should_review_event?
   end
   
   protected

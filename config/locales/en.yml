@@ -161,6 +161,17 @@ en:
       documents_explanation_2: If you intend to make a profit out of this event, please include an invoice so we can pay it.
       documents_explanation_3: 'The sum of all the invoices amounts must add up to %{amount} (or less).'
       upload_all: 'Upload'
+    approval:
+      approve:
+        popover: "By clicking this, you will become legally obliged to pay all the invoices attached, immediately."
+        popover_2: "Not approving a correctly documented event (and in a timely manner) can result in litigation."
+      reject:
+        popover: "By clicking this, all the collected payment will be refunded to the attendees."
+        popover_2: "Please only reject events for justified, not immediately ammendable reasons: insufficient documentation, strong chance of fraud, etc."
+    approve_or_reject:
+      title: Approve / Reject
+      approve: Approve
+      reject: Reject
     show:
       must_approve_or_reject: This event has been submitted by the promoter. Now you must approve or reject it.
       is_draft: This event is currently a draft.

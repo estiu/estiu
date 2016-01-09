@@ -37,7 +37,7 @@ function notify_uploader_deletion_problem(){
   alert("<%= I18n.t 'javascript.errors.uploader_deletion' %>")
 }
 
-DEFAULT_POPOVER_OPTIONS = {trigger: 'hover focus', placement: (MOBILE ? 'top' : 'bottom'), delay: 200}
+DEFAULT_POPOVER_OPTIONS = {trigger: 'focus', placement: (MOBILE ? 'top' : 'auto'), delay: 200} // data-placement is completely ignored if we pass these options, sadly.
 DEFAULT_UPLOAD_OPTIONS = {
   // forceIframeTransport: true, // if true, we cannot get XML data back from AWS. So it cannot be used.
   autoUpload: true,
