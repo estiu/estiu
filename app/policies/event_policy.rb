@@ -36,6 +36,12 @@ class EventPolicy < ApplicationPolicy
     !record.submitted_at
   end
   
+  %i(approve? reject?).each do |method|
+    define_method method do
+      user.admin? && record.must_be_reviewed?
+    end
+  end
+  
   class Scope < Scope
     def resolve
       if user.admin?

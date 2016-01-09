@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
-  before_action :load_event, only: [:show, :submit_documents, :submit]
+  before_action :load_event, only: [:show, :submit_documents, :submit, :approve, :reject]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -60,6 +60,12 @@ class EventsController < ApplicationController
     end
   end
   
+  %i(approve reject).each do |method|
+    define_method method do
+      approval_common "#{method}!"
+    end
+  end
+  
   helper_method :should_upload_documents?
   def should_upload_documents?
     current_event_promoter && !@event.submitted_at
@@ -76,6 +82,15 @@ class EventsController < ApplicationController
   end
   
   protected
+  
+  def approval_common method
+    if @event.send(method)
+      flash[:success] = t '.success', starts_at: @event.starts_at
+    else
+      flash[:error] = t '.error'
+    end
+    redirect_to @event
+  end
   
   def initialize_event
     authorize(@event = Event.new(campaign: Campaign.find(params[:id])))

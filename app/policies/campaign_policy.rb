@@ -14,11 +14,9 @@ class CampaignPolicy < ApplicationPolicy
   
   def show?
     
-    active_time = record.active_time?
     attendee_did_pledge = user.attendee ? user.attendee.pledged?(record) : false
     is_the_event_promoter = user.event_promoter ? record.event_promoter == user.event_promoter : false
-    
-    generic = active_time || attendee_did_pledge || is_the_event_promoter
+    generic = record.active_time? || attendee_did_pledge || is_the_event_promoter
     
     if record.visibility == Campaign::PUBLIC_VISIBILITY
       generic

@@ -48,6 +48,12 @@ class Event < ActiveRecord::Base
     submitted_at && (!approved_at && !rejected_at)
   end
   
+  {approve!: :approved_at, reject!: :rejected_at}.each do |method, attr|
+    define_method method do
+      update_attributes!({attr => DateTime.now})
+    end
+  end
+  
   def at_least_one_ra_artist
     if ra_artists.size.zero?
       errors[:ra_artists] << I18n.t("events.errors.at_least_one_ra_artist")
