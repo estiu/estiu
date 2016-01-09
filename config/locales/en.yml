@@ -161,7 +161,7 @@ en:
       documents_explanation_2: If you intend to make a profit out of this event, please include an invoice so we can pay it.
       documents_explanation_3: 'The sum of all the invoices amounts must add up to %{amount} (or less).'
       upload_all: 'Upload'
-    approval:
+    review:
       approve:
         popover: "By clicking this, you will become legally obliged to pay all the invoices attached, immediately."
         popover_2: "Not approving a correctly documented event (and in a timely manner) can result in litigation."

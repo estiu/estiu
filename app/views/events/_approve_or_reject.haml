@@ -3,13 +3,13 @@
   :ruby
     links = %w(approve reject).map{|x|
       content_tag :a, # <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
-        class: "btn btn-#{{approve: 'success', reject: 'danger'}.with_indifferent_access[x]}",
+        class: "btn btn-#{{approve: 'success', reject: 'danger'}.with_indifferent_access[x]} review-option-#{x}",
         tabindex: '0',
         role: 'button',
         data: {
           toggle: 'popover',
           placement: 'top',
-          content: render("events/approval/#{x}", event: event).gsub("\"", "'"), html: 'true'} do
+          content: render("events/review/#{x}", event: event).gsub("\"", "'"), html: 'true'} do
         t(".#{x}")
       end
     }

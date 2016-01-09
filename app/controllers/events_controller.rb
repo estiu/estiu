@@ -62,7 +62,7 @@ class EventsController < ApplicationController
   
   %i(approve reject).each do |method|
     define_method method do
-      approval_common "#{method}!"
+      review_common "#{method}!"
     end
   end
   
@@ -83,7 +83,7 @@ class EventsController < ApplicationController
   
   protected
   
-  def approval_common method
+  def review_common method
     if @event.send(method)
       flash[:success] = t '.success', starts_at: @event.starts_at
     else
