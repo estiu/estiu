@@ -16,21 +16,23 @@
     - label_html = locals.fetch(:label_html, {})
     - label_html[:class] = "#{label_html[:class]} control-label"
     - label_html[:value] = caption
-    - label_html[:style] = "#{label_html[:style]}; width: 100%"
+    - label_html[:style] = "#{label_html[:style]}; width: 100%; display: inline" # inline: for the popover indicator to be displayed in the same line
     - (label_html[:for] = locals[:html_opts][:id]) if locals[:html_opts][:id].present?
     = form.label key, label_html do
       = caption
-      - if locals[:popover]
-        -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
-        %a{'data-toggle' => 'popover',
-          'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
-          'data-html' => locals[:popover].keys.include?(:html).to_s,
-          tabindex: '0',
-          role: 'button'}
-          %span.glyphicon.glyphicon-question-sign.black
       - if locals[:remove_button]
         %span.remove-nested-attribute-item.float-right{style: 'color: black'}
           = remove_button
+    - if locals[:popover]
+      -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
+      %a{'data-toggle' => 'popover',
+        'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
+        'data-html' => locals[:popover].keys.include?(:html).to_s,
+        tabindex: '0',
+        role: 'button'}
+        %span.glyphicon.glyphicon-question-sign.black
+      -# empty div: for causing a newline, which is expected after a <label>.
+      %div
   - unless locals[:only_label]
     = render "fields/#{as}", locals.merge(locals: locals)
   - if render_label && locals[:optional]
