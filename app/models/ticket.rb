@@ -5,5 +5,12 @@ class Ticket < ActiveRecord::Base
   
   validates :attendee, presence: true
   validates :event, presence: true
+  validates :attendee_id, uniqueness: {scope: :event_id}
+  
+  after_commit :notify_attendee, on: :create
+  
+  def notify_attendee
+    Events::Approval::TicketNotificationJob.perform_later id
+  end
   
 end

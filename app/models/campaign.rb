@@ -14,7 +14,7 @@ class Campaign < ActiveRecord::Base
   
   belongs_to :event_promoter
   belongs_to :venue
-  has_and_belongs_to_many :attendees, join_table: :pledges
+  
   has_many :pledges
   has_one :event
   
@@ -69,6 +69,10 @@ class Campaign < ActiveRecord::Base
   after_commit :unschedule_unfulfillment_check, on: :destroy
   after_commit :send_fulfillment_emails, on: :update
   after_commit :check_unfulfilled_at, on: :update
+  
+  def attendees # manually define relationship so the Pledge default_scope is taken into account
+    Attendee.joins(:pledges).where(pledges: {id: pledges.pluck(:id)})
+  end
   
   def self.minimum_active_hours
     1
@@ -141,7 +145,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def user_email_pledged? email
-    Campaign.joins(attendees: :user).where.not(pledges: {stripe_charge_id: nil}).where(users: {email: email}, campaigns: {id: id}).any?
+    attendees.joins(:user).where(users: {email: email}).any?
   end
   
   def valid_date_fields

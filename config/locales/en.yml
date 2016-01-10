@@ -1,4 +1,31 @@
 mailers_common: &mailers_common
+  events:
+    approval:
+      event_promoter_notification_mailer:
+        perform:
+          subject: "Subject"
+          p1: ""
+          p2: ""
+          p3: ""
+      ticket_notification_mailer:
+        perform:
+          subject: "Subject"
+          p1: ""
+          p2: ""
+          p3: ""
+    rejection:
+      event_promoter_notification_mailer:
+        perform:
+          subject: "Subject"
+          p1: ""
+          p2: ""
+          p3: ""
+      attendee_notification_mailer:
+        perform:
+          subject: "Subject"
+          p1: ""
+          p2: ""
+          p3: ""
   credit_creation_mailer:
     perform:
       subject: "You have been credited %{amount}!"

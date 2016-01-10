@@ -6,14 +6,16 @@ class Event < ActiveRecord::Base
   belongs_to :venue
   has_many :tickets
   has_many :event_documents, dependent: :destroy
+  has_one :event_promoter, through: :campaign
   
   attr_accessor :documents_confirmation
   
   accepts_nested_attributes_for :ra_artists, allow_destroy: false, reject_if: ->(object){ object[:artist_path].blank? }
   accepts_nested_attributes_for :event_documents, allow_destroy: false, reject_if: ->(object){ object[:filename].blank? }
-  validate :at_least_one_ra_artist
   before_validation :find_ra_paths, on: :create
   before_validation :ensure_at_least_one_event_document, if: :submitted_at
+  after_commit :on_approval, on: :update
+  after_commit :on_rejection, on: :update
   
   # name, starts_at, venue_id are already present in Campaign, but these represent the *definitive* values.
   CREATE_ATTRS = %i(name starts_at duration venue_id)
@@ -33,6 +35,7 @@ class Event < ActiveRecord::Base
   validate :campaign_was_fulfilled
   validate :approved_at_and_rejected_at_nil_when_submitting
   validate :starts_at_is_future, on: :create
+  validate :at_least_one_ra_artist
   
   def self.visible_for_event_promoter event_promoter
     joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
@@ -56,12 +59,6 @@ class Event < ActiveRecord::Base
     end
   end
   
-  def at_least_one_ra_artist
-    if ra_artists.size.zero?
-      errors[:ra_artists] << I18n.t("events.errors.at_least_one_ra_artist")
-    end
-  end
-  
   def find_ra_paths
     new_value = self.ra_artists.map do |ra|
       v = RaArtist.where(artist_path: ra.artist_path).first_or_initialize
@@ -78,6 +75,12 @@ class Event < ActiveRecord::Base
     ra_artists.pluck(:artist_name).join(', ')
   end
   
+  def at_least_one_ra_artist
+    if ra_artists.size.zero?
+      errors[:ra_artists] << I18n.t("events.errors.at_least_one_ra_artist")
+    end
+  end
+  
   def ensure_at_least_one_event_document
     if event_documents.size.zero?
       errors[:event_documents] << I18n.t("events.errors.ensure_at_least_one_event_document")
@@ -91,7 +94,7 @@ class Event < ActiveRecord::Base
   end
   
   def approved_at_and_rejected_at_nil_when_submitting
-    change = previous_changes[:submitted_at]
+    change = previous_changes[:submitted_at] # XXX is this correct in a `validate`? Its for after_commit I think
     if change && change[0].nil? && change[1].present?
       if approved_at
         errors[:approved_at] << 'Cannot be present when setting submitted_at'
@@ -107,6 +110,22 @@ class Event < ActiveRecord::Base
       unless skip_past_date_validations
         errors[:starts_at] << I18n.t('past_date')
       end
+    end
+  end
+  
+  def on_approval
+    change = previous_changes[:approved_at]
+    if change && change[0].nil? && change[1].present?
+      Events::Approval::TicketCreationJob.perform_later id
+      Events::Approval::EventPromoterNotificationJob.perform_later id
+    end
+  end
+  
+  def on_rejection
+    change = previous_changes[:rejected_at]
+    if change && change[0].nil? && change[1].present?
+      Events::Rejection::EventPromoterNotificationJob.perform_later id
+      Events::Rejection::AttendeeNotificationJob.perform_later id
     end
   end
   
