@@ -176,6 +176,9 @@ en:
       must_approve_or_reject: This event has been submitted by the promoter. Now you must approve or reject it.
       is_draft: This event is currently a draft.
       draft: Now you must upload the documents (contracts and invoices) you have signed with your providers.
+      approved_will_take_place_admin: This event has been approved and it will take place on the specified date. Invoices should have been paid from your part (else do it immediately).
+      approved_will_take_place_promoter: This event has been approved and it must take place on the specified date/time. All invoices have been paid.
+      rejected: This event was rejected. No invoices have been paid, and attendees have been refunded.
     form:
       title: 'Create event'
       for_campaign: "For campaign: %{link}"

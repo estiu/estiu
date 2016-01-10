@@ -14,13 +14,7 @@ class EventsController < ApplicationController
   def show
     initialize_uploader
     if (params[:action] == 'show')
-      if @event.must_be_reviewed?
-        if current_admin
-          flash.now[:success] = t('events.show.must_approve_or_reject')
-        elsif current_event_promoter
-          flash.now[:success] = t('events.submit.success')
-        end
-      end
+      appropiate_show_flash
     end
   end
   
@@ -113,6 +107,32 @@ class EventsController < ApplicationController
   
   def event_document_attrs
     params.permit(event_document: %i(filename key visible_name))[:event_document].merge(event: @event)
+  end
+  
+  def appropiate_show_flash
+    
+    if @event.must_be_reviewed?
+      if current_admin
+        flash.now[:success] = t('events.show.must_approve_or_reject')
+      elsif current_event_promoter
+        flash.now[:success] = t('events.submit.success')
+      end
+    end
+    
+    if @event.approved_at
+      if DateTime.now < @event.starts_at
+        if current_admin
+          flash.now[:success] = t('events.show.approved_will_take_place_admin')
+        elsif current_event_promoter
+          flash.now[:success] = t('events.show.approved_will_take_place_promoter')
+        end
+      end
+    end
+    
+    if @event.rejected_at
+      flash.now[:alert] = t('events.show.rejected')
+    end
+    
   end
   
 end
