@@ -29,8 +29,10 @@ class Event < ActiveRecord::Base
   validates :approved_at, inclusion: [nil], if: :rejected_at
   validates :rejected_at, inclusion: [nil], unless: :submitted_at
   validates :rejected_at, inclusion: [nil], if: :approved_at
+  
   validate :campaign_was_fulfilled
   validate :approved_at_and_rejected_at_nil_when_submitting
+  validate :starts_at_is_future, on: :create
   
   def self.visible_for_event_promoter event_promoter
     joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
@@ -96,6 +98,14 @@ class Event < ActiveRecord::Base
       end
       if rejected_at
         errors[:rejected_at] << 'Cannot be present when setting submitted_at'
+      end
+    end
+  end
+  
+  def starts_at_is_future
+    if starts_at && starts_at.to_i - Time.zone.now.to_i < -60
+      unless skip_past_date_validations
+        errors[:starts_at] << I18n.t('past_date')
       end
     end
   end

@@ -16,6 +16,7 @@ describe 'Event creation', js: true do
       find('#event_name').set SecureRandom.hex
       find('#event_venue_id').all("option")[1].select_option
       find('#event_starts_at').click
+      next_month
       any_day
       find('#event_duration').set 3600
       find('#event_ra_artists_attributes_0_artist_path').set ra1

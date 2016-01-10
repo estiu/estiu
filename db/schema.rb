@@ -125,13 +125,14 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   end
 
   create_table "events", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.datetime "starts_at",    null: false
-    t.integer  "duration",     null: false
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
-    t.integer  "campaign_id",  null: false
-    t.integer  "venue_id",     null: false
+    t.string   "name",                       null: false
+    t.datetime "starts_at",                  null: false
+    t.integer  "duration",                   null: false
+    t.boolean  "skip_past_date_validations"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "campaign_id",                null: false
+    t.integer  "venue_id",                   null: false
     t.datetime "approved_at"
     t.datetime "rejected_at"
     t.datetime "submitted_at"
