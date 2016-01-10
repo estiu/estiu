@@ -15,7 +15,7 @@
   = render 'upload_documents', campaign: @event.campaign
     
 - if should_review_event?
-  .top30{class: centered_wider}
+  .top10{class: centered_wider}
   = render 'review_documents', campaign: @event.campaign
-  .top30{class: centered_wider}
+  .top10{class: centered_wider}
   = render 'approve_or_reject', event: @event
