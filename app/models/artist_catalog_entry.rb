@@ -5,7 +5,7 @@ class ArtistCatalogEntry < ActiveRecord::Base
   
   monetize :price_cents
   
-  %i(price_cents act_duration).each do |attr|
+  %i(price_cents act_duration artist artist_promoter).each do |attr|
     validates attr, presence: true
   end
   
