@@ -144,10 +144,8 @@ en:
       success: "Event successfully submitted for review. Once it's approved, we will pay each of the included invoices and officially anounce the event to the attendees."
       error: "Sorry, there has been a problem submitting your event. Please try again or contact us."
     approve:
-      success: "Event successfully approved - now all parts are obliged to celebrate the event on %{starts_at}. Attendees have been immediately notifed, and sent tickets."
       error: "Sorry, there has been an error when approving the event. No changes have been applied."
     reject:
-      success: "Event successfully rejected - all parts have been notified, and attendees will receive a refund for their payments."
       error: "Sorry, there has been an error when rejecting the event. No changes have been applied."
     documents_form:
       submit: Upload

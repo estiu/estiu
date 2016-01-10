@@ -16,7 +16,7 @@ describe "Rejecting a submitted event", js: true do
       event.reload.rejected_at.nil?
     }.from(true).to(false)
     
-    expect(page).to have_content(t('events.reject.success'))
+    expect(page).to have_content(t('events.show.rejected'))
     
   end
   

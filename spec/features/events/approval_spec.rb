@@ -16,7 +16,7 @@ describe "Approving a submitted event", js: true do
       event.reload.approved_at.nil?
     }.from(true).to(false)
     
-    expect(page).to have_content(t('events.approve.success', starts_at: event.starts_at))
+    expect(page).to have_content(t('events.show.approved_will_take_place_admin'))
     
   end
   

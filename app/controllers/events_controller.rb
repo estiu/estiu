@@ -79,7 +79,7 @@ class EventsController < ApplicationController
   
   def review_common method
     if @event.send(method)
-      flash[:success] = t '.success', starts_at: @event.starts_at
+      # do nothing - flash is set on show action
     else
       flash[:error] = t '.error'
     end
