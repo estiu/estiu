@@ -274,6 +274,7 @@ en:
         unfulfilled_campaign: 'goal not reached'
         open_campaign: 'open'
         pledged_campaign: 'pledged'
+        not_open_yet: 'not open yet'
         title: "Campaign: %{campaign}"
         starts_at: Starts at
         ends_at: Campaign closes

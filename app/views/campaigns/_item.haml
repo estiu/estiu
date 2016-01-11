@@ -10,13 +10,16 @@
         - elsif campaign.unfulfilled_at
           %span.glyphicon.glyphicon-remove-circle{style: 'vertical-align: middle'}
           %span{style: 'vertical-align: -1px'}= t '.unfulfilled_campaign'
+        - elsif campaign.active?
+          %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+          %span{style: 'vertical-align: -1px'}= t '.open_campaign'
+        - elsif campaign.not_open_yet?
+          %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+          %span{style: 'vertical-align: -1px'}= t '.not_open_yet'
         - elsif current_attendee
           - if current_attendee.pledged?(campaign)
             %span.glyphicon.glyphicon-ok-circle{style: 'vertical-align: middle'}
             %span{style: 'vertical-align: -1px'}= t '.pledged_campaign'
-          - elsif campaign.active?
-            %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
-            %span{style: 'vertical-align: -1px'}= t '.open_campaign'
           
 - else
   %h1= t '.title', campaign: campaign.name
