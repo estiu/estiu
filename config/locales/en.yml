@@ -3,10 +3,11 @@ mailers_common: &mailers_common
     approval:
       event_promoter_notification_mailer:
         perform:
-          subject: "Subject"
-          p1: ""
-          p2: ""
-          p3: ""
+          subject: "#%{id} - Your event %{name} has been paid/approved!"
+          p1: "Congratulations! Your event %{event} has been approved, and all the paying attendees have been submitted their tickets."
+          p2: "You now must work with your providers for actually delivering the event. Please remind that that is your contractal obligation."
+          p3: "If for any reason you have trouble organising the event, don't hesitate contacting us and we will be happy to help."
+          p3: "Thank you."
       ticket_notification_mailer:
         perform:
           subject: "Subject"

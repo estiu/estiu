@@ -1,4 +1,4 @@
-%p= t '.p1'
+%p= t('.p1', event: link_to(@event.name, event_url(@event))).html_safe
 
 %p= t '.p2'
 
