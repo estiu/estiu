@@ -1,5 +1,7 @@
-= t '.p1'
+= t '.p1', campaign: text_email_link(@campaign), event: text_email_link(@event)
 
-= t '.p2'
+= t '.p2', date: @date
 
-= t '.p3'
+= t '.p3', must: t('.must').upcase
+
+= t('.p4', not: t('.not').upcase, the_event_page: text_email_link(@event, t('.the_event_page')))

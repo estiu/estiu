@@ -74,6 +74,10 @@ class Campaign < ActiveRecord::Base
     Attendee.joins(:pledges).where(pledges: {id: pledges.pluck(:id)})
   end
   
+  def to_s
+    name
+  end
+  
   def self.minimum_active_hours
     1
   end

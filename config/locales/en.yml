@@ -10,10 +10,14 @@ mailers_common: &mailers_common
           p3: "Thank you."
       ticket_notification_mailer:
         perform:
-          subject: "Subject"
-          p1: ""
-          p2: ""
-          p3: ""
+          subject: "#%{id} - This is your ticket for the event %{name}!"
+          p1: "As promised for your support for the campaign %{campaign}, this is your ticket for the corresponding event %{event}."
+          p2: "The event will start on %{date}."
+          must: 'must'
+          p3: "Ticket details: no QR is needed. Just present your ID/passport at the entrance (which you %{must} do)."
+          the_event_page: 'the event page'
+          not: not
+          p4: "The ticket is %{not} transferrable. If you cannot attend the event, please visit %{the_event_page} for instructions for getting a refund."
     rejection:
       event_promoter_notification_mailer:
         perform:
@@ -51,7 +55,7 @@ mailers_common: &mailers_common
         subject: "The campaign you have supported has completed its goal!"
         p1: The campaign you have supported has completed its goal.
         p2: Now the promoter will create an event which you and the other attendees will have exclusive access to (no tickets are on sale now)
-        p3: You will be notified of the date by email. You can also access localhost for checking any notifications.
+        p3: You will be notified of the date by email. You can also access XXX for checking any notifications.
     event_promoter_mailer:
       perform:
         subject: "Your campaign has reached its goal!"

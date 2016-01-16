@@ -59,6 +59,10 @@ class Event < ActiveRecord::Base
     end
   end
   
+  def to_s
+    name
+  end
+  
   def find_ra_paths
     new_value = self.ra_artists.map do |ra|
       v = RaArtist.where(artist_path: ra.artist_path).first_or_initialize

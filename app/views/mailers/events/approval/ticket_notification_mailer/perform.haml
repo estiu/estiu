@@ -1,5 +1,7 @@
-%p= t '.p1'
+%p= t('.p1', campaign: link_to(@campaign, url_for(@campaign)), event: link_to(@event, url_for(@event))).html_safe
 
-%p= t '.p2'
+%p= t '.p2', date: @date
 
-%p= t '.p3'
+%p= t('.p3', must: content_tag(:strong){t('.must')}).html_safe
+  
+%p= t('.p4', not: content_tag(:strong){t('.not')}, the_event_page: link_to(t('.the_event_page'), url_for(@event))).html_safe

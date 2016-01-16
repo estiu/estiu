@@ -58,6 +58,10 @@ module ApplicationHelper
     's3-upload-item-wrapper'
   end
   
+  def text_email_link record, caption=record
+    "#{record} (#{url_for(record)})"
+  end
+  
   private
   
   def form_field form, key, locals={}
