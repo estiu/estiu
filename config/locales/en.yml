@@ -21,10 +21,11 @@ mailers_common: &mailers_common
     rejection:
       event_promoter_notification_mailer:
         perform:
-          subject: "Subject"
-          p1: ""
-          p2: ""
-          p3: ""
+          subject: "#%{id} - Sorry, your event %{name} has been rejected."
+          p1: "Unfortunately, we have rejected your event %{event} given its incorrect/incomplete information/documentation."
+          p2: "Consequently, the paying attendees have been offered a refund, and no payments related with this event will be made."
+          p3: "Please remind that it is your duty to follow all the instructions indicated as you use Estiu, as per our Terms and Conditions."
+          p4: "If you believe this rejection was a mistake, please don't hesitate contacting us."
       attendee_notification_mailer:
         perform:
           subject: "Subject"

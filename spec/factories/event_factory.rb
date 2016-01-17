@@ -30,6 +30,14 @@ FG.define do
       
     end
     
+    trait :rejected do
+      
+      after(:create) do |rec, eva|
+        rec.reload.update_attributes!(rejected_at: DateTime.now)
+      end
+      
+    end
+    
     after(:build) do |rec, eva|
       
       unless rec.campaign
