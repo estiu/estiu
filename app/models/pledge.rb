@@ -49,11 +49,16 @@ class Pledge < ActiveRecord::Base
   end
   
   def refundable?
-    return false if campaign.fulfilled_at
-    return false if stripe_charge_id.blank?
+    return false if stripe_charge_id.blank? # XXX this is incomplete since the pledge could have been paid with no money at all - only credits.
     return false if campaign.active?
     return false if refunded?
-    return true
+    if campaign.unfulfilled_at
+      return true
+    elsif campaign.fulfilled_at && campaign.event
+      return !!campaign.event.rejected_at
+    else
+      return false
+    end
   end
   
   def calculate_discount!

@@ -17,6 +17,22 @@ FG.define do
       rec.minimum_pledge_cents = [(rec.goal_cents / rec.venue.capacity).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max
     end
     
+    trait :with_event do
+      
+      after(:create) do |rec, eva|
+        FG.create :event, campaign: rec, event_promoter: rec.event_promoter
+      end
+      
+    end
+    
+    trait :with_submitted_event do
+      
+      after(:create) do |rec, eva|
+        FG.create :event, :submitted, campaign: rec, event_promoter: rec.event_promoter
+      end
+      
+    end
+    
     trait :fulfilled do
       
       transient do

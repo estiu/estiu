@@ -2,34 +2,32 @@
 .top10.center
   %strong
     = t '.caption'
-  - if current_attendee
-    - pledge = current_attendee.refundable_pledge_for(campaign)
-    - if pledge
-      :ruby
-        links = %w(money_back credits).map{|x|
-          content_tag :a, # <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
-            class: "btn btn-success unfulfilled-refund-option unfulfilled-refund-option-#{x}",
-            tabindex: '0',
-            role: 'button',
-            data: {
-              toggle: 'popover',
-              placement: 'top',
-              content: render("campaigns/unfulfilled/#{x}", pledge: pledge, campaign: campaign, amount: pledge.amount.format).gsub("\"", "'"), html: 'true'} do
-            t(".#{x}")
-          end
-        }
-      %p= t '.refundable', amount: pledge.amount.format
-      .row.top20.bordered.p20
-        .col-sm-5.right.hidden-xs
-          = links[0]
-        .col-xs-12.visible-xs
-          = links[0]
-        .col-sm-2.col-xs-12.center
-          .top5
-          %strong
-            = t 'or'
-          .bottom5.visible-xs
-        .col-sm-5.left.hidden-xs
-          = links[1]
-        .col-xs-12.visible-xs
-          = links[1]
+  - if refundable_pledge
+    :ruby
+      links = %w(money_back credits).map{|x|
+        content_tag :a, # <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
+          class: "btn btn-success unfulfilled-refund-option unfulfilled-refund-option-#{x}",
+          tabindex: '0',
+          role: 'button',
+          data: {
+            toggle: 'popover',
+            placement: 'top',
+            content: render("campaigns/unfulfilled/#{x}", pledge: refundable_pledge, campaign: campaign, amount: refundable_pledge.amount.format).gsub("\"", "'"), html: 'true'} do
+          t(".#{x}")
+        end
+      }
+    %p= t '.refundable', amount: refundable_pledge.amount.format
+    .row.top20.bordered.p20
+      .col-sm-5.right.hidden-xs
+        = links[0]
+      .col-xs-12.visible-xs
+        = links[0]
+      .col-sm-2.col-xs-12.center
+        .top5
+        %strong
+          = t 'or'
+        .bottom5.visible-xs
+      .col-sm-5.left.hidden-xs
+        = links[1]
+      .col-xs-12.visible-xs
+        = links[1]
