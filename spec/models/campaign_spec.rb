@@ -66,7 +66,7 @@ describe Campaign do
     end
     
     it 'works' do
-      expect(CampaignFulfillmentJob).to receive(:perform_later).with(subject.id).once
+      expect(CampaignFulfillmentJob).to receive(:perform_later).with(subject.id).once.and_call_original
       fulfill
     end
     
@@ -81,7 +81,7 @@ describe Campaign do
     end
     
     it 'triggers a job' do
-      expect(CampaignUnfulfillmentJob).to receive(:perform_later).with(subject.id).once
+      expect(CampaignUnfulfillmentJob).to receive(:perform_later).with(subject.id).once.and_call_original
       unfulfill
     end
     

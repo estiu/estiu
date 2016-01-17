@@ -1,5 +1,45 @@
 describe Event do
-
+  
+  describe '#on_approval', truncate: true do
+    
+    subject { FG.create :event, :submitted }
+    
+    before {
+      subject.reload
+      expect(subject.must_be_reviewed?).to be true
+    }
+    
+    it "triggers two jobs" do
+      
+      expect(Events::Approval::TicketCreationJob).to receive(:perform_later).with(subject.id).once.and_call_original
+      expect(Events::Approval::EventPromoterNotificationJob).to receive(:perform_later).with(subject.id).once.and_call_original
+      expect(subject).to receive(:on_approval).once.and_call_original
+      subject.approve!
+      
+    end
+    
+  end
+  
+  describe '#on_rejection', truncate: true do
+    
+    subject { FG.create :event, :submitted }
+    
+    before {
+      subject.reload
+      expect(subject.must_be_reviewed?).to be true
+    }
+    
+    it "triggers two jobs" do
+      
+      expect(Events::Rejection::EventPromoterNotificationJob).to receive(:perform_later).with(subject.id).once.and_call_original
+      expect(Events::Rejection::AttendeeNotificationJob).to receive(:perform_later).with(subject.id).once.and_call_original
+      expect(subject).to receive(:on_rejection).once.and_call_original
+      subject.reject!
+      
+    end
+    
+  end
+  
   describe '#find_ra_paths' do
   
     before {
