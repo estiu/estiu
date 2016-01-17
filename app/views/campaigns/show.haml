@@ -1,10 +1,9 @@
-- refundable_pledge = current_attendee.try(:refundable_pledge_for, @campaign)
-
 %div{class: centered_wider}
 
   = render 'item', campaign: @campaign, listing: false
   
-  - if @campaign.unfulfilled_at || refundable_pledge # XXX inefficient approach. do instead: `|| @campaign.event_rejected_at`, and only THEN defining refundable_pledge.
+  - if @campaign.unfulfilled_at || @campaign.event_rejected_at
+    - refundable_pledge = current_attendee.try(:refundable_pledge_for, @campaign)
     = render 'unfulfilled', campaign: @campaign, refundable_pledge: refundable_pledge
   
   .top10

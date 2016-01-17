@@ -130,6 +130,7 @@ class Event < ActiveRecord::Base
     if change && change[0].nil? && change[1].present?
       Events::Rejection::EventPromoterNotificationJob.perform_later id
       Events::Rejection::AttendeeNotificationJob.perform_later id
+      campaign.update_attributes!(event_rejected_at: DateTime.now)
     end
   end
   

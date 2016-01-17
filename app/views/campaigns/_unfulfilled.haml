@@ -1,7 +1,11 @@
 %hr
 .top10.center
   %strong
-    = t '.caption'
+    - if campaign.unfulfilled_at
+      = t '.caption_unfulfilled_at'
+    - if campaign.event_rejected_at
+      = t '.caption_event_rejected_at'
+      .bottom5
   - if refundable_pledge
     :ruby
       links = %w(money_back credits).map{|x|

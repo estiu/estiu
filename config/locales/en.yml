@@ -258,7 +258,8 @@ en:
         generate_invite_link: If the event is invite only, then a link must be generated.
         generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
       unfulfilled:
-        caption: This event didn't reach its goal.
+        caption_unfulfilled_at: "This event didn't reach its goal."
+        caption_event_rejected_at: "This event reached its goal, but the event promoter did not perform all the necessary actions for organising the event."
         refundable: "We got you covered. Choose what to do with your %{amount}:"
         money_back: Get my money back
         money_back_popover: Choose this for your credit card payment to be refunded.

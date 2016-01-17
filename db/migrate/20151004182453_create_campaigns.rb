@@ -8,6 +8,7 @@ class CreateCampaigns < ActiveRecord::Migration
       t.integer :minimum_pledge_cents
       t.datetime :starts_at, null: false
       t.datetime :ends_at, null: false
+      t.datetime :event_rejected_at
       t.datetime :fulfilled_at
       t.datetime :unfulfilled_at
       t.boolean :skip_past_date_validations

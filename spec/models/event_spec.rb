@@ -38,6 +38,17 @@ describe Event do
       
     end
     
+    it "sets campaign.event_rejected_at" do
+      
+      expect {
+        subject.reject!
+        subject.campaign.reload
+      }.to change {
+        subject.campaign.event_rejected_at.nil?
+      }.from(true).to(false)
+      
+    end
+    
   end
   
   describe '#find_ra_paths' do
