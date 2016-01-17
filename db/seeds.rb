@@ -8,4 +8,6 @@ if Rails.env.development?
   FG.create :campaign, :with_referred_attendee, referred_attendee: user.attendee
   FG.create :event, event_promoter_id: user.event_promoter_id
   !user.attendee.credits.count.zero? || fail
+  c = FG.create :campaign, :fulfilled, :with_submitted_event, including_attendees: [user.attendee]
+  c.event.reload.approve!
 end

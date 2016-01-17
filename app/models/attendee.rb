@@ -29,4 +29,8 @@ class Attendee < ActiveRecord::Base
     end
   end
   
+  def ticket_for event
+    @ticket_for ||= Ticket.find_by(attendee: self, event: event)
+  end
+  
 end

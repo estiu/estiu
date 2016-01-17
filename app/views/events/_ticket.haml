@@ -1,0 +1,8 @@
+%div{class: centered_wider}
+  %h2= t '.title'
+  .bordered.top10.p10
+    - must = content_tag(:strong) { t('.must') }
+    %p= t('.instructions', must: must).html_safe
+
+    - _not = content_tag(:strong) { t('.not') }
+    %p= t('.refund', not: _not).html_safe

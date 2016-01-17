@@ -19,3 +19,7 @@
   = render 'review_documents', campaign: @event.campaign
   .top10{class: centered_wider}
   = render 'approve_or_reject', event: @event
+
+- if ticket = current_attendee.try(:ticket_for, @event)
+  %div{class: centered_wider}
+  = render 'ticket', ticket: ticket

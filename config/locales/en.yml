@@ -14,7 +14,7 @@ mailers_common: &mailers_common
           p1: "As promised for your support for the campaign %{campaign}, this is your ticket for the corresponding event %{event}."
           p2: "The event will start on %{date}."
           must: 'must'
-          p3: "Ticket details: no QR is needed. Just present your ID/passport at the entrance (which you %{must} do)."
+          p3: "Ticket details: no QR code is needed. Just present your ID/passport at the entrance (which you %{must} bring with you)."
           the_event_page: 'the event page'
           not: not
           p4: "The ticket is %{not} transferrable. If you cannot attend the event, please visit %{the_event_page} for instructions for getting a refund."
@@ -65,7 +65,7 @@ mailers_common: &mailers_common
         p1: Congratulations! Your campaign has reached its goal.
         p2: "You must now create the corresponding event with a specific date, including a copy of the contracts/invoices you've signed with the venue, artists, providers and so on:"
         cta: Create the event for this campaign
-        p3: After you create the event and it is approved, we will transfer the collected funds so you can pay your providers.
+        p3: After you create the event and it is approved, we will pay the corresponding invoices so you can celebrate the event.
   campaign_unfulfillment:
     attendee_mailer:
       perform:
@@ -184,6 +184,12 @@ en:
       error: "Sorry, there has been an error when rejecting the event. No changes have been applied."
     documents_form:
       submit: Upload
+    ticket:
+      title: Your ticket
+      must: 'must'
+      instructions: "No QR code is needed. Just present your ID/passport at the entrance (which you %{must} bring with you)."
+      not: not
+      refund: "The ticket is %{not} transferrable. If you cannot attend the event, please follow the instructions for getting a refund."
     review_documents:
       documents: 'Documents'
     upload_documents:
