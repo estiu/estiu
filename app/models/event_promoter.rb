@@ -8,4 +8,8 @@ class EventPromoter < ActiveRecord::Base
     validates attr, presence: true
   end
   
+  def to_s
+    name
+  end
+  
 end

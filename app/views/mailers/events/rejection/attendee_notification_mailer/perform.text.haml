@@ -1,5 +1,7 @@
-= t '.p1'
+= t '.p1', campaign: text_email_link(@campaign)
 
-= t '.p2'
+= t '.p2', event_promoter: @event_promoter
 
-= t '.p3'
+= t '.p3', event_promoter: @event_promoter
+
+= t '.p4', the_campaign_page: text_email_link(@campaign, t('.the_campaign_page'))

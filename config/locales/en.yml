@@ -28,10 +28,12 @@ mailers_common: &mailers_common
           p4: "If you believe this rejection was a mistake, please don't hesitate contacting us."
       attendee_notification_mailer:
         perform:
-          subject: "Subject"
-          p1: ""
-          p2: ""
-          p3: ""
+          subject: "#%{id} - Sorry, the campaign %{campaign} is finally not taking place."
+          p1: "We regret to inform that the campaign %{campaign}, which you supported, will finally not have a corresponding event."
+          p2: "While the campaign succesfully collected the needed money, the event promoter (%{event_promoter}) did not do the paperwork we were expecting."
+          p3: "For keeping your money safe, we do not support events we don't fully believe in. We will review our relationship with %{event_promoter} for avoiding these incidents in the future."
+          the_campaign_page: 'the campaign page'
+          p4: "As always, we make it impossible for you to lose money. Just visit %{the_campaign_page} for getting an immediate refund!"
   credit_creation_mailer:
     perform:
       subject: "You have been credited %{amount}!"
