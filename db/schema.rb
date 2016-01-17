@@ -196,6 +196,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "tickets", ["attendee_id", "event_id"], name: "index_tickets_on_attendee_id_and_event_id", unique: true, using: :btree
   add_index "tickets", ["attendee_id"], name: "index_tickets_on_attendee_id", using: :btree
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id", using: :btree
 
