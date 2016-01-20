@@ -24,7 +24,9 @@ class Event < ActiveRecord::Base
     validates attr, presence: true
   end
 
-  validates_numericality_of :duration, greater_than_or_equal_to: 3600
+  MIN_DURATION = 3600
+
+  validates_numericality_of :duration, greater_than_or_equal_to: MIN_DURATION
   validates :submitted_at, presence: true, if: :approved_at
   validates :submitted_at, presence: true, if: :rejected_at
   validates :approved_at, inclusion: [nil], unless: :submitted_at

@@ -10,8 +10,8 @@
         = field.(:venue_id, as: :select, values: Venue.for_select)
         = field.(:starts_at, as: :date)
         = field.(:duration, as: :hidden)
-        = field.(:duration_hours, as: :select, values: (3..12).to_a)
-        = field.(:duration_minutes, as: :select, values: (0..60).to_a)
+        = field.(:duration_hours, as: :select, values: ((Event::MIN_DURATION/3600)..12).to_a, html_class: 'humanized_duration')
+        = field.(:duration_minutes, as: :select, values: (0..60).to_a, html_class: 'humanized_duration')
         %h3
           - popover_caption = "#{t('.popover1')} <br> <small class='f12 black'> #{t('.popover2')} </small>"
           -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
@@ -31,3 +31,4 @@
           on_added: activate_popover)
         %hr
         = field.(:submit)
+= render 'form_js'

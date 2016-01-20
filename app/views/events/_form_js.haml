@@ -1,4 +1,4 @@
-$(document).ready(function(){
+:javascript
 
   function calculateDuration (argument) {
     var seconds = $("#event_duration_hours").val() * 60 * 60;
@@ -12,6 +12,3 @@ $(document).ready(function(){
   $("#event_duration_hours, #event_duration_minutes").on("change", function() {
     calculateDuration();
   });
-
-});
-
