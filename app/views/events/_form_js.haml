@@ -6,7 +6,6 @@
     $("#event_duration").val(seconds);
   }
 
-  $("#event_duration_hours option").first().remove();
   calculateDuration();
 
   $("#event_duration_hours, #event_duration_minutes").on("change", function() {
