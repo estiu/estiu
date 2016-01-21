@@ -26,3 +26,6 @@
       - @events.each do |event|
         %li.listing-item.bordered.p10
           = render 'item', event: event, listing: true
+      - if @events.empty?
+        %li.listing-item.bordered.p10
+          = t('shared.empty', :resources => 'events')

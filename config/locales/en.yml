@@ -430,3 +430,5 @@ en:
       often2: On weekends or not
       often3: No overlap with clubs
       sign_up: Sign up
+  shared:
+    empty: "No %{resources} found."
