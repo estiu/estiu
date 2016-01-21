@@ -431,7 +431,8 @@ en:
       often3: No overlap with clubs
       sign_up: Sign up
   shared:
-    empty: "No %{resources} found."
+    info:
+      empty: "No %{resources} found."
     resources:
       events: events
       campaigns: campaigns
