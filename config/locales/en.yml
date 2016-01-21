@@ -432,3 +432,6 @@ en:
       sign_up: Sign up
   shared:
     empty: "No %{resources} found."
+    resources:
+      events: events
+      campaigns: campaigns
