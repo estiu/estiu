@@ -1,0 +1,86 @@
+en:
+  events:
+    ra_artist:
+      popover1: The url fragment which identifies the artist on residentadvisor.com.
+      popover2: "Example: dj/locodice or dj/bicep"
+    errors:
+      at_least_one_ra_artist: 'There must be at least one artist.'
+      ensure_at_least_one_event_document: "At least one document must be uploaded."
+    create:
+      success: "Event succesfully created."
+      error: "Couldn't create event due to the indicated errors."
+    submit:
+      success: "Event successfully submitted for review. Once it's approved, we will pay each of the included invoices and officially anounce the event to the attendees."
+      error: "Sorry, there has been a problem submitting your event. Please try again or contact us."
+    approve:
+      error: "Sorry, there has been an error when approving the event. No changes have been applied."
+    reject:
+      error: "Sorry, there has been an error when rejecting the event. No changes have been applied."
+    documents_form:
+      submit: Upload
+    ticket:
+      title: Your ticket
+      must: 'must'
+      instructions: "No QR code is needed. Just present your ID/passport at the entrance (which you %{must} bring with you)."
+      not: not
+      refund: "The ticket is %{not} transferrable. If you cannot attend the event, please follow the instructions for getting a refund."
+    review_documents:
+      documents: 'Documents'
+    upload_documents:
+      popover1: By checking this checkbox, you confirm that all contracts/invoices (artists, venue...) are included, forgetting none.
+      popover2: Not including all contracts/invoices constitutes a violation of our Terms and Conditions.
+      documents: Documents
+      documents_explanation: Please use clear, understandable file names for each invoice and contract (rename the files before uploading them if necessary).
+      documents_explanation_2: If you intend to make a profit out of this event, please include an invoice so we can pay it.
+      documents_explanation_3: 'The sum of all the invoices amounts must add up to %{amount} (or less).'
+      upload_all: 'Upload'
+    review:
+      approve:
+        popover: "By clicking this, you will become legally obliged to pay all the invoices attached, immediately."
+        popover_2: "Not approving a correctly documented event (and in a timely manner) can result in litigation."
+      reject:
+        popover: "By clicking this, all the collected payment will be refunded to the attendees."
+        popover_2: "Please only reject events for justified, not immediately ammendable reasons: insufficient documentation, strong chance of fraud, etc."
+    approve_or_reject:
+      title: Approve / Reject
+      approve: Approve
+      reject: Reject
+    show:
+      must_approve_or_reject: This event has been submitted by the promoter. Now you must approve or reject it.
+      is_draft: This event is currently a draft.
+      draft: Now you must upload the documents (contracts and invoices) you have signed with your providers.
+      approved_will_take_place_admin: This event has been approved and it will take place on the specified date. Invoices should have been paid from your part (else do it immediately).
+      approved_will_take_place_promoter: This event has been approved and it must take place on the specified date/time. All invoices have been paid.
+      rejected: This event was rejected. No invoices have been paid, and attendees have been refunded.
+    form:
+      title: 'Create event'
+      for_campaign: "For campaign: %{link}"
+      submit: 'Create'
+      venue_id: 'Venue'
+      name: 'Event name'
+      artists: Artists
+      starts_at: 'Date'
+      popover1: The artist(s) which will play at the event.
+      popover2: For identifying them, we use Resident Advisor url fragments.
+      submit_documents:
+        documents_confirmation: I confirm that these contracts/invoices are all the needed ones for this event to be celebrated.
+        submit: Submit
+      ra_artists:
+        artist_path: "Resident Advisor path"
+    item:
+      title: "Event: %{name}"
+      venue: Venue
+      from_campaign: "From campaign %{campaign_link}"
+      starts_at: Starts at
+      duration: Duration
+      artists: "With %{artists}"
+    index:
+      should_create_events: "There are fulfilled campaigns for which you must create the corresponding event now:"
+      title: My events
+      empty_admin: "There are no events to display."
+      empty_event_promoter: "You haven't campaigns with active events."
+      empty_attendee: "There aren't any active events you have bought tickets for."
+      empty2_event_promoter: "For having an event going, you can %{link}!"
+      empty2_attendee: "Check out our %{link} for joining an event!"
+      campaigns: campaigns
+      new_campaign: create a campaign

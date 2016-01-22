@@ -1,0 +1,90 @@
+mailers_common: &mailers_common
+  events:
+    approval:
+      event_promoter_notification_mailer:
+        perform:
+          subject: "#%{id} - Your event %{name} has been paid/approved!"
+          p1: "Congratulations! Your event %{event} has been approved, and all the paying attendees have been submitted their tickets."
+          p2: "You now must work with your providers for actually delivering the event. Please remind that that is your contractal obligation."
+          p3: "If for any reason you have trouble organising the event, don't hesitate contacting us and we will be happy to help."
+          p3: "Thank you."
+      ticket_notification_mailer:
+        perform:
+          subject: "#%{id} - This is your ticket for the event %{name}!"
+          p1: "As promised for your support for the campaign %{campaign}, this is your ticket for the corresponding event %{event}."
+          p2: "The event will start on %{date}."
+          must: 'must'
+          p3: "Ticket details: no QR code is needed. Just present your ID/passport at the entrance (which you %{must} bring with you)."
+          the_event_page: 'the event page'
+          not: not
+          p4: "The ticket is %{not} transferrable. If you cannot attend the event, please visit %{the_event_page} for instructions for getting a refund."
+    rejection:
+      event_promoter_notification_mailer:
+        perform:
+          subject: "#%{id} - Sorry, your event %{name} has been rejected."
+          p1: "Unfortunately, we have rejected your event %{event} given its incorrect/incomplete information/documentation."
+          p2: "Consequently, the paying attendees have been offered a refund, and no payments related with this event will be made."
+          p3: "Please remind that it is your duty to follow all the instructions indicated as you use Estiu, as per our Terms and Conditions."
+          p4: "If you believe this rejection was a mistake, please don't hesitate contacting us."
+      attendee_notification_mailer:
+        perform:
+          subject: "#%{id} - Sorry, the campaign %{campaign} is finally not taking place."
+          p1: "We regret to inform that the campaign %{campaign}, which you supported, will finally not have a corresponding event."
+          p2: "While the campaign succesfully collected the needed money, the event promoter (%{event_promoter}) did not do the paperwork we were expecting."
+          p3: "For keeping your money safe, we do not support events we don't fully believe in. We will review our relationship with %{event_promoter} for avoiding these incidents in the future."
+          the_campaign_page: 'the campaign page'
+          p4: "As always, we make it impossible for you to lose money. Just visit %{the_campaign_page} for getting an immediate refund!"
+  credit_creation_mailer:
+    perform:
+      subject: "You have been credited %{amount}!"
+      p1:
+        referral_pledge: "Your friend %{referrer} referred you while purchasing his/her ticket, which we compensate you with a credit of %{amount}."
+        refunded_pledge: "As you chose, we have refunded you with a credit with value of %{amount}."
+      p2:
+        referral_pledge: This credit can be applied to any future purchase of yours. You can accumulate as many credits as you wish in a single purchase - just get people to refer you!
+        refunded_pledge: This credit can be applied to any future purchase of yours. You also can accumulate this credit with the credits we give you when inviting your friends!
+      p3:
+        referral_pledge: "Thank you."
+        refunded_pledge: "Thank you."
+  payment_refund_confirmation_mailer:
+    perform:
+      subject: "You have been refunded %{amount}!"
+      p1: "As you chose, your credit card payment of %{amount} has been refunded."
+      p2: "Note that refunds take up to 10 days to complete."
+      p3: "Thanks for trusting us! Your money is always safe with us - for each payment you make, you get either a ticket or a refund if finally there's no event."
+  campaign_fulfillment:
+    attendee_mailer:
+      perform:
+        subject: "The campaign you have supported has completed its goal!"
+        p1: The campaign you have supported has completed its goal.
+        p2: Now the promoter will create an event which you and the other attendees will have exclusive access to (no tickets are on sale now)
+        p3: You will be notified of the date by email. You can also access XXX for checking any notifications.
+    event_promoter_mailer:
+      perform:
+        subject: "Your campaign has reached its goal!"
+        p1: Congratulations! Your campaign has reached its goal.
+        p2: "You must now create the corresponding event with a specific date, including a copy of the contracts/invoices you've signed with the venue, artists, providers and so on:"
+        cta: Create the event for this campaign
+        p3: After you create the event and it is approved, we will pay the corresponding invoices so you can celebrate the event.
+  campaign_unfulfillment:
+    attendee_mailer:
+      perform:
+        subject: "%{first_name}, the campaign you paid for has not reached its goal."
+        campaign_link_caption: campaign
+        another_campaign_link_caption: another campaign
+        p1: "Unfortunately the %{campaign_link} for which you paid %{amount} has not reached its goal, so the event won't be celebrated."
+        p2: "Don't worry, your money is safe with us. You can reuse the funds in %{another_campaign_link}, or get an immediate refund."
+        p3: "Thanks for trusting us."
+    event_promoter_mailer:
+      perform:
+        subject: "Sorry, your campaign has not reached its goal."
+        campaign_link_caption: campaign
+        new_campaign_link_caption: create
+        p1: "Unfortunately your %{campaign_link} only raised %{raised_amount} out of the %{goal_amount} goal, so no money will be transferred for your campaign."
+        p2: "The attendees can reuse their paid money in any other campaign (which you can %{new_campaign_link}), or get an immediate refund."
+        p3: "Thanks for trusting us."
+
+en:
+  mailers:
+    <<: *mailers_common
+  <<: *mailers_common
