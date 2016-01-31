@@ -6,29 +6,36 @@
     %hr
     = form_for(event, url: create_event_campaign_path(id: event.campaign.id)) do |f|
       = form_fields(f, 'events.form') do |field|
-        = field.(:name)
-        = field.(:venue_id, as: :select, values: Venue.for_select)
-        = field.(:starts_at, as: :date)
-        = field.(:duration, as: :hidden)
-        = field.(:duration_hours, as: :hour_select, min_seconds: Event::MIN_DURATION, html_class: 'humarized-duration')
-        = field.(:duration_minutes, as: :minute_select, html_class: 'humarized-duration')
-        %h3
-          - popover_caption = "#{t('.popover1')} <br> <small class='f12 black'> #{t('.popover2')} </small>"
-          -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
-          %a{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true', tabindex: '0', role: 'button'}
-            = t '.artists'
-          .float-right.noinput{id: add_another}
-            +
-          - Array(event.errors[:ra_artists]).each do |error|
-            .float-right
-              %span.collection-error.f14
-                = error
-        = field.(:ra_artists,
-          as: :nested_attributes,
-          translations: 'events.form.ra_artists',
-          partial: 'events/ra_artist',
-          add_another: add_another,
-          on_added: activate_popover)
-        %hr
-        = field.(:submit)
+        .row
+          .col-xs-12
+            = field.(:name)
+          .col-xs-12
+            = field.(:venue_id, as: :select, values: Venue.for_select)
+          .col-xs-12
+            = field.(:starts_at, as: :date)
+            = field.(:duration, as: :hidden)
+          .col-xs-6
+            = field.(:duration_hours, as: :hour_select, min_seconds: Event::MIN_DURATION, html_class: 'humarized-duration')
+          .col-xs-6
+            = field.(:duration_minutes, as: :minute_select, html_class: 'humarized-duration')
+          .col-xs-12
+            %h3
+              - popover_caption = "#{t('.popover1')} <br> <small class='f12 black'> #{t('.popover2')} </small>"
+              -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
+              %a{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true', tabindex: '0', role: 'button'}
+                = t '.artists'
+              .float-right.noinput{id: add_another}
+                +
+              - Array(event.errors[:ra_artists]).each do |error|
+                .float-right
+                  %span.collection-error.f14
+                    = error
+            = field.(:ra_artists,
+              as: :nested_attributes,
+              translations: 'events.form.ra_artists',
+              partial: 'events/ra_artist',
+              add_another: add_another,
+              on_added: activate_popover)
+            %hr
+            = field.(:submit)
 = render 'form_js'
