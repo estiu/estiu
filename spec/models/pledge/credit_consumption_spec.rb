@@ -49,7 +49,14 @@ describe Pledge do
       
       before {
         subject.calculate_total!
-        subject.save!
+        begin
+          subject.save!
+        rescue => e # debug flaky test
+          puts "subject.amount_cents: #{subject.amount_cents}"
+          puts "subject.campaign.amount_cents: #{subject.campaign.amount_cents}"
+          puts "subject.campaign == campaign: #{subject.campaign == campaign}"
+          raise e
+        end
         allow(Stripe::Charge).to receive(:create).once.with(args.merge(amount: amount_cents - Pledge::DISCOUNT_PER_REFERRAL)).and_return(charge)
       }
       
