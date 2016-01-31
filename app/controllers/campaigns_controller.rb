@@ -72,9 +72,10 @@ class CampaignsController < ApplicationController
   
   def ensure_pledge
     if current_attendee # XXX I assume logged-out users (w/ secret link) don't need this. check <<<
-      @pledge = Pledge.where(attendee: current_attendee, campaign: @campaign).first_or_initialize
+      @pledge = Pledge.unscoped.where(attendee: current_attendee, campaign: @campaign).first_or_initialize
       unless @pledge.originally_pledged_cents
         @pledge.originally_pledged_cents ||= @campaign.minimum_pledge_cents
+        @pledge.calculate_total!
         @pledge.save!
       end
     end 

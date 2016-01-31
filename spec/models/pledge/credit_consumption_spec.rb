@@ -53,7 +53,7 @@ describe Pledge do
           subject.save!
         rescue => e # debug flaky test
           puts "subject.amount_cents: #{subject.amount_cents}"
-          puts "subject.campaign.amount_cents: #{subject.campaign.amount_cents}"
+          puts "subject.campaign.minimum_pledge_cents: #{subject.campaign.minimum_pledge_cents}"
           puts "subject.campaign == campaign: #{subject.campaign == campaign}"
           raise e
         end

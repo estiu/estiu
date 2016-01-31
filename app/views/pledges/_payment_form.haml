@@ -1,4 +1,4 @@
-= form_for Pledge.new(originally_pledged_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
+= form_for pledge, url: pledge_path(id: campaign.id, pledge_id: pledge.id), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
   = form_fields(form, 'pledges.form') do |field|
     - if current_attendee.credits.any?
       .row.bottom10
@@ -28,7 +28,7 @@
         = field.(:desired_credit_ids, as: :hidden, value: [])
     .row.top10
       .col-xs-8.right.left-column
-        .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
+        .small= t 'pledges.form.can_pay_more', price: (pledge.amount_cents / 100.0).to_money.format
       .col-xs-4.left.right-column
         .small
           - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
@@ -45,7 +45,7 @@
 
 :javascript
   
-  var amount_cents = #{@pledge.amount_cents}
+  var amount_cents = #{pledge.amount_cents}
   var received_stripe_token = false
   
   var handler = StripeCheckout.configure({

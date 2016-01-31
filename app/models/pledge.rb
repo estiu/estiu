@@ -36,7 +36,7 @@ class Pledge < ActiveRecord::Base
     "Pledge for campaign #{campaign.id}"
   end
 
-  def charged?
+  def charged? # XXX what if I pay entirely with credits? is it possible right now? (I definitely want it anyway)
     stripe_charge_id.present?
   end
   
