@@ -1,0 +1,7 @@
+en:
+  shared:
+    info:
+      empty: "No %{resources} found."
+    resources:
+      events: events
+      campaigns: campaigns

@@ -1,0 +1,94 @@
+devise: &devise
+  devise:
+    registrations:
+      edit:
+        title: Update account data
+        password: New password
+        password_confirmation: Confirm your new password
+        submit: Update
+      new:
+        title: Sign up
+        submit: "Sign up"
+        email: Your email
+        event_promoter:
+          email: General email of your company
+          name: Name of your company
+          website: Company website
+      attendee:
+        maybe_fb: Would you prefer to sign up using Facebook?
+        maybe_fb_expl: Avoid filling this form and remembering passwords!
+    confirmations:
+      new:
+        title: Resend confirmation instructions
+        submit: Resend confirmation instructions
+    passwords:
+      new:
+        title: Reset password
+        submit: Send me reset password instructions
+    sessions:
+      new:
+        password_case: If you signed up using a password
+        fb_case: If you signed up with Facebook
+        title: Log in
+        remember_me: "Remember me?"
+        email: Email
+        password: Password
+        submit: Log in
+
+en:
+  javascript:
+    errors:
+      uploader: Sorry, there has been a problem uploading your file. Please try again.
+      uploader_deletion: Sorry, there has been a problem deleting your uploaded file. Please try again.
+  errors:
+    email_format: "The given email doesn't have email format."
+    format: "%{message}"
+    inclusion: "Please choose."
+  money_range: "Must be between %{min} and %{max}"
+  past_date: Cannot be in the past
+  add_a_file: 'Add a file...'
+  application:
+    param_required: "There has been an issue related with fields you left blank. Please try again."
+    forbidden: "You are not authorized to perform this action."
+    modern_browser_required: "Please use a modern browser in order to use this web application. Thank you!"
+    ensure_ajax_uploading: 'The page you attempted to visit cannot be viewed with Internet Explorer or Opera.'
+  fb_login: "Log in with Facebook"
+  fb_sign_up: "Sign up with Facebook"
+  'or': 'or'
+  fields:
+    optional: Optional
+    'yes': "Yes"
+    'no': 'No'
+  <<: *devise
+  layouts:
+    header:
+      for_promoters: For promoters
+      title: estiu
+      campaigns: Campaigns
+      events: My events
+      event_promoters: Event Promoters
+      artist_promoters: Artist Promoters
+      logout: Logout
+      login: Login
+  confirm: 'Confirm'
+  ra_artists:
+    errors:
+      value_format: "Please use the specified format. (found: %{found})"
+      dj: "The value must start with '%{prefix}', for example dj/dixon"
+      html_code: "extraneous html code"
+  omniauth_callbacks:
+    facebook:
+      error: 'Sorry, there has been an unexpected error while trying to login via Facebook. We will look at it.'
+  venues:
+    create:
+      error: "Couldn't create venue."
+    form:
+      id: "Which:"
+      title: Venue
+      other: Other venue
+  credits:
+    to_s: 
+      referral_pledge:
+        "%{amount} - from %{referrer}"
+      refunded_pledge:
+        "%{amount} - refunded from a campaign"

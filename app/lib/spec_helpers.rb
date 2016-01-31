@@ -106,6 +106,8 @@ module SpecHelpers
   
   def fill_stripe_form
     
+    sleep 3
+    
     within_frame 'stripe_checkout_app' do
       4.times { find('#card_number').send_keys "4242" } # In test mode, the 4242 4242 4242 4242 card is always valid for Stripe.
       find('#cc-exp').send_keys "12"
