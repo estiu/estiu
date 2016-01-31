@@ -8,7 +8,7 @@ class Event < ActiveRecord::Base
   has_many :event_documents, dependent: :destroy
   has_one :event_promoter, through: :campaign
   
-  attr_accessor :documents_confirmation, :duration_hours, :duration_minutes
+  attr_accessor :documents_confirmation
   
   accepts_nested_attributes_for :ra_artists, allow_destroy: false, reject_if: ->(object){ object[:artist_path].blank? }
   accepts_nested_attributes_for :event_documents, allow_destroy: false, reject_if: ->(object){ object[:filename].blank? }
@@ -18,7 +18,7 @@ class Event < ActiveRecord::Base
   after_commit :on_rejection, on: :update
   
   # name, starts_at, venue_id are already present in Campaign, but these represent the *definitive* values.
-  CREATE_ATTRS = %i(name starts_at duration venue_id)
+  CREATE_ATTRS = %i(name starts_at duration_hours duration_minutes venue_id)
   MIN_DURATION = 3600
   
   CREATE_ATTRS.each do |attr|
@@ -48,6 +48,10 @@ class Event < ActiveRecord::Base
   
   def self.not_celebrated
     where("events.starts_at > ?", DateTime.now)
+  end
+  
+  def duration
+    (duration_hours || 0).hours + duration_minutes.minutes
   end
   
   def must_be_reviewed?

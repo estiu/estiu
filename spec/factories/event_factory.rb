@@ -4,7 +4,7 @@ FG.define do
     
     name { ["Best party ever", 'Super outdoor event', 'House party', 'Club night', 'Rave in the woods', 'Boat party', 'Mega festival'].sample }
     starts_at {Date.tomorrow}
-    duration {6.hours}
+    duration_hours { (1..4).to_a.sample }
     association :venue
     
     transient do

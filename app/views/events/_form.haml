@@ -13,7 +13,6 @@
             = field.(:venue_id, as: :select, values: Venue.for_select)
           .col-xs-12
             = field.(:starts_at, as: :date)
-            = field.(:duration, as: :hidden)
           .col-xs-12.bold.bottom10
             = t '.duration_title'
           .col-xs-3.right.left-column
@@ -44,4 +43,3 @@
               on_added: activate_popover)
             %hr
             = field.(:submit)
-= render 'form_js'

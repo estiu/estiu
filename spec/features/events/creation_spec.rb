@@ -18,7 +18,8 @@ describe 'Event creation', js: true do
       find('#event_starts_at').click
       next_month
       any_day
-      find('#event_duration_hours').all("option")[3].select_option
+      options = find('#event_duration_hours').all("option")
+      options[(1..(options.size - 1)).to_a.sample].select_option
       find('#event_ra_artists_attributes_0_artist_path').set ra1
     end
     
