@@ -30,6 +30,9 @@ en:
       new: New campaign
       all: View all
       mine: View only mine
+      empty_generic: "There are no campaigns to display."
+      empty_event_promoter: "There are no campaigns no display. You can always create one!"
+      empty_attendee: "There are no campaigns to display."
     item:
       fulfilled_campaign: 'goal reached'
       unfulfilled_campaign: 'goal not reached'

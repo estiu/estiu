@@ -49,8 +49,9 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with(:truncation) # leave it clean for FactoryGirl
     FactoryGirl.lint
+    DatabaseCleaner.clean_with(:truncation) # clean what FactoryGirl created
   end
 
   config.before(:each) do |example|
