@@ -39,7 +39,7 @@
         %hr.top10.bottom15
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
-        %button#do-pledge.btn.btn-success.full{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
+        %button#do-pledge.btn.btn-success.full.skip-custom-readonly-styling{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
 
 %script{src: 'https://checkout.stripe.com/checkout.js'}
 
@@ -82,8 +82,20 @@
     }
   });
   
-  var update_pledge_object = function(success){
-
+  var payment_form = $('#payment-form')
+  var do_pledge = $('#do-pledge')
+  var old_serialized_value = payment_form.serialize()
+  
+  var update_pledge_object = function(){
+    
+    var serialized_value = payment_form.serialize()
+    
+    if (serialized_value == old_serialized_value){
+      return
+    } else {
+      old_serialized_value = serialized_value
+    }
+    
     var pledge_data = {}
     _.each(['originally_pledged_cents', 'referral_email'], function(attr){
       pledge_data[attr] = $('#pledge_' + attr).val()
@@ -104,9 +116,10 @@
       set_flash_messages(null)
       var discounted_message = response['discounted_message']
       if (discounted_message){
-        alert(discounted_message)
+        // alert(discounted_message) // XXX instead, update an always-visible row.
       }
       amount_cents = response['amount_cents']
+      do_pledge.attr('readonly', false)
     })
     request.fail(function(response){
       $('.block-ui').remove()
@@ -118,10 +131,48 @@
     })
   }
   
-  // XXX on form change: update_pledge_object
+  var all_payment_text_inputs = 'input[type="text"], input[type="email"]'
+  var all_payment_inputs = all_payment_text_inputs + ', input[type="checkbox"]'
   
-  $('#do-pledge').on('click', function(e) {
-    $('#payment-form').append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
+  payment_form.find(all_payment_inputs).change(function(){
+    do_pledge.attr('readonly', true)
+    update_pledge_object()
+  })
+  
+  var text_inputs_timeouts = []
+  
+  payment_form.find(all_payment_text_inputs).keyup(function(){
+    
+    if (payment_form.serialize() == old_serialized_value){ // prevent a bug by which when one presses backspace in an empty input, the button would get disabled.
+      return
+    }
+    
+    do_pledge.attr('readonly', true)
+    
+    _.each(text_inputs_timeouts, function(timeout){
+      clearTimeout(timeout)
+    })
+    var timeout = setTimeout(update_pledge_object, 800)
+    text_inputs_timeouts = [timeout]
+  })
+  
+  var update_pledge_object_if_readonly = function(){
+    if (do_pledge.is('[readonly]')){
+      update_pledge_object()
+    }
+  }
+  
+  do_pledge.click(function(e){
+    update_pledge_object_if_readonly()
+    e.preventDefault()
+  })
+  do_pledge.hover(update_pledge_object_if_readonly)
+  
+  do_pledge.on('click', function(e) {
+    if (do_pledge.is('[readonly]')){
+      return
+    }
+    payment_form.append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
     handler.open({
       name: '#{title}',
       email: '#{email}',
