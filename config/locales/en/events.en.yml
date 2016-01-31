@@ -59,6 +59,9 @@ en:
       venue_id: 'Venue'
       name: 'Event name'
       artists: Artists
+      duration_title: 'The event is going to last:'
+      duration_hours: 'hours'
+      duration_minutes: 'minutes'
       starts_at: 'Date'
       popover1: The artist(s) which will play at the event.
       popover2: For identifying them, we use Resident Advisor url fragments.
