@@ -1,0 +1,83 @@
+en:
+  campaigns:
+    errors:
+      minimum_pledge_cents:
+        venue: You must set at least %{value}.
+      starts_at:
+        ends_at: Must be prior to Ends at
+      ends_at:
+        starts_at: The campaign must remain open for at least %{hours} hours.
+      generate_invite_link: If the event is invite only, then a link must be generated.
+      generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
+    unfulfilled:
+      caption_unfulfilled_at: "This event didn't reach its goal."
+      caption_event_rejected_at: "This event reached its goal, but the event promoter did not perform all the necessary actions for organising the event."
+      refundable: "We got you covered. Choose what to do with your %{amount}:"
+      money_back: Get my money back
+      money_back_popover: Choose this for your credit card payment to be refunded.
+      money_back_popover_2: Refunds can take up to 10 days to complete.
+      credits: Get credits for next events
+      credits_popover: Choose this for getting %{amount} in credits for other events.
+      credits_popover_2: You can use them immediately in current and future campaigns.
+    share:
+      app_with_no_invite_token: "Keep in mind: this campaign/event is only visible to Estiu members (it's not public)."
+      invite: "Keep in mind - this campaign/event is %{invite_only}! Only users having the %{secret_link} can access it."
+      link: secret link
+      invite_only: invite only
+    index:
+      title: All campaigns
+      title_mine: My campaigns
+      new: New campaign
+      all: View all
+      mine: View only mine
+    item:
+      fulfilled_campaign: 'goal reached'
+      unfulfilled_campaign: 'goal not reached'
+      open_campaign: 'open'
+      pledged_campaign: 'pledged'
+      not_open_yet: 'not open yet'
+      title: "Campaign: %{campaign}"
+      starts_at: Starts at
+      ends_at: Campaign closes
+      venue: Venue
+    event_created:
+      event_created: This campaign has become an event!
+      view_event_created: "View the details %{link}."
+      view_event_created_link: here
+    show:
+      title: '%{pledged} paid'
+      percent: "%{percent}% reached"
+      goal: "Goal: %{goal}"
+      closed_sign_up: "You are viewing a closed campaign, you cannot participate in it anymore."
+      closed_sign_up_2: "Sign up for attending newer events!"
+      sign_up: "Sign up for joining this event"
+      sign_up_for_closed: "Sign up"
+    must_create_event:
+      your_event_fulfilled: Your event has reached its goal, and we are ready to transfer its funds.
+      must_create_event: "First, you must %{link}."
+      new_event: create the corresponding event
+    create:
+      success: "Succesfully created campaign."
+      error: "Couldn't create campaign due to the indicated errors."
+    form:
+      venue_capacity: 'Capacity'
+      visibility: Campaign/event visibility
+      public_visibility: Public
+      app_visibility: Confirmed Estiu members
+      invite_visibility: By invitation only
+      generate_invite_link: Generate invite link?
+      visibility_popover: Select to which users the campaign will be visible.
+      visibility_popover_2: This determines how public/secret the campaign is.
+      generate_invite_link_popover: If yes, a secret link will be generated, which users with access can share.
+      generate_invite_link_popover_2:  Anyone receiving the secret link will be able to view/participate in the campaign.
+      maximum_attendance: "Maximum attendance"
+      title: New campaign
+      goal_cents: Campaign Goal
+      starts_at: Campaign starts at
+      ends_at: Campaign ends at
+      recommended_pledge: Recommended minimum payment
+      recommended_pledge_cents: Recommended payment
+      minimum_pledge_cents: Minimum payment
+      minimum_pledge_cents_short: Minimum payment
+      submit: "Create"
+  

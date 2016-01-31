@@ -51,6 +51,7 @@ module Estiu
       g.test_framework nil
     end
     
+    config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml').to_s]
     config.middleware.use Rack::ContentLength
     config.active_job.queue_adapter = :sidekiq
     config.action_mailer.default_url_options ||= {}
