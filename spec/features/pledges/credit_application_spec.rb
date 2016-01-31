@@ -23,7 +23,7 @@ describe 'Credit application', js: true do
     
     def the_action
       find('#do-pledge').click
-      accept_dialog
+      # accept_dialog # XXX instead: expect "you will pay / you will be discounted" rows to be updated
       fill_stripe_form
       sleep 7
     end
