@@ -21,4 +21,9 @@
         = render 'item', campaign: campaign, listing: true
     - if @campaigns.empty?
       %li.listing-item.bordered.p10
-        = t('shared.info.empty', :resources => t('shared.resources.campaigns'))
+        - if current_event_promoter
+          = t('.empty_event_promoter')
+        - elsif current_attendee
+          = t('.empty_attendee') # note: in the future when scope by city is implemented, the text can say "search in other cities instead".
+        - else
+          = t('.empty_generic')
