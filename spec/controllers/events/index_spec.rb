@@ -24,7 +24,11 @@ describe EventsController do
         context "with #{"no" unless with_events}events" do
           
           before {
-            Event.all.each(&:destroy!) unless with_events
+            if with_events
+              FG.create :event
+            else
+              Event.all.each(&:destroy!)
+            end
             expect(Event.count).send((with_events ? :to_not : :to), be(0))
           }
           

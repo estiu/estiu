@@ -8,7 +8,7 @@ class Event < ActiveRecord::Base
   has_many :event_documents, dependent: :destroy
   has_one :event_promoter, through: :campaign
   
-  attr_accessor :documents_confirmation
+  attr_accessor :documents_confirmation, :duration_hours, :duration_minutes
   
   accepts_nested_attributes_for :ra_artists, allow_destroy: false, reject_if: ->(object){ object[:artist_path].blank? }
   accepts_nested_attributes_for :event_documents, allow_destroy: false, reject_if: ->(object){ object[:filename].blank? }
@@ -19,12 +19,13 @@ class Event < ActiveRecord::Base
   
   # name, starts_at, venue_id are already present in Campaign, but these represent the *definitive* values.
   CREATE_ATTRS = %i(name starts_at duration venue_id)
+  MIN_DURATION = 3600
   
   CREATE_ATTRS.each do |attr|
     validates attr, presence: true
   end
   
-  validates_numericality_of :duration, greater_than_or_equal_to: 3600
+  validates_numericality_of :duration, greater_than_or_equal_to: MIN_DURATION
   validates :submitted_at, presence: true, if: :approved_at
   validates :submitted_at, presence: true, if: :rejected_at
   validates :approved_at, inclusion: [nil], unless: :submitted_at

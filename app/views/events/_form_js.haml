@@ -1,0 +1,13 @@
+:javascript
+
+  function calculateDuration (argument) {
+    var seconds = $("#event_duration_hours").val() * 60 * 60;
+    seconds += $("#event_duration_minutes").val() * 60;
+    $("#event_duration").val(seconds);
+  }
+
+  calculateDuration();
+
+  $(".humarized-duration").on("change", function() {
+    calculateDuration();
+  });
