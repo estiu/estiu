@@ -1,10 +1,14 @@
 class PledgesController < ApplicationController
   
   before_action :authorize_campaign
-  before_action :new_pledge, only: [:create]
-  before_action :load_pledge, only: %i(update refund_payment create_refund_credit)
+  before_action :load_pledge, only: %i(update charge refund_payment create_refund_credit)
   
-  def create
+  def update # NOTE - used to be #create
+    @pledge.assign_attributes(
+      originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
+      referral_email: params.require(:pledge)[:referral_email],
+      desired_credit_ids: (params.require(:pledge)[:desired_credit_ids] || []) # ids are validated at model level. this includes consumed or extraneous ids.
+    )
     @pledge.calculate_total!
     if @pledge.save
       render json: {
@@ -17,7 +21,7 @@ class PledgesController < ApplicationController
     end
   end
   
-  def update
+  def charge # NOTE - used to be #update
     stripe_token = params.require :stripeToken
     if @pledge.charge!(stripe_token)
       render(json: {
@@ -52,17 +56,6 @@ class PledgesController < ApplicationController
   def authorize_campaign
     load_campaign
     authorize @campaign, :show?
-  end
-  
-  def new_pledge
-    @pledge = Pledge.new(
-      campaign: @campaign,
-      attendee: current_attendee,
-      originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
-      referral_email: params.require(:pledge)[:referral_email],
-      desired_credit_ids: (params.require(:pledge)[:desired_credit_ids] || []) # ids are validated at model level. this includes consumed or extraneous ids.
-    )
-    authorize @pledge
   end
   
   def load_pledge

@@ -45,7 +45,7 @@
 
 :javascript
   
-  var pledge_id = null
+  var amount_cents = #{@pledge.amount_cents}
   var received_stripe_token = false
   
   var handler = StripeCheckout.configure({
@@ -58,10 +58,10 @@
       }
     },
     token: function(token) {
-      if (!pledge_id){ // Should never happen.
+      if (!amount_cents){ // Should never happen.
         return
       }
-      var request = $.ajax(("#{action}" + '/' + pledge_id), {method: 'PUT', data: {stripeToken: token['id']}})
+      var request = $.ajax(("#{charge_action}"), {method: 'POST', data: {stripeToken: token['id']}})
       received_stripe_token = true
       request.done(function(response){
         var json = response
@@ -82,7 +82,7 @@
     }
   });
   
-  var create_pledge_object = function(success){
+  var update_pledge_object = function(success){
 
     var pledge_data = {}
     _.each(['originally_pledged_cents', 'referral_email'], function(attr){
@@ -99,15 +99,14 @@
       }
     })
     
-    var request = $.ajax("#{action}", {method: 'POST', data: {pledge: pledge_data}})
+    var request = $.ajax("#{update_action}", {method: 'PUT', data: {pledge: pledge_data}})
     request.done(function(response){
-      pledge_id = response['id']
       set_flash_messages(null)
       var discounted_message = response['discounted_message']
       if (discounted_message){
         alert(discounted_message)
       }
-      success(response['amount_cents'])
+      amount_cents = response['amount_cents']
     })
     request.fail(function(response){
       $('.block-ui').remove()
@@ -119,16 +118,16 @@
     })
   }
   
+  // XXX on form change: update_pledge_object
+  
   $('#do-pledge').on('click', function(e) {
     $('#payment-form').append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
-    create_pledge_object(function(chosen_cents){
-      handler.open({
-        name: '#{title}',
-        email: '#{email}',
-        description: '#{description}',
-        currency: "#{Pledge::STRIPE_EUR}",
-        amount: chosen_cents
-      });
-    })
+    handler.open({
+      name: '#{title}',
+      email: '#{email}',
+      description: '#{description}',
+      currency: "#{Pledge::STRIPE_EUR}",
+      amount: amount_cents
+    });
     e.preventDefault();
   });

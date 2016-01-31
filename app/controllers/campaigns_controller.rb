@@ -2,6 +2,7 @@ class CampaignsController < ApplicationController
   
   before_action :load_campaign, only: [:show]
   before_action :authorize_campaign, only: [:show]
+  before_action :ensure_pledge, only: [:show]
   
   def index
     authorize Campaign
@@ -67,6 +68,16 @@ class CampaignsController < ApplicationController
   
   def authorize_campaign
     authorize @campaign
+  end
+  
+  def ensure_pledge
+    if current_attendee # XXX I assume logged-out users (w/ secret link) don't need this. check <<<
+      @pledge = Pledge.where(attendee: current_attendee, campaign: @campaign).first_or_initialize
+      unless @pledge.originally_pledged_cents
+        @pledge.originally_pledged_cents ||= @campaign.minimum_pledge_cents
+        @pledge.save!
+      end
+    end 
   end
   
 end

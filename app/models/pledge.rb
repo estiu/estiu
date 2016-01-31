@@ -17,7 +17,8 @@ class Pledge < ActiveRecord::Base
   monetize :amount_cents # the final amount to be charged. equals originally_pledged_cents - discount_cents
   
   validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
-  validates :stripe_charge_id, presence: true, if: :id
+  # validates :stripe_charge_id, presence: true, if: :id # XXX WRONG: if: :id <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  validates :attendee_id, uniqueness: {scope: :campaign_id}
   
   validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t('errors.email_format')
   

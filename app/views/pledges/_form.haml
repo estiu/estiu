@@ -13,7 +13,8 @@
         .col-xs-12
           = render 'pledges/payment_form',
             campaign: campaign,
-            action: pledges_path(campaign.id),
+            update_action: pledge_path(id: campaign.id, pledge_id: @pledge.id),
+            charge_action: charge_pledge_path(id: campaign.id, pledge_id: @pledge.id),
             amount_cents: campaign.minimum_pledge_cents,
             title: campaign.name,
             description: t('.payment_description'),
