@@ -48,7 +48,7 @@ en:
       view_event_created: "View the details %{link}."
       view_event_created_link: here
     show:
-      title: '%{pledged} paid'
+      title: '%{pledged} contributed'
       percent: "%{percent}% reached"
       goal: "Goal: %{goal}"
       closed_sign_up: "You are viewing a closed campaign, you cannot participate in it anymore."

@@ -51,4 +51,6 @@
         %hr.top10.bottom15
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
-        %button#do-pledge.btn.btn-success.full.skip-custom-readonly-styling{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
+        %button#do-pledge.btn.btn-success.full.skip-custom-readonly-styling{style: 'min-width: 115px; margin-top: 0'}
+          = t 'pledges.form.buy'
+          %span.small#do-pledge-amount-cents-indicator= pledge.amount.format

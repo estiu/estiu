@@ -187,7 +187,7 @@ class Pledge < ActiveRecord::Base
     campaign.maybe_mark_as_fulfilled
   end
   
-  def create_credits_for_referred_attendee # XXX move to job
+  def create_credits_for_referred_attendee # XXX move to job. one loses transactionality but wins robustness / performance.
     if referral_email.present?
       change = changes[:stripe_charge_id]
       if change && change[0].nil? && change[1].present?

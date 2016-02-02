@@ -40,12 +40,14 @@
   var payment_form = $('#payment-form')
   var do_pledge = $('#do-pledge')
   var old_serialized_value = payment_form.serialize()
+  var pledge_is_valid = true
   
   var update_pledge_object = function(){
     
     var serialized_value = payment_form.serialize()
     
     if (serialized_value == old_serialized_value){
+      do_pledge.attr('readonly', !pledge_is_valid)
       return
     } else {
       old_serialized_value = serialized_value
@@ -78,11 +80,13 @@
       }
       amount_cents = response['amount_cents']
       amount_cents_formatted = response['amount_cents_formatted']
-      $('#amount-cents-indicator').text(amount_cents_formatted)
+      $('#amount-cents-indicator, #do-pledge-amount-cents-indicator').text(amount_cents_formatted)
       do_pledge.attr('readonly', false)
+      pledge_is_valid = true
     })
     request.fail(function(response){
       $('.block-ui').remove()
+      pledge_is_valid = false
       if (response.status == 500){
         set_flash_messages(flash_error("#{t 'pledges.create.error'}"))
       } else {
