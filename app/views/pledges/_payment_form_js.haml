@@ -42,9 +42,13 @@
   var old_serialized_value = payment_form.serialize()
   var pledge_is_valid = true
   
+  var serialize_payment_form = function(){
+    return payment_form.find(':input').serialize()
+  }
+  
   var update_pledge_object = function(){
     
-    var serialized_value = payment_form.serialize()
+    var serialized_value = serialize_payment_form()
     
     if (serialized_value == old_serialized_value){
       do_pledge.attr('readonly', !pledge_is_valid)
@@ -107,7 +111,7 @@
   
   payment_form.find(all_payment_text_inputs).keyup(function(){
     
-    if (payment_form.serialize() == old_serialized_value){ // prevent a bug by which when one presses backspace in an empty input, the button would get disabled.
+    if (serialize_payment_form() == old_serialized_value){ // prevent a bug by which when one presses backspace in an empty input, the button would get disabled.
       return
     }
     
