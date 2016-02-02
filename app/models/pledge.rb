@@ -29,7 +29,7 @@ class Pledge < ActiveRecord::Base
   default_scope { where.not(stripe_charge_id: nil) }
   
   before_validation :nullify_optional_fields
-  around_update :maybe_mark_campaign_as_fulfilled
+  around_save :maybe_mark_campaign_as_fulfilled, if: :charged?
   around_update :create_credits_for_referred_attendee
   
   def self.charge_description_for campaign
@@ -187,7 +187,7 @@ class Pledge < ActiveRecord::Base
     campaign.maybe_mark_as_fulfilled
   end
   
-  def create_credits_for_referred_attendee
+  def create_credits_for_referred_attendee # XXX move to job
     if referral_email.present?
       change = changes[:stripe_charge_id]
       if change && change[0].nil? && change[1].present?

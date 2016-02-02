@@ -192,7 +192,7 @@ class Campaign < ActiveRecord::Base
   def maybe_mark_as_fulfilled
 
     # this method is meant to be called within a ActiveRecord::Base.transaction. failing to do will result in unsafe operations.
-    # wrapping the method definition in a transaction would also be wrong since AR nested transactions are fake/deceiving.
+    # wrapping the method body in a transaction would also be wrong since AR nested transactions are fake/deceiving.
     fail if ActiveRecord::Base.connection.open_transactions.zero?
 
     if fulfilled? && !fulfilled_at
