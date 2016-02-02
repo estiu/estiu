@@ -35,10 +35,15 @@ en:
       empty_attendee: "There are no campaigns to display."
     item:
       fulfilled_campaign: 'goal reached'
+      fulfilled_campaign_title: 'This campaign reached its goal.'
       unfulfilled_campaign: 'goal not reached'
+      unfulfilled_campaign_title: "This campaign didn't reach its goal."
       open_campaign: 'open'
-      pledged_campaign: 'pledged'
+      open_campaign_title: 'This campaign is still open for contributions.'
+      pledged_campaign: 'contributed'
+      pledged_campaign_title: "You contributed %{amount} to this campaign."
       not_open_yet: 'not open yet'
+      not_open_yet_title: "This campaign will be open for contributions starting from %{date}."
       title: "Campaign: %{campaign}"
       starts_at: Starts at
       ends_at: Campaign closes

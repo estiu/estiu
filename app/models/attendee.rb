@@ -12,6 +12,7 @@ class Attendee < ActiveRecord::Base
   end
   
   def pledge_for campaign
+    # be careful when caching - must be done per campaign.id
     campaign.pledges.find_by(attendee_id: self.id)
   end
   
@@ -30,7 +31,8 @@ class Attendee < ActiveRecord::Base
   end
   
   def ticket_for event
-    @ticket_for ||= Ticket.find_by(attendee: self, event: event)
+    # be careful when caching - must be done per event.id
+    Ticket.find_by(attendee: self, event: event)
   end
   
 end

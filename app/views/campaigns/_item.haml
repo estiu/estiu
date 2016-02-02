@@ -1,25 +1,30 @@
 - if listing
   .row
-    .col-xs-9
+    .col-xs-12
       = link_to campaign.name, campaign, class: 'show-link-title'
-    .col-xs-3.dark-grey.right{style: 'padding-top: 12px'}
-      = link_to campaign, {class: 'dark-grey'} do
-        - if campaign.fulfilled_at
-          %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
-          %span{style: 'vertical-align: -1px'}= t '.fulfilled_campaign'
-        - elsif campaign.unfulfilled_at
-          %span.glyphicon.glyphicon-remove-circle{style: 'vertical-align: middle'}
-          %span{style: 'vertical-align: -1px'}= t '.unfulfilled_campaign'
-        - elsif campaign.active?
-          %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
-          %span{style: 'vertical-align: -1px'}= t '.open_campaign'
-        - elsif campaign.not_open_yet?
-          %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
-          %span{style: 'vertical-align: -1px'}= t '.not_open_yet'
-        - elsif current_attendee
-          - if current_attendee.pledged?(campaign)
-            %span.glyphicon.glyphicon-ok-circle{style: 'vertical-align: middle'}
-            %span{style: 'vertical-align: -1px'}= t '.pledged_campaign'
+  .row
+    .col-xs-12.dark-grey
+      - if campaign.fulfilled_at
+        %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px', title: t('.fulfilled_campaign_title')}
+          = t('.fulfilled_campaign')
+      - elsif campaign.unfulfilled_at
+        %span.glyphicon.glyphicon-remove-circle{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px', title: t('.unfulfilled_campaign_title')}
+          = t('.unfulfilled_campaign')
+      - elsif campaign.active?
+        %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px', title: t('.open_campaign_title')}
+          = t('.open_campaign')
+      - elsif campaign.not_open_yet?
+        %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px', title: t('.not_open_yet_title', date: campaign.starts_at)}
+          = t('.not_open_yet')
+    - if current_attendee && current_attendee.pledged?(campaign)
+      .col-xs-12.dark-grey
+        %span.glyphicon.glyphicon-ok-sign{style: 'vertical-align: middle'}
+        %span{style: 'vertical-align: -1px', title: t(".pledged_campaign_title", amount: current_attendee.pledge_for(campaign).originally_pledged.format)}
+          = t '.pledged_campaign'
           
 - else
   %h1= t '.title', campaign: campaign.name
