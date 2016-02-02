@@ -56,10 +56,14 @@ describe Campaign do
     
     subject { FG.create :campaign, :almost_fulfilled }
     
+    let(:pledge){
+      cents = subject.minimum_pledge_cents
+      Pledge.create!(campaign: subject, attendee: FG.create(:attendee), amount_cents: cents, originally_pledged_cents: cents)
+    }
+    
     def fulfill
       expect {
-        cents = subject.minimum_pledge_cents
-        Pledge.create!(campaign: subject, attendee: FG.create(:attendee), amount_cents: cents, originally_pledged_cents: cents, stripe_charge_id: SecureRandom.hex)
+        pledge.update_attributes! stripe_charge_id: SecureRandom.hex
       }.to change {
         subject.reload.fulfilled?
       }.from(false).to(true)
