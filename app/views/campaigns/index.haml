@@ -1,18 +1,22 @@
 %div{class: centered_wider}
   
-  %h1
-    =t(in_mine_page? ? '.title_mine' : '.title')
-    - if current_user
-      %span.float-right
-        - opts = {class: "btn btn-info btn-xs"}
-        - if in_mine_page?
-          = link_to t('.all'), campaigns_path, opts
-        - else
-          = link_to t('.mine'), mine_campaigns_path, opts
-    
+  .row
+    .col-sm-8.col-xs-12
+      %h1.m0
+        =t(in_mine_page? ? '.title_mine' : '.title')
+    .col-sm-4.col-xs-12.right.top10
+      - if current_user
+        %span
+          - opts = {class: "btn btn-info btn-xs"}
+          - if in_mine_page?
+            = link_to t('.all'), campaigns_path, opts
+          - else
+            = link_to t('.mine'), mine_campaigns_path, opts
   - if policy(Campaign).new?
-    .right
-      = link_to t(".new"), new_campaign_path, class: 'btn btn-success'
+    .row
+      .col-xs-12.right.top10
+        %span
+          = link_to t(".new"), new_campaign_path, class: 'btn btn-success'
 
   %hr
   %ul
