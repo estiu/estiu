@@ -17,7 +17,6 @@ class Pledge < ActiveRecord::Base
   monetize :amount_cents # the final amount to be charged. equals originally_pledged_cents - discount_cents
   
   validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
-  # validates :stripe_charge_id, presence: true, if: :id # XXX WRONG: if: :id <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   validates :attendee_id, uniqueness: {scope: :campaign_id}
   
   validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t('errors.email_format')
@@ -63,6 +62,8 @@ class Pledge < ActiveRecord::Base
   end
   
   def calculate_discount!
+    
+    self.discount_cents = 0 # first, reset to 0 - keep in mind that a Pledge can be updated many times. so we prevent repeted credit application
     
     check_truthful_referral_email!(:check_format)
     if referral_email.present? && errors[:referral_email].blank?
@@ -157,12 +158,6 @@ class Pledge < ActiveRecord::Base
       Rails.logger.error message
       Rollbar.error message
       false
-    end
-  end
-  
-  def discounted_message
-    if discount_cents > 0
-      I18n.t("pledges.discounted_message", discount: discount.format)
     end
   end
   

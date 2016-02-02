@@ -3,7 +3,7 @@ class PledgesController < ApplicationController
   before_action :authorize_campaign
   before_action :load_pledge, only: %i(update charge refund_payment create_refund_credit)
   
-  def update # NOTE - used to be #create
+  def update
     @pledge.assign_attributes(
       originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
       referral_email: params.require(:pledge)[:referral_email],
@@ -14,14 +14,15 @@ class PledgesController < ApplicationController
       render json: {
         id: @pledge.id,
         amount_cents: @pledge.amount_cents,
-        discounted_message: @pledge.discounted_message}
+        amount_cents_formatted: @pledge.amount.format,
+        discounted_message: (@pledge.discount_cents.zero? ? nil : @pledge.discount.format)}
     else
       flash.now[:error] = @pledge.errors.full_messages
       render json: flash_json, status: 422
     end
   end
   
-  def charge # NOTE - used to be #update
+  def charge
     stripe_token = params.require :stripeToken
     if @pledge.charge!(stripe_token)
       render(json: {

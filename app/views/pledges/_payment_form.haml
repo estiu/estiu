@@ -11,13 +11,15 @@
         - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} </small>"
         = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
       .col-xs-4.right-column.left
-        = field.(:referral_email, as: :email, only_input: true, value: params[:referral_email], form_group_class: 'full', html_class: 'full')
+        = field.(:referral_email, as: :email, only_input: true, value: (pledge.referral_email || params[:referral_email]), form_group_class: 'full', html_class: 'full')
     .row
       .col-xs-8.left-column
+        - popover_caption = "#{t('pledges.form.originally_pledged_cents_popover')}"
         = field.(:originally_pledged_cents,
           as: :currency,
           only_label: true,
-          label_html: {class: 'mr10'})
+          label_html: {class: 'mr10'},
+          popover: {html: popover_caption})
       .col-xs-4.right-column.left
         = field.(:originally_pledged_cents,
           as: :currency,
@@ -28,12 +30,22 @@
         = field.(:desired_credit_ids, as: :hidden, value: [])
     .row.top10
       .col-xs-8.right.left-column
-        .small= t 'pledges.form.can_pay_more', price: (pledge.amount_cents / 100.0).to_money.format
+        .small= t('pledges.form.can_pay_more', price: content_tag(:strong){(campaign.minimum_pledge_cents / 100.0).to_money.format}).html_safe
       .col-xs-4.left.right-column
         .small
           - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
           %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
             = t 'pledges.form.why_pay_more'
+    .row.top10#discount-cents-indicator-wrapper{style: "#{jquery_hidden if pledge.discount_cents.zero?}"}
+      .col-xs-8.left-column
+        %strong= t '.you_will_be_discounted'
+      .col-xs-4.left.right-column
+        %strong#discount-cents-indicator= pledge.discount.format
+    .row.top10
+      .col-xs-8.left-column
+        %strong= t '.you_will_pay'
+      .col-xs-4.left.right-column
+        %strong#amount-cents-indicator= pledge.amount.format
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
         %hr.top10.bottom15
@@ -116,9 +128,14 @@
       set_flash_messages(null)
       var discounted_message = response['discounted_message']
       if (discounted_message){
-        // alert(discounted_message) // XXX instead, update an always-visible row.
+        $('#discount-cents-indicator-wrapper').toggle(true)
+        $('#discount-cents-indicator').text(discounted_message)
+      } else {
+        $('#discount-cents-indicator-wrapper').toggle(false)
       }
       amount_cents = response['amount_cents']
+      amount_cents_formatted = response['amount_cents_formatted']
+      $('#amount-cents-indicator').text(amount_cents_formatted)
       do_pledge.attr('readonly', false)
     })
     request.fail(function(response){
@@ -152,7 +169,7 @@
     _.each(text_inputs_timeouts, function(timeout){
       clearTimeout(timeout)
     })
-    var timeout = setTimeout(update_pledge_object, 800)
+    var timeout = setTimeout(update_pledge_object, 400)
     text_inputs_timeouts = [timeout]
   })
   
