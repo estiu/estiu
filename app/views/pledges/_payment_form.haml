@@ -32,9 +32,9 @@
       .col-xs-8.right.left-column
         .small= t('pledges.form.can_pay_more', price: content_tag(:strong){(campaign.minimum_pledge_cents / 100.0).to_money.format}).html_safe
       .col-xs-4.left.right-column
-        .small
+        .small.bold.black-link
           - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
-          %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
+          %a{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true', tabindex: 0, role: 'button'}
             = t 'pledges.form.why_pay_more'
     .row.top10#discount-cents-indicator-wrapper{style: "#{jquery_hidden if pledge.discount_cents.zero?}"}
       .col-xs-8.left-column
