@@ -17,6 +17,7 @@ class PledgesController < ApplicationController
         amount_cents_formatted: @pledge.amount.format,
         discounted_message: (@pledge.discount_cents.zero? ? nil : @pledge.discount.format)}
     else
+      @pledge.errors.delete(:amount_cents)
       flash.now[:error] = @pledge.errors.full_messages
       render json: flash_json, status: 422
     end

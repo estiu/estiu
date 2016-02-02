@@ -24,6 +24,7 @@ class Pledge < ActiveRecord::Base
   validate :minimum_pledge
   validate :check_truthful_referral_email!
   validate :check_valid_desired_credit_ids!, unless: :stripe_charge_id
+  validate :discount_cents_not_greater_than_originally_pledged_cents
   
   default_scope { where.not(stripe_charge_id: nil) }
   
@@ -248,6 +249,12 @@ class Pledge < ActiveRecord::Base
   def nullify_optional_fields
     unless self.referral_email.present?
       self.referral_email = nil
+    end
+  end
+  
+  def discount_cents_not_greater_than_originally_pledged_cents
+    if discount_cents > originally_pledged_cents
+      errors[:discount_cents] << I18n.t("pledges.errors.discount_cents_not_greater_than_originally_pledged_cents")
     end
   end
   
