@@ -16,19 +16,20 @@ class Pledge < ActiveRecord::Base
   monetize :discount_cents # the total amount to be discounted.
   monetize :amount_cents # the final amount to be charged. equals originally_pledged_cents - discount_cents
   
-  validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
-  validates :stripe_charge_id, presence: true, if: :id
+  validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: STRIPE_MINIMUM_PAYMENT, less_than: MAXIMUM_PLEDGE_AMOUNT}
+  validates :attendee_id, uniqueness: {scope: :campaign_id}
   
   validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t('errors.email_format')
   
   validate :minimum_pledge
   validate :check_truthful_referral_email!
   validate :check_valid_desired_credit_ids!, unless: :stripe_charge_id
+  validate :discount_cents_not_greater_than_originally_pledged_cents
   
   default_scope { where.not(stripe_charge_id: nil) }
   
   before_validation :nullify_optional_fields
-  around_save :maybe_mark_campaign_as_fulfilled
+  around_save :maybe_mark_campaign_as_fulfilled, if: :charged?
   around_update :create_credits_for_referred_attendee
   
   def self.charge_description_for campaign
@@ -49,7 +50,7 @@ class Pledge < ActiveRecord::Base
   end
   
   def refundable?
-    return false if stripe_charge_id.blank? # XXX this is incomplete since the pledge could have been paid with no money at all - only credits.
+    return false unless charged?
     return false if campaign.active?
     return false if refunded?
     if campaign.unfulfilled_at
@@ -62,6 +63,8 @@ class Pledge < ActiveRecord::Base
   end
   
   def calculate_discount!
+    
+    self.discount_cents = 0 # first, reset to 0 - keep in mind that a Pledge can be updated many times. so we prevent repeted credit application
     
     check_truthful_referral_email!(:check_format)
     if referral_email.present? && errors[:referral_email].blank?
@@ -82,7 +85,7 @@ class Pledge < ActiveRecord::Base
   
   def charge!(token)
     
-    raise "charge_id already exists" if stripe_charge_id.present?
+    raise "already charged" if charged?
     
     valid_credits = nil
     charge = nil
@@ -159,12 +162,6 @@ class Pledge < ActiveRecord::Base
     end
   end
   
-  def discounted_message
-    if discount_cents > 0
-      I18n.t("pledges.discounted_message", discount: discount.format)
-    end
-  end
-  
   def self.discount_per_referral
     Money.new(DISCOUNT_PER_REFERRAL)
   end
@@ -190,7 +187,7 @@ class Pledge < ActiveRecord::Base
     campaign.maybe_mark_as_fulfilled
   end
   
-  def create_credits_for_referred_attendee
+  def create_credits_for_referred_attendee # XXX move to job. one loses transactionality but wins robustness / performance.
     if referral_email.present?
       change = changes[:stripe_charge_id]
       if change && change[0].nil? && change[1].present?
@@ -252,6 +249,12 @@ class Pledge < ActiveRecord::Base
   def nullify_optional_fields
     unless self.referral_email.present?
       self.referral_email = nil
+    end
+  end
+  
+  def discount_cents_not_greater_than_originally_pledged_cents
+    if discount_cents > originally_pledged_cents
+      errors[:discount_cents] << I18n.t("pledges.errors.discount_cents_not_greater_than_originally_pledged_cents")
     end
   end
   

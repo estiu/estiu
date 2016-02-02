@@ -1,4 +1,4 @@
-describe PledgesController, retry: 0 do
+describe PledgesController do
   
   describe '#update' do
     
@@ -6,16 +6,15 @@ describe PledgesController, retry: 0 do
       FG.create :campaign
     }
     
-    let(:amount_cents){
-      campaign.minimum_pledge_cents
+    let(:new_originally_pledged_cents){
+      rand(campaign.minimum_pledge_cents..Pledge::MAXIMUM_PLEDGE_AMOUNT)
     }
     
-    let(:most_campaign_params){
+    let(:campaign_params){
       {
         id: campaign.id,
-        pledge_id: pledge.id,
-        pledge: {amount_cents: amount_cents},
-        stripeToken: SecureRandom.hex
+        pledge_id: the_pledge.id,
+        pledge: {originally_pledged_cents: new_originally_pledged_cents},
       }
     }
     
@@ -23,57 +22,46 @@ describe PledgesController, retry: 0 do
       put :update, campaign_params
     end
     
-    def the_count
-      campaign.pledges.count # this because only charged pledges are in the default_scope. charging a pledge doesn't change the real count, but it does charge the AR one.
+    def the_count attendee
+      Pledge.unscoped.where(stripe_charge_id: nil, campaign: campaign, attendee: attendee).count
     end
     
-    def campaign_params
-      most_campaign_params.merge(pledge_id: pledge.id)
+    def the_pledge
+      Pledge.unscoped.find_by(campaign: campaign, attendee_id: user.attendee_id)
     end
     
     context 'active campaign' do
       
-      context "attendee which hasn't been charged to his pledge for this campaign" do
+      context "when there exists a Pledge object, which hasn't been charged" do
         
-        sign_as :attendee
+        sign_as :attendee, false, :user
         
-        let(:pledge) {
-          Pledge.create!(campaign: campaign, attendee: attendee.attendee, amount_cents: amount_cents, originally_pledged_cents: amount_cents)
-        }
-        
-        let(:charge){
-          double(id: SecureRandom.hex)
+        before {
+          FG.create(:pledge, attendee: user.attendee, campaign: campaign, stripe_charge_id: nil)
         }
         
         before {
-          args = {
-            amount: amount_cents,
-            currency: Pledge::STRIPE_EUR,
-            source: campaign_params[:stripeToken],
-            description: Pledge.charge_description_for(campaign)
-          }
-          expect(Stripe::Charge).to receive(:create).once.with(args).and_return(charge)
-          expect(charge).to receive(:id).exactly(2).times
+          expect(user.attendee.pledged?(campaign)).to be false
         }
         
-        it 'allows to create a pledge' do
+        it 'allows to update that pledge' do
           expect{
             the_action
           }.to change {
-            the_count
-          }.by(1)
+            the_pledge.originally_pledged_cents
+          }.and change {
+            the_pledge.amount_cents
+          }
         end
         
       end
       
-      context "attendee which already has been charged for a pledge to this campaign" do
+      context 'attendee which has been charged already for a pledge to this campaign' do
         
-        sign_as(->(*_){ 
-          FG.create(:user, :attendee_role, attendee: FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents, stripe_charge_id: SecureRandom.hex)]))
-        }, false, :user)
+        sign_as :attendee, false, :user
         
-        let(:pledge){
-          user.attendee.pledges.first
+        before {
+          FG.create(:pledge, attendee: user.attendee, campaign: campaign, stripe_charge_id: SecureRandom.hex)
         }
         
         before {
@@ -84,53 +72,24 @@ describe PledgesController, retry: 0 do
           expect_unauthorized
         }
         
-        it "doesn't allow to create a pledge" do
+        it "is forbidden to update a pledge" do
           expect{
             the_action
           }.to_not change {
-            the_count
+            the_pledge.originally_pledged_cents
+          }
+        end
+        
+        it "is forbidden to update a pledge" do
+          expect{
+            the_action
+          }.to_not change {
+            the_pledge.amount_cents
           }
         end
         
       end
-      
-    end
     
-    context 'inactive campaign' do
-      
-      before {
-        allow_any_instance_of(Campaign).to receive(:active?).and_return false
-      }
-      
-      context "attendee which has an uncharged pledge for this campaign" do
-        
-        sign_as(->(*_){ 
-          FG.create(:user, :attendee_role, attendee:
-            FG.create(:attendee, pledges: [FG.build(:pledge, campaign: campaign, amount_cents: amount_cents)]))
-        }, false, :user)
-        
-        let(:pledge){
-          Pledge.unscoped.where(attendee: user.attendee).first
-        }
-        
-        before {
-          expect(pledge.id).to be_present
-        }
-        
-        before {
-          expect_unauthorized
-        }
-        
-        it "doesn't allow to create a pledge" do
-          expect{
-            the_action
-          }.to_not change {
-            campaign.pledges.count
-          }
-        end
-        
-      end
-      
     end
     
   end

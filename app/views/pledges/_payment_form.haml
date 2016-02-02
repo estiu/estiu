@@ -1,4 +1,4 @@
-= form_for Pledge.new(originally_pledged_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
+= form_for pledge, url: pledge_path(id: campaign.id, pledge_id: pledge.id), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
   = form_fields(form, 'pledges.form') do |field|
     - if current_attendee.credits.any?
       .row.bottom10
@@ -11,13 +11,15 @@
         - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} </small>"
         = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
       .col-xs-4.right-column.left
-        = field.(:referral_email, as: :email, only_input: true, value: params[:referral_email], form_group_class: 'full', html_class: 'full')
+        = field.(:referral_email, as: :email, only_input: true, value: (pledge.referral_email || params[:referral_email]), form_group_class: 'full', html_class: 'full')
     .row
       .col-xs-8.left-column
+        - popover_caption = "#{t('pledges.form.originally_pledged_cents_popover')}"
         = field.(:originally_pledged_cents,
           as: :currency,
           only_label: true,
-          label_html: {class: 'mr10'})
+          label_html: {class: 'mr10'},
+          popover: {html: popover_caption})
       .col-xs-4.right-column.left
         = field.(:originally_pledged_cents,
           as: :currency,
@@ -28,107 +30,27 @@
         = field.(:desired_credit_ids, as: :hidden, value: [])
     .row.top10
       .col-xs-8.right.left-column
-        .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
+        .small= t('pledges.form.can_pay_more', price: content_tag(:strong){(campaign.minimum_pledge_cents / 100.0).to_money.format}).html_safe
       .col-xs-4.left.right-column
-        .small
+        .small.bold.black-link
           - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
-          %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
+          %a{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true', tabindex: 0, role: 'button'}
             = t 'pledges.form.why_pay_more'
+    .row.top10#discount-cents-indicator-wrapper{style: "#{jquery_hidden if pledge.discount_cents.zero?}"}
+      .col-xs-8.left-column
+        %strong= t '.you_will_be_discounted'
+      .col-xs-4.left.right-column
+        %strong#discount-cents-indicator= pledge.discount.format
+    .row.top10
+      .col-xs-8.left-column
+        %strong= t '.you_will_pay'
+      .col-xs-4.left.right-column
+        %strong#amount-cents-indicator= pledge.amount.format
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
         %hr.top10.bottom15
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
-        %button#do-pledge.btn.btn-success.full{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
-
-%script{src: 'https://checkout.stripe.com/checkout.js'}
-
-:javascript
-  
-  var pledge_id = null
-  var received_stripe_token = false
-  
-  var handler = StripeCheckout.configure({
-    key: '#{Rails.application.secrets.stripe_publishable_key}',
-    image: '#{image_path}',
-    locale: '#I18n.locale',
-    closed: function(){
-      if (!received_stripe_token){
-        $('.block-ui').remove()
-      }
-    },
-    token: function(token) {
-      if (!pledge_id){ // Should never happen.
-        return
-      }
-      var request = $.ajax(("#{action}" + '/' + pledge_id), {method: 'PUT', data: {stripeToken: token['id']}})
-      received_stripe_token = true
-      request.done(function(response){
-        var json = response
-        var sel = $('#campaign-progress-bar')
-        sel.animate({width: (json['campaign_fulfilled_percent'] + '%')}, {complete: function(){
-          $('#pledge-contribution').html(json['pledge_contribution_content'])
-          sel.text(json['campaign_fulfilled_caption'])
-          $('#campaign_pledged_title').text(json['campaign_pledged_title'])
-        }})
-      })
-      request.fail(function(response){
-        if (response.status == 500){
-          set_flash_messages(flash_error("#{t 'pledges.form.error_500'}"))
-        } else {
-          set_flash_messages(response)
-        }
-      })
-    }
-  });
-  
-  var create_pledge_object = function(success){
-
-    var pledge_data = {}
-    _.each(['originally_pledged_cents', 'referral_email'], function(attr){
-      pledge_data[attr] = $('#pledge_' + attr).val()
-    })
-    
-    var credit_attrs = #{current_attendee.credits.map{|credit| "desired_credit_ids_#{credit.id}" }}
-    pledge_data["desired_credit_ids"] = []
-    
-    _.each(credit_attrs, function(attr){
-      var val = $('#pledge_' + attr + ':checked').val()
-      if (val){
-        pledge_data["desired_credit_ids"].push(val)
-      }
-    })
-    
-    var request = $.ajax("#{action}", {method: 'POST', data: {pledge: pledge_data}})
-    request.done(function(response){
-      pledge_id = response['id']
-      set_flash_messages(null)
-      var discounted_message = response['discounted_message']
-      if (discounted_message){
-        alert(discounted_message)
-      }
-      success(response['amount_cents'])
-    })
-    request.fail(function(response){
-      $('.block-ui').remove()
-      if (response.status == 500){
-        set_flash_messages(flash_error("#{t 'pledges.create.error'}"))
-      } else {
-        set_flash_messages(response)
-      }
-    })
-  }
-  
-  $('#do-pledge').on('click', function(e) {
-    $('#payment-form').append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
-    create_pledge_object(function(chosen_cents){
-      handler.open({
-        name: '#{title}',
-        email: '#{email}',
-        description: '#{description}',
-        currency: "#{Pledge::STRIPE_EUR}",
-        amount: chosen_cents
-      });
-    })
-    e.preventDefault();
-  });
+        %button#do-pledge.btn.btn-success.full.skip-custom-readonly-styling{style: 'min-width: 115px; margin-top: 0'}
+          = t 'pledges.form.buy'
+          %span.small#do-pledge-amount-cents-indicator= pledge.amount.format

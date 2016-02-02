@@ -11,8 +11,10 @@ describe Pledge do
     }
     
     let(:campaign) { FG.create :campaign, :with_one_pledge }
+    let(:other_campaign) { FG.create :campaign }
     
     let(:amount_cents){ campaign.minimum_pledge_cents }
+    let(:other_amount_cents){ other_campaign.minimum_pledge_cents }
     
     let(:args){
       {
@@ -39,7 +41,7 @@ describe Pledge do
     
     let(:pledge_params){
       {
-        stripe_charge_id: nil, desired_credit_ids: [credit.id], amount_cents: amount_cents, campaign: campaign
+        stripe_charge_id: nil, desired_credit_ids: [credit.id], amount_cents: other_amount_cents, campaign: other_campaign
       }
     }
     
@@ -53,11 +55,11 @@ describe Pledge do
           subject.save!
         rescue => e # debug flaky test
           puts "subject.amount_cents: #{subject.amount_cents}"
-          puts "subject.campaign.amount_cents: #{subject.campaign.amount_cents}"
+          puts "subject.campaign.minimum_pledge_cents: #{subject.campaign.minimum_pledge_cents}"
           puts "subject.campaign == campaign: #{subject.campaign == campaign}"
           raise e
         end
-        allow(Stripe::Charge).to receive(:create).once.with(args.merge(amount: amount_cents - Pledge::DISCOUNT_PER_REFERRAL)).and_return(charge)
+        allow(Stripe::Charge).to receive(:create).once.with(args.merge(amount: (other_amount_cents - Pledge::DISCOUNT_PER_REFERRAL), description: Pledge.charge_description_for(other_campaign))).and_return(charge)
       }
       
       it 'works' do

@@ -168,6 +168,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   end
 
   add_index "pledges", ["attendee_id"], name: "index_pledges_on_attendee_id", using: :btree
+  add_index "pledges", ["campaign_id", "attendee_id"], name: "index_pledges_on_campaign_id_and_attendee_id", unique: true, using: :btree
   add_index "pledges", ["campaign_id"], name: "index_pledges_on_campaign_id", using: :btree
 
   create_table "ra_artists", force: :cascade do |t|

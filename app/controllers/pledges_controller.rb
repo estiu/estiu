@@ -1,23 +1,29 @@
 class PledgesController < ApplicationController
   
   before_action :authorize_campaign
-  before_action :new_pledge, only: [:create]
-  before_action :load_pledge, only: %i(update refund_payment create_refund_credit)
+  before_action :load_pledge, only: %i(update charge refund_payment create_refund_credit)
   
-  def create
+  def update
+    @pledge.assign_attributes(
+      originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
+      referral_email: params.require(:pledge)[:referral_email],
+      desired_credit_ids: (params.require(:pledge)[:desired_credit_ids] || []) # ids are validated at model level. this includes consumed or extraneous ids.
+    )
     @pledge.calculate_total!
     if @pledge.save
       render json: {
         id: @pledge.id,
         amount_cents: @pledge.amount_cents,
-        discounted_message: @pledge.discounted_message}
+        amount_cents_formatted: @pledge.amount.format,
+        discounted_message: (@pledge.discount_cents.zero? ? nil : @pledge.discount.format)}
     else
+      # @pledge.errors.delete(:amount_cents) # disables annoying "must be greater than 50", but also disables minimum_pledge.
       flash.now[:error] = @pledge.errors.full_messages
       render json: flash_json, status: 422
     end
   end
   
-  def update
+  def charge
     stripe_token = params.require :stripeToken
     if @pledge.charge!(stripe_token)
       render(json: {
@@ -52,17 +58,6 @@ class PledgesController < ApplicationController
   def authorize_campaign
     load_campaign
     authorize @campaign, :show?
-  end
-  
-  def new_pledge
-    @pledge = Pledge.new(
-      campaign: @campaign,
-      attendee: current_attendee,
-      originally_pledged_cents: params.require(:pledge).require(:originally_pledged_cents),
-      referral_email: params.require(:pledge)[:referral_email],
-      desired_credit_ids: (params.require(:pledge)[:desired_credit_ids] || []) # ids are validated at model level. this includes consumed or extraneous ids.
-    )
-    authorize @pledge
   end
   
   def load_pledge
