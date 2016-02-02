@@ -1,7 +1,7 @@
 en:
   pledges:
-    discounted_message: "You will be discounted %{discount}!"
     errors:
+      discount_cents_not_greater_than_originally_pledged_cents: "The amount to be discounted cannot be greater than what you choose to pay. Please remove some of the selected discounts, or choose a greater contribution amount."
       desired_credit_ids: One or more of the selected discounts are not valid.
       referral_email:
         no_user: "No user with that email has paid for this event."
@@ -24,6 +24,9 @@ en:
       refer_expl_2: "They have to enter your email (%{email}) at the moment of the purchase."
       refer_expl_fb: 'You can tell them via Facebook:'
       invite_cta: Invite my friends
+    payment_form:
+      you_will_be_discounted: "You will be discounted:"
+      you_will_pay: "You will pay:"
     form:
       discount_info: " (paying %{amount} thanks to discounts)"
       desired_credit_ids: "You can choose the following discounts:"
@@ -31,7 +34,8 @@ en:
       why_pay_more: Why pay more?
       why_pay_more_popover: The campaign will reach its goal faster, requiring less people to have contributed.
       why_pay_more_popover_2: Paying more will not give you more tickets in any case.
-      originally_pledged_cents: "You will pay:"
+      originally_pledged_cents: "You will contribute:"
+      originally_pledged_cents_popover: "The amount that the event promoter will receive."
       referral_email: "If someone invited you, put his email here:"
       referral_email_popover: "You can do this in order to get a discount for you, and your friend."
       referral_email_popover_2: "Your friend must already have paid for his ticket. Else, don't fill this field."

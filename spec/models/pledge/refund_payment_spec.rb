@@ -30,12 +30,18 @@ describe Pledge do
       
     end
     
-    context "not refundable" do
+    context "non refundable pledges" do
       
-      let(:pledge){ FG.create :pledge, attendee: attendee, campaign: campaign, stripe_charge_id: nil }
-      
-      it "doesn't work" do
-        expect(pledge.refund_payment!).to be false
+      context "when a pledge hasn't been charged" do
+        
+        let(:pledge){ FG.create :pledge, attendee: attendee, stripe_charge_id: nil }
+        
+        before { expect(pledge.campaign.active?).to be true }
+        
+        it "is not refundable" do
+          expect(pledge.refund_payment!).to be false
+        end
+        
       end
       
     end

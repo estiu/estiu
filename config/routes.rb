@@ -21,8 +21,9 @@ Rails.application.routes.draw do
         get :mine
       end
       member do
-        resources :pledges, only: [:create, :update], param: :pledge_id do
+        resources :pledges, only: [:update], param: :pledge_id do
           member do
+            post :charge
             get :refund_payment
             get :create_refund_credit
           end

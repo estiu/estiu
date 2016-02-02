@@ -18,11 +18,12 @@ describe 'Pledge creation' do
       
       def the_action submit_only=false, confirm_dialog=false
         
+        first('h3').click # force updating the pledge
+        sleep 3 # wait for ajax
+        
         find('#do-pledge').click
         
         return if submit_only
-        
-        accept_dialog if confirm_dialog
         
         fill_stripe_form
         

@@ -1,4 +1,4 @@
-= form_for Pledge.new(originally_pledged_cents: amount_cents), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
+= form_for pledge, url: pledge_path(id: campaign.id, pledge_id: pledge.id), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
   = form_fields(form, 'pledges.form') do |field|
     - if current_attendee.credits.any?
       .row.bottom10
@@ -11,13 +11,15 @@
         - popover_caption = "#{t('pledges.form.referral_email_popover')} <br> <small> #{t('pledges.form.referral_email_popover_2')} </small>"
         = field.(:referral_email, as: :email, only_label: true, label_html: {class: 'mr10'}, popover: {html: popover_caption})
       .col-xs-4.right-column.left
-        = field.(:referral_email, as: :email, only_input: true, value: params[:referral_email], form_group_class: 'full', html_class: 'full')
+        = field.(:referral_email, as: :email, only_input: true, value: (pledge.referral_email || params[:referral_email]), form_group_class: 'full', html_class: 'full')
     .row
       .col-xs-8.left-column
+        - popover_caption = "#{t('pledges.form.originally_pledged_cents_popover')}"
         = field.(:originally_pledged_cents,
           as: :currency,
           only_label: true,
-          label_html: {class: 'mr10'})
+          label_html: {class: 'mr10'},
+          popover: {html: popover_caption})
       .col-xs-4.right-column.left
         = field.(:originally_pledged_cents,
           as: :currency,
@@ -28,24 +30,34 @@
         = field.(:desired_credit_ids, as: :hidden, value: [])
     .row.top10
       .col-xs-8.right.left-column
-        .small= t 'pledges.form.can_pay_more', price: (amount_cents / 100.0).to_money.format
+        .small= t('pledges.form.can_pay_more', price: content_tag(:strong){(campaign.minimum_pledge_cents / 100.0).to_money.format}).html_safe
       .col-xs-4.left.right-column
         .small
           - popover_caption = "#{t('pledges.form.why_pay_more_popover')} <br> <small> #{t('pledges.form.why_pay_more_popover_2')} <small>"
           %strong{'data-toggle' => 'popover', 'data-content' => popover_caption, 'data-html' => 'true'}
             = t 'pledges.form.why_pay_more'
+    .row.top10#discount-cents-indicator-wrapper{style: "#{jquery_hidden if pledge.discount_cents.zero?}"}
+      .col-xs-8.left-column
+        %strong= t '.you_will_be_discounted'
+      .col-xs-4.left.right-column
+        %strong#discount-cents-indicator= pledge.discount.format
+    .row.top10
+      .col-xs-8.left-column
+        %strong= t '.you_will_pay'
+      .col-xs-4.left.right-column
+        %strong#amount-cents-indicator= pledge.amount.format
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
         %hr.top10.bottom15
     .row
       .col-xs-offset-8.col-xs-4.right-column.left
-        %button#do-pledge.btn.btn-success.full{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
+        %button#do-pledge.btn.btn-success.full.skip-custom-readonly-styling{style: 'min-width: 115px; margin-top: 0'}= t 'pledges.form.buy'
 
 %script{src: 'https://checkout.stripe.com/checkout.js'}
 
 :javascript
   
-  var pledge_id = null
+  var amount_cents = #{pledge.amount_cents}
   var received_stripe_token = false
   
   var handler = StripeCheckout.configure({
@@ -58,10 +70,10 @@
       }
     },
     token: function(token) {
-      if (!pledge_id){ // Should never happen.
+      if (!amount_cents){ // Should never happen.
         return
       }
-      var request = $.ajax(("#{action}" + '/' + pledge_id), {method: 'PUT', data: {stripeToken: token['id']}})
+      var request = $.ajax(("#{charge_action}"), {method: 'POST', data: {stripeToken: token['id']}})
       received_stripe_token = true
       request.done(function(response){
         var json = response
@@ -82,8 +94,20 @@
     }
   });
   
-  var create_pledge_object = function(success){
-
+  var payment_form = $('#payment-form')
+  var do_pledge = $('#do-pledge')
+  var old_serialized_value = payment_form.serialize()
+  
+  var update_pledge_object = function(){
+    
+    var serialized_value = payment_form.serialize()
+    
+    if (serialized_value == old_serialized_value){
+      return
+    } else {
+      old_serialized_value = serialized_value
+    }
+    
     var pledge_data = {}
     _.each(['originally_pledged_cents', 'referral_email'], function(attr){
       pledge_data[attr] = $('#pledge_' + attr).val()
@@ -99,15 +123,20 @@
       }
     })
     
-    var request = $.ajax("#{action}", {method: 'POST', data: {pledge: pledge_data}})
+    var request = $.ajax("#{update_action}", {method: 'PUT', data: {pledge: pledge_data}})
     request.done(function(response){
-      pledge_id = response['id']
       set_flash_messages(null)
       var discounted_message = response['discounted_message']
       if (discounted_message){
-        alert(discounted_message)
+        $('#discount-cents-indicator-wrapper').toggle(true)
+        $('#discount-cents-indicator').text(discounted_message)
+      } else {
+        $('#discount-cents-indicator-wrapper').toggle(false)
       }
-      success(response['amount_cents'])
+      amount_cents = response['amount_cents']
+      amount_cents_formatted = response['amount_cents_formatted']
+      $('#amount-cents-indicator').text(amount_cents_formatted)
+      do_pledge.attr('readonly', false)
     })
     request.fail(function(response){
       $('.block-ui').remove()
@@ -119,16 +148,54 @@
     })
   }
   
-  $('#do-pledge').on('click', function(e) {
-    $('#payment-form').append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
-    create_pledge_object(function(chosen_cents){
-      handler.open({
-        name: '#{title}',
-        email: '#{email}',
-        description: '#{description}',
-        currency: "#{Pledge::STRIPE_EUR}",
-        amount: chosen_cents
-      });
+  var all_payment_text_inputs = 'input[type="text"], input[type="email"]'
+  var all_payment_inputs = all_payment_text_inputs + ', input[type="checkbox"]'
+  
+  payment_form.find(all_payment_inputs).change(function(){
+    do_pledge.attr('readonly', true)
+    update_pledge_object()
+  })
+  
+  var text_inputs_timeouts = []
+  
+  payment_form.find(all_payment_text_inputs).keyup(function(){
+    
+    if (payment_form.serialize() == old_serialized_value){ // prevent a bug by which when one presses backspace in an empty input, the button would get disabled.
+      return
+    }
+    
+    do_pledge.attr('readonly', true)
+    
+    _.each(text_inputs_timeouts, function(timeout){
+      clearTimeout(timeout)
     })
+    var timeout = setTimeout(update_pledge_object, 400)
+    text_inputs_timeouts = [timeout]
+  })
+  
+  var update_pledge_object_if_readonly = function(){
+    if (do_pledge.is('[readonly]')){
+      update_pledge_object()
+    }
+  }
+  
+  do_pledge.click(function(e){
+    update_pledge_object_if_readonly()
+    e.preventDefault()
+  })
+  do_pledge.hover(update_pledge_object_if_readonly)
+  
+  do_pledge.on('click', function(e) {
+    if (do_pledge.is('[readonly]')){
+      return
+    }
+    payment_form.append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
+    handler.open({
+      name: '#{title}',
+      email: '#{email}',
+      description: '#{description}',
+      currency: "#{Pledge::STRIPE_EUR}",
+      amount: amount_cents
+    });
     e.preventDefault();
   });

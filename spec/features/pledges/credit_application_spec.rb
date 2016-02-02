@@ -23,7 +23,6 @@ describe 'Credit application', js: true do
     
     def the_action
       find('#do-pledge').click
-      accept_dialog
       fill_stripe_form
       sleep 7
     end
