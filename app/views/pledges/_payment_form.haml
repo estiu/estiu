@@ -1,5 +1,8 @@
-= form_for pledge, url: pledge_path(id: campaign.id, pledge_id: pledge.id), html: {class: 'form-inline', style: 'text-align: right', id: 'payment-form'} do |form|
-  = form_fields(form, 'pledges.form') do |field|
+- form_object = nil
+- form_for pledge, url: pledge_path(id: campaign.id, pledge_id: pledge.id) do |form|
+  - form_object = form
+%div{class: 'form-inline', style: 'text-align: right', id: 'payment-form'}
+  = form_fields(form_object, 'pledges.form') do |field|
     - if current_attendee.credits.any?
       .row.bottom10
         .col-xs-8.left-column
