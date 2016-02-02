@@ -36,8 +36,6 @@ describe Pledge do
         
       end
       
-      # XXX test more cases?
-      
     end
     
     context "already refunded" do

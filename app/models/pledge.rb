@@ -16,7 +16,7 @@ class Pledge < ActiveRecord::Base
   monetize :discount_cents # the total amount to be discounted.
   monetize :amount_cents # the final amount to be charged. equals originally_pledged_cents - discount_cents
   
-  validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: 1, less_than: MAXIMUM_PLEDGE_AMOUNT}
+  validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: STRIPE_MINIMUM_PAYMENT, less_than: MAXIMUM_PLEDGE_AMOUNT}
   validates :attendee_id, uniqueness: {scope: :campaign_id}
   
   validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t('errors.email_format')
@@ -29,14 +29,14 @@ class Pledge < ActiveRecord::Base
   default_scope { where.not(stripe_charge_id: nil) }
   
   before_validation :nullify_optional_fields
-  around_save :maybe_mark_campaign_as_fulfilled
+  around_update :maybe_mark_campaign_as_fulfilled
   around_update :create_credits_for_referred_attendee
   
   def self.charge_description_for campaign
     "Pledge for campaign #{campaign.id}"
   end
 
-  def charged? # XXX what if I pay entirely with credits? is it possible right now? (I definitely want it anyway)
+  def charged?
     stripe_charge_id.present?
   end
   
@@ -50,7 +50,7 @@ class Pledge < ActiveRecord::Base
   end
   
   def refundable?
-    return false if stripe_charge_id.blank? # XXX this is incomplete since the pledge could have been paid with no money at all - only credits.
+    return false unless charged?
     return false if campaign.active?
     return false if refunded?
     if campaign.unfulfilled_at
@@ -85,7 +85,7 @@ class Pledge < ActiveRecord::Base
   
   def charge!(token)
     
-    raise "charge_id already exists" if stripe_charge_id.present?
+    raise "already charged" if charged?
     
     valid_credits = nil
     charge = nil

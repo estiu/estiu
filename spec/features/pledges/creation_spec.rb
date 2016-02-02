@@ -25,7 +25,6 @@ describe 'Pledge creation' do
         
         return if submit_only
         
-        # accept_dialog if confirm_dialog # XXX instead: expect "you will pay / you will be discounted" rows to be updated
         fill_stripe_form
         
         sleep 7 # wait for Stripe processing + PledgesController#update processing
