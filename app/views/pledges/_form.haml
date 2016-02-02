@@ -13,10 +13,13 @@
         .col-xs-12
           = render 'pledges/payment_form',
             campaign: campaign,
+            pledge: @pledge
+          %script{src: 'https://checkout.stripe.com/checkout.js'}
+          = render 'pledges/payment_form_js',
             pledge: @pledge,
             update_action: pledge_path(id: campaign.id, pledge_id: @pledge.id),
             charge_action: charge_pledge_path(id: campaign.id, pledge_id: @pledge.id),
+            image_path: nil,
             title: campaign.name,
             description: t('.payment_description'),
-            email: current_user.email,
-            image_path: nil
+            email: current_user.email
