@@ -1,6 +1,6 @@
 CarrierWave.configure do |config|
   
-  credential_options = Rails.env.production? ?
+  credential_options = (Rails.env.production? || Rails.env.staging?) ?
     { use_iam_profile: true } :
     {
       aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],

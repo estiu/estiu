@@ -13,8 +13,10 @@ module Estiu
     
     def self.host
       case Rails.env
-      when 'production', 'staging'
-        'estiu.com'
+      when 'production'
+        'www.estiu.events'
+      when 'staging'
+        'staging.estiu.events'
       when 'development'
         false ?
           Socket.ip_address_list.detect{|intf| intf.ipv4_private?}.ip_address : # for mobile access
@@ -50,6 +52,11 @@ module Estiu
     config.generators do |g|
       g.test_framework nil
     end
+    
+    I18n.enforce_available_locales = true
+    I18n.available_locales = [:en]
+    I18n.locale = config.i18n.locale = I18n.default_locale = :en
+    config.i18n.fallbacks = [:en]
     
     config.time_zone = 'Europe/Madrid'
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml').to_s]

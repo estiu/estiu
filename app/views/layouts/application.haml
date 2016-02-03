@@ -1,8 +1,7 @@
 !!!
 %html
   %head
-    - if Rails.env.development?
-      %link{rel: 'shortcut icon', href: asset_path('favicon.ico')}
+    %link{rel: 'shortcut icon', href: asset_path('favicon.ico')}
     - if dev_or_test?
       :javascript
         window.errors = []

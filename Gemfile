@@ -36,9 +36,13 @@ gem 'uglifier', '~> 2.7'
 gem 'unicorn', '~> 5'
 gem 'validates_formatting_of', '~> 0.9'
 
-group :development, :test do
+group :development, :test, :staging do
   gem 'pry'
   gem 'pry-rails'
+  gem 'awesome_print'
+end
+
+group :development, :test do
   gem 'awesome_print'
   gem 'quiet_assets'
 end

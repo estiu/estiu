@@ -60,6 +60,7 @@ module AwsOps
     end
     
     def self.create_elb https=false
+      
       listeners = [
         {
           protocol: "HTTP",
@@ -96,10 +97,12 @@ module AwsOps
         })
           
       rescue Aws::ElasticLoadBalancing::Errors::CertificateNotFound => e
+        
         n = 10
         puts "#{e.class} - Sleeping #{n} seconds..."
         sleep n
         retry
+        
       end
       
       elb_client.configure_health_check({
@@ -112,6 +115,8 @@ module AwsOps
           healthy_threshold: 2
         }
       })
+      
+      # XXX upate cloudflare to cname the load balancer's subdomain
       
     end
     

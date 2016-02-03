@@ -1,18 +1,23 @@
 default: &default
+  database: <%= "estiu_#{Rails.env}" %>
   adapter: postgresql
-  pool: 5
+  pool: 5 # fix?
 
 development:
   <<: *default
-  database: estiu_development
 
 test:
   <<: *default
-  database: estiu_test
 
-production:
-  <<: *default
-  database: estiu_production
+rds: &rds
   host: <%= ENV['POSTGRESQL_HOST'] %>
   username: <%= ENV['POSTGRESQL_USERNAME'] %>
   password: <%= ENV['POSTGRESQL_PASSWORD'] %>
+
+staging:
+  <<: *default
+  <<: *rds
+  
+production:
+  <<: *default
+  <<: *rds
