@@ -66,6 +66,30 @@ describe "Campaign creation", js: true do
       
     end
     
+    context "when I choose to start the campaign right now, rather than at a specific date/time" do
+      
+      before {
+        fill_most
+        fill_last
+        find('#campaign_starts_immediately').find("option[value='true']").select_option
+      }
+      
+      def the_test
+        expect {
+          the_action
+        }.to change {
+          Campaign.count
+        }.by(1)
+        expect(Campaign.last.starts_immediately).to be true
+        expect(Campaign.last.starts_at).to be nil
+      end
+      
+      it 'is possible to successfully create that campaign' do
+        the_test
+      end
+      
+    end
+    
   end
   
   describe 'incomplete input' do

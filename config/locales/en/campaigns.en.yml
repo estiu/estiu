@@ -83,7 +83,7 @@ en:
       goal_cents: Campaign Goal
       starts_at: Campaign starts at
       starts_immediately: "Launch campaign immediately?"
-      starts_immediately_popover: "Whether this campaign should be public since the first moment, or only after the date you specify."
+      starts_immediately_popover: "Whether this campaign should be public since the first moment, or only after the date/time you specify."
       starts_immediately_popover_2: "Making the campaign public at a specific date may have a strategic advantage for you."
       ends_at: Campaign ends at
       starts_later: 'No, I will specify a date'

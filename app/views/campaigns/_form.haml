@@ -31,10 +31,11 @@
           .col-xs-12
             = field.(:starts_immediately, as: :boolean, no_label: t('.starts_later'), popover: {html: popover_html('.starts_immediately')})
         .row
-          .col-xs-6
+          .col-xs-7
             .starts-at-wrapper{style: "#{jquery_hidden unless (campaign.starts_immediately == false)}"}
-              = field.(:starts_at, as: :datetime)
-          .col-xs-6
+              = field.(:starts_at, as: :datetime, required: false)
+        .row
+          .col-xs-7
             = field.(:ends_at, as: :datetime)
         .row
           .col-xs-6
