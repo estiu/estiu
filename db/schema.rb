@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.text     "description"
     t.integer  "goal_cents"
     t.integer  "minimum_pledge_cents"
-    t.datetime "starts_at",                  null: false
+    t.datetime "starts_at"
     t.datetime "ends_at",                    null: false
     t.datetime "event_rejected_at"
     t.datetime "fulfilled_at"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.boolean  "skip_past_date_validations"
     t.string   "visibility",                 null: false
     t.boolean  "generate_invite_link",       null: false
+    t.boolean  "starts_immediately",         null: false
     t.string   "invite_token"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false

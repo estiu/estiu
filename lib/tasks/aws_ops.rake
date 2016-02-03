@@ -31,7 +31,7 @@ namespace :aws_ops do
   end
   
   task seed: :environment do
-    FG.create :campaign, :almost_fulfilled, starts_at: 5.seconds.from_now, ends_at: 120.seconds.from_now
+    FG.create :campaign, :almost_fulfilled, starts_immediately: true, ends_at: 120.seconds.from_now
   end
   
 end

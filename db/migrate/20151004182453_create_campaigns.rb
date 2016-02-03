@@ -6,7 +6,7 @@ class CreateCampaigns < ActiveRecord::Migration
       t.text :description
       t.integer :goal_cents
       t.integer :minimum_pledge_cents
-      t.datetime :starts_at, null: false
+      t.datetime :starts_at
       t.datetime :ends_at, null: false
       t.datetime :event_rejected_at
       t.datetime :fulfilled_at
@@ -14,6 +14,7 @@ class CreateCampaigns < ActiveRecord::Migration
       t.boolean :skip_past_date_validations
       t.string :visibility, null: false
       t.boolean :generate_invite_link, null: false
+      t.boolean :starts_immediately, null: false
       t.string :invite_token
       t.timestamps null: false
     end

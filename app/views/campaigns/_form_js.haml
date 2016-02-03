@@ -43,3 +43,7 @@
   }
   
   $('#campaign_goal_cents_facade, #campaign_minimum_pledge_cents_facade').bind('cents_field_updated', update_attendance_indicator)
+  
+  $('#campaign_starts_immediately').change(function(){
+    $('.starts-at-wrapper').toggle($(this).val() == 'false')
+  })

@@ -29,6 +29,7 @@ describe "Campaign creation", js: true do
     find('#campaign_name').set(campaign.name)
     find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
     find('#campaign_minimum_pledge_cents_facade').send_keys("#{campaign.minimum_pledge.format(symbol: false)}")
+    find('#campaign_starts_immediately').find("option[value='false']").select_option
     find('#campaign_venue_id').find("option[value='#{campaign.venue.id}']").select_option
     fill_starts_at
     fill_ends_at
@@ -124,6 +125,7 @@ describe "Campaign creation", js: true do
       
       it 'persists across failed submissions' do
         
+        find('#campaign_starts_immediately').find("option[value='false']").select_option
         minute_selector.select_option
         value = minute_selector.value
         the_action

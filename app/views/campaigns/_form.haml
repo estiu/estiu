@@ -28,8 +28,12 @@
           .col-xs-6
             #attendance-indicator.f12.alert.alert-warning.p10{style: 'margin-top: 22px'}= t('.maximum_attendance') + ':'
         .row
+          .col-xs-12
+            = field.(:starts_immediately, as: :boolean, no_label: t('.starts_later'), popover: {html: popover_html('.starts_immediately')})
+        .row
           .col-xs-6
-            = field.(:starts_at, as: :datetime)
+            .starts-at-wrapper{style: "#{jquery_hidden unless (campaign.starts_immediately == false)}"}
+              = field.(:starts_at, as: :datetime)
           .col-xs-6
             = field.(:ends_at, as: :datetime)
         .row

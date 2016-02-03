@@ -15,6 +15,7 @@ describe CampaignsController do
         v[:campaign][attr] = campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
       end
       v[:campaign].merge!({
+        "starts_immediately" => 'false',
         "starts_at(4i)" => "23",
         "starts_at(5i)" => "59",
         "ends_at(4i)" => "23",

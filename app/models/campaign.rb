@@ -4,7 +4,7 @@ class Campaign < ActiveRecord::Base
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
   BASIC_ATTRS = %i(name venue_id) + DATE_ATTRS
-  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :generate_invite_link, :visibility]
+  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :generate_invite_link, :visibility, :starts_immediately]
   PUBLIC_VISIBILITY = 'public'
   APP_VISIBILITY = 'app'
   INVITE_VISIBILITY = 'invite'
@@ -32,10 +32,13 @@ class Campaign < ActiveRecord::Base
   monetize :pledged_cents
   monetize :estimated_minimum_pledge_cents
   
-  BASIC_ATTRS.each do |attr|
+  (BASIC_ATTRS - [:starts_at, :starts_immediately]).each do |attr|
     validates attr, presence: true
   end
   
+  validates :starts_immediately, inclusion: [true, false]
+  validates :starts_at, presence: true, unless: :starts_immediately
+  validates :starts_at, inclusion: [nil], if: :starts_immediately
   validates :invite_token, presence: true, if: :generate_invite_link
   validates :invite_token, inclusion: [nil], unless: :generate_invite_link
   validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}
@@ -64,6 +67,7 @@ class Campaign < ActiveRecord::Base
   attr_accessor :passed_invite_token
   
   before_validation :do_generate_invite_link
+  before_validation :maybe_discard_starts_at
   
   after_commit :schedule_unfulfillment_check, on: :create
   after_commit :unschedule_unfulfillment_check, on: :destroy
@@ -76,6 +80,10 @@ class Campaign < ActiveRecord::Base
   
   def to_s
     name
+  end
+  
+  def starts_at_criterion
+    starts_immediately ? created_at : starts_at
   end
   
   def self.minimum_active_hours
@@ -119,7 +127,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def active_time?
-    Rails.env.test? && skip_past_date_validations ? true : (starts_at..ends_at).cover?(Time.zone.now)
+    Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(Time.zone.now)
   end
   
   def active?
@@ -136,7 +144,7 @@ class Campaign < ActiveRecord::Base
   
   def not_open_yet?
     now = Time.zone.now
-    (now..starts_at).cover?(now)
+    (now..starts_at_criterion).cover?(now)
   end
   
   def maximum_pledge_cents
@@ -250,6 +258,12 @@ class Campaign < ActiveRecord::Base
       Rails.application.routes.url_helpers.show_with_invite_token_campaign_url(opts.merge(invite_token: invite_token))
     else
       Rails.application.routes.url_helpers.campaign_url(opts)
+    end
+  end
+  
+  def maybe_discard_starts_at
+    if self.starts_immediately
+      self.starts_at = nil
     end
   end
   
