@@ -120,13 +120,13 @@ describe "Campaign creation", js: true do
     describe 'any time field' do
       
       def minute_selector
-        find('#campaign_starts_at_5i option:last-child')
+        find('#campaign_starts_at_5i')
       end
       
       it 'persists across failed submissions' do
         
         find('#campaign_starts_immediately').find("option[value='false']").select_option
-        minute_selector.select_option
+        minute_selector.find('option:last-child').select_option
         value = minute_selector.value
         the_action
         expect(minute_selector.value).to eq value
