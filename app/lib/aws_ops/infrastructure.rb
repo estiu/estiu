@@ -114,7 +114,7 @@ module AwsOps
       elb_client.configure_health_check({
         load_balancer_name: elb_name,
         health_check: {
-          target: "HTTP:80/",
+          target: "HTTP:80/pages/home",
           interval: 7,
           timeout: 5,
           unhealthy_threshold: 2,
