@@ -197,6 +197,8 @@ module AwsOps
       })
     end
     
+    # LCs don't support tags.
+    # anyway, LCs don't support updating the AMI id, so the current setup is unfit for production.z
     def self.create_launch_configurations roles=ASG_ROLES
       roles.each do |role|
         auto_scaling_client.create_launch_configuration({
@@ -205,13 +207,7 @@ module AwsOps
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn,
-          tags: [
-            {
-              key: 'environment',
-              value: environment
-            }
-          ]
+          iam_instance_profile: Iam.instance_profile_arn
         })
       end
     end
@@ -224,7 +220,7 @@ module AwsOps
       names.any?
     end
     
-    def self.create_asgs roles=[ASG_WEB_NAME, ASG_WORKER_NAME]
+    def self.create_asgs roles=ASG_ROLES
       roles.each do |asg_name|
         ami = latest_ami_object asg_name, AwsOps::PRODUCTION_SIZE
         commit = ami.tags.detect{|t|t.key == 'commit'}.try(&:value)

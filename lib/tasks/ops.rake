@@ -1,6 +1,7 @@
 def reset_state environment, silent=false
   AwsOps::Ec2.wait_until_all_instances_terminated
   AwsOps::SQS.drain_all_queues!
+  return # `command` fails for staging atm
   command = "RAILS_ENV=#{environment} bundle exec rake db:drop db:create db:migrate"
   if silent
     `#{command}`

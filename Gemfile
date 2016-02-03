@@ -39,11 +39,11 @@ gem 'validates_formatting_of', '~> 0.9'
 group :development, :test, :staging do
   gem 'pry'
   gem 'pry-rails'
+  gem 'pry-stack_explorer'
   gem 'awesome_print'
 end
 
 group :development, :test do
-  gem 'awesome_print'
   gem 'quiet_assets'
 end
 

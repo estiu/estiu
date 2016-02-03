@@ -1,11 +1,11 @@
 CarrierWave.configure do |config|
   
-  credential_options = (Rails.env.production? || Rails.env.staging?) ?
-    { use_iam_profile: true } :
+  credential_options = DeveloperMachine.running_in_developer_machine? ?
     {
       aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
       aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    }
+    } :
+    { use_iam_profile: true }
     
   config.fog_credentials = {
     provider: 'AWS',

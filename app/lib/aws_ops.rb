@@ -54,7 +54,7 @@ module AwsOps
   end
   
   def elb_name
-    ELB_NAME + '_' + environment
+    "#{ELB_NAME}-#{environment}"
   end
   
 end
