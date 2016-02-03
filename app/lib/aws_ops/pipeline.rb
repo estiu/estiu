@@ -16,7 +16,13 @@ class AwsOps::Pipeline
     
     id = data_pipeline_client.create_pipeline({
       name: name,
-      unique_id: name
+      unique_id: name,
+      tags: [
+        {
+          key: 'environment',
+          value: environment
+        }
+      ]
     }).pipeline_id
     
     output = data_pipeline_client.put_pipeline_definition({

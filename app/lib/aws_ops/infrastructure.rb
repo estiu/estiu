@@ -4,7 +4,7 @@ module AwsOps
     extend AwsOps
     
     def self.security_groups
-      Hash.new{ raise }.merge({ # TODO - fetch from API. assume key names
+      Hash.new{ raise }.merge({ # TODO - fetch from API. assume key names. especially important after introducing `environment`.
         port_443_public: 'sg-a68a3ac2',    
         port_80_public: "sg-e19e2985",
         port_80_vpc: "sg-fd9e2999",
@@ -13,7 +13,7 @@ module AwsOps
       })
     end
     
-    def self.delete_elbs
+    def self.delete_elbs # XXX elb_client.describe_load_balancers.select{|x| x.tags.environment == environment }
       `rm -f *.pem`
       names = elb_client.describe_load_balancers.load_balancer_descriptions.map &:load_balancer_name
       names.each do |lb|
@@ -24,9 +24,9 @@ module AwsOps
     
     def self.https_elb_setup
       
-        private_key_name = 'private_key'
-        csr_name = 'csr'
-        certificate_name = 'certificate'
+        private_key_name = "private_key_#{environment}"
+        csr_name = "csr_#{environment}"
+        certificate_name = "certificate_#{environment}"
         
         iam_client.delete_server_certificate({server_certificate_name: certificate_name}) rescue Aws::IAM::Errors::NoSuchEntity
         
@@ -90,10 +90,16 @@ module AwsOps
       begin
         
         elb_client.create_load_balancer({
-          load_balancer_name: ELB_NAME,
+          load_balancer_name: elb_name,
           listeners: listeners,
           security_groups: _security_groups,
-          availability_zones: AVAILABILITY_ZONES
+          availability_zones: AVAILABILITY_ZONES,
+          tags: [
+            {
+              key: 'environment',
+              value: environment
+            }
+          ]
         })
           
       rescue Aws::ElasticLoadBalancing::Errors::CertificateNotFound => e
@@ -106,7 +112,7 @@ module AwsOps
       end
       
       elb_client.configure_health_check({
-        load_balancer_name: ELB_NAME,
+        load_balancer_name: elb_name,
         health_check: {
           target: "HTTP:80/",
           interval: 7,
@@ -116,7 +122,7 @@ module AwsOps
         }
       })
       
-      # XXX upate cloudflare to cname the load balancer's subdomain
+      # XXX upate cloudflare to cname the load balancer's subdomain, on a per-env basis
       
     end
     
@@ -176,7 +182,7 @@ module AwsOps
     end
     
     
-    def self.delete_launch_configurations
+    def self.delete_launch_configurations # XXX per-env
       names = auto_scaling_client.describe_launch_configurations.launch_configurations.map &:launch_configuration_name
       names.each do |name|
         auto_scaling_client.delete_launch_configuration launch_configuration_name: name
@@ -199,12 +205,18 @@ module AwsOps
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn
+          iam_instance_profile: Iam.instance_profile_arn,
+          tags: [
+            {
+              key: 'environment',
+              value: environment
+            }
+          ]
         })
       end
     end
     
-    def self.delete_asgs
+    def self.delete_asgs # XXX per env
       names = auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.map &:auto_scaling_group_name
       names.each do |name|
         auto_scaling_client.delete_auto_scaling_group auto_scaling_group_name: name, force_delete: true
@@ -226,10 +238,14 @@ module AwsOps
             {
               key: 'commit',
               value: commit
+            },
+            {
+              key: 'environment',
+              value: environment
             }
           ]
         }
-        opts.merge!({load_balancer_names: [ELB_NAME]}) if LOAD_BALANCED_ASGS.include?(asg_name)
+        opts.merge!({load_balancer_names: [elb_name]}) if LOAD_BALANCED_ASGS.include?(asg_name)
         auto_scaling_client.create_auto_scaling_group(opts)
       end
     end

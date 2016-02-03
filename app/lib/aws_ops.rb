@@ -2,6 +2,8 @@ require 'aws-sdk'
 
 module AwsOps
   
+  mattr_accessor :aws_ops_environment
+  
   VPC = '172.32.0.0/16'
   ELB_NAME = 'ELB'
   BASE_IMAGE_NAME = 'base'
@@ -11,7 +13,7 @@ module AwsOps
   IMAGE_TYPES = [BASE_IMAGE_NAME, ASG_WEB_NAME, ASG_WORKER_NAME, PIPELINE_IMAGE_NAME]
   ASG_ROLES = [ASG_WEB_NAME, ASG_WORKER_NAME]
   LOAD_BALANCED_ASGS = [ASG_WEB_NAME]
-  AVAILABILITY_ZONES = ['eu-west-1a', 'eu-west-1b', 'eu-west-1c']
+  AVAILABILITY_ZONES = ['eu-west-1a']
   KEYPAIR_NAME = 'eu_west_1'
   USERNAME = 'ec2-user'
   BUILD_SIZE = 't2.micro'
@@ -43,9 +45,16 @@ module AwsOps
     @@data_pipeline_client ||= Aws::DataPipeline::Client.new
   end
   
-  
   def sqs_client
     @@sqs_client ||= Aws::SQS::Client.new
+  end
+  
+  def environment
+    self.aws_ops_environment || fail("environment (production/staging) not set")
+  end
+  
+  def elb_name
+    ELB_NAME + '_' + environment
   end
   
 end
