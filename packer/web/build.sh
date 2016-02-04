@@ -5,7 +5,7 @@ set -u
 sleep 30
 source ~/.profile
 cd
-sudo mv files/unicorn_estiu /etc/init.d
+sudo mv files/unicorn_estiu /etc/init.d # controllable with: sudo service unicorn stop/start
 sudo chmod 755 /etc/init.d/unicorn_estiu
 sudo update-rc.d unicorn_estiu defaults
 sudo rm -f /etc/nginx/sites-enabled/default

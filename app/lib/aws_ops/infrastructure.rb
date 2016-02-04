@@ -13,9 +13,15 @@ module AwsOps
       })
     end
     
-    def self.delete_elbs # XXX elb_client.describe_load_balancers.select{|x| x.tags.environment == environment }
+    def self.delete_elbs
       `rm -f *.pem`
-      names = elb_client.describe_load_balancers.load_balancer_descriptions.map &:load_balancer_name
+      names =
+        elb_client.describe_load_balancers.load_balancer_descriptions.select{|elb|
+          elb_client.describe_tags(load_balancer_names: [elb.load_balancer_name]).tag_descriptions[0].tags.detect{|tag|
+            tag.key == 'environment' && tag.value == environment
+          }
+        }.
+        map(&:load_balancer_name)
       names.each do |lb|
         elb_client.delete_load_balancer load_balancer_name: lb
       end
@@ -126,8 +132,12 @@ module AwsOps
       
     end
     
-    def self.delete_launch_configurations # XXX per-env
-      names = auto_scaling_client.describe_launch_configurations.launch_configurations.map &:launch_configuration_name
+    def self.delete_launch_configurations
+      names = auto_scaling_client.describe_launch_configurations.launch_configurations.select{|lc|
+        auto_scaling_client.describe_tags.tags.detect{|tag|
+          tag.key == 'environment' && tag.value == environment
+        }
+      }.map &:launch_configuration_name
       names.each do |name|
         auto_scaling_client.delete_launch_configuration launch_configuration_name: name
       end
@@ -156,8 +166,10 @@ module AwsOps
       end
     end
     
-    def self.delete_asgs # XXX per env
-      names = auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.map &:auto_scaling_group_name
+    def self.delete_asgs
+      names = auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.select{|asg| asg.tags.detect{|tag|
+        tag.key == 'environment' && tag.value == environment
+      } }.map(&:auto_scaling_group_name)
       names.each do |name|
         auto_scaling_client.delete_auto_scaling_group auto_scaling_group_name: name, force_delete: true
       end
