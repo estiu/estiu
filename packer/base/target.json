@@ -13,13 +13,13 @@
     "ami_name": "base {{timestamp}}",
     "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
     "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-    "tags": {"type": "base", "commit": "{{user `commit_sha`}}"}
+    "tags": {"type": "base", "environment": "{{user `RAILS_ENV`}}", "commit": "{{user `commit_sha`}}"}
   }],
   "provisioners": [
     {"type": "shell",
      "inline": "echo \"{{user `REPO_DEPLOY_PUBLIC_KEY`}}\" > ~/.ssh/deployment_key.pub; echo \"{{user `REPO_DEPLOY_PRIVATE_KEY`}}\" > ~/.ssh/deployment_key; "},
     {"type": "shell", "script": "build.sh"},
     {"type": "shell",
-     "inline": "echo \"{{user `RAILS_ENV`}}\" > ~/.estiu/RAILS_ENV"}
+     "inline": "echo \"{{user `RAILS_ENV`}}\" > ~/estiu/RAILS_ENV"}
   ]
 }

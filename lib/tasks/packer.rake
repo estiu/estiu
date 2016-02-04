@@ -51,9 +51,9 @@ def build force_rebuild, images, environment
     fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
     
     all_good = if image == AwsOps::BASE_IMAGE_NAME
-      (rebuild_base ? rebuild(image, force_rebuild) : true)
+      (rebuild_base ? rebuild(image, force_rebuild, environment) : true)
     else
-      rebuild(image, force_rebuild)
+      rebuild(image, force_rebuild, environment)
     end
     
     all_good || fail # prevent additional builds
@@ -68,18 +68,14 @@ def build force_rebuild, images, environment
   
 end
 
-%i(production staging).each do |environment|
-    
-  task packer: :environment do
-    AwsOps.aws_ops_environment = environment
-    build(false, all_image_types, environment)
-  end
-
-end
-
 namespace :packer do
   
   %i(production staging).each do |environment|
+    
+    task environment => :environment do
+      AwsOps.aws_ops_environment = environment
+      build(false, all_image_types, environment)
+    end
     
     namespace environment do
           

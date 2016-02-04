@@ -12,7 +12,7 @@
     "ami_name": "worker {{timestamp}}",
     "ssh_keypair_name": "{{user `ssh_keypair_name`}}",
     "ssh_private_key_file": "{{user `ssh_private_key_file`}}",
-    "tags": {"type": "worker", "commit": "{{user `commit_sha`}}"}
+    "tags": {"type": "worker", "environment": "{{user `RAILS_ENV`}}", "commit": "{{user `commit_sha`}}"}
   }],
   "provisioners": [
     {"type": "file", "source": "files", "destination": "~/"},
