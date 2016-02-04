@@ -1,10 +1,14 @@
 require_relative '../../app/lib/aws_ops.rb'
 
-def rebuild role, force_rebuild
+def all_image_types
+  AwsOps::IMAGE_TYPES
+end
+
+def rebuild role, force_rebuild, rails_environment
   puts "Building image for role #{role}..."
   base_ami = (force_rebuild && role.to_s == AwsOps::BASE_IMAGE_NAME) ?
-    AwsOps::Infrastructure.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
-    AwsOps::Infrastructure.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
+    AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
+    AwsOps::Amis.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
   repo_source = ci? ? "~/clone" : "~/estiu"
   return system %| \
     set -e \;
@@ -24,18 +28,19 @@ def rebuild role, force_rebuild
       -var "user=#{AwsOps::USERNAME}" \
       -var "region=#{AwsOps::REGION}" \
       -var "commit_sha=#{`git rev-parse HEAD`.split("\n")[0]}" \
+      -var "RAILS_ENV=#{rails_environment}" \
       target.json ;\
     cd - \
   |
 end
 
-def build force_rebuild=false, images=AwsOps::IMAGE_TYPES
+def build force_rebuild, images, environment
   
   build_commit_count = 1 # sometimes one pushes more than one commit, only the last one gets built
   
   command = "git diff --name-only HEAD~#{build_commit_count}..HEAD"
   files = ['packer/base', 'lib/tasks/packer.rake', 'Gemfile*']
-  no_base_built = AwsOps::Infrastructure.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Infrastructure.clean_ubuntu_ami(AwsOps::BUILD_SIZE)
+  no_base_built = AwsOps::Amis.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE)
   
   rebuild_base = force_rebuild || files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
   
@@ -56,44 +61,53 @@ def build force_rebuild=false, images=AwsOps::IMAGE_TYPES
   end
   
   if all_good
-    AwsOps::Infrastructure.delete_amis
+    AwsOps::Amis.delete_amis
   else
     exit 1
   end
   
 end
 
-task packer: :environment do
-  build
+%i(production staging).each do |environment|
+    
+  task packer: :environment do
+    AwsOps.aws_ops_environment = environment
+    build(false, all_image_types, environment)
+  end
+
 end
 
 namespace :packer do
   
-  task rebuild: :environment do
-  
-    build :force_rebuild
+  %i(production staging).each do |environment|
     
-  end
-  
-  (AwsOps::IMAGE_TYPES - [AwsOps::BASE_IMAGE_NAME]).each do |image|
-    
-    task("rebuild_#{image}".to_sym => :environment) do
+    namespace environment do
+          
+      task rebuild: :environment do
+        AwsOps.aws_ops_environment = environment
+        build :force_rebuild, all_image_types, environment
+      end
       
-      build false, [AwsOps::BASE_IMAGE_NAME, image]
+      (AwsOps::IMAGE_TYPES - [AwsOps::BASE_IMAGE_NAME]).each do |image|
+        
+        task("rebuild_#{image}".to_sym => :environment) do
+          AwsOps.aws_ops_environment = environment
+          build false, [AwsOps::BASE_IMAGE_NAME, image], environment
+        end
+        
+      end
+      
+      task clear: :environment do
+        AwsOps.aws_ops_environment = environment
+        AwsOps::Amis.delete_amis
+      end
+      
+      task clear_all: :environment do
+        AwsOps.aws_ops_environment = environment
+        AwsOps::Amis.delete_amis :all
+      end
       
     end
-    
-  end
-  
-  task clear: :environment do
-    
-    AwsOps::Infrastructure.delete_amis
-    
-  end
-  
-  task clear_all: :environment do
-    
-    AwsOps::Infrastructure.delete_amis :all
     
   end
   

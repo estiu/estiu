@@ -130,4 +130,16 @@ module SpecHelpers
     page.driver.instance_variable_get('@browser').find_elements(class: 'file-uploader').map{|i| i.send_keys path }
   end
   
+  def set_aws_ops_test_env
+    
+    before {
+      AwsOps.aws_ops_environment = 'test'
+    }
+    
+    after {
+      AwsOps.aws_ops_environment = nil
+    }
+    
+  end
+  
 end

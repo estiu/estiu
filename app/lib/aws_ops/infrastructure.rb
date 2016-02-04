@@ -126,62 +126,6 @@ module AwsOps
       
     end
     
-    def self.clean_ubuntu_ami size
-      # I think all these sizes are fine with the same AMI, but larger need a different ubuntu image.
-      ami1 = 'ami-47a23a30'
-      Hash.new { raise }.merge({
-        't2.micro' => ami1,
-        't2.small' => ami1,
-        't2.medium' => ami1
-      })[size]
-    end
-    
-    def self.latest_ami_object role, size
-      latest = ec2_client.describe_images(owners: ['self']).images.
-        select{|image|
-          image.tags.detect{|tag|
-            tag.key == 'type' && tag.value == role.to_s
-          }
-        }.sort {|a, b|
-          DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
-        }.
-        last
-      if latest
-        latest
-      else
-        if role.to_s == BASE_IMAGE_NAME
-          Struct.new(:image_id).new(clean_ubuntu_ami size)
-        else
-          latest_ami BASE_IMAGE_NAME, size
-        end
-      end
-
-    end
-    
-    def self.latest_ami role=BASE_IMAGE_NAME, size
-      latest_ami_object(role, size).image_id
-    end
-    
-    def self.delete_amis newer_too=false
-      IMAGE_TYPES.each do |role|
-        images = ec2_client.describe_images(owners: ['self']).images.
-        select{|image|
-          image.tags.detect{|tag|
-            tag.key == 'type' && tag.value == role.to_s
-          }
-        }.sort {|a, b|
-          DateTime.iso8601(a.creation_date) <=> DateTime.iso8601(b.creation_date)
-        }
-        target = newer_too ? images : images[0...(images.size - 1)]
-        target.each do |image|
-          puts "Deregistering #{image.image_id}"
-          ec2_client.deregister_image({image_id: image.image_id})
-          ec2_client.delete_snapshot({snapshot_id: image.block_device_mappings.detect(&:ebs).ebs.snapshot_id})
-        end
-      end
-    end
-    
-    
     def self.delete_launch_configurations # XXX per-env
       names = auto_scaling_client.describe_launch_configurations.launch_configurations.map &:launch_configuration_name
       names.each do |name|
@@ -198,12 +142,12 @@ module AwsOps
     end
     
     # LCs don't support tags.
-    # anyway, LCs don't support updating the AMI id, so the current setup is unfit for production.z
+    # anyway, LCs don't support updating the AMI id, so the current setup is unfit for production.
     def self.create_launch_configurations roles=ASG_ROLES
       roles.each do |role|
         auto_scaling_client.create_launch_configuration({
           launch_configuration_name: role,
-          image_id: latest_ami(role, PRODUCTION_SIZE),
+          image_id: ::AwsOps::Amis.latest_ami(role, PRODUCTION_SIZE),
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
@@ -222,7 +166,7 @@ module AwsOps
     
     def self.create_asgs roles=ASG_ROLES
       roles.each do |asg_name|
-        ami = latest_ami_object asg_name, AwsOps::PRODUCTION_SIZE
+        ami = ::AwsOps::Amis.latest_ami_object asg_name, AwsOps::PRODUCTION_SIZE
         commit = ami.tags.detect{|t|t.key == 'commit'}.try(&:value)
         opts = {
           auto_scaling_group_name: "#{asg_name} #{SecureRandom.hex 6}",

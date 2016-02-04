@@ -56,7 +56,7 @@ class AwsOps::Pipeline
           fields: (
             [
               {key: 'type', string_value: 'Ec2Resource'},
-              {key: 'imageId', string_value: AwsOps::Infrastructure.latest_ami(AwsOps::PIPELINE_IMAGE_NAME, AwsOps::PRODUCTION_SIZE)},
+              {key: 'imageId', string_value: AwsOps::Amis.latest_ami(AwsOps::PIPELINE_IMAGE_NAME, AwsOps::PRODUCTION_SIZE)},
               {key: 'instanceType', string_value: AwsOps::PRODUCTION_SIZE},
               {key: 'keyPair', string_value: AwsOps::KEYPAIR_NAME},
               {key: 'terminateAfter', string_value: '1 hour'},

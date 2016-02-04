@@ -98,13 +98,15 @@ describe Campaign do
     let(:pipeline_id){ SecureRandom.hex }
     
     before {
-      expect(AwsOps::Infrastructure).to receive(:latest_ami).and_return(SecureRandom.hex)
+      expect(AwsOps::Amis).to receive(:latest_ami).and_return(SecureRandom.hex)
       the_double = double(
         put_pipeline_definition: double(errored: false),
         activate_pipeline: true,
         create_pipeline: double(pipeline_id: pipeline_id))
       expect(AwsOps::Pipeline).to receive(:data_pipeline_client).at_least(3).times.and_return(the_double)
     }
+    
+    set_aws_ops_test_env
     
     def the_action
       subject.save!

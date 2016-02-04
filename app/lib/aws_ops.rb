@@ -50,7 +50,8 @@ module AwsOps
   end
   
   def environment
-    self.aws_ops_environment || fail("environment (production/staging) not set")
+    fail("environment (production/staging) not set") unless self.aws_ops_environment
+    self.aws_ops_environment.to_s
   end
   
   def elb_name
