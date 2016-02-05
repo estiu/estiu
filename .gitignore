@@ -29,3 +29,5 @@ shared/pids/unicorn.pid
 vendor/bundle
 coverage
 public/assets
+.aws_credentials.production
+.aws_credentials.staging
