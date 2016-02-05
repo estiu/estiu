@@ -2,7 +2,7 @@ class AwsOps::SQS
   
   extend AwsOps
   
-  def self.drain_all_queues
+  def self.drain_all_queues!
     sqs_client.list_queues(queue_name_prefix: environment).queue_urls.each do |url|
       begin
         sqs_client.purge_queue queue_url: url

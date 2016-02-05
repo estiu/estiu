@@ -49,6 +49,10 @@ module AwsOps
     @@sqs_client ||= Aws::SQS::Client.new
   end
   
+  def r53_client
+    @@r53_client ||= Aws::Route53::Client.new
+  end
+  
   def environment
     fail("environment (production/staging) not set") unless self.aws_ops_environment
     self.aws_ops_environment.to_s

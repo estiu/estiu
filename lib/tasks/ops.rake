@@ -1,4 +1,5 @@
 def reset_state environment, silent=false
+  puts "Resetting state..."
   AwsOps::Ec2.wait_until_all_instances_terminated
   AwsOps::SQS.drain_all_queues!
   return # `command` fails for staging atm

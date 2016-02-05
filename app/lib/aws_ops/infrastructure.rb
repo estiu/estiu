@@ -67,6 +67,8 @@ module AwsOps
     
     def self.create_elb https=false
       
+      dns_name = nil
+      
       listeners = [
         {
           protocol: "HTTP",
@@ -95,7 +97,7 @@ module AwsOps
       
       begin
         
-        elb_client.create_load_balancer({
+        dns_name = elb_client.create_load_balancer({
           load_balancer_name: elb_name,
           listeners: listeners,
           security_groups: _security_groups,
@@ -106,7 +108,7 @@ module AwsOps
               value: environment
             }
           ]
-        })
+        }).dns_name
           
       rescue Aws::ElasticLoadBalancing::Errors::CertificateNotFound => e
         
@@ -128,7 +130,28 @@ module AwsOps
         }
       })
       
-      # XXX upate cloudflare to cname the load balancer's subdomain, on a per-env basis
+      if environment == 'staging'
+        
+        r53_client.change_resource_record_sets(
+          hosted_zone_id: 'Z2Q23XVC6W99R2', # estiu.events
+          change_batch: {
+            changes: [
+              {
+                action: 'UPSERT',
+                resource_record_set: {
+                  name: 'staging.estiu.events.',
+                  type: 'CNAME',
+                  ttl: 3600,
+                  resource_records: [
+                    {value: dns_name}
+                  ]
+                }
+              }
+            ]
+          }
+        )
+        
+      end
       
     end
     
@@ -204,7 +227,7 @@ module AwsOps
     
     def self.create!
       begin
-        ensure_queues_created
+        AwsOps::SQS.ensure_queues_created
         create_elb
         create_launch_configurations
         create_asgs
