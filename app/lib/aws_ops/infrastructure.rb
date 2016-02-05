@@ -204,6 +204,7 @@ module AwsOps
     
     def self.create!
       begin
+        ensure_queues_created
         create_elb
         create_launch_configurations
         create_asgs

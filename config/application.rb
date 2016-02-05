@@ -47,7 +47,21 @@ module Estiu
     def self.protocol
       'http'
     end
-
+    
+    def self.job_names environments=['staging', 'production']
+      
+      jobs_dir = Rails.root.join('app', 'jobs')
+      
+      Dir.glob(jobs_dir.join '**/*.rb').
+        each{|a| require_relative a }.
+        map{|a| a.gsub(jobs_dir.to_s + '/', '').gsub('.rb', '') }.
+        reject{|a| a == 'application_job' }.
+        map{|a|
+          environments.map{|e| ApplicationJob.format_queue_name(a, e) }
+        }.
+        flatten
+    end
+    
     config.active_record.raise_in_transactional_callbacks = true
     config.generators do |g|
       g.test_framework nil
