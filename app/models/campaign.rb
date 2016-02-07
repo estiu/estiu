@@ -4,7 +4,7 @@ class Campaign < ActiveRecord::Base
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
   BASIC_ATTRS = %i(name venue_id) + DATE_ATTRS
-  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :generate_invite_link, :visibility, :starts_immediately]
+  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :generate_invite_link, :visibility, :starts_immediately, :time_zone]
   PUBLIC_VISIBILITY = 'public'
   APP_VISIBILITY = 'app'
   INVITE_VISIBILITY = 'invite'
@@ -56,6 +56,7 @@ class Campaign < ActiveRecord::Base
       record.visibility == PUBLIC_VISIBILITY
     }
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
+  validates :time_zone, presence: true, inclusion: Estiu::Timezones::ALL
   
   validate :valid_date_fields, on: :create
   validate :minimum_pledge_according_to_venue, on: :create
@@ -127,7 +128,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def active_time?
-    Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(Time.zone.now) # xxx now
+    Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(DateTime.current)
   end
   
   def active?
@@ -143,7 +144,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def not_open_yet?
-    now = Time.zone.now # xxx now
+    now = DateTime.current
     (now..starts_at_criterion).cover?(now)
   end
   
@@ -172,10 +173,10 @@ class Campaign < ActiveRecord::Base
       end
     end
     if (dev_or_test? ? !skip_past_date_validations : true)
-      if starts_at && starts_at.to_i - Time.zone.now.to_i < -60 # xxx now
+      if starts_at && starts_at.to_i - DateTime.current.to_i < -60
         errors[:starts_at] << I18n.t('past_date')
       end
-      if ends_at && ends_at.to_i - Time.zone.now.to_i < -60 # xxx now
+      if ends_at && ends_at.to_i - DateTime.current.to_i < -60
         errors[:ends_at] << I18n.t('past_date')
       end
     end

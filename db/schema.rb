@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.boolean  "generate_invite_link",       null: false
     t.boolean  "starts_immediately",         null: false
     t.string   "invite_token"
+    t.string   "time_zone",                  null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "event_promoter_id",          null: false

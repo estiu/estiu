@@ -30,6 +30,7 @@ describe "Campaign creation", js: true do
     find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
     find('#campaign_minimum_pledge_cents_facade').send_keys("#{campaign.minimum_pledge.format(symbol: false)}")
     find('#campaign_starts_immediately').find("option[value='false']").select_option
+    find('#campaign_time_zone').find("option[value='#{campaign.time_zone}']").select_option
     find('#campaign_venue_id').find("option[value='#{campaign.venue.id}']").select_option
     fill_starts_at
     fill_ends_at
@@ -150,10 +151,33 @@ describe "Campaign creation", js: true do
       it 'persists across failed submissions' do
         
         find('#campaign_starts_immediately').find("option[value='false']").select_option
+        find('#campaign_time_zone').find("option[value='#{campaign.time_zone}']").select_option
         minute_selector.find('option:last-child').select_option
         value = minute_selector.value
         the_action
         expect(minute_selector.value).to eq value
+        
+      end
+      
+    end
+    
+    describe 'the time zone selector' do
+      
+      context "when I don't select it" do
+        
+        before { expect(find('#campaign_time_zone').value).to be_blank }
+        
+        context "and I submit" do
+          
+          before { the_action }
+          
+          it "the page doesn't throw any error" do
+            
+            page_ok 200, :feature
+            
+          end
+          
+        end
         
       end
       

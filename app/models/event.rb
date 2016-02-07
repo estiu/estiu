@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
   
-  # note on starts_at: It must be timezone-unaware. (Unpredicatble) timezone-related changes should never affect the time the user specified for a given event.
+  # note on starts_at: It must be timezone-unaware. (Unpredicatble) timezone-related changes should never affect the time the user did specify, for a given event.
   
   has_and_belongs_to_many :ra_artists
   has_and_belongs_to_many :attendees, join_table: :tickets
@@ -60,7 +60,7 @@ class Event < ActiveRecord::Base
     venue.timezone_object.local(starts_at_date.year, starts_at_date.month, starts_at_date.day, starts_at_hours, starts_at_minutes)
   end
   
-  def starts_at_for_user # XXX localize according to user's preferred datetime format
+  def starts_at_for_user # XXX localize date format according to user's preference
     "#{starts_at_date} #{starts_at_hours}:#{starts_at_minutes.to_s.rjust(2, '0')}"
   end
   

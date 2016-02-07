@@ -16,6 +16,7 @@ class CreateCampaigns < ActiveRecord::Migration
       t.boolean :generate_invite_link, null: false
       t.boolean :starts_immediately, null: false
       t.string :invite_token
+      t.string :time_zone, null: false
       t.timestamps null: false
     end
   end
