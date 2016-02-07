@@ -1,5 +1,7 @@
 class Event < ActiveRecord::Base
   
+  # note on starts_at: It must be timezone-unaware. (Unpredicatble) timezone-related changes should never affect the time the user specified for a given event.
+  
   has_and_belongs_to_many :ra_artists
   has_and_belongs_to_many :attendees, join_table: :tickets
   belongs_to :campaign
@@ -17,14 +19,16 @@ class Event < ActiveRecord::Base
   after_commit :on_approval, on: :update
   after_commit :on_rejection, on: :update
   
-  # name, starts_at, venue_id are already present in Campaign, but these represent the *definitive* values.
-  CREATE_ATTRS = %i(name starts_at duration_hours duration_minutes venue_id)
+  # name, starts_at*, venue_id are already present in Campaign, but these represent the *definitive* values.
+  CREATE_ATTRS = %i(name starts_at_date starts_at_hours starts_at_minutes duration_hours duration_minutes venue_id)
   MIN_DURATION = 3600
   
   CREATE_ATTRS.each do |attr|
     validates attr, presence: true
   end
   
+  validates_numericality_of :starts_at_hours, greater_than_or_equal_to: 0, less_than: 24
+  validates_numericality_of :starts_at_minutes, greater_than_or_equal_to: 0, less_than: 60
   validates_numericality_of :duration, greater_than_or_equal_to: MIN_DURATION
   validates :submitted_at, presence: true, if: :approved_at
   validates :submitted_at, presence: true, if: :rejected_at
@@ -47,7 +51,17 @@ class Event < ActiveRecord::Base
   end
   
   def self.not_celebrated
-    where("events.starts_at > ?", DateTime.now)
+    all.select{|event|
+      event.starts_at_for_calculations > DateTime.current
+    }
+  end
+  
+  def starts_at_for_calculations
+    venue.timezone_object.local(starts_at_date.year, starts_at_date.month, starts_at_date.day, starts_at_hours, starts_at_minutes)
+  end
+  
+  def starts_at_for_user # XXX localize according to user's preferred datetime format
+    "#{starts_at_date} #{starts_at_hours}:#{starts_at_minutes.to_s.rjust(2, '0')}"
   end
   
   def duration
@@ -115,9 +129,9 @@ class Event < ActiveRecord::Base
   end
   
   def starts_at_is_future
-    if starts_at && starts_at.to_i - Time.zone.now.to_i < -60
+    if starts_at_for_calculations && starts_at_for_calculations.to_i - DateTime.current.to_i < -60
       unless skip_past_date_validations
-        errors[:starts_at] << I18n.t('past_date')
+        errors[:starts_at_date] << I18n.t('past_date')
       end
     end
   end

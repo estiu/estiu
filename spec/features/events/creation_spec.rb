@@ -15,9 +15,11 @@ describe 'Event creation', js: true do
     def fill_most
       find('#event_name').set SecureRandom.hex
       find('#event_venue_id').all("option")[1].select_option
-      find('#event_starts_at').click
+      find('#event_starts_at_date').click
       next_month
       any_day
+      options = find('#event_starts_at_hours').all("option")
+      options[(1..(options.size - 1)).to_a.sample].select_option
       options = find('#event_duration_hours').all("option")
       options[(1..(options.size - 1)).to_a.sample].select_option
       find('#event_ra_artists_attributes_0_artist_path').set ra1

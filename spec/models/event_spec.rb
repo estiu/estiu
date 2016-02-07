@@ -91,4 +91,14 @@ describe Event do
     
   end
   
+  describe 'starts_at_date' do
+    
+    subject { FG.create(:event).starts_at_date }
+    
+    it "is a Date object" do
+      expect(subject.class).to eq(Date)
+    end
+    
+  end
+  
 end

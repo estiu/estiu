@@ -1,7 +1,7 @@
 Rails.application.configure do
   config.cache_classes = true
   config.eager_load = true
-  config.serve_static_files = false
+  config.serve_static_files = true # must be true, for capybara to work
   config.static_cache_control = 'public, max-age=3600'
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false

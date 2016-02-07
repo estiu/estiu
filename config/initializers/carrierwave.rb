@@ -1,10 +1,11 @@
 CarrierWave.configure do |config|
   
+  if Rails.env.development? || Rails.env.test?
+    AwsOps.aws_ops_environment = 'staging'
+  end
+  
   credential_options = DeveloperMachine.running_in_developer_machine? ?
-    {
-      aws_access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-      aws_secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
-    } :
+    AwsOps::Infrastructure.credentials.except(:access_key_id, :secret_access_key) :
     { use_iam_profile: true }
     
   config.fog_credentials = {

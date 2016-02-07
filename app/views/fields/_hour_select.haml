@@ -1,1 +1,1 @@
-= form.select key, ((min_seconds/3600)..12).to_a, html_opts.merge(include_blank: true), html_opts
+= form.select key, ((min_seconds/3600)..max_hours).to_a, html_opts.merge(include_blank: true), html_opts

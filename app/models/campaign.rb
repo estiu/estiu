@@ -127,7 +127,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def active_time?
-    Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(Time.zone.now)
+    Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(Time.zone.now) # xxx now
   end
   
   def active?
@@ -143,7 +143,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def not_open_yet?
-    now = Time.zone.now
+    now = Time.zone.now # xxx now
     (now..starts_at_criterion).cover?(now)
   end
   
@@ -172,10 +172,10 @@ class Campaign < ActiveRecord::Base
       end
     end
     if (dev_or_test? ? !skip_past_date_validations : true)
-      if starts_at && starts_at.to_i - Time.zone.now.to_i < -60
+      if starts_at && starts_at.to_i - Time.zone.now.to_i < -60 # xxx now
         errors[:starts_at] << I18n.t('past_date')
       end
-      if ends_at && ends_at.to_i - Time.zone.now.to_i < -60
+      if ends_at && ends_at.to_i - Time.zone.now.to_i < -60 # xxx now
         errors[:ends_at] << I18n.t('past_date')
       end
     end
@@ -204,7 +204,7 @@ class Campaign < ActiveRecord::Base
     fail if ActiveRecord::Base.connection.open_transactions.zero?
 
     if fulfilled? && !fulfilled_at
-      self.fulfilled_at = Time.now
+      self.fulfilled_at = DateTime.now
       self.save
     end
     

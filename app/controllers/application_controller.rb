@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
   def process_datetime_params hash, attrs
     if hash
       attrs.map do |attr|
-        the_date = hash[attr].present? ? Date.strptime(hash[attr], date_format) : Date.today
+        the_date = hash[attr].present? ? Date.strptime(hash[attr], date_format) : Date.today # XXX strptime, today. use user timezone here
         hash["#{attr}_not_given"] = hash[attr].blank?
         hash["#{attr}(1i)"] = the_date.year.to_s
         hash["#{attr}(2i)"] = the_date.month.to_s
@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
           if user_given # set the attr_accessor fields, as defined in ResettableDates
             hash["#{attr}_#{n}i"] = user_given
           else # set the Rails time fields (note the extra parenses in "#{attr}(#{n}i)")
-            hash["#{attr}(#{n}i)"] = DateTime.now.send({4 => :hour, 5 => :minute}[n]).to_s
+            hash["#{attr}(#{n}i)"] = DateTime.now.send({4 => :hour, 5 => :minute}[n]).to_s # XXX use user timezone here
           end
         end
       end

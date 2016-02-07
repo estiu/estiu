@@ -128,7 +128,9 @@ ActiveRecord::Schema.define(version: 20151123190146) do
 
   create_table "events", force: :cascade do |t|
     t.string   "name",                                   null: false
-    t.datetime "starts_at",                              null: false
+    t.date     "starts_at_date",                         null: false
+    t.integer  "starts_at_hours",                        null: false
+    t.integer  "starts_at_minutes",          default: 0, null: false
     t.integer  "duration_hours",                         null: false
     t.integer  "duration_minutes",           default: 0, null: false
     t.boolean  "skip_past_date_validations"

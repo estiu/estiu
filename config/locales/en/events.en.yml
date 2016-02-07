@@ -59,6 +59,7 @@ en:
       venue_id: 'Venue'
       name: 'Event name'
       artists: Artists
+      start_date_title: 'The event will start at:'
       duration_title: 'The event is going to last:'
       duration_hours: 'hours'
       duration_minutes: 'minutes'
