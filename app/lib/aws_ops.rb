@@ -29,7 +29,15 @@ module AwsOps
   end
   
   def credentials
-    Dotenv::Environment.new(".aws_credentials.#{environment}").to_h.symbolize_keys
+    if ENV['CODESHIP'].present?
+      Hash[
+        %w(AWS_ACCESS_KEY_ID AWS_ACCESS_KEY AWS_SECRET_ACCESS_KEY AWS_SECRET_KEY).map{|k|
+          [k, ENV[k]]
+        }
+      ]
+    else
+      Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
+    end.symbolize_keys
   end
   
   def ec2_client

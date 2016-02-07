@@ -120,7 +120,7 @@ class EventsController < ApplicationController
     end
     
     if @event.approved_at
-      if DateTime.now < @event.starts_at
+      if DateTime.current < @event.starts_at_for_calculations
         if current_admin
           flash.now[:success] = t('events.show.approved_will_take_place_admin')
         elsif current_event_promoter

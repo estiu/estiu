@@ -8,7 +8,7 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
     fb_attrs = {
       facebook_user_id: uid,
       facebook_access_token: auth_hash[:credentials][:token],
-      facebook_access_token_expires: Time.at(auth_hash[:credentials][:expires_at].to_i).to_datetime,
+      facebook_access_token_expires: Time.zone.at(auth_hash[:credentials][:expires_at].to_i).to_datetime,
     }
     if current_user
       current_user.update_attributes!(fb_attrs)

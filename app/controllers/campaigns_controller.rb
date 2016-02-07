@@ -62,7 +62,11 @@ class CampaignsController < ApplicationController
   def campaign_attrs
     authorize(Campaign.new) # ugly extra call to .authorize for keeping the tests happy
     v = params.permit(campaign: Campaign::CREATE_ATTRS)[:campaign]
-    process_datetime_params v, Campaign::DATE_ATTRS
+    if v[:time_zone].present?
+      process_datetime_params v, Campaign::DATE_ATTRS, v[:time_zone]
+    else
+      v.except(:"starts_at(4i)", :"starts_at(5i)", :"ends_at(4i)", :"ends_at(5i)")
+    end
   end
   
   def authorize_campaign

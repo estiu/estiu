@@ -20,4 +20,8 @@ class Venue < ActiveRecord::Base
     name
   end
   
+  def timezone_object
+    Time.zone # XXX ActiveSupport::TimeZone.find city.timezone
+  end
+  
 end

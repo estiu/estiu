@@ -22,10 +22,10 @@ class ApplicationController < ActionController::Base
     Time::DATE_FORMATS[:default]
   end
   
-  def process_datetime_params hash, attrs
+  def process_datetime_params hash, attrs, time_zone
     if hash
       attrs.map do |attr|
-        the_date = hash[attr].present? ? Date.strptime(hash[attr], date_format) : Date.today
+        the_date = hash[attr].present? ? Date.strptime(hash[attr], date_format) : DateTime.current.to_date # XXX Date.strptime -> Estiu::Timezones::ALL_TIMEZONE_OBJECTS[time_zone].strptime. Depends on Rails 5
         hash["#{attr}_not_given"] = hash[attr].blank?
         hash["#{attr}(1i)"] = the_date.year.to_s
         hash["#{attr}(2i)"] = the_date.month.to_s
@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
           if user_given # set the attr_accessor fields, as defined in ResettableDates
             hash["#{attr}_#{n}i"] = user_given
           else # set the Rails time fields (note the extra parenses in "#{attr}(#{n}i)")
-            hash["#{attr}(#{n}i)"] = DateTime.now.send({4 => :hour, 5 => :minute}[n]).to_s
+            hash["#{attr}(#{n}i)"] = DateTime.current.in_time_zone(time_zone).send({4 => :hour, 5 => :minute}[n]).to_s
           end
         end
       end

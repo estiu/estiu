@@ -13,6 +13,7 @@ FG.define do
     visibility Campaign::PUBLIC_VISIBILITY
     generate_invite_link false
     starts_immediately false
+    time_zone { Estiu::Timezones::ALL.sample }
     
     after(:build) do |rec, eva|
       rec.minimum_pledge_cents = [(rec.goal_cents / rec.venue.capacity).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max

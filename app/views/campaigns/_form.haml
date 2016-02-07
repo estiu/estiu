@@ -38,6 +38,9 @@
           .col-xs-7
             = field.(:ends_at, as: :datetime)
         .row
+          .col-xs-12
+            = field.(:time_zone, as: :time_zone)
+        .row
           .col-xs-6
             = field.(:visibility, as: :select, values: Campaign.visibility_select, popover: {html: popover_html('.visibility')})
           .col-xs-6

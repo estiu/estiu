@@ -8,7 +8,7 @@ describe EventsController do
         FG.build :ra_artist
       end
       v = {event: {}}
-      Event::CREATE_ATTRS.each do |attr|
+      (Event::CREATE_ATTRS - [:starts_at]).each do |attr|
         v[:event][attr] = sample_event.send attr
       end
       v[:event][:venue_id] = campaign.venue.id

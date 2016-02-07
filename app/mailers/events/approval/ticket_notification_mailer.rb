@@ -4,7 +4,7 @@ class Events::Approval::TicketNotificationMailer < ApplicationMailer
     @event = event = ticket.event
     @campaign = event.campaign
     @name = event.name
-    @date = event.starts_at
+    @date = event.starts_at_for_user
     mail(to: ticket.attendee.user.email, subject: t("mailers.events.approval.ticket_notification_mailer.perform.subject", id: event.id, name: @name))
   end
   

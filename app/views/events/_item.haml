@@ -12,7 +12,7 @@
   = event.venue
 %p
   %strong= t('.starts_at') + ':'
-  = l event.starts_at, format: :long
+  = event.starts_at_for_user
 %p
   %strong= t('.duration') + ':'
   = distance_of_time_in_words(Time.now, event.duration.seconds.from_now)
