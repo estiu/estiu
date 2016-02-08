@@ -1,10 +1,17 @@
 en:
   pages:
+    attendees:
+      faq:
+        sounds_good: "Sounds good?"
+        sign_up: Sign up
     event_promoters:
       title: Promote and fund the perfect event
       encouragement: "Crowdfund your event, securing 100% attendance."
       faq_cta: Read the event promoter FAQ
       sign_up_cta: Sign up as an event promoter
+      faq:
+        sounds_good: "Sounds good?"
+        sign_up: "Sign up as an event promoter"
     hero:
       the_perfect_event: "The perfect event,"
       just_for_you: Just for you

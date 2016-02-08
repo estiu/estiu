@@ -1,58 +1,8 @@
 .markdown{class: centered_wider}
-  :markdown
-    ## FAQ
-    
-    ### What is Estiu?
-    
-    Estiu is a **platform** which allows event promoters to organise exclusive electronic music events.
-    
-    We facilitate them collecting money, finding awesome venues, the perfect soundsystem, and so on.
-    
-    Our primary goal is that you, the listener, can re-discover the joy of a good electronic party.
-    
-    ### Who organises parties through Estiu?
-    
-    Professional event promoters, record labels, and established artists are welcome to use Estiu to organise parties through our platform.
-    
-    Those campaigns are **reviewed and approved** by Estiu first - we don't like noise!
-    
-    Estiu also occasionally organises its own parties.
-    
-    ### What is a Campaign?
-    
-    What an event promoter decides to organize a party, he launches a **campaign**, for collecting the needed money for the venue, soundsystem, DJs, etc.
-    
-    If the campaign doesn't reach its goal, the even't won't be celebrated, and anyone who contributed will get his money back.
-    
-    We offer two choices of refunds: **payment refund** (you simply get your money back), or **credit refund** (we give you an equivalent amount in credits, which you can use for new campaigns).
-    
-    We recommend you to use the credit refund type. That way you only pay once, and can re-use your money until a campaign is successful!
-    
-    You can always exchange credits for a money back transfer, so **you never lose your money**.
-    
-    ### Why participate in campaigns? I can just go to a club.
-    
-    As opposed to clubs which just want to sell as much tickets/drinks as possible, we put the **musical experience first**:
-    
-    * We only work with **Funktion One** (or comparable) soundystems. We want you to float in bass!
-    * We target **small-to-medium crowds**, so you can enjoy more personal space and peace of mind.
-    * We only select DJs and live performers who play **enjoyable music**. All subgenres are welcome - pointless party music is not.
-    * We give the option to organise **invite-only** events, so you can enjoy a better vibe.
-    
-    ### What if the event promoter misuses the collected money?
-    
-    That is simply impossible, because we never give the collected money to the promoter. Instead, he facilitates to us the **invoices** needed for the event (venue, soundsystem, personnel...), and we pay those invoices directly to each provider.
-    
-    Furthermore, we only pay invoices to **trusted providers**: we work closely with venues, professional audio companies, etc to prevent any possible fraud.
-    
-    ### A campaign I contributed to achieved its goal. Now what?
-    
-    The event promoter will create an **event** derived from the successful campaign, with a definitive place, date and lineup, which we will review for approval or rejection.
-    
-    After approval, campaign backers get one ticket for the event. **Events are always exclusive for campaign backers!**
-    
-    In case the event cannot be celebrated, you get a refund.
-    
-    In case you cannot attend the event, you can get a refund if someone else buys the ticket through our **resale queue**.
-    
-    Please note that **personally reselling tickets is forbidden**, and in fact tickets are only valid for their legitimate owners.
+  = render_per_locale_partial 'pages/attendees/faq'
+  - unless current_user
+    %hr
+    .center.bottom20
+      %p.small
+        = t '.sounds_good'
+      = link_to t('.sign_up'), new_registration_path(:user), class: 'btn btn-primary'

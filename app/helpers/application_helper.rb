@@ -62,6 +62,15 @@ module ApplicationHelper
     "#{record} (#{url_for(record)})"
   end
   
+  def render_per_locale_partial base_path
+    candidate = "/#{base_path}/#{I18n.locale}"
+    if lookup_context.find_all(candidate, [], true).any?
+      render candidate
+    else
+      render "/#{base_path}/en" # XXX use fallback instead. e.g. :es is the fallback of :cat.
+    end
+  end
+  
   private
   
   def form_field form, key, locals={}
