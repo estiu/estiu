@@ -19,17 +19,17 @@
   - else
     %hr 
     - the_link = link_to t(@campaign.closed? ? '.sign_up_for_closed' : '.sign_up'), attendees_sign_up_path, class: 'btn btn-success', id: 'sign-up-from-campaign'
-    - if @campaign.closed?
-      .alert.alert-info.p10
-        %small
+    .alert.alert-warning.center
+      .small
+        - if @campaign.closed?
           - unless @campaign.unfulfilled_at
             %p= t '.closed_sign_up'
-          %p
-            %strong
-              =t '.closed_sign_up_2'
-          = the_link
-          = facebook_connect
-    - else 
+          %strong
+            =t '.closed_sign_up_2'
+        - else
+          %strong
+            = t '.not_signed_in'
+    .center
       = the_link
       = facebook_connect
   

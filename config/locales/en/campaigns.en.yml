@@ -60,6 +60,7 @@ en:
       closed_sign_up_2: "Sign up for attending newer events!"
       sign_up: "Sign up for joining this event"
       sign_up_for_closed: "Sign up"
+      not_signed_in: "You aren't signed in. Login or signup for attending this event!"
     must_create_event:
       your_event_fulfilled: Your event has reached its goal, and we are ready to transfer its funds.
       must_create_event: "First, you must %{link}."
