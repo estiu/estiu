@@ -62,16 +62,20 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.integer  "goal_cents"
     t.integer  "minimum_pledge_cents"
     t.datetime "starts_at"
-    t.datetime "ends_at",                    null: false
+    t.datetime "ends_at"
+    t.datetime "approved_at"
+    t.datetime "datetime"
+    t.datetime "rejected_at"
+    t.datetime "submitted_at"
     t.datetime "event_rejected_at"
     t.datetime "fulfilled_at"
     t.datetime "unfulfilled_at"
     t.boolean  "skip_past_date_validations"
-    t.string   "visibility",                 null: false
-    t.boolean  "generate_invite_link",       null: false
-    t.boolean  "starts_immediately",         null: false
+    t.string   "visibility"
+    t.boolean  "generate_invite_link"
+    t.boolean  "starts_immediately"
     t.string   "invite_token"
-    t.string   "time_zone",                  null: false
+    t.string   "time_zone"
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
     t.integer  "event_promoter_id",          null: false

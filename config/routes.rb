@@ -16,9 +16,10 @@ Rails.application.routes.draw do
       get '/mailer_previews/*path', to: "rails/mailers#preview"
     end
     
-    resources :campaigns, only: [:new, :create, :show, :index] do
+    resources :campaigns, only: [:new, :create, :show, :index, :update, :destroy] do
       collection do
         get :mine
+        get :drafts
       end
       member do
         resources :pledges, only: [:update], param: :pledge_id do
@@ -28,6 +29,10 @@ Rails.application.routes.draw do
             get :create_refund_credit
           end
         end
+        get :edit # must be defined here and not in `only:`
+        get :view_draft
+        post :submit
+        get :submit, to: 'campaigns#view_draft' # in case user tries to visit address bar location after validation errors
         get 'create_event', to: 'events#new', as: 'new_event'
         post 'create_event', to: 'events#create', as: 'create_event'
         get ':invite_token', to: 'campaigns#show', as: 'show_with_invite_token'

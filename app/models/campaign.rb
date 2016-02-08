@@ -3,8 +3,9 @@ class Campaign < ActiveRecord::Base
   MINIMUM_GOAL_AMOUNT = 100_00
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
-  BASIC_ATTRS = %i(name venue_id) + DATE_ATTRS
-  CREATE_ATTRS = BASIC_ATTRS + [:description, :goal_cents, :minimum_pledge_cents, :generate_invite_link, :visibility, :starts_immediately, :time_zone]
+  BASIC_ATTRS = %i() + DATE_ATTRS
+  CREATE_ATTRS_STEP_1 = %i(name description venue_id goal_cents  minimum_pledge_cents) 
+  CREATE_ATTRS_STEP_2 = DATE_ATTRS + %i(starts_immediately time_zone visibility generate_invite_link)
   PUBLIC_VISIBILITY = 'public'
   APP_VISIBILITY = 'app'
   INVITE_VISIBILITY = 'invite'
@@ -32,31 +33,38 @@ class Campaign < ActiveRecord::Base
   monetize :pledged_cents
   monetize :estimated_minimum_pledge_cents
   
-  (BASIC_ATTRS - [:starts_at, :starts_immediately]).each do |attr|
+  CREATE_ATTRS_STEP_1.each do |attr|
     validates attr, presence: true
   end
   
-  validates :starts_immediately, inclusion: [true, false]
-  validates :starts_at, presence: true, unless: :starts_immediately
-  validates :starts_at, inclusion: [nil], if: :starts_immediately
+  validates :event_promoter, presence: true
   validates :invite_token, presence: true, if: :generate_invite_link
   validates :invite_token, inclusion: [nil], unless: :generate_invite_link
-  validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}
-  validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}
-  validates :generate_invite_link,
-    inclusion: {in: [true], message: I18n.t('campaigns.errors.generate_invite_link')},
-    if: ->(record){
-      record.generate_invite_link == false && # check false, not nil
-      record.visibility == INVITE_VISIBILITY
-    }
-  validates :generate_invite_link,
-    inclusion: {in: [false], message: I18n.t('campaigns.errors.generate_invite_link_false')},
-    if: ->(record){
-      record.generate_invite_link &&
-      record.visibility == PUBLIC_VISIBILITY
-    }
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
-  validates :time_zone, presence: true, inclusion: Estiu::Timezones::ALL
+  validates :starts_at, inclusion: [nil], if: :starts_immediately
+  
+  begin # validations enclosed in this black depend on :submitted_at
+    validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :submitted_at
+    validates :starts_at, presence: true, if: ->(rec){ rec.submitted_at && !rec.starts_immediately }
+    validates :ends_at, presence: true, if: :submitted_at
+    validates :time_zone, presence: true, inclusion: {in: Estiu::Timezones::ALL, message: I18n.t('errors.inclusion')}, if: :submitted_at
+    validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}, if: :submitted_at
+    validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :submitted_at
+    validates :generate_invite_link,
+      inclusion: {in: [true], message: I18n.t('campaigns.errors.generate_invite_link')},
+      if: ->(record){
+        record.submitted_at &&
+        record.generate_invite_link == false && # check false, not nil
+        record.visibility == INVITE_VISIBILITY
+      }
+    validates :generate_invite_link,
+      inclusion: {in: [false], message: I18n.t('campaigns.errors.generate_invite_link_false')},
+      if: ->(record){
+        record.submitted_at &&
+        record.generate_invite_link &&
+        record.visibility == PUBLIC_VISIBILITY
+      }
+  end
   
   validate :valid_date_fields, on: :create
   validate :minimum_pledge_according_to_venue, on: :create
@@ -93,6 +101,14 @@ class Campaign < ActiveRecord::Base
   
   def self.visible_for_event_promoter event_promoter
     where(campaigns: {event_promoter_id: event_promoter.id})
+  end
+  
+  def self.approved
+    where.not(approved_at: nil)
+  end
+  
+  def self.rejected
+    where.not(rejected_at: nil)
   end
   
   def self.visible_for_attendee attendee

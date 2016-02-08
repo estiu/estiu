@@ -1,52 +1,31 @@
-.row
-  .bordered{class: centered}
-    %h2= t '.title'
+%hr
+= form_for(campaign, class: 'form-horizontal') do |f|
+  = form_fields(f, 'campaigns.form') do |field|
+    - venue_capacity = capture do
+      .venue-capacity.f13{style: 'margin-top: 3px'}
+        %strong
+          %span#venue-capacity-indicator
+    .row
+      .col-xs-2
+        = field.(:venue_id, as: :select, values: Venue.for_select, only_label: true)
+      .col-xs-6.right
+        = field.(:venue_id, as: :select, values: Venue.for_select, only_input: true, after: venue_capacity, form_group_class: 'm0')
+      .col-xs-4.right
+        = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-info btn-xs')
+    = field.(:name)
+    = field.(:description, as: :textarea)
+    .row
+      .col-xs-6
+        = field.(:goal_cents, as: :currency, min: Campaign::MINIMUM_GOAL_AMOUNT, max: Campaign::MAXIMUM_GOAL_AMOUNT)
+      .col-xs-6
+        #recommended-pledge-indicator.f12.alert.alert-info.p10{style: 'margin-top: 22px'}
+    .row
+      .col-xs-6
+        = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
+      .col-xs-6
+        #attendance-indicator.f12.alert.alert-warning.p10{style: 'margin-top: 22px'}= t('.maximum_attendance') + ':'
     %hr
-    = form_for(campaign, class: 'form-horizontal') do |f|
-      = form_fields(f, 'campaigns.form') do |field|
-        - venue_capacity = capture do
-          .venue-capacity.f13{style: 'margin-top: 3px'}
-            %strong
-              %span#venue-capacity-indicator
-        .row
-          .col-xs-2
-            = field.(:venue_id, as: :select, values: Venue.for_select, only_label: true)
-          .col-xs-6.right
-            = field.(:venue_id, as: :select, values: Venue.for_select, only_input: true, after: venue_capacity, form_group_class: 'm0')
-          .col-xs-4.right
-            = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-info btn-xs')
-        = field.(:name)
-        = field.(:description, as: :textarea)
-        .row
-          .col-xs-6
-            = field.(:goal_cents, as: :currency, min: Campaign::MINIMUM_GOAL_AMOUNT, max: Campaign::MAXIMUM_GOAL_AMOUNT)
-          .col-xs-6
-            #recommended-pledge-indicator.f12.alert.alert-info.p10{style: 'margin-top: 22px'}
-        .row
-          .col-xs-6
-            = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
-          .col-xs-6
-            #attendance-indicator.f12.alert.alert-warning.p10{style: 'margin-top: 22px'}= t('.maximum_attendance') + ':'
-        .row
-          .col-xs-12
-            = field.(:starts_immediately, as: :boolean, no_label: t('.starts_later'), popover: {html: popover_html('.starts_immediately')})
-        .row
-          .col-xs-7
-            .starts-at-wrapper{style: "#{jquery_hidden unless (campaign.starts_immediately == false)}"}
-              = field.(:starts_at, as: :datetime, required: false)
-        .row
-          .col-xs-7
-            = field.(:ends_at, as: :datetime)
-        .row
-          .col-xs-12
-            = field.(:time_zone, as: :time_zone)
-        .row
-          .col-xs-6
-            = field.(:visibility, as: :select, values: Campaign.visibility_select, popover: {html: popover_html('.visibility')})
-          .col-xs-6
-            = field.(:generate_invite_link, as: :boolean, popover: {html: popover_html('.generate_invite_link')})
-        %hr
-        .right
-          = field.(:submit)
+    .right
+      = field.(:submit)
           
 = render 'form_js'
