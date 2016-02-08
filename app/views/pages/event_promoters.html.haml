@@ -1,8 +1,12 @@
-%h1 Promote and fund the perfect event
-%hr
+%div{class: centered_wider}
 
-:markdown
-  Crowdfund your event, securing 100% assistance, accessing your revenue in advance.
-  
-%hr
-= link_to "Sign up as an event promoter", event_promoters_sign_up_path, class: 'btn btn-primary'
+  %h1= t '.title'
+
+  = t '.encouragement'
+
+  %hr
+  %h4.center
+    = link_to t('.faq_cta'), page_path(id: 'event_promoters/faq')
+  %hr
+  .center
+    = link_to t('.sign_up_cta'), event_promoters_sign_up_path, class: 'btn btn-primary'

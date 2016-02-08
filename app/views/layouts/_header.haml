@@ -22,6 +22,10 @@
               - unless @event_notification_value.zero?
                 %span.header-notification
                   = @event_notification_value
+        
+      %ul.nav.navbar-nav.navbar-right
+        %li
+          = link_to 'FAQ', page_path(id: (current_event_promoter ? 'event_promoters/faq' : 'attendees/faq'))
         - unless current_user
           %li.dropdown
             %a{"data-toggle" => "dropdown", "role" => "button", "aria-haspopup" => "true"}
@@ -30,9 +34,9 @@
             %ul.dropdown-menu
               %li
                 = link_to t(".event_promoters"), page_path(id: 'event_promoters')
-              %li
-                = link_to t(".artist_promoters"), '#'
-      %ul.nav.navbar-nav.navbar-right
+              - if false
+                %li
+                  = link_to t(".artist_promoters"), '#'
         - if user_signed_in?
           %li
             = link_to current_user, '#'
