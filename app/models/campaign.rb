@@ -116,7 +116,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def self.without_event
-    joins('left outer join events on campaigns.id = events.campaign_id').where(events: {campaign_id: nil})
+    approved.joins('left outer join events on campaigns.id = events.campaign_id').where(events: {campaign_id: nil})
   end
   
   def self.fulfilled
