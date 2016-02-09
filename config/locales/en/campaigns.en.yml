@@ -82,6 +82,9 @@ en:
       success: "Campaign draft successfully discarded."
       error: "Sorry, there was a problem discarding this campaign draft. Please try again."
     view_draft:
+      review_status_success: "Approved"
+      review_status_danger: "Rejected"
+      review_status_info: "Pending review"
       edit: Edit
       destroy: Discard
       title: 'Draft: %{campaign_name}'

@@ -5,6 +5,11 @@
     - unless campaign.submitted_at
       = link_to t('.edit'), edit_campaign_path(campaign), class: 'btn btn-xs btn-info'
       = link_to t('.destroy'), campaign_path(campaign), method: :delete, class: 'btn btn-xs btn-danger'
+    - if campaign.submitted_at
+      %hr
+      - status = campaign.approved_at ? 'success' : campaign.rejected_at ? 'danger' : 'info'
+      %span.f14{class: "label label-#{status}"}
+        = t ".review_status_#{status}"
     %hr
     = render 'step_1_fields', campaign: campaign
     - if campaign.submitted_at
