@@ -66,7 +66,7 @@ en:
       must_create_event: "First, you must %{link}."
       new_event: create the corresponding event
     create:
-      success: "Succesfully created campaign."
+      success: "Succesfully saved the campaign draft. Now after filling the final fields, you can submit it for review."
       error: "Couldn't create campaign due to the indicated errors."
     new:
       title: 'New campaign'

@@ -43,6 +43,7 @@ class CampaignsController < ApplicationController
     authorize(@campaign = Campaign.new(campaign_attrs_step_1))
     @campaign.event_promoter = current_user.event_promoter
     if @campaign.save
+      flash[:success] = t('.success')
       redirect_to view_draft_campaign_path(@campaign)
     else
       flash.now[:error] = t('.error')
@@ -67,6 +68,7 @@ class CampaignsController < ApplicationController
       flash.now[:success] = t('.success')
     else
       flash.now[:error] = t('.error')
+      @campaign.submitted_at = nil
     end
     render :view_draft
   end
