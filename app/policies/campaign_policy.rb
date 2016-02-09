@@ -18,11 +18,11 @@ class CampaignPolicy < ApplicationPolicy
     is_the_event_promoter = user.event_promoter ? record.event_promoter == user.event_promoter : false
     generic = record.active_time? || attendee_did_pledge || is_the_event_promoter
     
-    if record.visibility == Campaign::PUBLIC_VISIBILITY
+    if record.visibility == CampaignDraft::PUBLIC_VISIBILITY
       generic
     elsif record.invite_token && (record.invite_token == record.passed_invite_token)
       generic
-    elsif (record.visibility == Campaign::APP_VISIBILITY) && logged_in?
+    elsif (record.visibility == CampaignDraft::APP_VISIBILITY) && logged_in?
       generic
     elsif is_the_event_promoter
       true

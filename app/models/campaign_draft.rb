@@ -9,6 +9,13 @@ class CampaignDraft < ActiveRecord::Base
   DATE_ATTRS = %i(starts_at ends_at)
   CREATE_ATTRS_STEP_1 = %i(name description venue_id goal_cents minimum_pledge_cents) 
   CREATE_ATTRS_STEP_2 = DATE_ATTRS + %i(starts_immediately time_zone visibility generate_invite_link)
+  FORWARD_METHODS = %i(
+    starts_at_criterion
+    skip_past_date_validations
+    venue
+    event_promoter
+    goal
+  )
   PUBLIC_VISIBILITY = 'public'
   APP_VISIBILITY = 'app'
   INVITE_VISIBILITY = 'invite'

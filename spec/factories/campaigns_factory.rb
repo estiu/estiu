@@ -4,6 +4,14 @@ FG.define do
     
     association :campaign_draft
     
+    transient do
+      event_promoter_id nil
+    end
+    
+    after(:build) do |rec, eva|
+      rec.campaign_draft.event_promoter_id = eva.event_promoter_id if eva.event_promoter_id
+    end
+    
     trait :with_event do
       
       after(:create) do |rec, eva|
@@ -15,7 +23,7 @@ FG.define do
     trait :with_submitted_event do
       
       after(:create) do |rec, eva|
-        FG.create :event, :submitted, campaign: rec, event_promoter: rec.event_promoter
+        FG.create :event, :submitted, campaign: rec
       end
       
     end
@@ -69,10 +77,9 @@ FG.define do
         including_attendees []
       end
       
-      starts_at { 30.days.ago }
-      ends_at { 2.days.ago }
-      
       after(:create) do |rec, eva|
+        
+        rec.campaign_draft.update_attributes! starts_at: 30.days.ago, ends_at: 2.days.ago
         
         pledge_count = 5
         amount_cents = ((rec.goal_cents - rec.minimum_pledge_cents - 1).to_f / pledge_count.to_f).floor

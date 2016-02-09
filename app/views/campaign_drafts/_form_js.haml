@@ -3,18 +3,18 @@
   window.venue_capacities = #{Venue.venue_capacities.to_json}
   
   function update_recommended_pledge(){
-    var capacity = window.venue_capacities[$('#campaign_venue_id').val()] || "#{t 'campaigns.form.venue_capacity'}"
-    var facade = $('#campaign_goal_cents_facade').val()
-    var goal = $('#campaign_goal_cents').val()
+    var capacity = window.venue_capacities[$('#campaign_draft_venue_id').val()] || "#{t 'campaigns.form.venue_capacity'}"
+    var facade = $('#campaign_draft_goal_cents_facade').val()
+    var goal = $('#campaign_draft_goal_cents').val()
     var result;
     if (facade && goal && !isNaN(capacity) && !isNaN(goal)){
       var _goal = new Number(goal)
       var _capacity = new Number(capacity)
       result = (_goal / _capacity / 100.0).toFixed(2)
-      $('#campaign_minimum_pledge_cents_facade').attr('placeholder', result)
+      $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', result)
     } else {
       result = "#{t 'campaigns.form.minimum_pledge_cents_short'}"
-      $('#campaign_minimum_pledge_cents_facade').attr('placeholder', null)
+      $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', null)
     }
     result = '<strong>' + result + '</strong>'
     var money = facade || "#{t 'campaigns.form.goal_cents'}"
@@ -22,20 +22,10 @@
     $('#recommended-pledge-indicator').html(caption)
   }
   
-  $('#campaign_venue_id').change(function(){
-    var val = window.venue_capacities[$(this).val()]
-    var caption = val ? "#{t('campaigns.form.venue_capacity')}: " + val : ""
-    $("#venue-capacity-indicator").text(caption)
-    update_recommended_pledge()
-  }).change()
-  
-  $('#campaign_goal_cents_facade').bind('cents_field_updated', update_recommended_pledge)
-  update_recommended_pledge()
-  
   function update_attendance_indicator(){
     var caption = "#{t 'campaigns.form.maximum_attendance'}"
-    var goal = $('#campaign_goal_cents').val()
-    var pledge = $('#campaign_minimum_pledge_cents').val()
+    var goal = $('#campaign_draft_goal_cents').val()
+    var pledge = $('#campaign_draft_minimum_pledge_cents').val()
     var value = ""
     if (goal && pledge && pledge != "0") { // "0": because of autonumeric's min.
       value = Math.floor(goal / pledge)
@@ -43,4 +33,15 @@
     $('#attendance-indicator').html(caption + ": " + value)
   }
   
-  $('#campaign_goal_cents_facade, #campaign_minimum_pledge_cents_facade').bind('cents_field_updated', update_attendance_indicator)
+  $('#campaign_draft_venue_id').change(function(){
+    var val = window.venue_capacities[$(this).val()]
+    var caption = val ? "#{t('campaigns.form.venue_capacity')}: " + val : ""
+    $("#venue-capacity-indicator").text(caption)
+    update_recommended_pledge()
+  }).change()
+  
+  $('#campaign_draft_goal_cents_facade').bind('cents_field_updated', update_recommended_pledge)
+  update_recommended_pledge()
+  update_attendance_indicator()
+  
+  $('#campaign_draft_goal_cents_facade, #campaign_draft_minimum_pledge_cents_facade').bind('cents_field_updated', update_attendance_indicator)

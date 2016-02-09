@@ -1,7 +1,7 @@
 class CampaignDraftsController < ApplicationController
   
   should_load_draft = [:show, :edit, :update, :destroy, :submit]
-  before_action :load_draft
+  before_action :load_draft, only: should_load_draft
   before_action :authorize_draft, only: should_load_draft
   
   def index
@@ -22,7 +22,7 @@ class CampaignDraftsController < ApplicationController
     @draft.event_promoter = current_user.event_promoter
     if @draft.save
       flash[:success] = t('.success')
-      redirect_to campaign_path(@draft)
+      redirect_to campaign_draft_path(@draft)
     else
       flash.now[:error] = t('.error')
       render :new
@@ -32,10 +32,10 @@ class CampaignDraftsController < ApplicationController
   def update
     @draft.assign_attributes(draft_attrs_step_1)
     if @draft.save
-      redirect_to campaign_path(@draft), notice: t('.success')
+      redirect_to campaign_draft_path(@draft), notice: t('.success')
     else
       flash.now[:error] = t('.error')
-      render :edit
+       :edit
     end
   end
   
@@ -48,7 +48,7 @@ class CampaignDraftsController < ApplicationController
       flash.now[:error] = t('.error')
       @draft.submitted_at = nil
     end
-    render :view_draft
+    render :show
   end
   
   def publish

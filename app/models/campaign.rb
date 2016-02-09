@@ -19,7 +19,7 @@ class Campaign < ActiveRecord::Base
   
   monetize :pledged_cents
   
-  (CampaignDraft::CREATE_ATTRS_STEP_1 + CampaignDraft::CREATE_ATTRS_STEP_2 + %i(starts_at_criterion skip_past_date_validations venue event_promoter)).each do |attr|
+  (CampaignDraft::CREATE_ATTRS_STEP_1 + CampaignDraft::CREATE_ATTRS_STEP_2 + CampaignDraft::FORWARD_METHODS).each do |attr|
     delegate attr, to: :campaign_draft
   end
   
@@ -32,7 +32,7 @@ class Campaign < ActiveRecord::Base
   end
   
   def self.visible_for_event_promoter event_promoter
-    where(campaigns: {event_promoter_id: event_promoter.id})
+    joins(:campaign_draft).where(campaign_drafts: {event_promoter_id: event_promoter.id})
   end
   
   def self.visible_for_attendee attendee

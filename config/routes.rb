@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     resources :campaign_drafts, path: 'drafts' do
       member do
         post :submit
-        get :submit, to: 'campaign_draftss#show' # in case user tries to visit address bar location after validation errors
+        get :submit, to: 'campaign_drafts#show' # in case user tries to visit address bar location after validation errors
       end
     end
     

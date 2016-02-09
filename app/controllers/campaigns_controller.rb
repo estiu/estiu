@@ -40,7 +40,7 @@ class CampaignsController < ApplicationController
   protected
   
   def listing_scope
-    Campaign.approved.without_event
+    Campaign.without_event
   end
   
   def authorize_campaign

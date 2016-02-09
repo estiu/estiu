@@ -8,7 +8,7 @@ class Event < ActiveRecord::Base
   belongs_to :venue
   has_many :tickets
   has_many :event_documents, dependent: :destroy
-  has_one :event_promoter, through: :campaign
+  delegate :event_promoter, to: :campaign
   
   attr_accessor :documents_confirmation
   

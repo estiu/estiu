@@ -1,0 +1,112 @@
+en: # XXX delete unrelated stuff
+  campaign_drafts:
+    errors:
+      minimum_pledge_cents:
+        venue: You must set at least %{value}.
+      starts_at:
+        ends_at: Must be prior to Ends at
+      ends_at:
+        starts_at: The campaign must remain open for at least %{hours} hours.
+      generate_invite_link: If the event is invite only, then a link must be generated.
+      generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
+    unfulfilled:
+      caption_unfulfilled_at: "This event didn't reach its goal."
+      caption_event_rejected_at: "This event reached its goal, but the event promoter did not perform all the necessary actions for organising the event."
+      refundable: "We got you covered. Choose what to do with your %{amount}:"
+      money_back: Get my money back
+      money_back_popover: Choose this for your credit card payment to be refunded.
+      money_back_popover_2: Refunds can take up to 10 days to complete.
+      credits: Get credits for next events
+      credits_popover: Choose this for getting %{amount} in credits for other events.
+      credits_popover_2: You can use them immediately in current and future campaigns.
+    share:
+      app_with_no_invite_token: "Keep in mind: this campaign/event is only visible to Estiu members (it's not public)."
+      invite: "Keep in mind - this campaign/event is %{invite_only}! Only users having the %{secret_link} can access it."
+      link: secret link
+      invite_only: invite only
+    index:
+      title: All campaigns
+      title_mine: My campaigns
+      new: New campaign
+      all: View all
+      mine: View only mine
+      empty_generic: "There are no campaigns to display."
+      empty_event_promoter: "There are no campaigns no display. You can always create one!"
+      empty_attendee: "There are no campaigns to display."
+    item:
+      fulfilled_campaign: 'goal reached'
+      fulfilled_campaign_title: 'This campaign reached its goal.'
+      unfulfilled_campaign: 'goal not reached'
+      unfulfilled_campaign_title: "This campaign didn't reach its goal."
+      open_campaign: 'open'
+      open_campaign_title: 'This campaign is still open for contributions.'
+      pledged_campaign: 'contributed'
+      pledged_campaign_title: "You contributed %{amount} to this campaign."
+      not_open_yet: 'not open yet'
+      not_open_yet_title: "This campaign will be open for contributions starting from %{date}."
+      title: "Campaign: %{campaign}"
+      starts_at: Starts at
+      ends_at: Campaign closes
+      venue: Venue
+    event_created:
+      event_created: This campaign has become an event!
+      view_event_created: "View the details %{link}."
+      view_event_created_link: here
+    must_create_event:
+      your_event_fulfilled: Your event has reached its goal, and we are ready to transfer its funds.
+      must_create_event: "First, you must %{link}."
+      new_event: create the corresponding event
+    create:
+      success: "Succesfully saved the campaign draft. Now after filling the final fields, you can submit it for review."
+      error: "Couldn't create campaign due to the indicated errors."
+    new:
+      title: 'New campaign'
+    edit:
+      title: 'Edit campaign draft'
+    update:
+      success: "Campaign draft updated successfully."
+      error: "Couldn't update the campaign draft due to the indicated errors."
+    submit:
+      success: "Campaign successfully submitted for review."
+      error: "Couldn't submit the campaign due to the indicated errors."
+    destroy:
+      success: "Campaign draft successfully discarded."
+      error: "Sorry, there was a problem discarding this campaign draft. Please try again."
+    show:
+      review_status_success: "Approved"
+      review_status_danger: "Rejected"
+      review_status_info: "Pending review"
+      edit: Edit
+      destroy: Discard
+      title: 'Draft: %{campaign_name}'
+      starts_later: 'No, I will specify a date'
+      starts_immediately_popover: "Whether this campaign should be public since the first moment, or only after the date/time you specify."
+      starts_immediately_popover_2: "Making the campaign public at a specific date may have a strategic advantage for you."
+      visibility_popover: Select to which users the campaign will be visible.
+      visibility_popover_2: This determines how public/secret the campaign is.
+      generate_invite_link_popover: If yes, a secret link will be generated, which users with access can share.
+      generate_invite_link_popover_2:  Anyone receiving the secret link will be able to view/participate in the campaign.
+      starts_immediately: "Launch campaign immediately?"
+      visibility: Campaign/event visibility
+      generate_invite_link: Generate invite link?
+      submit: Submit campaign for review
+      starts_at: Campaign starts at
+      ends_at: Campaign ends at
+    step_1_fields:
+      venue: Venue
+      name: Name
+      description: Description
+      goal: Goal
+    form:
+      public_visibility: Public
+      app_visibility: Confirmed Estiu members
+      invite_visibility: By invitation only
+      venue_capacity: 'Capacity'
+      maximum_attendance: "Maximum attendance"
+      goal_cents: Campaign Goal
+      recommended_pledge: Recommended minimum payment
+      recommended_pledge_cents: Recommended payment
+      minimum_pledge_cents: Minimum payment
+      minimum_pledge_cents_short: Minimum payment
+      submit: "Save draft"
+  
