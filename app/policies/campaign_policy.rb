@@ -12,25 +12,7 @@ class CampaignPolicy < ApplicationPolicy
     user.event_promoter?
   end
   
-  def view_draft?
-    user.event_promoter == record.event_promoter
-  end
-  
-  def edit_or_update?
-    !record.submitted_at && view_draft?
-  end
-  
-  def destroy?
-    edit_or_update?
-  end
-  
-  def submit?
-    edit_or_update?
-  end
-  
   def show?
-    
-    return false unless record.approved_at
     
     attendee_did_pledge = user.attendee ? user.attendee.pledged?(record) : false
     is_the_event_promoter = user.event_promoter ? record.event_promoter == user.event_promoter : false
