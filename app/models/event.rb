@@ -43,7 +43,7 @@ class Event < ActiveRecord::Base
   validate :at_least_one_ra_artist
   
   def self.visible_for_event_promoter event_promoter
-    joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
+    joins(campaign: :campaign_draft).where(campaign_drafts: {event_promoter_id: event_promoter.id})
   end
   
   def self.visible_for_attendee attendee

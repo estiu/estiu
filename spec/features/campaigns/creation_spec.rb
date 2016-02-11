@@ -9,7 +9,7 @@ describe "Campaign creation", js: true do
   }
   
   before {
-    visit new_campaign_path
+    visit new_campaign_draft_path
   }
   
   def fill_starts_at

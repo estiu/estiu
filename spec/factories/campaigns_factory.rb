@@ -4,18 +4,10 @@ FG.define do
     
     association :campaign_draft
     
-    transient do
-      event_promoter_id nil
-    end
-    
-    after(:build) do |rec, eva|
-      rec.campaign_draft.event_promoter_id = eva.event_promoter_id if eva.event_promoter_id
-    end
-    
     trait :with_event do
       
       after(:create) do |rec, eva|
-        FG.create :event, campaign: rec, event_promoter: rec.event_promoter
+        FG.create :event, campaign: rec, event_promoter_id: rec.event_promoter.id
       end
       
     end

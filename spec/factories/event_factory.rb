@@ -43,7 +43,7 @@ FG.define do
       
       unless rec.campaign
         opts = {}
-        opts.merge!(event_promoter_id: eva.event_promoter_id) if eva.event_promoter_id
+        opts.merge!(campaign_draft: FG.create(:campaign_draft, event_promoter_id: eva.event_promoter_id)) if eva.event_promoter_id
         rec.campaign = FG.create(:campaign, :fulfilled, opts)
       end
       

@@ -15,6 +15,8 @@ class CampaignDraft < ActiveRecord::Base
     venue
     event_promoter
     goal
+    invite_token
+    minimum_pledge
   )
   PUBLIC_VISIBILITY = 'public'
   APP_VISIBILITY = 'app'

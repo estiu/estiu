@@ -24,7 +24,7 @@ describe EventsController do
       context "related event_promoter for a campaign without event" do
         
         let(:campaign){
-          FG.create :campaign, :fulfilled, event_promoter_id: event_promoter.event_promoter_id
+          FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, event_promoter_id: event_promoter.event_promoter_id)
         }
         
         [1, 2].each do |n|
