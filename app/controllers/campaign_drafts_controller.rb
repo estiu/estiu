@@ -35,7 +35,7 @@ class CampaignDraftsController < ApplicationController
       redirect_to campaign_draft_path(@draft), notice: t('.success')
     else
       flash.now[:error] = t('.error')
-       :edit
+      render :edit
     end
   end
   

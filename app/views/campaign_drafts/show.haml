@@ -4,7 +4,7 @@
     %h2= t '.title', campaign_name: campaign.name
     - unless campaign.submitted_at
       = link_to t('.edit'), edit_campaign_draft_path(campaign), class: 'btn btn-xs btn-info'
-      = link_to t('.destroy'), campaign_draft_path(campaign), method: :delete, class: 'btn btn-xs btn-danger'
+      = link_to t('.destroy'), campaign_draft_path(campaign), method: :delete, class: 'btn btn-xs btn-danger', id: "delete-draft-#{campaign.id}"
     - if campaign.submitted_at
       %hr
       - status = campaign.approved_at ? 'success' : campaign.rejected_at ? 'danger' : 'info'

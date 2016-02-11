@@ -37,7 +37,7 @@ describe "Campaign draft creation", js: true do
   
   describe 'success' do
     
-    it 'is possible to create a campaign' do
+    it 'is possible to create a campaign draft' do
 
       fill_most
       fill_last
