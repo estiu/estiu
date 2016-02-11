@@ -4,6 +4,7 @@ FG.define do
     
     association :event_promoter
     association :venue
+    submitted_at { DateTime.now }
     name "Fund my party"
     description "I was thinking of throwing the perfect party, in a great open-air venue, at daytime, and with some of the latest and greatest DJs out there."
     starts_at { DateTime.now.beginning_of_day }
@@ -17,6 +18,17 @@ FG.define do
     
     after(:build) do |rec, eva|
       rec.minimum_pledge_cents = [(rec.goal_cents / rec.venue.capacity).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max
+    end
+    
+    trait :step_1 do
+      
+      after(:build) do |rec, eva|
+        CampaignDraft::CREATE_ATTRS_STEP_2.each do |attr|
+          rec.send "#{attr}=", nil
+          rec.submitted_at = nil
+        end
+      end
+      
     end
     
   end

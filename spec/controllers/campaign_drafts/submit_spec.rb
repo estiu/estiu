@@ -4,15 +4,16 @@ describe CampaignDraftsController do
     
     sign_as :event_promoter
     
-    let!(:campaign){ FG.create(:campaign_draft, event_promoter: event_promoter.event_promoter) }
+    let!(:campaign){ FG.create(:campaign_draft, :step_1, event_promoter: event_promoter.event_promoter) }
+    let(:sample_campaign){ FG.create :campaign_draft }
     
     let!(:campaign_params){
       v = {campaign_draft: {}, id: campaign.id}
       CampaignDraft::CREATE_ATTRS_STEP_2.each do |attr|
-        v[:campaign_draft][attr] = campaign.send attr
+        v[:campaign_draft][attr] = sample_campaign.send attr
       end
       CampaignDraft::DATE_ATTRS.each do |attr|
-        v[:campaign_draft][attr] = campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
+        v[:campaign_draft][attr] = sample_campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
       end
       v[:campaign_draft].merge!({
         "starts_immediately" => 'false',
@@ -103,8 +104,8 @@ describe CampaignDraftsController do
             }.to change{
               campaign.reload.submitted_at
             }
-            expect(CampaignDraft.last.starts_at.strftime('%H')).send((negative ? :to_not : :to), eq(distinct_value))
-            expect(CampaignDraft.last.starts_at.strftime('%M')).send((negative ? :to_not : :to), eq(distinct_value))
+            expect(campaign.reload.starts_at.strftime('%H')).send((negative ? :to_not : :to), eq(distinct_value))
+            expect(campaign.reload.starts_at.strftime('%M')).send((negative ? :to_not : :to), eq(distinct_value))
           end
           
           it 'is the time fields which have priority' do

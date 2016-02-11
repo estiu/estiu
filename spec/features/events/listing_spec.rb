@@ -8,7 +8,7 @@ describe 'Events listing' do
       
       def the_test negative=false
         visit events_path
-        campaigns = Campaign.without_event.where(event_promoter_id: event_promoter.event_promoter_id)
+        campaigns = Campaign.joins(:campaign_draft).without_event.where(campaign_drafts: {event_promoter_id: event_promoter.event_promoter_id})
         expect(campaigns.size.zero?).to be !!negative
         campaigns.each do |campaign|
           expect(all("a[href='#{campaign_path(campaign)}']").size).to be 1
@@ -19,7 +19,7 @@ describe 'Events listing' do
       context "when there are pending campaigns" do
         
         before {
-          FG.create :campaign, :fulfilled, event_promoter_id: event_promoter.event_promoter_id
+          FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, event_promoter_id: event_promoter.event_promoter_id)
         }
         
         it "is displayed a warning with the corresponding links" do

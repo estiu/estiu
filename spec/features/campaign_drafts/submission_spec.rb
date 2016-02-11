@@ -1,58 +1,53 @@
-describe "Campaign creation", js: true do
+describe "Campaign draft submission", js: true do
   
   sign_as :event_promoter, :feature
   
-  let!(:campaign){ FG.create :campaign }
+  let!(:campaign){ FG.create :campaign_draft, :step_1, event_promoter: event_promoter.event_promoter }
   
   before{
     FG.create :venue
   }
   
   before {
-    visit new_campaign_draft_path
+    visit campaign_draft_path(campaign)
   }
   
   def fill_starts_at
-    find('#campaign_starts_at').click
+    find('#campaign_draft_starts_at').click
     next_month
     any_day
   end
   
   def fill_ends_at
-    find("#campaign_ends_at").click
+    find("#campaign_draft_ends_at").click
     next_month
     next_month
     any_day
   end
   
   def fill_most
-    find('#campaign_name').set(campaign.name)
-    find('#campaign_goal_cents_facade').set(campaign.goal_cents / 100)
-    find('#campaign_minimum_pledge_cents_facade').send_keys("#{campaign.minimum_pledge.format(symbol: false)}")
-    find('#campaign_starts_immediately').find("option[value='false']").select_option
-    find('#campaign_time_zone').find("option[value='#{campaign.time_zone}']").select_option
-    find('#campaign_venue_id').find("option[value='#{campaign.venue.id}']").select_option
+    find('#campaign_draft_starts_immediately').find("option[value='false']").select_option
+    find('#campaign_draft_time_zone').find("option[value='#{Estiu::Timezones::FOR_SELECT.sample[1]}']").select_option
     fill_starts_at
     fill_ends_at
-    find('#campaign_visibility').find("option[value='public']").select_option
-    find('#campaign_generate_invite_link').find("option[value='false']").select_option
+    find('#campaign_draft_visibility').find("option[value='public']").select_option
   end
   
   def the_last_field
-    'description'
+    'generate_invite_link'
   end
   
   def fill_last
-    find("#campaign_#{the_last_field}").set(campaign.description)
+    find('#campaign_draft_generate_invite_link').find("option[value='false']").select_option
   end
   
   def the_action
-    find('#new_campaign input[type=submit]').click
+    find("#edit_campaign_draft_#{campaign.id} input[type=submit]").click
   end
   
   describe 'success' do
     
-    it 'is possible to create a campaign' do
+    it 'is possible to submit a campaign' do
 
       fill_most
       fill_last
@@ -60,10 +55,10 @@ describe "Campaign creation", js: true do
       expect {
         the_action
       }.to change {
-        Campaign.count
-      }.by(1)
+        campaign.reload.submitted_at
+      }
       
-      expect(page).to have_content(t 'campaigns.create.success')
+      expect(page).to have_content(t 'campaigns.submit.success')
       
     end
     
@@ -71,18 +66,18 @@ describe "Campaign creation", js: true do
       
       before {
         fill_most
+        find('#campaign_draft_starts_immediately').find("option[value='true']").select_option
         fill_last
-        find('#campaign_starts_immediately').find("option[value='true']").select_option
       }
       
       def the_test
         expect {
           the_action
         }.to change {
-          Campaign.count
-        }.by(1)
-        expect(Campaign.last.starts_immediately).to be true
-        expect(Campaign.last.starts_at).to be nil
+          campaign.reload.submitted_at
+        }
+        expect(CampaignDraft.last.starts_immediately).to be true
+        expect(CampaignDraft.last.starts_at).to be nil
       end
       
       it 'is possible to successfully create that campaign' do
@@ -97,15 +92,15 @@ describe "Campaign creation", js: true do
     
     it 'results in the form being rendered again' do
       
-      fill_most # but don't fill_last
+      fill_most
       
       expect {
         the_action
       }.to_not change {
-        Campaign.count
+        campaign.reload.submitted_at
       }
       
-      expect(find(".help-block.#{the_last_field}-error.error-is-blank")).to have_content(t 'errors.messages.blank')
+      expect(find(".help-block.#{the_last_field}-error")).to have_content(t 'errors.inclusion')
       
     end
     
@@ -116,7 +111,7 @@ describe "Campaign creation", js: true do
     describe 'any date field' do
       
       def the_starts_at_value
-        page.evaluate_script "$('#campaign_starts_at').val()"
+        page.evaluate_script "$('#campaign_draft_starts_at').val()"
       end
       
       it 'persists across failed submissions' do
@@ -145,13 +140,13 @@ describe "Campaign creation", js: true do
     describe 'any time field' do
       
       def minute_selector
-        find('#campaign_starts_at_5i')
+        find('#campaign_draft_starts_at_5i')
       end
       
       it 'persists across failed submissions' do
         
-        find('#campaign_starts_immediately').find("option[value='false']").select_option
-        find('#campaign_time_zone').find("option[value='#{campaign.time_zone}']").select_option
+        find('#campaign_draft_starts_immediately').find("option[value='false']").select_option
+        find('#campaign_draft_time_zone').find("option[value='#{Estiu::Timezones::FOR_SELECT.sample[1]}']").select_option
         minute_selector.find('option:last-child').select_option
         value = minute_selector.value
         the_action
@@ -165,7 +160,7 @@ describe "Campaign creation", js: true do
       
       context "when I don't select it" do
         
-        before { expect(find('#campaign_time_zone').value).to be_blank }
+        before { expect(find('#campaign_draft_time_zone').value).to be_blank }
         
         context "and I submit" do
           
