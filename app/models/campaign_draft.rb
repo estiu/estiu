@@ -38,7 +38,7 @@ class CampaignDraft < ActiveRecord::Base
   
   monetize :estimated_minimum_pledge_cents
   
-  CREATE_ATTRS_STEP_1.each do |attr|
+  (CREATE_ATTRS_STEP_1 - %i(description)).each do |attr|
     validates attr, presence: true
   end
 
@@ -47,6 +47,8 @@ class CampaignDraft < ActiveRecord::Base
   validates :invite_token, inclusion: [nil], unless: :generate_invite_link
   validates :description, presence: true, length: {minimum: 140, maximum: 1000}
   validates :starts_at, inclusion: [nil], if: :starts_immediately
+  validates :submitted_at, presence: true, if: ->(rec){ CREATE_ATTRS_STEP_2.any?{|attr| rec.send(attr).present? } }
+  validates :submitted_at, inclusion: [nil], if: ->(rec){ dev_or_test? ? false : rec.id }
   
   begin # validations enclosed in this black depend on :submitted_at
     validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :submitted_at

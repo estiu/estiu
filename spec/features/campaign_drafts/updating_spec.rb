@@ -49,7 +49,7 @@ describe "Campaign draft updating", js: true do
         }.to_not change {
           campaign.reload.updated_at
         }
-        expect(first(".help-block.#{the_last_field}-error.error-is-blank")).to have_content(t 'errors.messages.blank')
+        expect(first(".help-block.name-error.error-is-blank")).to have_content(t 'errors.messages.blank')
         
       end
       
