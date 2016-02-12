@@ -1,0 +1,4 @@
+= form_for(campaign, url: submit_campaign_draft_path(campaign), method: :post, class: 'form-horizontal') do |f|
+  = form_fields(f, 'campaigns.view_draft') do |field|
+    %hr
+    = field.(:submit)

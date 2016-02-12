@@ -1,0 +1,24 @@
+= form_for(campaign, url: publish_campaign_draft_path(campaign), method: :post, class: 'form-horizontal') do |f|
+  = form_fields(f, 'campaign_drafts.publish_form') do |field|
+    .row
+      .col-xs-12
+        = field.(:starts_immediately, as: :boolean, no_label: t('.starts_later'), popover: {html: popover_html('.starts_immediately')})
+    .row
+      .col-xs-7
+        .starts-at-wrapper{style: "#{jquery_hidden unless (campaign.starts_immediately == false)}"}
+          = field.(:starts_at, as: :datetime, required: false)
+    .row
+      .col-xs-7
+        = field.(:ends_at, as: :datetime)
+    .row
+      .col-xs-12
+        -# XXX show newline between label and input
+        = field.(:time_zone, as: :time_zone)
+    .row
+      .col-xs-6
+        = field.(:visibility, as: :select, values: CampaignDraft.visibility_select, popover: {html: popover_html('.visibility')})
+      .col-xs-6
+        = field.(:generate_invite_link, as: :boolean, popover: {html: popover_html('.generate_invite_link')})
+    %hr
+    .right
+      = field.(:submit)

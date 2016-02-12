@@ -1,5 +1,7 @@
 class CampaignDraft < ActiveRecord::Base
   
+  extend Approvable
+  
   belongs_to :venue
   belongs_to :event_promoter
   has_one :campaign
@@ -45,29 +47,30 @@ class CampaignDraft < ActiveRecord::Base
   validates :event_promoter, presence: true
   validates :invite_token, presence: true, if: :generate_invite_link
   validates :invite_token, inclusion: [nil], unless: :generate_invite_link
-  validates :description, presence: true, length: {minimum: 140, maximum: 1000}
+  validates :description, presence: true, length: {minimum: (Rails.env.development? ? 2 : 140), maximum: 1000}
   validates :starts_at, inclusion: [nil], if: :starts_immediately
-  validates :submitted_at, presence: true, if: ->(rec){ CREATE_ATTRS_STEP_2.any?{|attr| rec.send(attr).present? } }
-  validates :submitted_at, inclusion: [nil], if: ->(rec){ dev_or_test? ? false : rec.id }
+  validates :published_at, presence: true, if: ->(rec){ CREATE_ATTRS_STEP_2.any?{|attr| rec.send(attr).present? } }
+  validates :published_at, inclusion: [nil], if: ->(rec){ dev_or_test? ? false : !rec.id }
+  validates :submitted_at, inclusion: [nil], if: ->(rec){ dev_or_test? ? false : !rec.id }
   
   begin # validations enclosed in this black depend on :submitted_at
-    validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :submitted_at
-    validates :starts_at, presence: true, if: ->(rec){ rec.submitted_at && !rec.starts_immediately }
-    validates :ends_at, presence: true, if: :submitted_at
-    validates :time_zone, presence: true, inclusion: {in: Estiu::Timezones::ALL, message: I18n.t('errors.inclusion')}, if: :submitted_at
-    validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}, if: :submitted_at
-    validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :submitted_at
+    validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :published_at
+    validates :starts_at, presence: true, if: ->(rec){ rec.published_at && !rec.starts_immediately }
+    validates :ends_at, presence: true, if: :published_at
+    validates :time_zone, presence: true, inclusion: {in: Estiu::Timezones::ALL, message: I18n.t('errors.inclusion')}, if: :published_at
+    validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}, if: :published_at
+    validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :published_at
     validates :generate_invite_link,
       inclusion: {in: [true], message: I18n.t('campaigns.errors.generate_invite_link')},
       if: ->(record){
-        record.submitted_at &&
+        record.published_at &&
         record.generate_invite_link == false && # check false, not nil
         record.visibility == INVITE_VISIBILITY
       }
     validates :generate_invite_link,
       inclusion: {in: [false], message: I18n.t('campaigns.errors.generate_invite_link_false')},
       if: ->(record){
-        record.submitted_at &&
+        record.published_at &&
         record.generate_invite_link &&
         record.visibility == PUBLIC_VISIBILITY
       }
@@ -81,17 +84,11 @@ class CampaignDraft < ActiveRecord::Base
 
   attr_accessor :goal_cents_facade
   
-  def self.approved
-    where.not(approved_at: nil)
-  end
-  
-  def self.rejected
-    where.not(rejected_at: nil)
-  end
+  around_update :create_campaign
   
   def self.visibility_select
     VISIBILITIES.map{|value|
-      [I18n.t("campaigns.form.#{value}_visibility"), value]
+      [I18n.t!("campaign_drafts.publish_form.#{value}_visibility"), value]
     }
   end
   
@@ -116,11 +113,11 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def valid_date_fields
-    if starts_at && ends_at
-      if starts_at > ends_at
+    if starts_at_criterion && ends_at
+      if starts_at_criterion > ends_at
         errors[:starts_at] << I18n.t('campaigns.errors.starts_at.ends_at')
       end
-      if ends_at.to_i - starts_at.to_i < self.class.minimum_active_hours.hours
+      if ends_at.to_i - starts_at_criterion.to_i < self.class.minimum_active_hours.hours
         unless Rails.env.production? && DeveloperMachine.running_in_developer_machine? # sometimes one runs production in a developer machine.
           errors[:ends_at] << I18n.t('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
         end
@@ -149,6 +146,14 @@ class CampaignDraft < ActiveRecord::Base
       goal_cents / venue.capacity
     else
       nil
+    end
+  end
+  
+  def create_campaign # create a Campaign using the same transaction as the surrounding `.save` call.
+    yield
+    change = changes[:published_at]
+    if change && change[0].nil? && change[1].present?
+      Campaign.create(campaign_draft: self)
     end
   end
   

@@ -12,11 +12,15 @@ class CampaignDraftPolicy < ApplicationPolicy
     !record.submitted_at && show?
   end
   
-  def destroy?
+  def submit?
     edit_or_update?
   end
   
-  def submit?
+  def publish?
+    show? && record.approved_at? && !record.published_at
+  end
+  
+  def destroy?
     edit_or_update?
   end
   

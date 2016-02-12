@@ -1,6 +1,6 @@
 class CampaignDraftsController < ApplicationController
   
-  should_load_draft = [:show, :edit, :update, :destroy, :submit]
+  should_load_draft = [:show, :edit, :update, :destroy, :submit, :publish]
   before_action :load_draft, only: should_load_draft
   before_action :authorize_draft, only: should_load_draft
   
@@ -40,23 +40,28 @@ class CampaignDraftsController < ApplicationController
   end
   
   def submit
-    @draft.assign_attributes(draft_attrs_step_2)
     @draft.submitted_at = DateTime.now
     if @draft.save
-      flash.now[:success] = t('.success')
+      flash[:success] = t('.success')
+      redirect_to @draft
     else
-      flash.now[:error] = t('.error')
       @draft.submitted_at = nil
+      flash.now[:error] = t('.error')
+      render :show
     end
-    render :show
   end
   
   def publish
-    
-  end
-  
-  def do_publish
-    
+    @draft.published_at = DateTime.now
+    @draft.assign_attributes(draft_attrs_step_2)
+    if @draft.save
+      flash[:success] = t('.success')
+      redirect_to @draft.campaign
+    else
+      @draft.published_at = nil
+      flash.now[:error] = t('.error')
+      render :show
+    end
   end
   
   def destroy

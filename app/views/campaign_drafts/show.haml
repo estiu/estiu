@@ -12,34 +12,16 @@
         = t ".review_status_#{status}"
     %hr
     = render 'step_1_fields', campaign: campaign
-    - if campaign.submitted_at
+    - unless campaign.submitted_at
+      = render 'submit_form', campaign: campaign
+    - if campaign.published_at
       = render 'step_2_fields', campaign: campaign
-    - else
-      = form_for(campaign, url: submit_campaign_draft_path(campaign), method: :post, class: 'form-horizontal') do |f|
-        = form_fields(f, 'campaigns.view_draft') do |field|
-          .row
-            .col-xs-12
-              = field.(:starts_immediately, as: :boolean, no_label: t('.starts_later'), popover: {html: popover_html('.starts_immediately')})
-          .row
-            .col-xs-7
-              .starts-at-wrapper{style: "#{jquery_hidden unless (campaign.starts_immediately == false)}"}
-                = field.(:starts_at, as: :datetime, required: false)
-          .row
-            .col-xs-7
-              = field.(:ends_at, as: :datetime)
-          .row
-            .col-xs-12
-              -# XXX show newline between label and input
-              = field.(:time_zone, as: :time_zone)
-          .row
-            .col-xs-6
-              = field.(:visibility, as: :select, values: CampaignDraft.visibility_select, popover: {html: popover_html('.visibility')})
-            .col-xs-6
-              = field.(:generate_invite_link, as: :boolean, popover: {html: popover_html('.generate_invite_link')})
-          %hr
-          .right
-            = field.(:submit)
-          
+    - if campaign.approved_at
+      - if campaign.campaign
+        = link_to(campaign.campaign, campaign.campaign)
+      - else
+        = render 'publish_form', campaign: campaign
+    
 :javascript
   
   $('#campaign_draft_starts_immediately').change(function(){

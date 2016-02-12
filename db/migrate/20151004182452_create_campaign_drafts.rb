@@ -10,6 +10,7 @@ class CreateCampaignDrafts < ActiveRecord::Migration
       t.datetime :approved_at, :datetime
       t.datetime :rejected_at, :datetime
       t.datetime :submitted_at, :datetime
+      t.datetime :published_at, :datetime
       t.boolean :skip_past_date_validations
       t.string :visibility
       t.boolean :generate_invite_link

@@ -4,7 +4,7 @@ if Rails.env.development?
   FG.create :campaign
   FG.create :campaign, :almost_fulfilled
   2.times { FG.create :campaign, :unfulfilled, including_attendees: [user.attendee] }
-  2.times { FG.create :campaign, :fulfilled, event_promoter_id: user.event_promoter_id }
+  2.times { FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, event_promoter_id: user.event_promoter_id) }
   FG.create :campaign, :with_referred_attendee, referred_attendee: user.attendee
   FG.create :event, event_promoter_id: user.event_promoter_id
   !user.attendee.credits.count.zero? || fail

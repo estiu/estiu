@@ -66,6 +66,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "datetime"
     t.datetime "rejected_at"
     t.datetime "submitted_at"
+    t.datetime "published_at"
     t.boolean  "skip_past_date_validations"
     t.string   "visibility"
     t.boolean  "generate_invite_link"
