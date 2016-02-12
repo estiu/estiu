@@ -8,5 +8,6 @@ class CreateArtistCatalogEntries < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :artist_catalog_entries, [:artist_id, :artist_promoter_id], unique: true, name: 'artist_catalog_entries_join_uniqueness'
   end
 end

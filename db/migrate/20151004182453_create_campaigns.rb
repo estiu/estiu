@@ -5,8 +5,9 @@ class CreateCampaigns < ActiveRecord::Migration
       t.datetime :event_rejected_at
       t.datetime :fulfilled_at
       t.datetime :unfulfilled_at
-      t.references :campaign_draft, index: true, foreign_key: true, null: false
+      t.references :campaign_draft, index: false, foreign_key: true, null: false
       t.timestamps null: false
     end
+    add_index :campaigns, :campaign_draft_id, unique: true
   end
 end

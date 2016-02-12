@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at",         null: false
   end
 
+  add_index "artist_catalog_entries", ["artist_id", "artist_promoter_id"], name: "artist_catalog_entries_join_uniqueness", unique: true, using: :btree
   add_index "artist_catalog_entries", ["artist_id"], name: "index_artist_catalog_entries_on_artist_id", using: :btree
   add_index "artist_catalog_entries", ["artist_promoter_id"], name: "index_artist_catalog_entries_on_artist_promoter_id", using: :btree
 
@@ -92,7 +93,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at",             null: false
   end
 
-  add_index "campaigns", ["campaign_draft_id"], name: "index_campaigns_on_campaign_draft_id", using: :btree
+  add_index "campaigns", ["campaign_draft_id"], name: "index_campaigns_on_campaign_draft_id", unique: true, using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.string   "first_name",       null: false
@@ -167,6 +168,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at",   null: false
   end
 
+  add_index "events_ra_artists", ["event_id", "ra_artist_id"], name: "index_events_ra_artists_on_event_id_and_ra_artist_id", unique: true, using: :btree
   add_index "events_ra_artists", ["event_id"], name: "index_events_ra_artists_on_event_id", using: :btree
   add_index "events_ra_artists", ["ra_artist_id"], name: "index_events_ra_artists_on_ra_artist_id", using: :btree
 

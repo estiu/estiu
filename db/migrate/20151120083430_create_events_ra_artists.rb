@@ -6,5 +6,6 @@ class CreateEventsRaArtists < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+    add_index :events_ra_artists, [:event_id, :ra_artist_id], unique: true
   end
 end
