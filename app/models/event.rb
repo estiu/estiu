@@ -1,6 +1,8 @@
 class Event < ActiveRecord::Base
   
-  # note on starts_at: It must be timezone-unaware. (Unpredicatble) timezone-related changes should never affect the time the user did specify, for a given event.
+  # note on starts_at: It must be timezone-unaware. (Unpredictable) timezone-related changes should never affect the time the user did specify, for a given event.
+  
+  extend Approvable
   
   has_and_belongs_to_many :ra_artists
   has_and_belongs_to_many :attendees, join_table: :tickets
@@ -8,7 +10,7 @@ class Event < ActiveRecord::Base
   belongs_to :venue
   has_many :tickets
   has_many :event_documents, dependent: :destroy
-  has_one :event_promoter, through: :campaign
+  delegate :event_promoter, to: :campaign
   
   attr_accessor :documents_confirmation
   
@@ -30,20 +32,13 @@ class Event < ActiveRecord::Base
   validates_numericality_of :starts_at_hours, greater_than_or_equal_to: 0, less_than: 24
   validates_numericality_of :starts_at_minutes, greater_than_or_equal_to: 0, less_than: 60
   validates_numericality_of :duration, greater_than_or_equal_to: MIN_DURATION
-  validates :submitted_at, presence: true, if: :approved_at
-  validates :submitted_at, presence: true, if: :rejected_at
-  validates :approved_at, inclusion: [nil], unless: :submitted_at
-  validates :approved_at, inclusion: [nil], if: :rejected_at
-  validates :rejected_at, inclusion: [nil], unless: :submitted_at
-  validates :rejected_at, inclusion: [nil], if: :approved_at
   
   validate :campaign_was_fulfilled
-  validate :approved_at_and_rejected_at_nil_when_submitting
   validate :starts_at_is_future, on: :create
   validate :at_least_one_ra_artist
   
   def self.visible_for_event_promoter event_promoter
-    joins(:campaign).where(campaigns: {event_promoter_id: event_promoter.id})
+    joins(campaign: :campaign_draft).where(campaign_drafts: {event_promoter_id: event_promoter.id})
   end
   
   def self.visible_for_attendee attendee
@@ -66,16 +61,6 @@ class Event < ActiveRecord::Base
   
   def duration
     (duration_hours || 0).hours + duration_minutes.minutes
-  end
-  
-  def must_be_reviewed?
-    submitted_at && (!approved_at && !rejected_at)
-  end
-  
-  {approve!: :approved_at, reject!: :rejected_at}.each do |method, attr|
-    define_method method do
-      update_attributes!({attr => DateTime.now})
-    end
   end
   
   def to_s
@@ -113,18 +98,6 @@ class Event < ActiveRecord::Base
   def campaign_was_fulfilled
     unless campaign.fulfilled_at
       errors[:campaign] << 'campaign.fulfilled_at must be present.'
-    end
-  end
-  
-  def approved_at_and_rejected_at_nil_when_submitting
-    change = previous_changes[:submitted_at] # XXX is this correct in a `validate`? Its for after_commit I think
-    if change && change[0].nil? && change[1].present?
-      if approved_at
-        errors[:approved_at] << 'Cannot be present when setting submitted_at'
-      end
-      if rejected_at
-        errors[:rejected_at] << 'Cannot be present when setting submitted_at'
-      end
     end
   end
   

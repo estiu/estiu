@@ -1,0 +1,31 @@
+%hr
+= form_for(campaign, class: 'form-horizontal') do |f|
+  = form_fields(f, 'campaign_drafts.form') do |field|
+    - venue_capacity = capture do
+      .venue-capacity.f13{style: 'margin-top: 3px'}
+        %strong
+          %span#venue-capacity-indicator
+    .row
+      .col-xs-2
+        = field.(:venue_id, as: :select, values: Venue.for_select, only_label: true)
+      .col-xs-6.right
+        = field.(:venue_id, as: :select, values: Venue.for_select, only_input: true, after: venue_capacity, form_group_class: 'm0')
+      .col-xs-4.right
+        = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-info btn-xs')
+    = field.(:name)
+    = field.(:description, as: :textarea)
+    .row
+      .col-xs-6
+        = field.(:goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT)
+      .col-xs-6
+        #recommended-pledge-indicator.f12.alert.alert-info.p10{style: 'margin-top: 22px'}
+    .row
+      .col-xs-6
+        = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
+      .col-xs-6
+        #attendance-indicator.f12.alert.alert-warning.p10{style: 'margin-top: 22px'}= t('.maximum_attendance') + ':'
+    %hr
+    .right
+      = field.(:submit)
+          
+= render 'form_js'

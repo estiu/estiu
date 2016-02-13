@@ -33,6 +33,8 @@
         %span.glyphicon.glyphicon-question-sign.black
       -# empty div: for causing a newline, which is expected after a <label>.
       %div
+  - if locals[:force_newline_after_label]
+    %div
   - unless locals[:only_label]
     = render "fields/#{as}", locals.merge(locals: locals)
   - if render_label && locals[:optional]

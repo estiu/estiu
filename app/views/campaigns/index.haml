@@ -12,11 +12,11 @@
             = link_to t('.all'), campaigns_path, opts
           - else
             = link_to t('.mine'), mine_campaigns_path, opts
-  - if policy(Campaign).new?
+  - if policy(CampaignDraft).new?
     .row
       .col-xs-12.right.top10
         %span
-          = link_to t(".new"), new_campaign_path, class: 'btn btn-success'
+          = link_to t(".new"), new_campaign_draft_path, class: 'btn btn-success'
 
   %hr
   %ul

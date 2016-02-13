@@ -1,0 +1,29 @@
+- campaign = @draft
+.row
+  .bordered{class: centered}
+    %h2= t '.title', campaign_name: campaign.name
+    - unless campaign.submitted_at
+      = link_to t('.edit'), edit_campaign_draft_path(campaign), class: 'btn btn-xs btn-info'
+      = link_to t('.destroy'), campaign_draft_path(campaign), method: :delete, class: 'btn btn-xs btn-danger', id: "delete-draft-#{campaign.id}"
+    - if campaign.submitted_at
+      %hr
+      - status = campaign.approved_at ? 'success' : campaign.rejected_at ? 'danger' : 'info'
+      %span.f14{class: "label label-#{status}"}
+        = t ".review_status_#{status}"
+    %hr
+    = render 'step_1_fields', campaign: campaign
+    - unless campaign.submitted_at
+      = render 'submit_form', campaign: campaign
+    - if campaign.published_at
+      = render 'step_2_fields', campaign: campaign
+    - if campaign.approved_at
+      - if campaign.campaign
+        = link_to(campaign.campaign, campaign.campaign)
+      - else
+        = render 'publish_form', campaign: campaign
+    
+:javascript
+  
+  $('#campaign_draft_starts_immediately').change(function(){
+    $('.starts-at-wrapper').toggle($(this).val() == 'false')
+  })

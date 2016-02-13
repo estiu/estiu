@@ -7,7 +7,7 @@ describe CampaignUnfulfillmentCheck do
     }
     
     before {
-      campaign.update_attributes!(ends_at: DateTime.now)
+      campaign.campaign_draft.update_attributes!(ends_at: DateTime.now)
     }
     
     def the_action

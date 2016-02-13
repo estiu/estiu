@@ -2,27 +2,12 @@ FG.define do
   
   factory :campaign do
     
-    association :event_promoter
-    association :venue
-    name "Fund my party"
-    description "I was thinking of throwing the perfect party, in a great open-air venue, at daytime, and with some of the latest and greatest DJs out there."
-    starts_at { DateTime.now.beginning_of_day }
-    ends_at { 30.days.from_now }
-    goal_cents { Random.rand(Campaign::MAXIMUM_GOAL_AMOUNT - Campaign::MINIMUM_GOAL_AMOUNT).to_i + Campaign::MINIMUM_GOAL_AMOUNT}
-    skip_past_date_validations true
-    visibility Campaign::PUBLIC_VISIBILITY
-    generate_invite_link false
-    starts_immediately false
-    time_zone { Estiu::Timezones::ALL.sample }
-    
-    after(:build) do |rec, eva|
-      rec.minimum_pledge_cents = [(rec.goal_cents / rec.venue.capacity).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max
-    end
+    association :campaign_draft, factory: [:campaign_draft, :published]
     
     trait :with_event do
       
       after(:create) do |rec, eva|
-        FG.create :event, campaign: rec, event_promoter: rec.event_promoter
+        FG.create :event, campaign: rec, event_promoter_id: rec.event_promoter.id
       end
       
     end
@@ -30,7 +15,7 @@ FG.define do
     trait :with_submitted_event do
       
       after(:create) do |rec, eva|
-        FG.create :event, :submitted, campaign: rec, event_promoter: rec.event_promoter
+        FG.create :event, :submitted, campaign: rec
       end
       
     end
@@ -84,10 +69,9 @@ FG.define do
         including_attendees []
       end
       
-      starts_at { 30.days.ago }
-      ends_at { 2.days.ago }
-      
       after(:create) do |rec, eva|
+        
+        rec.campaign_draft.update_attributes! starts_at: 30.days.ago, ends_at: 2.days.ago
         
         pledge_count = 5
         amount_cents = ((rec.goal_cents - rec.minimum_pledge_cents - 1).to_f / pledge_count.to_f).floor

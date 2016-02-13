@@ -1,0 +1,47 @@
+:javascript
+  
+  window.venue_capacities = #{Venue.venue_capacities.to_json}
+  
+  function update_recommended_pledge(){
+    var capacity = window.venue_capacities[$('#campaign_draft_venue_id').val()] || "#{t 'campaign_drafts.form.venue_capacity'}"
+    var facade = $('#campaign_draft_goal_cents_facade').val()
+    var goal = $('#campaign_draft_goal_cents').val()
+    var result;
+    if (facade && goal && !isNaN(capacity) && !isNaN(goal)){
+      var _goal = new Number(goal)
+      var _capacity = new Number(capacity)
+      result = (_goal / _capacity / 100.0).toFixed(2)
+      $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', result)
+    } else {
+      result = "#{t 'campaign_drafts.form.minimum_pledge_cents_short'}"
+      $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', null)
+    }
+    result = '<strong>' + result + '</strong>'
+    var money = facade || "#{t 'campaign_drafts.form.goal_cents'}"
+    var caption = money + " / " + capacity + " = " + result
+    $('#recommended-pledge-indicator').html(caption)
+  }
+  
+  function update_attendance_indicator(){
+    var caption = "#{t 'campaign_drafts.form.maximum_attendance'}"
+    var goal = $('#campaign_draft_goal_cents').val()
+    var pledge = $('#campaign_draft_minimum_pledge_cents').val()
+    var value = ""
+    if (goal && pledge && pledge != "0") { // "0": because of autonumeric's min.
+      value = Math.floor(goal / pledge)
+    }
+    $('#attendance-indicator').html(caption + ": " + value)
+  }
+  
+  $('#campaign_draft_venue_id').change(function(){
+    var val = window.venue_capacities[$(this).val()]
+    var caption = val ? "#{t('campaign_drafts.form.venue_capacity')}: " + val : ""
+    $("#venue-capacity-indicator").text(caption)
+    update_recommended_pledge()
+  }).change()
+  
+  $('#campaign_draft_goal_cents_facade').bind('cents_field_updated', update_recommended_pledge)
+  update_recommended_pledge()
+  update_attendance_indicator()
+  
+  $('#campaign_draft_goal_cents_facade, #campaign_draft_minimum_pledge_cents_facade').bind('cents_field_updated', update_attendance_indicator)

@@ -16,7 +16,17 @@ Rails.application.routes.draw do
       get '/mailer_previews/*path', to: "rails/mailers#preview"
     end
     
-    resources :campaigns, only: [:new, :create, :show, :index] do
+    resources :campaign_drafts, path: 'drafts' do
+      member do
+        post :submit
+        post :publish
+        get :approve
+        get :reject
+        get :submit, to: 'campaign_drafts#show' # in case user tries to visit address bar location after validation errors
+      end
+    end
+    
+    resources :campaigns, only: [:show, :index] do
       collection do
         get :mine
       end

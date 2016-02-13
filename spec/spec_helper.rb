@@ -1,7 +1,10 @@
 if (RSpec.configuration.instance_variable_get :@files_or_directories_to_run) == ['spec']
   unless ENV['CODESHIP']
     require 'simplecov'
-    SimpleCov.start 'rails'
+    SimpleCov.start 'rails' do
+      add_filter 'app/lib/aws_ops'
+      add_filter 'app/mailer_previews'
+    end
   end
 end
 

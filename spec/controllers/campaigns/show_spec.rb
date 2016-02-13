@@ -35,7 +35,7 @@ describe CampaignsController do
       
       sign_as :event_promoter
       
-      let(:campaign){ FG.create :campaign, :fulfilled, event_promoter_id: event_promoter.event_promoter_id }
+      let(:campaign){ FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id) }
       
       context "campaign with event from this event_promoter" do
         

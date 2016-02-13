@@ -17,7 +17,7 @@
       %p= t('.empty_admin')      
     - elsif current_event_promoter
       %p= t('.empty_event_promoter')
-      %p= t('.empty2_event_promoter', link: link_to(t('.new_campaign'), new_campaign_path)).html_safe
+      %p= t('.empty2_event_promoter', link: link_to(t('.new_campaign'), new_campaign_draft_path)).html_safe
     - elsif current_attendee
       %p= t('.empty_attendee')
       %p= t('.empty2_attendee', link: link_to(t('.campaigns'), campaigns_path)).html_safe

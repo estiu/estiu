@@ -1,0 +1,20 @@
+%p
+  %strong= t '.venue'
+  = campaign.venue
+
+%p
+  %strong= t '.name'
+  = campaign.name
+
+%p
+  %strong= t '.description'
+  = campaign.description
+
+%p
+  %strong= t '.goal'
+  = campaign.goal.format
+
+%p
+  %strong= t 'campaign_drafts.form.minimum_pledge_cents'
+  = campaign.minimum_pledge.format
+

@@ -1,4 +1,4 @@
-describe CampaignsController do
+describe CampaignDraftsController do
   
   context 'event_promoter role' do
     
@@ -12,7 +12,7 @@ describe CampaignsController do
       
       it 'works' do
         
-        expect(Campaign).to receive(:new).once.and_call_original
+        expect(CampaignDraft).to receive(:new).once.and_call_original
         get :new
         
       end

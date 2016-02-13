@@ -1,20 +1,21 @@
-describe CampaignsController do
+describe CampaignDraftsController do
   
   context 'event_promoter role' do
     
     sign_as :event_promoter
     
-    let(:campaign){ FG.build(:campaign) }
+    let!(:campaign){ FG.create(:campaign_draft, :approved, event_promoter: event_promoter.event_promoter) }
+    let(:sample_campaign){ FG.create :campaign_draft, :published }
     
     let!(:campaign_params){
-      v = {campaign: {}}
-      Campaign::CREATE_ATTRS.each do |attr|
-        v[:campaign][attr] = campaign.send attr
+      v = {campaign_draft: {}, id: campaign.id}
+      CampaignDraft::CREATE_ATTRS_STEP_2.each do |attr|
+        v[:campaign_draft][attr] = sample_campaign.send attr
       end
-      Campaign::DATE_ATTRS.each do |attr|
-        v[:campaign][attr] = campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
+      CampaignDraft::DATE_ATTRS.each do |attr|
+        v[:campaign_draft][attr] = sample_campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
       end
-      v[:campaign].merge!({
+      v[:campaign_draft].merge!({
         "starts_immediately" => 'false',
         "starts_at(4i)" => "23",
         "starts_at(5i)" => "59",
@@ -24,24 +25,37 @@ describe CampaignsController do
       v
     }
     
-    describe '#create' do
+    describe '#publish' do
       
       describe 'success' do
         
         after do
-          controller_ok(302)
-          expect(response).to redirect_to(campaign_path(id: Campaign.last.id))
+          controller_ok 302
         end
+        
+        def the_action
+          post :publish, campaign_params
+        end
+        
+        it 'successfully sets the campaign as published' do
           
-        it 'creates a Campaign' do
-          
-          expect(Campaign).to receive(:new).exactly(2).times.and_call_original
-          expect_any_instance_of(Campaign).to receive(:save).once.and_call_original
+          expect_any_instance_of(CampaignDraft).to receive(:save).once.and_call_original
           expect{
-            post :create, campaign_params
+            the_action
           }.to change{
-            Campaign.count
+            campaign.reload.published_at
+          }
+          
+        end
+        
+        it "creates a Campaign" do
+          
+          expect {
+            the_action
+          }.to change {
+            Campaign.where(campaign_draft: campaign).count
           }.by(1)
+          
         end
         
       end
@@ -52,13 +66,25 @@ describe CampaignsController do
         
         let(:incomplete_params){
           v = campaign_params
-          v[:campaign][:name] = nil
+          v[:campaign_draft][:time_zone] = nil
           v
         }
         
-        it "doesn't create a campaign" do
+        def the_action
+          post :publish, incomplete_params
+        end
+        
+        it "doesn't set the campaign as published" do
           expect{
-            post :create, incomplete_params
+            the_action
+          }.to_not change{
+            campaign.reload.published_at
+          }
+        end
+        
+        it "doesn't result in any Campaign being created" do
+          expect{
+            the_action
           }.to_not change{
             Campaign.count
           }
@@ -93,20 +119,20 @@ describe CampaignsController do
           
           let(:params){
             v = campaign_params
-            v[:campaign][:starts_at] = starts_at.strftime(Date::DATE_FORMATS[:default])
-            v[:campaign][:ends_at] = ends_at.strftime(Date::DATE_FORMATS[:default])
-            v[:campaign].merge!(time_params) unless causality_checking
+            v[:campaign_draft][:starts_at] = starts_at.strftime(Date::DATE_FORMATS[:default])
+            v[:campaign_draft][:ends_at] = ends_at.strftime(Date::DATE_FORMATS[:default])
+            v[:campaign_draft].merge!(time_params) unless causality_checking
             v
           }
           
           def the_test negative=false
             expect{
-              post :create, params
+              post :publish, params
             }.to change{
-              Campaign.count
+              campaign.reload.published_at
             }
-            expect(Campaign.last.starts_at.strftime('%H')).send((negative ? :to_not : :to), eq(distinct_value))
-            expect(Campaign.last.starts_at.strftime('%M')).send((negative ? :to_not : :to), eq(distinct_value))
+            expect(campaign.reload.starts_at.strftime('%H')).send((negative ? :to_not : :to), eq(distinct_value))
+            expect(campaign.reload.starts_at.strftime('%M')).send((negative ? :to_not : :to), eq(distinct_value))
           end
           
           it 'is the time fields which have priority' do
@@ -129,22 +155,22 @@ describe CampaignsController do
            
            let(:incomplete_params){
              v = campaign_params
-             v[:campaign][:starts_at] = nil
-             v[:campaign][:ends_at] = nil
-             v[:campaign].merge!(time_params)
+             v[:campaign_draft][:starts_at] = nil
+             v[:campaign_draft][:ends_at] = nil
+             v[:campaign_draft].merge!(time_params)
              v
            }
            
            def the_test(negative=false)
              expect{
-               post :create, incomplete_params
+               post :publish, incomplete_params
              }.send((negative ? :to_not : :to), change{
-               Campaign.count
+               campaign.reload.published_at
              })
            end
            
            
-           it "doesn't result in a campaign being created" do
+           it "doesn't result in the campaign being published" do
              the_test :negative
            end
            
@@ -168,9 +194,11 @@ describe CampaignsController do
   
   context 'forbidden roles' do
     
+    let!(:campaign){ FG.create(:campaign_draft) }
+    
     before {
       expect_unauthorized
-      post :create
+      post :publish, id: campaign.id
     }
     
     forbidden_for(nil, :attendee)

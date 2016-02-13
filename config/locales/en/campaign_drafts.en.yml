@@ -1,0 +1,71 @@
+en:
+  campaign_drafts:
+    errors:
+      minimum_pledge_cents:
+        venue: You must set at least %{value}.
+      starts_at:
+        ends_at: Must be prior to Ends at
+      ends_at:
+        starts_at: The campaign must remain open for at least %{hours} hours.
+      generate_invite_link: If the event is invite only, then a link must be generated.
+      generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
+    create:
+      success: "Succesfully saved the campaign draft. Now please check everything's correct (else you can edit the draft). Then you can submit it for review."
+      error: "Couldn't create campaign due to the indicated errors."
+    new:
+      title: 'New campaign'
+    edit:
+      title: 'Edit campaign draft'
+    update:
+      success: "Campaign draft updated successfully."
+      error: "Couldn't update the campaign draft due to the indicated errors."
+    submit:
+      success: "Campaign successfully submitted for review. We will get back to you soon!"
+      error: "Couldn't submit the campaign due to the indicated errors."
+    publish:
+      success: "Campaign successfully published! Attendees may now discover and be notified of the campaign."
+      error: "Couldn't publish the campaign due to the indicated errors."
+    destroy:
+      success: "Campaign draft successfully discarded."
+      error: "Sorry, there was a problem discarding this campaign draft. Please try again."
+    submit_form:
+      submit: "Submit for review"
+    show:
+      review_status_success: "Approved"
+      review_status_danger: "Rejected"
+      review_status_info: "Pending review"
+      edit: Edit
+      destroy: Discard
+      title: 'Draft: %{campaign_name}'
+    step_1_fields:
+      venue: Venue
+      name: Name
+      description: Description
+      goal: Goal
+    form:
+      maximum_attendance: "Maximum attendance"
+      venue_capacity: 'Capacity'
+      goal_cents: Campaign Goal
+      recommended_pledge: Recommended minimum payment
+      recommended_pledge_cents: Recommended payment
+      minimum_pledge_cents: Minimum payment
+      minimum_pledge_cents_short: Minimum payment
+      submit: "Save draft"
+    publish_form:
+      starts_later: 'No, I will specify a date'
+      starts_immediately_popover: "Whether this campaign should be public since the first moment, or only after the date/time you specify."
+      starts_immediately_popover_2: "Making the campaign public at a specific date may have a strategic advantage for you."
+      visibility_popover: Select to which users the campaign will be visible.
+      visibility_popover_2: This determines how public/secret the campaign is.
+      generate_invite_link_popover: If yes, a secret link will be generated, which users with access can share.
+      generate_invite_link_popover_2:  Anyone receiving the secret link will be able to view/participate in the campaign.
+      starts_immediately: "Launch campaign immediately?"
+      visibility: Campaign/event visibility
+      generate_invite_link: Generate invite link?
+      submit: Publish campaign
+      starts_at: Campaign starts at
+      ends_at: Campaign ends at
+      public_visibility: Public
+      app_visibility: Confirmed Estiu members
+      invite_visibility: By invitation only
+  

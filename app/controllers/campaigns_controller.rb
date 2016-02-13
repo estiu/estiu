@@ -27,22 +27,6 @@ class CampaignsController < ApplicationController
   def show
   end
   
-  def new
-    authorize(@campaign = Campaign.new)
-  end
-  
-  def create
-    authorize(@campaign = Campaign.new(campaign_attrs))
-    @campaign.event_promoter = current_user.event_promoter
-    if @campaign.save
-      flash[:success] = t('.success')
-      redirect_to @campaign
-    else
-      flash.now[:error] = t('.error')
-      render :new
-    end
-  end
-  
   helper_method :in_mine_page?
   def in_mine_page?
     params[:action] == 'mine'
@@ -57,16 +41,6 @@ class CampaignsController < ApplicationController
   
   def listing_scope
     Campaign.without_event
-  end
-  
-  def campaign_attrs
-    authorize(Campaign.new) # ugly extra call to .authorize for keeping the tests happy
-    v = params.permit(campaign: Campaign::CREATE_ATTRS)[:campaign]
-    if v[:time_zone].present?
-      process_datetime_params v, Campaign::DATE_ATTRS, v[:time_zone]
-    else
-      v.except(:"starts_at(4i)", :"starts_at(5i)", :"ends_at(4i)", :"ends_at(5i)")
-    end
   end
   
   def authorize_campaign

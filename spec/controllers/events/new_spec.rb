@@ -13,7 +13,7 @@ describe EventsController do
       context "event_promoter of a campaign with pending event" do
         
         let(:campaign){
-          FG.create :campaign, :fulfilled, event_promoter_id: event_promoter.event_promoter_id
+          FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
         }
         
         it 'is permitted' do
@@ -29,9 +29,7 @@ describe EventsController do
       context "event_promoter of a campaign having an event already" do
         
         let(:campaign){
-          c = FG.create :campaign, :fulfilled, event_promoter_id: event_promoter.event_promoter_id
-          FG.create :event, campaign: c
-          c
+          FG.create :campaign, :fulfilled, :with_event, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
         }
         
         it "is forbidden" do

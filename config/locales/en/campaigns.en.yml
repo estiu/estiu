@@ -65,32 +65,3 @@ en:
       your_event_fulfilled: Your event has reached its goal, and we are ready to transfer its funds.
       must_create_event: "First, you must %{link}."
       new_event: create the corresponding event
-    create:
-      success: "Succesfully created campaign."
-      error: "Couldn't create campaign due to the indicated errors."
-    form:
-      venue_capacity: 'Capacity'
-      visibility: Campaign/event visibility
-      public_visibility: Public
-      app_visibility: Confirmed Estiu members
-      invite_visibility: By invitation only
-      generate_invite_link: Generate invite link?
-      visibility_popover: Select to which users the campaign will be visible.
-      visibility_popover_2: This determines how public/secret the campaign is.
-      generate_invite_link_popover: If yes, a secret link will be generated, which users with access can share.
-      generate_invite_link_popover_2:  Anyone receiving the secret link will be able to view/participate in the campaign.
-      maximum_attendance: "Maximum attendance"
-      title: New campaign
-      goal_cents: Campaign Goal
-      starts_at: Campaign starts at
-      starts_immediately: "Launch campaign immediately?"
-      starts_immediately_popover: "Whether this campaign should be public since the first moment, or only after the date/time you specify."
-      starts_immediately_popover_2: "Making the campaign public at a specific date may have a strategic advantage for you."
-      ends_at: Campaign ends at
-      starts_later: 'No, I will specify a date'
-      recommended_pledge: Recommended minimum payment
-      recommended_pledge_cents: Recommended payment
-      minimum_pledge_cents: Minimum payment
-      minimum_pledge_cents_short: Minimum payment
-      submit: "Create"
-  

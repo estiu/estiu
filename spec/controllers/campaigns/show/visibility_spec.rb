@@ -22,7 +22,7 @@ describe CampaignsController do
     
     context "public visibility" do
       
-      before { expect(campaign.visibility).to eq(Campaign::PUBLIC_VISIBILITY) }
+      before { expect(campaign.visibility).to eq(CampaignDraft::PUBLIC_VISIBILITY) }
       
       it 'works' do
         the_action
@@ -33,7 +33,7 @@ describe CampaignsController do
     
     context "app visibility" do
       
-      let(:campaign){ FG.create :campaign, visibility: Campaign::APP_VISIBILITY }
+      let(:campaign){ FG.create :campaign, campaign_draft: FG.create(:campaign_draft, :published, visibility: CampaignDraft::APP_VISIBILITY) }
       
       context "signed out" do
       
@@ -61,7 +61,7 @@ describe CampaignsController do
     
     context "invite only" do
       
-      let(:campaign){ FG.create :campaign, visibility: Campaign::INVITE_VISIBILITY, generate_invite_link: true }
+      let(:campaign){ FG.create :campaign, campaign_draft: FG.create(:campaign_draft, :published, visibility: CampaignDraft::INVITE_VISIBILITY, generate_invite_link: true) }
       
       context "signed out" do
         
@@ -123,7 +123,7 @@ describe CampaignsController do
         context "as the event promoter who created the event" do
           
           let(:campaign) {
-            FG.create :campaign, visibility: Campaign::INVITE_VISIBILITY, generate_invite_link: true, event_promoter: event_promoter.event_promoter
+            FG.create :campaign, campaign_draft: FG.create(:campaign_draft, :published, visibility: CampaignDraft::INVITE_VISIBILITY, generate_invite_link: true, event_promoter: event_promoter.event_promoter)
           }
           
           context "without passing the invite link" do

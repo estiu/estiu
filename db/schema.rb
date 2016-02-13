@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at",         null: false
   end
 
+  add_index "artist_catalog_entries", ["artist_id", "artist_promoter_id"], name: "artist_catalog_entries_join_uniqueness", unique: true, using: :btree
   add_index "artist_catalog_entries", ["artist_id"], name: "index_artist_catalog_entries_on_artist_id", using: :btree
   add_index "artist_catalog_entries", ["artist_promoter_id"], name: "index_artist_catalog_entries_on_artist_promoter_id", using: :btree
 
@@ -55,31 +56,44 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "campaigns", force: :cascade do |t|
+  create_table "campaign_drafts", force: :cascade do |t|
     t.string   "name",                       null: false
-    t.string   "unfulfillment_check_id"
     t.text     "description"
     t.integer  "goal_cents"
     t.integer  "minimum_pledge_cents"
     t.datetime "starts_at"
-    t.datetime "ends_at",                    null: false
+    t.datetime "ends_at"
+    t.datetime "approved_at"
+    t.datetime "datetime"
+    t.datetime "rejected_at"
+    t.datetime "submitted_at"
+    t.datetime "published_at"
+    t.boolean  "skip_past_date_validations"
+    t.string   "visibility"
+    t.boolean  "generate_invite_link"
+    t.boolean  "starts_immediately"
+    t.string   "invite_token"
+    t.string   "time_zone"
+    t.integer  "venue_id",                   null: false
+    t.integer  "event_promoter_id",          null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "campaign_drafts", ["event_promoter_id"], name: "index_campaign_drafts_on_event_promoter_id", using: :btree
+  add_index "campaign_drafts", ["venue_id"], name: "index_campaign_drafts_on_venue_id", using: :btree
+
+  create_table "campaigns", force: :cascade do |t|
+    t.string   "unfulfillment_check_id"
     t.datetime "event_rejected_at"
     t.datetime "fulfilled_at"
     t.datetime "unfulfilled_at"
-    t.boolean  "skip_past_date_validations"
-    t.string   "visibility",                 null: false
-    t.boolean  "generate_invite_link",       null: false
-    t.boolean  "starts_immediately",         null: false
-    t.string   "invite_token"
-    t.string   "time_zone",                  null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-    t.integer  "event_promoter_id",          null: false
-    t.integer  "venue_id",                   null: false
+    t.integer  "campaign_draft_id",      null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
-  add_index "campaigns", ["event_promoter_id"], name: "index_campaigns_on_event_promoter_id", using: :btree
-  add_index "campaigns", ["venue_id"], name: "index_campaigns_on_venue_id", using: :btree
+  add_index "campaigns", ["campaign_draft_id"], name: "index_campaigns_on_campaign_draft_id", unique: true, using: :btree
 
   create_table "contacts", force: :cascade do |t|
     t.string   "first_name",       null: false
@@ -154,6 +168,7 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.datetime "updated_at",   null: false
   end
 
+  add_index "events_ra_artists", ["event_id", "ra_artist_id"], name: "index_events_ra_artists_on_event_id_and_ra_artist_id", unique: true, using: :btree
   add_index "events_ra_artists", ["event_id"], name: "index_events_ra_artists_on_event_id", using: :btree
   add_index "events_ra_artists", ["ra_artist_id"], name: "index_events_ra_artists_on_ra_artist_id", using: :btree
 
@@ -250,8 +265,9 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   add_foreign_key "artist_catalog_entries", "artist_promoters"
   add_foreign_key "artist_catalog_entries", "artists"
   add_foreign_key "artists", "ra_artists"
-  add_foreign_key "campaigns", "event_promoters"
-  add_foreign_key "campaigns", "venues"
+  add_foreign_key "campaign_drafts", "event_promoters"
+  add_foreign_key "campaign_drafts", "venues"
+  add_foreign_key "campaigns", "campaign_drafts"
   add_foreign_key "credits", "attendees"
   add_foreign_key "credits", "pledges", column: "referral_pledge_id"
   add_foreign_key "credits", "pledges", column: "refunded_pledge_id"
