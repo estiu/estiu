@@ -12,8 +12,7 @@
         = field.(:ends_at, as: :datetime)
     .row
       .col-xs-12
-        -# XXX show newline between label and input
-        = field.(:time_zone, as: :time_zone)
+        = field.(:time_zone, as: :time_zone, force_newline_after_label: true)
     .row
       .col-xs-6
         = field.(:visibility, as: :select, values: CampaignDraft.visibility_select, popover: {html: popover_html('.visibility')})

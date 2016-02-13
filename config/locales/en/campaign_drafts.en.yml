@@ -10,7 +10,7 @@ en:
       generate_invite_link: If the event is invite only, then a link must be generated.
       generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
     create:
-      success: "Succesfully saved the campaign draft. Now after filling the final fields, you can submit it for review."
+      success: "Succesfully saved the campaign draft. Now please check everything's correct (else you can edit the draft). Then you can submit it for review."
       error: "Couldn't create campaign due to the indicated errors."
     new:
       title: 'New campaign'
@@ -62,7 +62,7 @@ en:
       starts_immediately: "Launch campaign immediately?"
       visibility: Campaign/event visibility
       generate_invite_link: Generate invite link?
-      submit: Submit campaign for review
+      submit: Publish campaign
       starts_at: Campaign starts at
       ends_at: Campaign ends at
       public_visibility: Public
