@@ -48,7 +48,7 @@ describe "Campaign draft creation", js: true do
         CampaignDraft.count
       }.by(1)
       
-      expect(page).to have_content(t 'campaigns.create.success')
+      expect(page).to have_content(t 'campaign_drafts.create.success')
       
     end
     

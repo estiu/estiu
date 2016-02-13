@@ -19,7 +19,7 @@ describe 'Events listing' do
       context "when there are pending campaigns" do
         
         before {
-          FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, event_promoter_id: event_promoter.event_promoter_id)
+          FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
         }
         
         it "is displayed a warning with the corresponding links" do

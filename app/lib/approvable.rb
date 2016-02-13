@@ -29,6 +29,7 @@ module Approvable
       end
       
       def approved_at_and_rejected_at_nil_when_submitting
+        return if dev_or_test?
         change = previous_changes[:submitted_at] # XXX is this correct in a `validate`? Its for after_commit I think
         if change && change[0].nil? && change[1].present?
           if approved_at

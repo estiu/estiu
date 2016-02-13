@@ -2,7 +2,7 @@ describe "Campaign draft updating", js: true do
   
   sign_as :event_promoter, :feature
   
-  let!(:campaign){ FG.create :campaign_draft, :step_1, event_promoter: event_promoter.event_promoter }
+  let!(:campaign){ FG.create :campaign_draft, event_promoter: event_promoter.event_promoter }
   
   before {
     visit edit_campaign_draft_path(campaign)
@@ -33,7 +33,7 @@ describe "Campaign draft updating", js: true do
           campaign.reload.name
         }.from(old_name).to(new_name)
         
-        expect(page).to have_content(t 'campaigns.update.success')
+        expect(page).to have_content(t 'campaign_drafts.update.success')
         
       end
       

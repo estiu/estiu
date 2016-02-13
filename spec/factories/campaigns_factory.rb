@@ -2,7 +2,7 @@ FG.define do
   
   factory :campaign do
     
-    association :campaign_draft
+    association :campaign_draft, factory: [:campaign_draft, :published]
     
     trait :with_event do
       

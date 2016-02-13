@@ -2,7 +2,7 @@ describe "Campaign draft deletion" do
   
   sign_as :event_promoter, :feature
   
-  let!(:campaign){ FG.create :campaign_draft, :step_1, event_promoter: event_promoter.event_promoter }
+  let!(:campaign){ FG.create :campaign_draft, event_promoter: event_promoter.event_promoter }
   
   before {
     visit campaign_draft_path(campaign)

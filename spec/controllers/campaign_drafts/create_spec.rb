@@ -11,16 +11,6 @@ describe CampaignDraftsController do
       CampaignDraft::CREATE_ATTRS_STEP_1.each do |attr|
         v[:campaign_draft][attr] = campaign.send attr
       end
-      CampaignDraft::DATE_ATTRS.each do |attr|
-        v[:campaign_draft][attr] = campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
-      end
-      v[:campaign_draft].merge!({
-        "starts_immediately" => 'false',
-        "starts_at(4i)" => "23",
-        "starts_at(5i)" => "59",
-        "ends_at(4i)" => "23",
-        "ends_at(5i)" => "59"
-      })
       v
     }
     
