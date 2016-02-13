@@ -68,4 +68,19 @@ en:
       public_visibility: Public
       app_visibility: Confirmed Estiu members
       invite_visibility: By invitation only
-  
+    approve:
+      success: "Campaign approved successfully. The event promoter will receive an email confimation."
+      error: "Sorry, there has been an error when approving the campaign. No changes have been applied."
+    reject:
+      success: "Campaign rejected successfully. The event promoter will receive an email confimation."
+      error: "Sorry, there has been an error when rejecting the campaign. No changes have been applied."
+    review:
+      approve:
+        popover: "Do you confirm this campaign documentation is correct?"
+        popover_2: "By approving a campaign, you grant the promoter rights to immediately publish the campaign."
+      reject:
+        popover: "Do you confirm this campaign documentation is not adequate to publish?"
+    approve_or_reject:
+      title: Approve / Reject
+      approve: Approve
+      reject: Reject

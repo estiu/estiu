@@ -1,15 +1,15 @@
 %p
-  %strong= t 'campaigns.view_draft.starts_at'
+  %strong= t 'campaign_drafts.publish_form.starts_at'
   = campaign.starts_at_criterion
 
 %p
-  %strong= t 'campaigns.view_draft.ends_at'
+  %strong= t 'campaign_drafts.publish_form.ends_at'
   = campaign.ends_at
 
 %p
-  %strong= t 'campaigns.publish.visibility'
-  = t("campaigns.form.#{campaign.visibility}_visibility")
+  %strong= t 'campaign_drafts.publish_form.visibility'
+  = t("campaign_drafts.publish_form.#{campaign.visibility}_visibility")
 
 %p
-  %strong= t 'campaigns.view_draft.generate_invite_link'
+  %strong= t 'campaign_drafts.publish_form.generate_invite_link'
   = t "fields.#{campaign.generate_invite_link ? 'yes' : 'no'}"

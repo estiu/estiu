@@ -36,7 +36,7 @@ en:
       upload_all: 'Upload'
     review:
       approve:
-        popover: "By clicking this, you will become legally obliged to pay all the invoices attached, immediately."
+        popover: "By clicking this, you will become legally obligated to pay all the invoices attached, immediately."
         popover_2: "Not approving a correctly documented event (and in a timely manner) can result in litigation."
       reject:
         popover: "By clicking this, all the collected payment will be refunded to the attendees."
