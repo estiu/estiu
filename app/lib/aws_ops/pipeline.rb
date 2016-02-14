@@ -2,12 +2,28 @@ class AwsOps::Pipeline
   
   extend AwsOps
   
-  def self.unschedule_campaign_unfulfillment_check campaign_id
-    campaign = Campaign.find campaign_id
-    id = campaign.unfulfillment_check_id
+  def self.delete_single_pipeline id
     Rails.logger.info "Deleting pipeline with id #{id}..."
     data_pipeline_client.delete_pipeline({pipeline_id: id})
     Rails.logger.info "Deleted pipeline with id #{id}."
+  end
+  
+  def self.unschedule_campaign_unfulfillment_check campaign_id
+    campaign = Campaign.find campaign_id
+    id = campaign.unfulfillment_check_id
+    delete_single_pipeline id
+  end
+  
+  def self.delete_all_pipelines!
+    all_ids = list_pipelines.pipeline_id_list.map &:id
+    delete_ids = data_pipeline_client.describe_pipelines(pipeline_ids: all_ids).pipeline_description_list.select{|pipeline|
+      pipeline.tags.detect{|tag|
+        (tag.key == 'environment' && tag.value == environment)
+      }
+    }.map(&:pipeline_id)
+    delete_ids.map do |id|
+      delete_single_pipeline id
+    end
   end
   
   def self.schedule_campaign_unfulfillment_check campaign, test=false
