@@ -26,15 +26,17 @@ module AwsOps
   end
   
   def credentials
-    if ENV['CODESHIP'].present?
-      Hash[
-        %w(AWS_ACCESS_KEY_ID AWS_ACCESS_KEY AWS_SECRET_ACCESS_KEY AWS_SECRET_KEY).map{|k|
-          [k, ENV[k]]
-        }
-      ]
-    else
-      Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
-    end.symbolize_keys
+    result = 
+      if ENV['CODESHIP'].present?
+        Hash[
+          %w(AWS_ACCESS_KEY_ID AWS_ACCESS_KEY AWS_SECRET_ACCESS_KEY AWS_SECRET_KEY).map{|k|
+            [k, ENV[k]]
+          }
+        ]
+      else
+        Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
+      end.symbolize_keys
+    Hash.new{raise}.merge(result)
   end
   
   def region 

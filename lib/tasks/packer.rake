@@ -16,8 +16,8 @@ def rebuild role, force_rebuild, rails_environment
     cd packer/#{role}; \
     packer build \
       -var "base_ami=#{base_ami}" \
-      -var "aws_access_key=$AWS_ACCESS_KEY" \
-      -var "aws_secret_key=$AWS_SECRET_KEY" \
+      -var "aws_access_key=#{AwsOps::Infrastructure.credentials[:access_key_id]}" \
+      -var "aws_secret_key=#{AwsOps::Infrastructure.credentials[:secret_access_key]}" \
       -var "REPO_DEPLOY_PUBLIC_KEY=$REPO_DEPLOY_PUBLIC_KEY" \
       -var "REPO_DEPLOY_PRIVATE_KEY=$REPO_DEPLOY_PRIVATE_KEY" \
       -var "repo_source=$(echo #{repo_source})" \
