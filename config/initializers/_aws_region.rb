@@ -1,0 +1,1 @@
+Aws.config[:region] = AwsOps::Infrastructure.region

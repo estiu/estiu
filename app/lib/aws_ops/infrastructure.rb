@@ -151,7 +151,7 @@ module AwsOps
                 resource_record_set: {
                   name: 'staging.estiu.events.',
                   type: 'CNAME',
-                  ttl: 3600,
+                  ttl: 600,
                   resource_records: [
                     {value: dns_name}
                   ]
