@@ -190,16 +190,18 @@ module AwsOps
     # LCs don't support tags.
     # anyway, LCs don't support updating the AMI id, so the current setup is unfit for production.
     def self.create_launch_configurations roles=ASG_ROLES
+      base_opts = {
+        launch_configuration_name: role,
+        image_id: ::AwsOps::Amis.latest_ami(role, PRODUCTION_SIZE),
+        instance_type: AwsOps::PRODUCTION_SIZE,
+        security_groups: security_groups_per_worker[role],
+        key_name: KEYPAIR_NAME,
+        iam_instance_profile: Iam.instance_profile_arn
+      }.freeze
       roles.each do |role|
-        auto_scaling_client.create_launch_configuration({
-          launch_configuration_name: role,
-          image_id: ::AwsOps::Amis.latest_ami(role, PRODUCTION_SIZE),
-          instance_type: AwsOps::PRODUCTION_SIZE,
-          security_groups: security_groups_per_worker[role],
-          key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn,
-          health_check_type: 'ELB'
-        })
+        opts = base_opts.dup
+        opts.merge!(health_check_type: 'ELB') if LOAD_BALANCED_ASGS.include?(asg_name)
+        auto_scaling_client.create_launch_configuration(opts)
       end
     end
     
@@ -221,7 +223,7 @@ module AwsOps
           auto_scaling_group_name: "#{asg_name} #{SecureRandom.hex 6}",
           launch_configuration_name: asg_name,
           min_size: 1,
-          max_size: 1,
+          max_size: 4,
           availability_zones: availability_zones,
           tags: [
             {
