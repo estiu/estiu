@@ -5,7 +5,7 @@ class CampaignDraftPolicy < ApplicationPolicy
   end
   
   def show?
-    user.event_promoter == record.event_promoter
+    (user.event_promoter == record.event_promoter) || user.admin?
   end
   
   def edit_or_update?
