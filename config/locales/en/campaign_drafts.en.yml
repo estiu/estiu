@@ -37,6 +37,7 @@ en:
       edit: Edit
       destroy: Discard
       title: 'Draft: %{campaign_name}'
+      has_campaign: "This campaign has been published! Link: %{link}"
     step_1_fields:
       venue: Venue
       name: Name

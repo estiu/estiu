@@ -18,7 +18,8 @@
       = render 'step_2_fields', campaign: campaign
     - if campaign.approved_at
       - if campaign.campaign
-        = link_to(campaign.campaign, campaign.campaign)
+        .alert.alert-info
+          = t('.has_campaign', link: link_to(campaign.campaign, campaign.campaign, class: 'black bold')).html_safe
       - else
         = render 'publish_form', campaign: campaign
 
