@@ -20,12 +20,10 @@ module AwsOps
   USERNAME = 'ec2-user'
   BUILD_SIZE = 't2.micro'
   PRODUCTION_SIZE = 't2.micro'
-  REGION = 'eu-west-1'
   UPLOADS_BUCKET = "events-uploads-#{Rails.env}"
   
   def environment
-    fail("environment (production/staging) not set") unless self.aws_ops_environment
-    self.aws_ops_environment.to_s
+    (self.aws_ops_environment || Rails.env).to_s
   end
   
   def credentials
@@ -38,6 +36,17 @@ module AwsOps
     else
       Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
     end.symbolize_keys
+  end
+  
+  def region 
+    values = { # http://www.cloudping.info
+      'production' => 'eu-central-1', # production should be ireland. will switch with https://trello.com/c/Gcs8Svj4/181-use-separate-aws-accounts-for-each-env 
+      'staging' => 'eu-west-1',
+      'development' => 'us-east-1',
+      'test' => 'us-west-2'
+    }
+    raise "no environments should share the same region" if values.keys.uniq.size != values.values.uniq.size
+    Hash.new{raise}.merge(values)[environment]
   end
   
   def ec2_client
@@ -70,11 +79,6 @@ module AwsOps
   
   def r53_client
     @@r53_client ||= Aws::Route53::Client.new(credentials)
-  end
-  
-  def environment
-    fail("environment (production/staging) not set") unless self.aws_ops_environment
-    self.aws_ops_environment.to_s
   end
   
   def elb_name

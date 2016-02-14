@@ -54,8 +54,6 @@ describe Campaign do
       expect(AwsOps::Pipeline).to receive(:data_pipeline_client).at_least(3).times.and_return(the_double)
     }
     
-    set_aws_ops_test_env
-    
     def the_action
       subject.save!
     end

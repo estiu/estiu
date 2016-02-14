@@ -26,7 +26,7 @@ def rebuild role, force_rebuild, rails_environment
       -var "ssh_keypair_name=#{AwsOps::KEYPAIR_NAME}" \
       -var "ssh_private_key_file=/Users/vemv/.ssh/eu_west_1.pem" \
       -var "user=#{AwsOps::USERNAME}" \
-      -var "region=#{AwsOps::REGION}" \
+      -var "region=#{AwsOps::Infrastructure.region}" \
       -var "commit_sha=#{`git rev-parse HEAD`.split("\n")[0]}" \
       -var "RAILS_ENV=#{rails_environment}" \
       target.json ;\
@@ -72,34 +72,33 @@ namespace :packer do
   
   %i(production staging).each do |environment|
     
-    task environment => :environment do
+    task :set_environment => :environment do
       AwsOps.aws_ops_environment = environment
+    end
+    
+    task environment => :set_environment do
       build(false, all_image_types, environment)
     end
     
     namespace environment do
           
-      task rebuild: :environment do
-        AwsOps.aws_ops_environment = environment
+      task rebuild: :set_environment do
         build :force_rebuild, all_image_types, environment
       end
       
       (AwsOps::IMAGE_TYPES - [AwsOps::BASE_IMAGE_NAME]).each do |image|
         
-        task("rebuild_#{image}".to_sym => :environment) do
-          AwsOps.aws_ops_environment = environment
+        task("rebuild_#{image}".to_sym => :set_environment) do
           build false, [AwsOps::BASE_IMAGE_NAME, image], environment
         end
         
       end
       
-      task clear: :environment do
-        AwsOps.aws_ops_environment = environment
+      task clear: :set_environment do
         AwsOps::Amis.delete_amis
       end
       
-      task clear_all: :environment do
-        AwsOps.aws_ops_environment = environment
+      task clear_all: :set_environment do
         AwsOps::Amis.delete_amis :all
       end
       

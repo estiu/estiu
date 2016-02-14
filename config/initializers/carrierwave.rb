@@ -1,16 +1,12 @@
 CarrierWave.configure do |config|
   
-  if Rails.env.development? || Rails.env.test?
-    AwsOps.aws_ops_environment = 'staging'
-  end
-  
   credential_options = DeveloperMachine.running_in_developer_machine? ?
     AwsOps::Infrastructure.credentials.except(:access_key_id, :secret_access_key) :
     { use_iam_profile: true }
     
   config.fog_credentials = {
     provider: 'AWS',
-    region: ENV['AWS_REGION']
+    region: AwsOps::Infrastructure.region
   }.merge(credential_options)
   
   config.fog_directory = AwsOps::UPLOADS_BUCKET

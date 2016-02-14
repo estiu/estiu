@@ -31,3 +31,5 @@ coverage
 public/assets
 .aws_credentials.production
 .aws_credentials.staging
+.aws_credentials.development
+.aws_credentials.test

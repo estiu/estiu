@@ -1,5 +1,5 @@
 aws:
-  region: <%= ENV['AWS_REGION'] %>
+  region: <%= AwsOps::Infrastructure.region %>
   receive_message: # See http://docs.aws.amazon.com/sdkforruby/api/Aws/SQS/Client.html#receive_message-instance_method
     attribute_names:
       - All
