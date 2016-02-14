@@ -30,11 +30,11 @@ function unlock_uploader_ui(){
 }
 
 function notify_uploader_ui_problem(){
-  alert("<%= I18n.t 'javascript.errors.uploader' %>")
+  alert("<%= I18n.t! 'javascript.errors.uploader' %>")
 }
 
 function notify_uploader_deletion_problem(){
-  alert("<%= I18n.t 'javascript.errors.uploader_deletion' %>")
+  alert("<%= I18n.t! 'javascript.errors.uploader_deletion' %>")
 }
 
 DEFAULT_POPOVER_OPTIONS = {trigger: 'focus', placement: (MOBILE ? 'top' : 'auto'), delay: 200} // data-placement is completely ignored if we pass these options, sadly.

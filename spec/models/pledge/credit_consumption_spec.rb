@@ -85,7 +85,7 @@ describe Pledge do
       it 'is not possible to create such a pledge' do
         
         expect(subject.save).to be false
-        expect(subject.errors[:desired_credit_ids]).to include I18n.t("pledges.errors.desired_credit_ids")
+        expect(subject.errors[:desired_credit_ids]).to include I18n.t!("pledges.errors.desired_credit_ids")
         
       end
       

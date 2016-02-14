@@ -30,7 +30,7 @@ class CampaignDraft < ActiveRecord::Base
   monetize :goal_cents, subunit_numericality: {
     greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT,
     less_than: MAXIMUM_GOAL_AMOUNT,
-    message: I18n.t("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format)
+    message: I18n.t!("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format)
   }
   
   monetize :minimum_pledge_cents, subunit_numericality: {
@@ -54,21 +54,21 @@ class CampaignDraft < ActiveRecord::Base
   validates :submitted_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
   
   begin # validations enclosed in this black depend on :submitted_at
-    validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :published_at
+    validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :starts_at, presence: true, if: ->(rec){ rec.published_at && !rec.starts_immediately }
     validates :ends_at, presence: true, if: :published_at
-    validates :time_zone, presence: true, inclusion: {in: Estiu::Timezones::ALL, message: I18n.t('errors.inclusion')}, if: :published_at
-    validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t('errors.inclusion')}, if: :published_at
-    validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :published_at
+    validates :time_zone, presence: true, inclusion: {in: Estiu::Timezones::ALL, message: I18n.t!('errors.inclusion')}, if: :published_at
+    validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t!('errors.inclusion')}, if: :published_at
+    validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :generate_invite_link,
-      inclusion: {in: [true], message: I18n.t('campaigns.errors.generate_invite_link')},
+      inclusion: {in: [true], message: I18n.t!('campaigns.errors.generate_invite_link')},
       if: ->(record){
         record.published_at &&
         record.generate_invite_link == false && # check false, not nil
         record.visibility == INVITE_VISIBILITY
       }
     validates :generate_invite_link,
-      inclusion: {in: [false], message: I18n.t('campaigns.errors.generate_invite_link_false')},
+      inclusion: {in: [false], message: I18n.t!('campaigns.errors.generate_invite_link_false')},
       if: ->(record){
         record.published_at &&
         record.generate_invite_link &&
@@ -115,20 +115,20 @@ class CampaignDraft < ActiveRecord::Base
   def valid_date_fields
     if starts_at_criterion && ends_at
       if starts_at_criterion > ends_at
-        errors[:starts_at] << I18n.t('campaigns.errors.starts_at.ends_at')
+        errors[:starts_at] << I18n.t!('campaigns.errors.starts_at.ends_at')
       end
       if ends_at.to_i - starts_at_criterion.to_i < self.class.minimum_active_hours.hours
         unless Rails.env.production? && DeveloperMachine.running_in_developer_machine? # sometimes one runs production in a developer machine.
-          errors[:ends_at] << I18n.t('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
+          errors[:ends_at] << I18n.t!('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
         end
       end
     end
     if (dev_or_test? ? !skip_past_date_validations : true)
       if starts_at && starts_at.to_i - DateTime.current.to_i < -60
-        errors[:starts_at] << I18n.t('past_date')
+        errors[:starts_at] << I18n.t!('past_date')
       end
       if ends_at && ends_at.to_i - DateTime.current.to_i < -60
-        errors[:ends_at] << I18n.t('past_date')
+        errors[:ends_at] << I18n.t!('past_date')
       end
     end
   end
@@ -136,7 +136,7 @@ class CampaignDraft < ActiveRecord::Base
   def minimum_pledge_according_to_venue
     if minimum_pledge_cents && goal_cents && venue
       if minimum_pledge_cents < estimated_minimum_pledge_cents
-        errors[:minimum_pledge_cents] << I18n.t("campaigns.errors.minimum_pledge_cents.venue", value: estimated_minimum_pledge.format)
+        errors[:minimum_pledge_cents] << I18n.t!("campaigns.errors.minimum_pledge_cents.venue", value: estimated_minimum_pledge.format)
       end
     end
   end

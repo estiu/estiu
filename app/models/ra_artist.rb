@@ -14,7 +14,7 @@ class RaArtist < ActiveRecord::Base
     
     %w(http https www residentadvisor .net).each do |fragment|
       if self.artist_path.include?(fragment)
-        errors[:artist_path] << I18n.t("ra_artists.errors.artist_path_format", found: fragment)
+        errors[:artist_path] << I18n.t!("ra_artists.errors.artist_path_format", found: fragment)
         return
       end
     end
@@ -22,7 +22,7 @@ class RaArtist < ActiveRecord::Base
     sanitized = Rails::Html::FullSanitizer.new.sanitize self.artist_path
     
     if self.artist_path != sanitized
-      errors[:artist_path] << I18n.t("ra_artists.errors.artist_path_format", found: I18n.t("ra_artists.errors.html_code"))
+      errors[:artist_path] << I18n.t!("ra_artists.errors.artist_path_format", found: I18n.t!("ra_artists.errors.html_code"))
       return
     end
     
@@ -35,7 +35,7 @@ class RaArtist < ActiveRecord::Base
     end
     
     unless self.artist_path.start_with?(PREFIX)
-      errors[:artist_path] << I18n.t("ra_artists.errors.dj", prefix: PREFIX)
+      errors[:artist_path] << I18n.t!("ra_artists.errors.dj", prefix: PREFIX)
       return
     end
     

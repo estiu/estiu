@@ -15,7 +15,7 @@ describe Campaign do
       }
       it 'is reported' do
         expect(subject.valid?).to be false
-        expect(subject.errors[:starts_at]).to include I18n.t('campaigns.errors.starts_at.ends_at')
+        expect(subject.errors[:starts_at]).to include I18n.t!('campaigns.errors.starts_at.ends_at')
       end
     end
     
@@ -26,7 +26,7 @@ describe Campaign do
       }
       it 'is reported' do
         expect(subject.valid?).to be false
-        expect(subject.errors[:ends_at]).to include I18n.t('campaigns.errors.ends_at.starts_at', hours: CampaignDraft.minimum_active_hours)
+        expect(subject.errors[:ends_at]).to include I18n.t!('campaigns.errors.ends_at.starts_at', hours: CampaignDraft.minimum_active_hours)
       end
     end
     
@@ -36,7 +36,7 @@ describe Campaign do
       }
       it 'is reported' do
         expect(subject.valid?).to be false
-        expect(subject.errors[:starts_at]).to include I18n.t('past_date')
+        expect(subject.errors[:starts_at]).to include I18n.t!('past_date')
       end
     end
     
@@ -46,7 +46,7 @@ describe Campaign do
       }
       it 'is reported' do
         expect(subject.valid?).to be false
-        expect(subject.errors[:ends_at]).to include I18n.t('past_date')
+        expect(subject.errors[:ends_at]).to include I18n.t!('past_date')
       end
     end
     

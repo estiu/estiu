@@ -26,9 +26,9 @@ class Credit < ActiveRecord::Base
   
   def to_s
     if referral_pledge
-      I18n.t("credits.to_s.referral_pledge", amount: amount.format, referrer: referral_pledge.attendee.first_name)
+      I18n.t!("credits.to_s.referral_pledge", amount: amount.format, referrer: referral_pledge.attendee.first_name)
     elsif refunded_pledge
-      I18n.t("credits.to_s.refunded_pledge", amount: amount.format)
+      I18n.t!("credits.to_s.refunded_pledge", amount: amount.format)
     else
       raise
     end

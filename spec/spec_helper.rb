@@ -30,7 +30,7 @@ Sidekiq::Testing.inline!
 Capybara.server_host = 'localhost' # no 127.0.0.1. Cleaner and FB expects it too
 Capybara.server_port = Estiu::Application.port
 
-I18n.t 'errors.format' # .t is lazy - force it
+I18n.t! 'errors.format' # .t is lazy - force it
 I18n.backend.store_translations :en, {errors: {format: '%{attribute} %{message}'}}
 
 OmniAuth.config.logger = Logger.new('/dev/null')

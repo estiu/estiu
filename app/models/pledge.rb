@@ -19,7 +19,7 @@ class Pledge < ActiveRecord::Base
   validates :amount_cents, presence: true, numericality: {greater_than_or_equal_to: STRIPE_MINIMUM_PAYMENT, less_than: MAXIMUM_PLEDGE_AMOUNT}
   validates :attendee_id, uniqueness: {scope: :campaign_id}
   
-  validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t('errors.email_format')
+  validates_formatting_of :referral_email, using: :email, allow_blank: true, message: I18n.t!('errors.email_format')
   
   validate :minimum_pledge
   validate :check_truthful_referral_email!
@@ -178,7 +178,7 @@ class Pledge < ActiveRecord::Base
   
   def minimum_pledge
     if observed_value_for_minimum_pledge < campaign.minimum_pledge_cents
-      errors[:amount_cents] << I18n.t("pledges.errors.amount_cents.minimum_pledge", amount: campaign.minimum_pledge.format)
+      errors[:amount_cents] << I18n.t!("pledges.errors.amount_cents.minimum_pledge", amount: campaign.minimum_pledge.format)
     end
   end
   
@@ -208,7 +208,7 @@ class Pledge < ActiveRecord::Base
         
         unless campaign.user_email_pledged? referral_email
           
-          errors[:referral_email] << I18n.t("pledges.errors.referral_email.no_user")
+          errors[:referral_email] << I18n.t!("pledges.errors.referral_email.no_user")
           
         end
         
@@ -234,7 +234,7 @@ class Pledge < ActiveRecord::Base
         
       rescue ActiveRecord::RecordNotFound
         
-        errors[:desired_credit_ids] << I18n.t("pledges.errors.desired_credit_ids")
+        errors[:desired_credit_ids] << I18n.t!("pledges.errors.desired_credit_ids")
         
         return
         
@@ -254,7 +254,7 @@ class Pledge < ActiveRecord::Base
   
   def discount_cents_not_greater_than_originally_pledged_cents
     if discount_cents > originally_pledged_cents
-      errors[:discount_cents] << I18n.t("pledges.errors.discount_cents_not_greater_than_originally_pledged_cents")
+      errors[:discount_cents] << I18n.t!("pledges.errors.discount_cents_not_greater_than_originally_pledged_cents")
     end
   end
   

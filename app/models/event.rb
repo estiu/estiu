@@ -85,13 +85,13 @@ class Event < ActiveRecord::Base
   
   def at_least_one_ra_artist
     if ra_artists.size.zero?
-      errors[:ra_artists] << I18n.t("events.errors.at_least_one_ra_artist")
+      errors[:ra_artists] << I18n.t!("events.errors.at_least_one_ra_artist")
     end
   end
   
   def ensure_at_least_one_event_document
     if event_documents.size.zero?
-      errors[:event_documents] << I18n.t("events.errors.ensure_at_least_one_event_document")
+      errors[:event_documents] << I18n.t!("events.errors.ensure_at_least_one_event_document")
     end
   end
   
@@ -104,7 +104,7 @@ class Event < ActiveRecord::Base
   def starts_at_is_future
     if starts_at_for_calculations && starts_at_for_calculations.to_i - DateTime.current.to_i < -60
       unless skip_past_date_validations
-        errors[:starts_at_date] << I18n.t('past_date')
+        errors[:starts_at_date] << I18n.t!('past_date')
       end
     end
   end
