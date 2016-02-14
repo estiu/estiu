@@ -130,6 +130,16 @@ module AwsOps
         }
       })
       
+      elb_client.modify_load_balancer_attributes({
+        load_balancer_name: elb_name,
+        load_balancer_attributes: {
+          connection_draining: {
+            enabled: true,
+            timeout: 30
+          }
+        }
+      })
+      
       if environment == 'staging'
         
         r53_client.change_resource_record_sets(
