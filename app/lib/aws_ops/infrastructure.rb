@@ -197,7 +197,8 @@ module AwsOps
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn
+          iam_instance_profile: Iam.instance_profile_arn,
+          health_check_type: 'ELB'
         })
       end
     end
