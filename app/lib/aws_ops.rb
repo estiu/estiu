@@ -20,6 +20,10 @@ module AwsOps
   BUILD_SIZE = 't2.micro'
   PRODUCTION_SIZE = 't2.micro'
   UPLOADS_BUCKET = "events-uploads-#{Rails.env}"
+  SCALE_OUT_SUFFIX = ' - scale out'
+  SCALE_IN_SUFFIX = ' - scale in'
+  CONNECTION_DRAINING_TIMEOUT = 30
+  ESTIMATED_INIT_TIME = 210 # 3 minutes and half.
   
   def environment
     (self.aws_ops_environment || Rails.env).to_s
@@ -41,10 +45,10 @@ module AwsOps
   
   def region 
     values = { # http://www.cloudping.info
-      'production' => 'eu-central-1', # production should be ireland. will switch with https://trello.com/c/Gcs8Svj4/181-use-separate-aws-accounts-for-each-env 
-      'staging' => 'eu-west-1',
-      'development' => 'us-east-1',
-      'test' => 'us-west-2'
+      'production' => 'us-east-1', # production should be ireland. will switch with https://trello.com/c/Gcs8Svj4/181-use-separate-aws-accounts-for-each-env 
+      'staging' => 'eu-west-1', # eu-central-1 has no Data Pipeline.
+      'development' => 'us-west-2',
+      'test' => 'us-west-1' # us-west-1 has no Data Pipeline.
     }
     raise "no environments should share the same region" if values.keys.uniq.size != values.values.uniq.size
     Hash.new{raise}.merge(values)[environment]
@@ -85,6 +89,10 @@ module AwsOps
   
   def r53_client
     @@r53_client ||= Aws::Route53::Client.new(credentials)
+  end
+  
+  def cloudwatch_client
+    @@cloudwatch_client ||= Aws::CloudWatch::Client.new(credentials)
   end
   
   def elb_name

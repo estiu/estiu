@@ -1,1 +1,1 @@
-OkComputer.mount_at = "#{Estiu::Application.nginx_prefix}/#{ApplicationController::HEALTH_PATH}"
+OkComputer.mount_at = Estiu::Application.health_path Rails.env

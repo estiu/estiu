@@ -36,12 +36,17 @@ module Estiu
       end
     end
     
-    def nginx_prefix
-      if Rails.env.development?
+    def nginx_prefix env=nil
+      env ||= Rails.env
+      if env == 'development'
         '/estiu'
       else
         ''
       end
+    end
+    
+    def self.health_path environment
+      "#{nginx_prefix(environment)}/#{ApplicationController::HEALTH_PATH}"
     end
     
     def self.protocol

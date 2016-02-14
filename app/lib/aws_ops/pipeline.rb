@@ -15,7 +15,8 @@ class AwsOps::Pipeline
   end
   
   def self.delete_all_pipelines!
-    all_ids = list_pipelines.pipeline_id_list.map &:id
+    all_ids = data_pipeline_client.list_pipelines.pipeline_id_list.map &:id
+    return if all_ids.blank?
     delete_ids = data_pipeline_client.describe_pipelines(pipeline_ids: all_ids).pipeline_description_list.select{|pipeline|
       pipeline.tags.detect{|tag|
         (tag.key == 'environment' && tag.value == environment)
