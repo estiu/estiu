@@ -36,7 +36,7 @@ module AwsOps
       else
         Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
       end.symbolize_keys
-    Hash.new{raise}.merge(result)
+    Hash.new{raise}.merge(result).merge(region: region)
   end
   
   def region 
