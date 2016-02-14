@@ -101,7 +101,7 @@ module AwsOps
           load_balancer_name: elb_name,
           listeners: listeners,
           security_groups: _security_groups,
-          availability_zones: AVAILABILITY_ZONES,
+          availability_zones: availability_zones,
           tags: [
             {
               key: 'environment',
@@ -208,7 +208,7 @@ module AwsOps
           launch_configuration_name: asg_name,
           min_size: 1,
           max_size: 1,
-          availability_zones: AVAILABILITY_ZONES,
+          availability_zones: availability_zones,
           tags: [
             {
               key: 'commit',

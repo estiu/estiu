@@ -15,7 +15,6 @@ module AwsOps
   IMAGE_TYPES = [BASE_IMAGE_NAME, ASG_WEB_NAME, ASG_WORKER_NAME, PIPELINE_IMAGE_NAME]
   ASG_ROLES = [ASG_WEB_NAME, ASG_WORKER_NAME]
   LOAD_BALANCED_ASGS = [ASG_WEB_NAME]
-  AVAILABILITY_ZONES = ['eu-west-1a']
   KEYPAIR_NAME = 'eu_west_1'
   USERNAME = 'ec2-user'
   BUILD_SIZE = 't2.micro'
@@ -47,6 +46,11 @@ module AwsOps
     }
     raise "no environments should share the same region" if values.keys.uniq.size != values.values.uniq.size
     Hash.new{raise}.merge(values)[environment]
+  end
+  
+  def availability_zones
+    # each region has 2-4 AZs. Discoverable with `aws ec2 describe-availability-zones --region us-west-2`
+    [region + 'a']
   end
   
   def ec2_client
