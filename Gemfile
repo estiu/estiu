@@ -20,6 +20,7 @@ gem 'jquery-rails', '~> 4'
 gem 'jquery-ui-rails', '~> 5'
 gem 'money-rails', '~> 1.4'
 gem 'oj', '~> 2.12' # for rollbar
+gem 'okcomputer', '~> 1.6', github: 'vemv/okcomputer'
 gem 'omniauth', '~> 1.2'
 gem 'omniauth-facebook', '~> 3'
 gem 'pg', '~> 0.18'

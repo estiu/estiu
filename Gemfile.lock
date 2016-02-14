@@ -7,6 +7,12 @@ GIT
       aws-sdk-core (~> 2)
       celluloid (~> 0.16)
 
+GIT
+  remote: git://github.com/vemv/okcomputer.git
+  revision: 9dfed9285ded2b12b5c09fa3a8ff74e3eca93978
+  specs:
+    okcomputer (1.6.4)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -514,6 +520,7 @@ DEPENDENCIES
   launchy (~> 2.4)
   money-rails (~> 1.4)
   oj (~> 2.12)
+  okcomputer (~> 1.6)!
   omniauth (~> 1.2)
   omniauth-facebook (~> 3)
   pg (~> 0.18)

@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   
+  HEALTH_PATH = '013dbcf0a5b04b' # health path has a non-obvious name so we don't receive extraneous requests (health checks are potentially expensive)
+  
   include Pundit
   
   protect_from_forgery with: :exception

@@ -1,0 +1,1 @@
+OkComputer.mount_at = "#{Estiu::Application.nginx_prefix}/#{ApplicationController::HEALTH_PATH}"

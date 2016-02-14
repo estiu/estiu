@@ -118,11 +118,14 @@ module AwsOps
         retry
         
       end
+
+      health_path = OkComputer::Engine.routes.url_helpers.okcomputer_checks_path
+      health_path = health_path[1..(health_path.size)] if health_path.start_with?('/')
       
       elb_client.configure_health_check({
         load_balancer_name: elb_name,
         health_check: {
-          target: "HTTP:80/pages/home",
+          target: "HTTP:80/#{health_path}",
           interval: 7,
           timeout: 5,
           unhealthy_threshold: 2,
