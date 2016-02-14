@@ -28,17 +28,17 @@ namespace :ops do
         AwsOps::S3.update_env_files
       end
       
-      task create: environment do
+      task create: :update_env do
         AwsOps::Infrastructure.delete!
         reset_state environment
         AwsOps::Infrastructure.create!
       end
       
-      task launch_worker: environment do
+      task launch_worker: :update_env do
         AwsOps::Infrastructure.launch_worker!
       end
       
-      task delete: environment do
+      task delete: :update_env do
         AwsOps::Infrastructure.delete!
         reset_state environment, :silent
       end
