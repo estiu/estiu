@@ -1,6 +1,6 @@
 class CampaignDraftsController < ApplicationController
   
-  should_load_draft = [:show, :edit, :update, :destroy, :submit, :publish]
+  should_load_draft = [:show, :edit, :update, :destroy, :submit, :publish, :approve, :reject]
   before_action :load_draft, only: should_load_draft
   before_action :authorize_draft, only: should_load_draft
   
@@ -74,6 +74,12 @@ class CampaignDraftsController < ApplicationController
     redirect_to campaigns_path
   end
   
+  %i(approve reject).each do |method|
+    define_method method do
+      review_common "#{method}!"
+    end
+  end
+  
   protected
   
   def load_draft
@@ -96,6 +102,20 @@ class CampaignDraftsController < ApplicationController
   
   def authorize_draft
     authorize @draft
+  end
+  
+  def review_common method
+    if @draft.send(method)
+      flash[:success] = t('.success')
+    else
+      flash[:error] = t '.error'
+    end
+    redirect_to @draft
+  end
+  
+  helper_method :should_review_draft?
+  def should_review_draft?
+    current_admin && @draft.must_be_reviewed?
   end
   
 end

@@ -18,10 +18,15 @@
       = render 'step_2_fields', campaign: campaign
     - if campaign.approved_at
       - if campaign.campaign
-        = link_to(campaign.campaign, campaign.campaign)
+        .alert.alert-info
+          = t('.has_campaign', link: link_to(campaign.campaign, campaign.campaign, class: 'black bold')).html_safe
       - else
         = render 'publish_form', campaign: campaign
-    
+
+- if should_review_draft?
+  .row.top20
+    = render 'approve_or_reject', campaign: campaign
+
 :javascript
   
   $('#campaign_draft_starts_immediately').change(function(){
