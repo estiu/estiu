@@ -13,7 +13,7 @@ end
 namespace :ops do
   
   task seed: :environment do
-    FG.create :campaign, :almost_fulfilled, starts_immediately: true, ends_at: 120.seconds.from_now
+    FG.create :campaign, :almost_fulfilled, campaign_draft: FG.create(:campaign_draft, :published, starts_immediately: true, ends_at: 1.hours.from_now)
   end
   
   %i(production staging).each do |environment|

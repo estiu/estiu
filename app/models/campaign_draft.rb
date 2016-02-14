@@ -50,8 +50,8 @@ class CampaignDraft < ActiveRecord::Base
   validates :description, presence: true, length: {minimum: (Rails.env.development? ? 2 : 140), maximum: 1000}
   validates :starts_at, inclusion: [nil], if: :starts_immediately
   validates :published_at, presence: true, if: ->(rec){ CREATE_ATTRS_STEP_2.any?{|attr| rec.send(attr).present? } }
-  validates :published_at, inclusion: [nil], if: ->(rec){ dev_or_test? ? false : !rec.id }
-  validates :submitted_at, inclusion: [nil], if: ->(rec){ dev_or_test? ? false : !rec.id }
+  validates :published_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
+  validates :submitted_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
   
   begin # validations enclosed in this black depend on :submitted_at
     validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t('errors.inclusion')}, if: :published_at
