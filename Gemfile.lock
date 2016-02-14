@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/phstc/shoryuken.git
-  revision: 81cc5be899198d46a01930c385b01857ac1cf436
-  ref: 81cc5be899198d46a01930c385b01857ac1cf436
+  revision: d34a35552b0457cab6660a2da3d680c7c9833b9b
+  branch: test-region-#180
   specs:
-    shoryuken (2.0.2)
+    shoryuken (2.0.4)
       aws-sdk-core (~> 2)
       celluloid (~> 0.16)
 
