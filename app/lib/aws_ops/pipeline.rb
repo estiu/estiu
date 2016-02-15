@@ -81,7 +81,7 @@ class AwsOps::Pipeline
               
             ].
             concat(
-              AwsOps::Infrastructure.security_groups_per_worker[AwsOps::ASG_WORKER_NAME].map{|sg|
+              AwsOps::Permanent.security_groups_per_worker[AwsOps::ASG_WORKER_NAME].map{|sg|
                 {key: 'securityGroupIds', string_value: sg}
               }
             )

@@ -1,1 +1,1 @@
-Aws.config[:region] = AwsOps::Infrastructure.region
+Aws.config[:region] = AwsOps::Permanent.region

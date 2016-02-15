@@ -30,17 +30,17 @@ namespace :ops do
       end
       
       task create: :update_env do
-        AwsOps::Infrastructure.delete!
+        AwsOps.delete!
         reset_state environment
-        AwsOps::Infrastructure.create!
+        AwsOps.create!
       end
       
       task launch_worker: :update_env do
-        AwsOps::Infrastructure.launch_worker!
+        AwsOps.launch_worker!
       end
       
       task delete: :update_env do
-        AwsOps::Infrastructure.delete!
+        AwsOps.delete!
         reset_state environment, :silent
       end
       

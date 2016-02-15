@@ -103,4 +103,44 @@ module AwsOps
     "#{ELB_NAME}-#{environment}"
   end
   
+  def self.create!
+    begin
+      AwsOps::Permanent.create_elb
+      puts "Permanent infrastructure succesfully created."
+      deploy!
+    rescue Exception => e
+      puts "An error ocurred."
+      delete!
+      raise e
+    end
+  end
+  
+  def self.deploy!
+    AwsOps::SQS.ensure_queues_created
+    AwsOps::Transient.create_launch_configurations
+    AwsOps::Transient.create_asgs
+    AwsOps::Transient.setup_metrics_for_asgs
+    puts "Successfully deployed."
+  end
+  
+  def self.launch_worker!
+    delete!
+    begin
+      AwsOps::Transient.create_launch_configurations [ASG_WORKER_NAME]
+      AwsOps::Transient.create_asgs [ASG_WORKER_NAME]
+      puts "Worker succesfully launched."
+    rescue Exception => e
+      puts "An error ocurred."
+      delete!
+      raise e
+    end
+  end
+  
+  def self.delete!
+    puts "Deleting infrastructure..."
+    AwsOps::Permanent.delete_elbs
+    AwsOps::Transient.delete_asgs
+    AwsOps::Transient.delete_launch_configurations
+  end
+  
 end
