@@ -39,7 +39,7 @@ namespace :ops do
         AwsOps.deploy!
         AwsOps::Transient.remove_old_asgs_instances!
         puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
-        if gets.downcase.include?('ok')
+        if STDIN.gets.downcase.include?('ok')
           AwsOps::Transient.delete_old_asgs!
         elsif
           

@@ -86,12 +86,14 @@ module AwsOps
       
       roles.each do |asg_name|
         
+        @@initial_desired_size_for_new_asg = calculate_desired_capacity_for(asg_name)
+        
         opts = {
           auto_scaling_group_name: final_asg_name(asg_name),
           launch_configuration_name: final_asg_name(asg_name),
           min_size: 0, # must be zero, else cannot peform B/G deployment by removing instances.
           max_size: 4,
-          desired_capacity: calculate_desired_capacity_for(asg_name),
+          desired_capacity: @@initial_desired_size_for_new_asg,
           new_instances_protected_from_scale_in: false,
           availability_zones: availability_zones,
           tags: [
@@ -127,8 +129,9 @@ module AwsOps
       
     end
     
-    def self.new_asg role
+    def self.new_asg role, expire_cache=false
       @@new_asg ||= {}
+      (@@new_asg[role] = nil) if expire_cache
       @@new_asg[role] ||=
         (auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.detect{|asg|
           asg.tags.detect{|tag|
@@ -140,8 +143,9 @@ module AwsOps
         })
     end
     
-    def self.old_asg role
+    def self.old_asg role, expire_cache=false
       @@old_asg ||= {}
+      (@@old_asg[role] = nil) if expire_cache
       @@old_asg[role] ||=
         (auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.reject {|asg|
           ASG_ROLES.map{|name| final_asg_name name }.include?(asg.auto_scaling_group_name)
@@ -211,17 +215,35 @@ module AwsOps
       end
     end
     
+    class MustWait < StandardError; end
+    
     def self.wait_until_new_asg_in_service role
+      
+      instances = []
+      
+      @@initial_desired_size_for_new_asg ||= 1
+      
+      begin
+        
+        instances = new_asg(role, :expire_cache).instances
+        
+        if (instances.size != @@initial_desired_size_for_new_asg) || instances.any?{|i| (i.lifecycle_state != 'InService') || (i.health_status != 'Healthy') }
+          raise MustWait
+        end
+        
+      rescue MustWait
+        puts "Waiting until the instances of new ASG are fully initialized..."
+        sleep 45
+        retry
+      end
+      
       if LOAD_BALANCED_ASGS.include?(role)
         puts 'Waiting until ELB recognises the new ASG as "in service"...'
-        elb_client.wait_until(
-          :instance_in_service,
-          {load_balancer_name: elb_name, instances: new_asg(role).instances.map(&:instance_id).map{|id| {instance_id: id} }})
-      else
-        puts 'Waiting until the EC2 instances have healthy state...'
-        # XXX 
+        elb_client.wait_until(:instance_in_service, {load_balancer_name: elb_name, instances: instances.map(&:instance_id).map{|id| {instance_id: id} }})
       end
+      
       puts "Ready!"
+      
     end
     
     def self.remove_old_asgs_instances!
