@@ -35,6 +35,32 @@ namespace :ops do
         AwsOps.create!
       end
       
+      task deploy: :update_env do
+        AwsOps.deploy!
+        AwsOps::Transient.put_old_asgs_in_standby!
+        puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
+        if gets.downcase.include?('ok')
+          AwsOps::Transient.delete_old_asgs!
+        elsif
+          
+          puts "If the deploy didn't go OK:"
+          puts "do a git reset --hard to the commit matching to the old ASG (it is essential to go back to a matching SHA). Then run the `ops:#{environment}:rollback` task."
+          
+          puts "If the deploy went OK:"
+          puts "Run the `ops:#{environment}:delete_old_asgs` task immediately."
+          
+        end
+      end
+      
+      task delete_old_asgs: :update_env do
+        AwsOps::Transient.delete_old_asgs!
+      end
+      
+      task rollback: :update_env do
+        AwsOps::Transient.put_current_asgs_in_service!
+        AwsOps::Transient.delete_old_asgs!
+      end
+      
       task launch_worker: :update_env do
         AwsOps.launch_worker!
       end

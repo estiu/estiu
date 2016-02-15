@@ -3,70 +3,102 @@ module AwsOps
     
     extend AwsOps
     
-    def self.delete_launch_configurations
-      names = auto_scaling_client.describe_launch_configurations.launch_configurations.map &:launch_configuration_name
-      names.each do |name|
-        auto_scaling_client.delete_launch_configuration launch_configuration_name: name
-      end
-      names.any?
+    def self.commit_digest
+      current_commit[0..14]
     end
     
-    # LCs don't support tags.
-    # anyway, LCs don't support updating the AMI id, so the current setup is unfit for production.
-    def self.create_launch_configurations roles=ASG_ROLES
-      roles.each do |role|
-        base_opts = {
-          launch_configuration_name: role,
-          image_id: ::AwsOps::Amis.latest_ami(role, PRODUCTION_SIZE),
-          instance_type: AwsOps::PRODUCTION_SIZE,
-          security_groups: ::AwsOps::Permanent.security_groups_per_worker[role],
-          key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn
-        }.freeze
-        opts = base_opts.dup
-        auto_scaling_client.create_launch_configuration(opts)
-      end
-    end
-    
-    def self.delete_asgs
-      names = auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.select{|asg| asg.tags.detect{|tag|
-        tag.key == 'environment' && tag.value == environment
-      } }.map(&:auto_scaling_group_name)
-      names.each do |name|
-        auto_scaling_client.delete_auto_scaling_group auto_scaling_group_name: name, force_delete: true
-      end
-      names.any?
-    end
-    
-    def self.final_asg_name role_name
-      "#{role_name} - #{current_commit[0..14]}"
+    def self.final_asg_name role_name, past_commit_digest=nil
+      "#{role_name} - #{past_commit_digest || commit_digest}"
     end
     
     def self.asg_policy_name role_name, suffix
       "#{final_asg_name(role_name)} - #{suffix}"
     end
     
+    def self.create_launch_configurations roles=ASG_ROLES
+      roles.each do |role|
+        opts = {
+          launch_configuration_name: final_asg_name(role),
+          image_id: ::AwsOps::Amis.latest_ami(role, PRODUCTION_SIZE),
+          instance_type: AwsOps::PRODUCTION_SIZE,
+          security_groups: ::AwsOps::Permanent.security_groups_per_worker[role],
+          key_name: KEYPAIR_NAME,
+          iam_instance_profile: Iam.instance_profile_arn
+        }
+        auto_scaling_client.create_launch_configuration(opts)
+      end
+    end
+    
+    def self.delete_launch_configurations only=nil
+      names = only || auto_scaling_client.describe_launch_configurations.launch_configurations.map(&:launch_configuration_name)
+      names.each do |name|
+        auto_scaling_client.delete_launch_configuration launch_configuration_name: name
+      end
+      names.any?
+    end
+    
+    def self.create_scaling_policies_for asg_name
+      
+      policy_common = {
+        auto_scaling_group_name: final_asg_name(asg_name),
+        policy_type: 'SimpleScaling',
+        adjustment_type: 'ChangeInCapacity'
+      }
+      
+      auto_scaling_client.put_scaling_policy(
+        policy_common.merge(
+          {
+            policy_name: asg_policy_name(asg_name, AwsOps::SCALE_OUT_SUFFIX),
+            scaling_adjustment: 1,
+            cooldown: AwsOps::ESTIMATED_INIT_TIME
+          }
+        )
+      )
+      
+      auto_scaling_client.put_scaling_policy(
+        policy_common.merge(
+          {
+            policy_name: asg_policy_name(asg_name, AwsOps::SCALE_IN_SUFFIX),
+            scaling_adjustment: -1,
+            cooldown: AwsOps::CONNECTION_DRAINING_TIMEOUT
+          }
+        )
+      )
+      
+    end
+    
     def self.create_asgs roles=ASG_ROLES
       
       roles.each do |asg_name|
         
-        ami = ::AwsOps::Amis.latest_ami_object asg_name, AwsOps::PRODUCTION_SIZE
-        commit = ami.tags.detect{|t|t.key == 'commit'}.try(&:value)
+        min_size = 1
+        
+        desired_capacity = (if old_asg(asg_name)
+          old_asg(asg_name).instances.select{|i| i.lifecycle_state == 'InService' }.size
+        else
+          min_size
+        end)
         
         opts = {
           auto_scaling_group_name: final_asg_name(asg_name),
-          launch_configuration_name: asg_name,
-          min_size: 1,
+          launch_configuration_name: final_asg_name(asg_name),
+          min_size: min_size,
           max_size: 4,
+          desired_capacity: [min_size, desired_capacity].max,
+          new_instances_protected_from_scale_in: false,
           availability_zones: availability_zones,
           tags: [
             {
               key: 'commit',
-              value: commit
+              value: commit_digest
             },
             {
               key: 'environment',
               value: environment
+            },
+            {
+              key: 'role',
+              value: asg_name
             }
           ]
         }
@@ -79,36 +111,51 @@ module AwsOps
             }
           ) 
         end
+        
         auto_scaling_client.create_auto_scaling_group(opts)
         
-        policy_common = {
-          auto_scaling_group_name: final_asg_name(asg_name),
-          policy_type: 'SimpleScaling',
-          adjustment_type: 'ChangeInCapacity'
-        }
-        
-        auto_scaling_client.put_scaling_policy(
-          policy_common.merge(
-            {
-              policy_name: asg_policy_name(asg_name, AwsOps::SCALE_OUT_SUFFIX),
-              scaling_adjustment: 1,
-              cooldown: AwsOps::ESTIMATED_INIT_TIME
-            }
-          )
-        )
-        
-        auto_scaling_client.put_scaling_policy(
-          policy_common.merge(
-            {
-              policy_name: asg_policy_name(asg_name, AwsOps::SCALE_IN_SUFFIX),
-              scaling_adjustment: -1,
-              cooldown: AwsOps::CONNECTION_DRAINING_TIMEOUT
-            }
-          )
-        )
+        create_scaling_policies_for(asg_name)
         
       end
       
+    end
+    
+    def self.new_asg role
+      @@new_asg ||= {}
+      @@new_asg[role] ||=
+        (auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.detect{|asg|
+          asg.tags.detect{|tag|
+            tag.key == 'role' && tag.value == role 
+          } &&
+          asg.tags.detect{|tag|
+            tag.key == 'commit' && tag.value == commit_digest
+          }
+        })
+    end
+    
+    def self.old_asg role
+      @@old_asg ||= {}
+      @@old_asg[role] ||=
+        (auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.reject {|asg|
+          ASG_ROLES.map{|name| final_asg_name name }.include?(asg.auto_scaling_group_name)
+        }.detect{|asg|
+          asg.tags.detect{|tag|
+            tag.key == 'role' && tag.value == role
+          } &&
+          asg.tags.detect{|tag|
+            tag.key == 'commit' && tag.value != commit_digest
+          }
+        })
+    end
+    
+    def self.delete_asgs only=nil
+      names = only || auto_scaling_client.describe_auto_scaling_groups.auto_scaling_groups.select{|asg| asg.tags.detect{|tag|
+        tag.key == 'environment' && tag.value == environment
+      } }.map(&:auto_scaling_group_name)
+      names.each do |name|
+        auto_scaling_client.delete_auto_scaling_group auto_scaling_group_name: name, force_delete: true
+      end
+      names.any?
     end
     
     def self.asg_policy_for policy_name
@@ -117,7 +164,7 @@ module AwsOps
       }).scaling_policies[0]
     end
     
-    def self.setup_metrics_for_asgs roles=ASG_ROLES
+    def self.setup_metrics_for_asgs roles=ASG_ROLES # metrics get auto-deleted when the associated ASG is deleted.
       roles.each do |asg_name|
         common = {
           metric_name: 'CPUUtilization',
@@ -155,6 +202,63 @@ module AwsOps
           )
         )
       end
+    end
+    
+    def self.wait_until_new_asg_in_service role
+      if LOAD_BALANCED_ASGS.include?(role)
+        puts 'Waiting until ELB recognises the new ASG as "in service"...'
+        elb_client.wait_until(
+          :instance_in_service,
+          {load_balancer_name: elb_name, instances: new_asg(role).instances.map(&:instance_id).map{|id| {instance_id: id} }})
+      else
+        puts 'Waiting until the EC2 instances have healthy state...'
+        # XXX 
+      end
+      puts "Ready!"
+    end
+    
+    def self.put_old_asgs_in_standby!
+      ASG_ROLES.each do |role|
+        puts %|Processing old ASG for role #{role}...|
+        wait_until_new_asg_in_service role
+        puts 'Putting the old ASG instances in "stand by"...'
+        auto_scaling_client.enter_standby({
+          instance_ids: old_asg(role).instances.map(&:instance_id),
+          auto_scaling_group_name: old_asg(role).auto_scaling_group_name,
+          should_decrement_desired_capacity: false
+        })
+      end
+    end
+    
+    # this mechanism is needed for rollback only
+    def self.put_current_asgs_in_service!
+      
+      puts "Putting old ASGs in service again..."
+      
+      ASG_ROLES.each do |role|
+        
+        auto_scaling_client.exit_standby({
+          instance_ids: new_asg(role).instances.map(&:instance_id),
+          auto_scaling_group_name: new_asg(role).auto_scaling_group_name
+        })
+        
+        wait_until_new_asg_in_service role
+        
+      end
+      
+      puts "Old ASGs are in service again!"
+      
+    end
+    
+    def self.delete_old_asgs!
+      puts "Deleting old ASGs.."
+      ASG_ROLES.each do |role|
+        old_commit = old_asg(role).tags.detect{|tag| tag.key == 'commit' }.value
+        name = final_asg_name(role, old_commit)
+        delete_asgs [name]
+        delete_launch_configurations [name]
+      end
+      puts "Done!"
     end
     
   end

@@ -13,19 +13,11 @@ module AwsOps
       })
     end
     
-    def self.delete_elbs
-      `rm -f *.pem`
-      names =
-        elb_client.describe_load_balancers.load_balancer_descriptions.select{|elb|
-          elb_client.describe_tags(load_balancer_names: [elb.load_balancer_name]).tag_descriptions[0].tags.detect{|tag|
-            tag.key == 'environment' && tag.value == environment
-          }
-        }.
-        map(&:load_balancer_name)
-      names.each do |lb|
-        elb_client.delete_load_balancer load_balancer_name: lb
-      end
-      names.any?
+    def self.security_groups_per_worker
+      Hash.new{raise}.merge({
+        ASG_WEB_NAME => [security_groups[:port_80_vpc], security_groups[:ssh]],
+        ASG_WORKER_NAME => [security_groups[:ssh], security_groups[:smtp]]
+      })
     end
     
     def self.https_elb_setup
@@ -168,11 +160,19 @@ module AwsOps
       
     end
     
-    def self.security_groups_per_worker
-      Hash.new{raise}.merge({
-        ASG_WEB_NAME => [security_groups[:port_80_vpc], security_groups[:ssh]],
-        ASG_WORKER_NAME => [security_groups[:ssh], security_groups[:smtp]]
-      })
+    def self.delete_elbs
+      `rm -f *.pem`
+      names =
+        elb_client.describe_load_balancers.load_balancer_descriptions.select{|elb|
+          elb_client.describe_tags(load_balancer_names: [elb.load_balancer_name]).tag_descriptions[0].tags.detect{|tag|
+            tag.key == 'environment' && tag.value == environment
+          }
+        }.
+        map(&:load_balancer_name)
+      names.each do |lb|
+        elb_client.delete_load_balancer load_balancer_name: lb
+      end
+      names.any?
     end
     
   end
