@@ -67,24 +67,30 @@ module AwsOps
       
     end
     
+    def self.initial_min_size
+      1
+    end
+    
+    def self.calculate_desired_capacity_for role
+      value = (
+        if old_asg(role)
+          old_asg(role).instances.select{|i| i.lifecycle_state == 'InService' }.size
+        else
+          initial_min_size
+        end)
+      [value, initial_min_size].max
+    end
+    
     def self.create_asgs roles=ASG_ROLES
       
       roles.each do |asg_name|
         
-        min_size = 1
-        
-        desired_capacity = (if old_asg(asg_name)
-          old_asg(asg_name).instances.select{|i| i.lifecycle_state == 'InService' }.size
-        else
-          min_size
-        end)
-        
         opts = {
           auto_scaling_group_name: final_asg_name(asg_name),
           launch_configuration_name: final_asg_name(asg_name),
-          min_size: min_size,
+          min_size: 0, # must be zero, else cannot peform B/G deployment by removing instances.
           max_size: 4,
-          desired_capacity: [min_size, desired_capacity].max,
+          desired_capacity: calculate_desired_capacity_for(asg_name),
           new_instances_protected_from_scale_in: false,
           availability_zones: availability_zones,
           tags: [
@@ -217,29 +223,30 @@ module AwsOps
       puts "Ready!"
     end
     
-    def self.put_old_asgs_in_standby!
+    def self.remove_old_asgs_instances!
       ASG_ROLES.each do |role|
         puts %|Processing old ASG for role #{role}...|
         wait_until_new_asg_in_service role
         puts 'Putting the old ASG instances in "stand by"...'
-        auto_scaling_client.enter_standby({
-          instance_ids: old_asg(role).instances.map(&:instance_id),
+        auto_scaling_client.set_desired_capacity({
           auto_scaling_group_name: old_asg(role).auto_scaling_group_name,
-          should_decrement_desired_capacity: false
+          desired_capacity: 0,
+          honor_cooldown: false
         })
       end
     end
     
     # this mechanism is needed for rollback only
-    def self.put_current_asgs_in_service!
+    def self.restore_old_asgs_instances!
       
       puts "Putting old ASGs in service again..."
       
       ASG_ROLES.each do |role|
         
-        auto_scaling_client.exit_standby({
-          instance_ids: new_asg(role).instances.map(&:instance_id),
-          auto_scaling_group_name: new_asg(role).auto_scaling_group_name
+        auto_scaling_client.set_desired_capacity({
+          auto_scaling_group_name: old_asg(role).auto_scaling_group_name,
+          desired_capacity: calculate_desired_capacity_for(role),
+          honor_cooldown: false
         })
         
         wait_until_new_asg_in_service role

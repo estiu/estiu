@@ -37,7 +37,7 @@ namespace :ops do
       
       task deploy: :update_env do
         AwsOps.deploy!
-        AwsOps::Transient.put_old_asgs_in_standby!
+        AwsOps::Transient.remove_old_asgs_instances!
         puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
         if gets.downcase.include?('ok')
           AwsOps::Transient.delete_old_asgs!
@@ -57,7 +57,7 @@ namespace :ops do
       end
       
       task rollback: :update_env do
-        AwsOps::Transient.put_current_asgs_in_service!
+        AwsOps::Transient.restore_old_asgs_instances!
         AwsOps::Transient.delete_old_asgs!
       end
       
