@@ -23,7 +23,8 @@ module AwsOps
           instance_type: AwsOps::PRODUCTION_SIZE,
           security_groups: ::AwsOps::Permanent.security_groups_per_worker[role],
           key_name: KEYPAIR_NAME,
-          iam_instance_profile: Iam.instance_profile_arn
+          iam_instance_profile: Iam.instance_profile_arn,
+          user_data: Base64.encode64(current_commit)
         }
         auto_scaling_client.create_launch_configuration(opts)
       end

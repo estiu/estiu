@@ -13,6 +13,7 @@ sudo mv files/nginx_estiu /etc/nginx/sites-enabled/default
 sudo service nginx restart
 rm -rf files
 cd estiu
-git pull
+git fetch --force
+git reset --hard `curl http://169.254.169.254/latest/user-data`
 bundle
 cd -
