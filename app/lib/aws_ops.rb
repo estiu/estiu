@@ -59,6 +59,10 @@ module AwsOps
     [region + 'a']
   end
   
+  def current_commit
+    `git rev-parse HEAD`.split("\n")[0]
+  end
+  
   def ec2_client
     @@ec2_client ||= Aws::EC2::Client.new(credentials)
   end

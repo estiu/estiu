@@ -27,7 +27,7 @@ def rebuild role, force_rebuild, rails_environment
       -var "ssh_private_key_file=/Users/vemv/.ssh/eu_west_1.pem" \
       -var "user=#{AwsOps::USERNAME}" \
       -var "region=#{AwsOps::Infrastructure.region}" \
-      -var "commit_sha=#{`git rev-parse HEAD`.split("\n")[0]}" \
+      -var "commit_sha=#{AwsOps::Infrastructure.current_commit}" \
       -var "RAILS_ENV=#{rails_environment}" \
       target.json ;\
     cd - \
