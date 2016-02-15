@@ -30,17 +30,43 @@ namespace :ops do
       end
       
       task create: :update_env do
-        AwsOps::Infrastructure.delete!
+        AwsOps.delete!
         reset_state environment
-        AwsOps::Infrastructure.create!
+        AwsOps.create!
+      end
+      
+      task deploy: :update_env do
+        AwsOps.deploy!
+        AwsOps::Transient.remove_old_asgs_instances!
+        puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
+        if gets.downcase.include?('ok')
+          AwsOps::Transient.delete_old_asgs!
+        elsif
+          
+          puts "If the deploy didn't go OK:"
+          puts "do a git reset --hard to the commit matching to the old ASG (it is essential to go back to a matching SHA). Then run the `ops:#{environment}:rollback` task."
+          
+          puts "If the deploy went OK:"
+          puts "Run the `ops:#{environment}:delete_old_asgs` task immediately."
+          
+        end
+      end
+      
+      task delete_old_asgs: :update_env do
+        AwsOps::Transient.delete_old_asgs!
+      end
+      
+      task rollback: :update_env do
+        AwsOps::Transient.restore_old_asgs_instances!
+        AwsOps::Transient.delete_old_asgs!
       end
       
       task launch_worker: :update_env do
-        AwsOps::Infrastructure.launch_worker!
+        AwsOps.launch_worker!
       end
       
       task delete: :update_env do
-        AwsOps::Infrastructure.delete!
+        AwsOps.delete!
         reset_state environment, :silent
       end
       

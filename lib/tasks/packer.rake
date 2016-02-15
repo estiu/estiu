@@ -16,8 +16,8 @@ def rebuild role, force_rebuild, rails_environment
     cd packer/#{role}; \
     packer build \
       -var "base_ami=#{base_ami}" \
-      -var "aws_access_key=#{AwsOps::Infrastructure.credentials[:access_key_id]}" \
-      -var "aws_secret_key=#{AwsOps::Infrastructure.credentials[:secret_access_key]}" \
+      -var "aws_access_key=#{AwsOps::Permanent.credentials[:access_key_id]}" \
+      -var "aws_secret_key=#{AwsOps::Permanent.credentials[:secret_access_key]}" \
       -var "REPO_DEPLOY_PUBLIC_KEY=$REPO_DEPLOY_PUBLIC_KEY" \
       -var "REPO_DEPLOY_PRIVATE_KEY=$REPO_DEPLOY_PRIVATE_KEY" \
       -var "repo_source=$(echo #{repo_source})" \
@@ -26,8 +26,8 @@ def rebuild role, force_rebuild, rails_environment
       -var "ssh_keypair_name=#{AwsOps::KEYPAIR_NAME}" \
       -var "ssh_private_key_file=/Users/vemv/.ssh/eu_west_1.pem" \
       -var "user=#{AwsOps::USERNAME}" \
-      -var "region=#{AwsOps::Infrastructure.region}" \
-      -var "commit_sha=#{AwsOps::Infrastructure.current_commit}" \
+      -var "region=#{AwsOps::Permanent.region}" \
+      -var "commit_sha=#{AwsOps::Permanent.current_commit}" \
       -var "RAILS_ENV=#{rails_environment}" \
       target.json ;\
     cd - \

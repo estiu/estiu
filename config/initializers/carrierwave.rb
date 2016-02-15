@@ -1,7 +1,7 @@
 CarrierWave.configure do |config|
   
   credential_options = (if DeveloperMachine.running_in_developer_machine?
-      c = AwsOps::Infrastructure.credentials
+      c = AwsOps::Permanent.credentials
       {aws_access_key_id: c[:access_key_id], aws_secret_access_key: c[:secret_access_key]}
     else
       { use_iam_profile: true }
@@ -9,7 +9,7 @@ CarrierWave.configure do |config|
     
   config.fog_credentials = {
     provider: 'AWS',
-    region: AwsOps::Infrastructure.region
+    region: AwsOps::Permanent.region
   }.merge(credential_options)
   
   config.fog_directory = AwsOps::UPLOADS_BUCKET
