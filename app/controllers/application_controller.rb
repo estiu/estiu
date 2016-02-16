@@ -149,7 +149,7 @@ class ApplicationController < ActionController::Base
       0
     elsif current_attendee
       Rails.cache.fetch(cache_key, notification_cache_options){
-        Campaign.visible_for_attendee(current_attendee).fulfilled.without_event.count
+        Campaign.visible_for_attendee(current_attendee).need_event.count
       }
     else
       0
@@ -160,7 +160,7 @@ class ApplicationController < ActionController::Base
     cache_key = "prepare_event_notification_value_#{current_user.try(:id)}"
     @event_notification_value = if current_event_promoter
       Rails.cache.fetch(cache_key, notification_cache_options){
-        Campaign.visible_for_event_promoter(current_event_promoter).without_event.count
+        Campaign.visible_for_event_promoter(current_event_promoter).need_event.count
       }
     elsif current_attendee
       Rails.cache.fetch(cache_key, notification_cache_options){

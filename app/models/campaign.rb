@@ -43,6 +43,10 @@ class Campaign < ActiveRecord::Base
     joins('left outer join events on campaigns.id = events.campaign_id').where(events: {campaign_id: nil})
   end
   
+  def self.need_event
+    fulfilled.without_event
+  end
+  
   def self.fulfilled
     where.not(fulfilled_at: nil)
   end

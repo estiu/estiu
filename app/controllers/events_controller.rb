@@ -9,7 +9,7 @@ class EventsController < ApplicationController
   
   def index
     @campaigns_with_pending_events = (if current_event_promoter
-      Campaign.joins(:campaign_draft).without_event.where(campaign_drafts: {event_promoter_id: current_event_promoter.id}).all
+      Campaign.joins(:campaign_draft).where(campaign_drafts: {event_promoter_id: current_event_promoter.id}).need_event.all
     else
       []
     end)
