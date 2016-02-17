@@ -44,7 +44,7 @@ Rails.application.routes.draw do
       end
     end
     
-    resources :events, only: [:index, :show, :create] do
+    resources :events, only: [:index, :show, :create, :edit, :update] do
       member do
         post :submit_documents
         post :submit

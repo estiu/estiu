@@ -1,7 +1,7 @@
 class EventsController < ApplicationController
   
   before_action :initialize_event, only: [:new]
-  before_action :load_event, only: [:show, :submit_documents, :submit, :approve, :reject]
+  before_action :load_event, only: [:show, :edit, :update, :submit_documents, :submit, :approve, :reject]
   
   with_events = [:index]
   before_action :load_events, only: with_events
@@ -33,6 +33,20 @@ class EventsController < ApplicationController
     else
       flash.now[:error] = t('.error')
       render :new
+    end
+  end
+  
+  def edit
+  end
+  
+  def update
+    @event.assign_attributes event_attrs
+    if @event.save
+      flash[:success] = t '.success'
+      redirect_to @event
+    else
+      flash[:error] = t '.error'
+      render 'edit'
     end
   end
   
@@ -104,9 +118,9 @@ class EventsController < ApplicationController
   end
   
   def event_attrs
-    params.
-      permit(event: (Event::CREATE_ATTRS + [{ra_artists_attributes: %i(artist_path)}]))[:event].
-      merge(campaign_id: params[:id])
+    v = params.permit(event: (Event::CREATE_ATTRS + [{ra_artists_attributes: %i(artist_path id _destroy)}]))[:event]
+    v.merge!(campaign_id: params[:id]) unless @event.campaign_id # for `new` only (`edit` doesn't need campaign_id)
+    v
   end
   
   def event_document_attrs

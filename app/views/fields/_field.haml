@@ -11,7 +11,7 @@
 .form-group{class: "#{"has-error" if form.object.errors[key].present?} #{locals[:form_group_class]}"}
   - render_label = !([:submit].include? key) && !([:hidden, :nested_attributes, :s3_upload].include? as)
   - caption = locals[:caption] || t("#{prefix}.#{key}", default: key.to_s.humanize)
-  - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as)
+  - locals[:html_opts].merge!(value: caption) if !render_label && !([:hidden].include? as) && !locals.keys.include?(:value)
   - if render_label && !locals[:only_input]
     - label_html = locals.fetch(:label_html, {})
     - label_html[:class] = "#{label_html[:class]} control-label"

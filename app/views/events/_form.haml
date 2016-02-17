@@ -1,10 +1,11 @@
 - add_another = 'add-another-ra-artist'
 .row
   .bordered{class: centered}
-    %h2= t '.title'
+    %h2= event.id ? t('.title_edit') : t('.title_new')
     %h5= t('.for_campaign', link: link_to(event.campaign.name, event.campaign)).html_safe
     %hr
-    = form_for(event, url: create_event_campaign_path(id: event.campaign.id)) do |f|
+    - url = event.id ? event_path(event) : create_event_campaign_path(id: event.campaign.id)
+    = form_for(event, url: url) do |f|
       = form_fields(f, 'events.form') do |field|
         .row
           .col-xs-12
@@ -51,4 +52,4 @@
               add_another: add_another,
               on_added: activate_popover)
             %hr
-            = field.(:submit)
+            = field.(:submit, value: (event.id ? t('.submit_edit') : t('.submit_new')))

@@ -14,7 +14,7 @@ class Event < ActiveRecord::Base
   
   attr_accessor :documents_confirmation
   
-  accepts_nested_attributes_for :ra_artists, allow_destroy: false, reject_if: ->(object){ object[:artist_path].blank? }
+  accepts_nested_attributes_for :ra_artists, allow_destroy: true, reject_if: ->(object){ object[:artist_path].blank? }
   accepts_nested_attributes_for :event_documents, allow_destroy: false, reject_if: ->(object){ object[:filename].blank? }
   before_validation :find_ra_paths, on: :create
   before_validation :ensure_at_least_one_event_document, if: :submitted_at
