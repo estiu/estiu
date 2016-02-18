@@ -12,7 +12,7 @@
     - if can_edit
       .col-xs-6.col-sm-4.right
         .top10
-        = link_to t('.edit'), edit_event_path(event), class: 'btn btn-info btn-xs'
+        = link_to t('.edit'), edit_event_path(event), class: 'btn btn-info btn-xs edit-this-event'
 
 %p{class: "#{'p10 bordered' unless listing}", style: 'font-size: 16px'}= t('.artists', artists: event.artists_to_display)
   
