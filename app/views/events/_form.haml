@@ -25,11 +25,11 @@
           .col-xs-12.bold.bottom10
             = t '.duration_title'
           .col-xs-3.right.left-column
-            = field.(:duration_hours, as: :hour_select, min_seconds: Event::MIN_DURATION, max_hours: 12, only_input: true)
+            = field.(:duration_hours, as: :hour_select, min_seconds: Event::MIN_DURATION, max_hours: 12, only_input: true, rjust: 1)
           .col-xs-3.left.right-column{style: 'padding-top: 4px'}
             = field.(:duration_hours, as: :hour_select, min_seconds: Event::MIN_DURATION, max_hours: 12, only_label: true)
           .col-xs-3.right.left-column
-            = field.(:duration_minutes, as: :minute_select, only_input: true)
+            = field.(:duration_minutes, as: :minute_select, only_input: true, rjust: 1)
           .col-xs-3.left.right-column{style: 'padding-top: 4px'}
             = field.(:duration_minutes, as: :minute_select, only_label: true)
             
