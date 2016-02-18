@@ -119,7 +119,7 @@ class EventsController < ApplicationController
   
   def event_attrs
     v = params.permit(event: (Event::CREATE_ATTRS + [{ra_artists_attributes: %i(artist_path id _destroy)}]))[:event]
-    v.merge!(campaign_id: params[:id]) unless @event.campaign_id # for `new` only (`edit` doesn't need campaign_id)
+    v.merge!(campaign_id: params[:id]) unless @event.try(:campaign_id) # for `new` only (`edit` doesn't need campaign_id)
     v
   end
   

@@ -67,6 +67,18 @@ class Event < ActiveRecord::Base
     name
   end
   
+  def presentational_status
+    if !submitted_at
+      'info'
+    elsif must_be_reviewed?
+      'primary'  
+    elsif rejected_at
+      'danger'
+    else # approved
+      'success'
+    end
+  end
+  
   def find_ra_paths
     new_value = self.ra_artists.map do |ra|
       v = RaArtist.where(artist_path: ra.artist_path).first_or_initialize

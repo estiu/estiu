@@ -75,6 +75,10 @@ en:
       ra_artists:
         artist_path: "Resident Advisor path"
     item:
+      event_status_info: Draft
+      event_status_primary: Submitted for review
+      event_status_danger: Rejected
+      event_status_success: Approved
       edit: Edit
       title: "Event: %{name}"
       venue: Venue
