@@ -56,7 +56,7 @@ module AwsOps
   
   def availability_zones
     # each region has 2-4 AZs. Discoverable with `aws ec2 describe-availability-zones --region us-west-2`
-    [region + 'a']
+    @@availability_zones ||= ec2_client.describe_availability_zones.availability_zones.map(&:zone_name)
   end
   
   def current_commit

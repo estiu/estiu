@@ -69,13 +69,13 @@ module AwsOps
     end
     
     def self.initial_min_size
-      1
+      2 # 2 (and not 1): for cross-AZ availability
     end
     
     def self.calculate_desired_capacity_for role
       value = (
         if old_asg(role)
-          old_asg(role).instances.select{|i| i.lifecycle_state == 'InService' }.size
+          old_asg(role, :expire_cache).instances.select{|i| i.lifecycle_state == 'InService' }.size
         else
           initial_min_size
         end)
