@@ -70,7 +70,11 @@ module AwsOps
     
     def self.initial_min_size(role)
       if LOAD_BALANCED_ASGS.include?(role)
-        2 # so the user-facing availability is ensured
+        if environment == 'production'
+          2 # so the user-facing availability is ensured
+        else
+          1
+        end
       else
         1 # worker instances have less availability requirements.
       end

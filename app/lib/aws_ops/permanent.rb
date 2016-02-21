@@ -175,5 +175,13 @@ module AwsOps
       names.any?
     end
     
+    def self.create_rds
+      
+    end
+    
+    def self.delete_rds
+      
+    end
+    
   end
 end

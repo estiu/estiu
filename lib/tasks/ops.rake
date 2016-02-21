@@ -1,8 +1,9 @@
-def reset_state environment, silent=false
+def reset_state environment, silent=false, reset_db=true
   puts "Resetting state..."
   AwsOps::Ec2.wait_until_all_instances_terminated
   AwsOps::Pipeline::delete_all_pipelines!
   AwsOps::SQS.drain_all_queues!
+  return unless reset_db
   command = "RAILS_ENV=#{environment} bundle exec rake db:drop db:create db:migrate"
   if silent
     `#{command}`
@@ -39,7 +40,7 @@ namespace :ops do
         AwsOps.deploy!
         AwsOps::Transient.remove_old_asgs_instances!
         puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
-        if STDIN.gets.downcase.include?('ok')
+        if AwsOps::Transient.confirm
           AwsOps::Transient.delete_old_asgs!
         elsif
           
@@ -65,9 +66,29 @@ namespace :ops do
         AwsOps.launch_worker!
       end
       
-      task delete: :update_env do
-        AwsOps.delete!
+      task delete_transient: :update_env do
+        AwsOps.delete_transient!
         reset_state environment, :silent
+      end
+      
+      task delete_permanent: :update_env do
+        
+        puts "Delete all instances, ELB, and DB? Type 'ok' to confirm."
+        
+        if AwsOps::Permanent.confirm
+          
+          puts "Deleting permanent infrastructure..."
+          
+          AwsOps.delete_transient!
+          
+          reset_state environment, :silent, false
+          
+          AwsOps.delete_permanent!
+          
+        else
+          puts "Canceled!"
+        end
+        
       end
       
     end

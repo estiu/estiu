@@ -136,11 +136,32 @@ module AwsOps
     end
   end
   
-  def self.delete!
-    puts "Deleting infrastructure..."
-    AwsOps::Permanent.delete_elbs
+  def self.confirm
+    STDIN.gets.downcase.include?('ok')
+  end
+  
+  def self.delete_transient! silent=false
+    puts "Deleting transient infrastructure..." unless silent
     AwsOps::Transient.delete_asgs
     AwsOps::Transient.delete_launch_configurations
+    puts "Delete transient infrastructure." unless silent
+  end
+  
+  def self.delete_permanent!
+    
+    AwsOps::Permanent.delete_elbs
+    # delete SGs, S3 buckets, etc
+    
+    puts "Deleted permanent infrastructure."
+    
+    if environment == 'production'
+      puts "Won't drop the production database. Do manually if really needed."
+    else
+      puts "Deleting RDS instances / data..."
+      AwsOps::Permanent.delete_rds
+      puts "Deleted RDS instaces / data."
+    end
+    
   end
   
 end
