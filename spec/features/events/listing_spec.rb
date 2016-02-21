@@ -11,7 +11,7 @@ describe 'Events listing' do
         campaigns = Campaign.joins(:campaign_draft).need_event.where(campaign_drafts: {event_promoter_id: event_promoter.event_promoter_id})
         expect(campaigns.size.zero?).to be !!negative
         campaigns.each do |campaign|
-          expect(all("a[href='#{campaign_path(campaign)}']").size).to be 1
+          expect(all("a[href='#{new_event_campaign_path(campaign)}']").size).to be 1
         end
         expect(all('.alert.alert-warning').size).send((negative ? :to_not : :to), eq(1))
       end

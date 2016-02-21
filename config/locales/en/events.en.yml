@@ -53,17 +53,20 @@ en:
       approved_will_take_place_promoter: This event has been approved and it must take place on the specified date/time. All invoices have been paid.
       rejected: This event was rejected. No invoices have been paid, and attendees have been refunded.
     form:
-      title: 'Create event'
+      title_new: 'Create event'
+      title_edit: 'Edit event draft'
       for_campaign: "For campaign: %{link}"
       submit: 'Create'
       venue_id: 'Venue'
+      submit_edit: 'Update'
+      submit_new: 'Create'
       name: 'Event name'
       artists: Artists
       start_date_title: 'The event will start at:'
       duration_title: 'The event is going to last:'
       duration_hours: 'hours'
       duration_minutes: 'minutes'
-      starts_at: 'Date'
+      starts_at_date: 'Date'
       popover1: The artist(s) which will play at the event.
       popover2: For identifying them, we use Resident Advisor url fragments.
       submit_documents:
@@ -72,6 +75,11 @@ en:
       ra_artists:
         artist_path: "Resident Advisor path"
     item:
+      event_status_info: Draft
+      event_status_primary: Submitted for review
+      event_status_danger: Rejected
+      event_status_success: Approved
+      edit: Edit
       title: "Event: %{name}"
       venue: Venue
       from_campaign: "From campaign %{campaign_link}"
@@ -88,3 +96,6 @@ en:
       empty2_attendee: "Check out our %{link} for joining an event!"
       campaigns: campaigns
       new_campaign: create a campaign
+    update:
+      success: "Event draft updated successfully."
+      error: "Couldn't update the event information due to the indicated errors."

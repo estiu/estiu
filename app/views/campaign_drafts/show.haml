@@ -1,7 +1,7 @@
 - campaign = @draft
 .row
   .bordered{class: centered}
-    %h2= t '.title', campaign_name: campaign.name
+    %h2= t(".title_#{campaign.approved_at ? 'documentation' : 'proposal'}", campaign_name: campaign.name)
     - unless campaign.submitted_at
       = link_to t('.edit'), edit_campaign_draft_path(campaign), class: 'btn btn-xs btn-info'
       = link_to t('.destroy'), campaign_draft_path(campaign), method: :delete, class: 'btn btn-xs btn-danger', id: "delete-draft-#{campaign.id}"

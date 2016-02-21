@@ -22,6 +22,10 @@ class EventPolicy < ApplicationPolicy
     end
   end
   
+  def edit_or_update?
+    promoter_has_not_submitted?
+  end
+  
   def submit?
     promoter_has_not_submitted?
   end

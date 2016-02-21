@@ -1,9 +1,21 @@
+- can_edit = policy(event).edit_or_update?
+
 - if listing
   = link_to event.name, event, class: 'show-link-title'
+  %span{class: "label label-#{event.presentational_status} label-xs"}
+    = t(".event_status_#{event.presentational_status}")
+  %div.bottom10
 - else
-  %h1
-    = t '.title', name: event.name
-    %small.f14= t('.from_campaign', campaign_link: link_to("##{event.campaign.id}", campaign_path(event.campaign))).html_safe
+  .row.bottom10
+    %div{class: (can_edit ? "col-xs-6 col-sm-8" : "col-xs-12")}
+      %h1.m0
+        = t '.title', name: event.name
+      .top5
+      %small.text-muted.f14= t('.from_campaign', campaign_link: link_to("##{event.campaign.id}", campaign_path(event.campaign))).html_safe
+    - if can_edit
+      .col-xs-6.col-sm-4.right
+        .top10
+        = link_to t('.edit'), edit_event_path(event), class: 'btn btn-info btn-xs edit-this-event'
 
 %p{class: "#{'p10 bordered' unless listing}", style: 'font-size: 16px'}= t('.artists', artists: event.artists_to_display)
   
