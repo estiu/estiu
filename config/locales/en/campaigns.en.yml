@@ -34,6 +34,8 @@ en:
       empty_event_promoter: "There are no campaigns no display. You can always create one!"
       empty_attendee: "There are no campaigns to display."
     item:
+      from_campaign_draft: "Campaign documentation: %{campaign_link}"
+      from_campaign_draft_link: "link"
       fulfilled_campaign: 'goal reached'
       fulfilled_campaign_title: 'This campaign reached its goal.'
       unfulfilled_campaign: 'goal not reached'

@@ -10,15 +10,15 @@ en:
       generate_invite_link: If the event is invite only, then a link must be generated.
       generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
     create:
-      success: "Succesfully saved the campaign draft. Now please check everything's correct (else you can edit the draft). Then you can submit it for review."
+      success: "Succesfully saved the campaign proposal. Now please check everything's correct (else please edit it). Then you can submit it for review."
       error: "Couldn't create campaign due to the indicated errors."
     new:
       title: 'New campaign'
     edit:
-      title: 'Edit campaign draft'
+      title: 'Edit campaign proposal'
     update:
-      success: "Campaign draft updated successfully."
-      error: "Couldn't update the campaign draft due to the indicated errors."
+      success: "Campaign proposal updated successfully."
+      error: "Couldn't update the campaign proposal due to the indicated errors."
     submit:
       success: "Campaign successfully submitted for review. We will get back to you soon!"
       error: "Couldn't submit the campaign due to the indicated errors."
@@ -26,8 +26,8 @@ en:
       success: "Campaign successfully published! Attendees may now discover and be notified of the campaign."
       error: "Couldn't publish the campaign due to the indicated errors."
     destroy:
-      success: "Campaign draft successfully discarded."
-      error: "Sorry, there was a problem discarding this campaign draft. Please try again."
+      success: "Campaign proposal successfully discarded."
+      error: "Sorry, there was a problem discarding this campaign proposal. Please try again."
     submit_form:
       submit: "Submit for review"
     show:
@@ -36,7 +36,8 @@ en:
       review_status_info: "Pending review"
       edit: Edit
       destroy: Discard
-      title: 'Draft: %{campaign_name}'
+      title_proposal: 'Campaign proposal: %{campaign_name}'
+      title_documentation: 'Campaign documentation: %{campaign_name}'
       has_campaign: "This campaign has been published! Link: %{link}"
     step_1_fields:
       venue: Venue
