@@ -68,8 +68,12 @@ module AwsOps
       
     end
     
-    def self.initial_min_size
-      2 # 2 (and not 1): for cross-AZ availability
+    def self.initial_min_size(role)
+      if LOAD_BALANCED_ASGS.include?(role)
+        2 # so the user-facing availability is ensured
+      else
+        1 # worker instances have less availability requirements.
+      end
     end
     
     def self.calculate_desired_capacity_for role
@@ -77,9 +81,9 @@ module AwsOps
         if old_asg(role)
           old_asg(role, :expire_cache).instances.select{|i| i.lifecycle_state == 'InService' }.size
         else
-          initial_min_size
+          initial_min_size(role)
         end)
-      [value, initial_min_size].max
+      [value, initial_min_size(role)].max
     end
     
     def self.create_asgs roles=ASG_ROLES
