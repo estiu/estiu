@@ -42,7 +42,8 @@ class RaArtist < ActiveRecord::Base
   end
   
   def copy_artist_name
-    unless self.artist_name.present?
+    change = self.changes['artist_path']
+    if self.artist_name.blank? || (change.present? && change[1].present?)
       self.artist_name = self.artist_path.gsub(PREFIX, '')
     end
   end
