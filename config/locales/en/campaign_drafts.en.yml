@@ -1,14 +1,5 @@
 en:
   campaign_drafts:
-    errors:
-      minimum_pledge_cents:
-        venue: You must set at least %{value}.
-      starts_at:
-        ends_at: Must be prior to Ends at
-      ends_at:
-        starts_at: The campaign must remain open for at least %{hours} hours.
-      generate_invite_link: If the event is invite only, then a link must be generated.
-      generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
     create:
       success: "Succesfully saved the campaign proposal. Now please check everything's correct (else please edit it). Then you can submit it for review."
       error: "Couldn't create campaign due to the indicated errors."

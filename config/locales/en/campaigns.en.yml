@@ -3,6 +3,7 @@ en:
     errors:
       minimum_pledge_cents:
         venue: You must set at least %{value}.
+        goal_cents: "Must be at least %{n} times lower than the goal amount (so at least %{n} people can attend the event)."
       starts_at:
         ends_at: Must be prior to Ends at
       ends_at:

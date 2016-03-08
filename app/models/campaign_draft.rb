@@ -24,6 +24,7 @@ class CampaignDraft < ActiveRecord::Base
   APP_VISIBILITY = 'app'
   INVITE_VISIBILITY = 'invite'
   VISIBILITIES = [APP_VISIBILITY, INVITE_VISIBILITY, PUBLIC_VISIBILITY]
+  GOAL_TO_MINIMUM_PLEDGE_FACTOR = 10 # goal must be at least 10 times higher than the minimum pledge, so at least 10 people can attend.
   
   extend ResettableDates
   
@@ -78,6 +79,7 @@ class CampaignDraft < ActiveRecord::Base
 
   validate :valid_date_fields, on: :create
   validate :minimum_pledge_according_to_venue, on: :create
+  validate :minimum_pledge_not_greater_than_goal
 
   before_validation :do_generate_invite_link
   before_validation :maybe_discard_starts_at
@@ -129,6 +131,14 @@ class CampaignDraft < ActiveRecord::Base
       end
       if ends_at && ends_at.to_i - DateTime.current.to_i < -60
         errors[:ends_at] << I18n.t!('past_date')
+      end
+    end
+  end
+  
+  def minimum_pledge_not_greater_than_goal
+    if minimum_pledge_cents && goal_cents
+      if (goal_cents.to_f / minimum_pledge_cents.to_f) < GOAL_TO_MINIMUM_PLEDGE_FACTOR.to_f
+        errors[:minimum_pledge_cents] << I18n.t!('campaigns.errors.minimum_pledge_cents.goal_cents', n: GOAL_TO_MINIMUM_PLEDGE_FACTOR)
       end
     end
   end
