@@ -40,7 +40,7 @@ namespace :ops do
         AwsOps.deploy!
         AwsOps::Transient.remove_old_asgs_instances!
         puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
-        if AwsOps::Transient.confirm
+        if AwsOps.confirm
           AwsOps::Transient.delete_old_asgs!
         elsif
           
@@ -75,7 +75,7 @@ namespace :ops do
         
         puts "Delete all instances, ELB, and DB? Type 'ok' to confirm."
         
-        if AwsOps::Permanent.confirm
+        if AwsOps.confirm
           
           puts "Deleting permanent infrastructure..."
           

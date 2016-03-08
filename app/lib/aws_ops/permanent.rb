@@ -3,6 +3,10 @@ module AwsOps
     
     extend AwsOps
     
+    def self.db_name # make sure it matches database.yml
+      "estiu_#{environment}"
+    end
+    
     def self.security_groups
       Hash.new{ raise }.merge({ # TODO - fetch from API. assume key names. especially important after introducing `environment`.
         port_443_public: 'sg-a68a3ac2',    
@@ -175,12 +179,61 @@ module AwsOps
       names.any?
     end
     
+    POSTGRES_SECURITY_GROUP = "postgresql"
+    
+    def find_or_create_postgres_security_group
+      name = POSTGRES_SECURITY_GROUP
+      existing = ec2_client.<FIND_BY_NAME>(name).first # XXX
+      return existing.group_id if existing
+      group_id = ec2_client.create_security_group({
+        group_name: name,
+        description: name
+      }).group_id
+      ec2_client.authorize_security_group_ingress({
+        group_name: name,
+        ip_protocol: "tcp",
+        from_port: 5432,
+        to_port: 5432,
+        cidr_ip: "0.0.0.0/0"
+      })
+      group_id
+    end
+    
     def self.create_rds
+      security_group_id = find_or_create_postgres_security_group
+      username = base_dotenv_environment['POSTGRESQL_USERNAME']
+      password = base_dotenv_environment['POSTGRESQL_PASSWORD']
+      db_instance_identifier = base_dotenv_environment[AwsOps::RDS_INSTANCE_ID_KEY]
+      
+      instance = rds_client.create_db_instance({
+        db_name: db_name,
+        db_instance_identifier: db_instance_identifier,
+        engine: 'postgres',
+        db_instance_class: 'db.t2.micro',
+        master_username: username,
+        master_user_password: password,
+        backup_retention_period: (environment == 'production' ? 90 : 0),
+        allocated_storage: 8,
+        vpc_security_group_ids: [security_group_id]
+        # XXX needs multi-az option
+      }).db_instance
+      
+      rds_client.wait_until :db_instance_available, db_instance_identifier: db_instance_identifier
+      host = rds_client.describe_db_instances(db_instance_identifier: db_instance_identifier).db_instances.first.endpoint.address
+      
+      `echo "\nPOSTGRESQL_HOST=#{host}" >> .env.#{environment}`
+      puts "ATTENTION! Your .env.#{environment} file has been appended one RDS-related entry (POSTGRESQL_HOST). Make sure to delete the old POSTGRESQL_HOST entry (if any)."
       
     end
     
     def self.delete_rds
-      
+      skip_final_snapshot = environment != 'production'
+      opts = {
+        db_instance_identifier: base_dotenv_environment[AwsOps::RDS_INSTANCE_ID_KEY],
+        skip_final_snapshot: skip_final_snapshot
+      }
+      opts.merge!(final_db_snapshot_identifier: "final-snapshot-#{SecureRandom.hex}") unless skip_final_snapshot
+      rds_client.delete_db_instance(opts)
     end
     
   end

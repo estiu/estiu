@@ -24,6 +24,7 @@ module AwsOps
   SCALE_IN_SUFFIX = ' - scale in'
   CONNECTION_DRAINING_TIMEOUT = 30
   ESTIMATED_INIT_TIME = 210 # 3 minutes and half.
+  RDS_INSTANCE_ID_KEY = 'RDS_INSTANCE_ID'
   
   def environment
     (self.aws_ops_environment || Rails.env).to_s
@@ -41,6 +42,10 @@ module AwsOps
         Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
       end.symbolize_keys
     Hash.new{raise}.merge(result).merge(region: region)
+  end
+  
+  def base_dotenv_environment
+    @@base_dotenv_environment ||= Dotenv::Environment.new(".env.#{environment}").to_h
   end
   
   def region 
@@ -98,6 +103,10 @@ module AwsOps
   def cloudwatch_client
     @@cloudwatch_client ||= Aws::CloudWatch::Client.new(credentials)
   end
+
+  def rds_client
+    @@rds_client ||= Aws::RDS::Client.new(credentials)
+  end
   
   def elb_name
     "#{ELB_NAME}-#{environment}"
@@ -154,7 +163,7 @@ module AwsOps
     
     puts "Deleted permanent infrastructure."
     
-    if environment == 'production'
+    if AwsOps::Permanent.environment == 'production'
       puts "Won't drop the production database. Do manually if really needed."
     else
       puts "Deleting RDS instances / data..."
