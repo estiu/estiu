@@ -9,8 +9,8 @@ class CampaignDraft < ActiveRecord::Base
   MINIMUM_GOAL_AMOUNT = 100_00
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
-  CREATE_ATTRS_STEP_1 = %i(name description venue_id goal_cents minimum_pledge_cents) 
-  CREATE_ATTRS_STEP_2 = DATE_ATTRS + %i(starts_immediately time_zone visibility generate_invite_link)
+  CREATE_ATTRS_STEP_1 = %i(name description venue_id goal_cents minimum_pledge_cents cost_justification)
+  CREATE_ATTRS_STEP_2 = DATE_ATTRS + %i(starts_immediately time_zone visibility generate_invite_link estimated_event_date estimated_event_hour estimated_event_minutes)
   FORWARD_METHODS = %i(
     starts_at_criterion
     skip_past_date_validations
@@ -41,7 +41,7 @@ class CampaignDraft < ActiveRecord::Base
   
   monetize :estimated_minimum_pledge_cents
   
-  (CREATE_ATTRS_STEP_1 - %i(description)).each do |attr|
+  (CREATE_ATTRS_STEP_1 - %i(description cost_justification)).each do |attr|
     validates attr, presence: true
   end
 
@@ -49,15 +49,19 @@ class CampaignDraft < ActiveRecord::Base
   validates :invite_token, presence: true, if: :generate_invite_link
   validates :invite_token, inclusion: [nil], unless: :generate_invite_link
   validates :description, presence: true, length: {minimum: (Rails.env.development? ? 2 : 140), maximum: 1000}
+  validates :cost_justification, presence: true, length: {minimum: (Rails.env.development? ? 2 : 140), maximum: 1000}
   validates :starts_at, inclusion: [nil], if: :starts_immediately
-  validates :published_at, presence: true, if: ->(rec){ CREATE_ATTRS_STEP_2.any?{|attr| rec.send(attr).present? } }
+  validates :published_at, presence: true, if: ->(rec){ (CREATE_ATTRS_STEP_2 - %i(estimated_event_minutes)).any?{|attr| rec.send(attr).present? } }
   validates :published_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
   validates :submitted_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
   
-  begin # validations enclosed in this black depend on :submitted_at
+  begin # validations enclosed in this black depend on :published_at
     validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :starts_at, presence: true, if: ->(rec){ rec.published_at && !rec.starts_immediately }
     validates :ends_at, presence: true, if: :published_at
+    validates :estimated_event_date, presence: true, if: :published_at
+    validates :estimated_event_hour, presence: true, if: :published_at
+    validates :estimated_event_minutes, presence: true, if: :published_at
     validates :time_zone, presence: true, inclusion: {in: Estiu::Timezones::ALL, message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :visibility, inclusion: {in: VISIBILITIES, message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :generate_invite_link, inclusion: {in: [true, false], message: I18n.t!('errors.inclusion')}, if: :published_at

@@ -18,6 +18,13 @@
         = field.(:visibility, as: :select, values: CampaignDraft.visibility_select, popover: {html: popover_html('.visibility')})
       .col-xs-6
         = field.(:generate_invite_link, as: :boolean, popover: {html: popover_html('.generate_invite_link')})
+    .row
+      .col-xs-6
+        = field.(:estimated_event_date, as: :date, popover: {html: popover_html('.estimated_event_date')})
+      .col-xs-3
+        = field.(:estimated_event_hour, as: :hour_select)
+      .col-xs-3
+        = field.(:estimated_event_minutes, as: :minute_select)
     %hr
     .right
       = field.(:submit)

@@ -24,6 +24,7 @@
         = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
       .col-xs-6
         #attendance-indicator.f12.alert.alert-warning.p10{style: 'margin-top: 22px'}= t('.maximum_attendance') + ':'
+    = field.(:cost_justification, as: :textarea, popover: {html: popover_html('.cost_justification')})
     %hr
     .right
       = field.(:submit)
