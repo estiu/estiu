@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   before_action :ensure_modern_browser
+  before_action :prepare_draft_notification_value
   before_action :prepare_campaign_notification_value
   before_action :prepare_event_notification_value
   after_action :verify_authorized, unless: :devise_controller?
@@ -140,6 +141,17 @@ class ApplicationController < ActionController::Base
       else
         render 'pages/home'
       end
+    end
+  end
+  
+  def prepare_draft_notification_value
+    cache_key = "prepare_draft_notification_value_#{current_user.try(:id)}"
+    @draft_notification_value = if current_event_promoter
+      Rails.cache.fetch(cache_key, notification_cache_options){
+        current_event_promoter.campaign_drafts.without_campaign.count
+      }
+    else
+      0
     end
   end
   

@@ -1,4 +1,11 @@
-= form_for(campaign, url: submit_campaign_draft_path(campaign), method: :post, class: 'form-horizontal') do |f|
-  = form_fields(f, 'campaign_drafts.submit_form') do |field|
-    %hr
-    = field.(:submit)
+- submit_html_class ||= nil
+- inline ||= false
+- inline_class = "inline" if inline
+= form_for(campaign, url: submit_campaign_draft_path(campaign), method: :post, html: {class: "m0 #{inline_class}"}) do |f|
+  = form_fields(f, 'campaign_drafts.submit_form', form_group_class: inline_class) do |field|
+    - submit = field.(:submit, html_class: "#{submit_html_class} submit-campaign-draft")
+    - if hr
+      %hr
+      = submit
+    - else
+      = submit

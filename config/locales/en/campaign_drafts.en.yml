@@ -1,5 +1,10 @@
 en:
   campaign_drafts:
+    index:
+      title: Campaign drafts
+      new: New campaign...
+    item:
+      publish: 'Publish...'
     create:
       success: "Succesfully saved the campaign proposal. Now please check everything's correct (else please edit it). Then you can submit it for review."
       error: "Couldn't create campaign due to the indicated errors."
@@ -22,9 +27,10 @@ en:
     submit_form:
       submit: "Submit for review"
     show:
+      review_status_primary: "Pending review"
       review_status_success: "Approved"
       review_status_danger: "Rejected"
-      review_status_info: "Pending review"
+      review_status_info: "Unsubmitted"
       edit: Edit
       destroy: Discard
       title_proposal: 'Campaign proposal: %{campaign_name}'

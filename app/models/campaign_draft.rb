@@ -59,6 +59,7 @@ class CampaignDraft < ActiveRecord::Base
     validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :starts_at, presence: true, if: ->(rec){ rec.published_at && !rec.starts_immediately }
     validates :ends_at, presence: true, if: :published_at
+    validates :campaign, presence: true, if: :published_at
     validates :estimated_event_date, presence: true, if: :published_at
     validates :estimated_event_hour, presence: true, if: :published_at
     validates :estimated_event_minutes, presence: true, if: :published_at
@@ -90,7 +91,11 @@ class CampaignDraft < ActiveRecord::Base
 
   attr_accessor :goal_cents_facade
   
-  around_update :create_campaign
+  before_validation :create_campaign
+  
+  def self.without_campaign
+    joins('left outer join campaigns on campaign_drafts.id = campaigns.campaign_draft_id').where(campaigns: {campaign_draft_id: nil})
+  end
   
   def self.visibility_select
     VISIBILITIES.map{|value|
@@ -163,11 +168,10 @@ class CampaignDraft < ActiveRecord::Base
     end
   end
   
-  def create_campaign # create a Campaign using the same transaction as the surrounding `.save` call.
-    yield
+  def create_campaign
     change = changes[:published_at]
     if change && change[0].nil? && change[1].present?
-      Campaign.create(campaign_draft: self)
+      self.campaign ||= Campaign.new(campaign_draft: self)
     end
   end
   

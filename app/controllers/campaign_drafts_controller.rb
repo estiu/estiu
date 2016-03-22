@@ -5,6 +5,8 @@ class CampaignDraftsController < ApplicationController
   before_action :authorize_draft, only: should_load_draft
   
   def index
+    authorize CampaignDraft
+    @drafts = current_event_promoter.campaign_drafts.without_campaign
   end
   
   def show

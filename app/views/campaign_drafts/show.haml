@@ -13,7 +13,7 @@
     %hr
     = render 'step_1_fields', campaign: campaign
     - unless campaign.submitted_at
-      = render 'submit_form', campaign: campaign
+      = render 'submit_form', campaign: campaign, hr: true
     - if campaign.published_at
       = render 'step_2_fields', campaign: campaign
     - if campaign.approved_at
