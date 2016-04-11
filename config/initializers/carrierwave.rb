@@ -2,7 +2,7 @@ CarrierWave.configure do |config|
   
   credential_options = (if DeveloperMachine.running_in_developer_machine?
       c = AwsOps::Permanent.credentials
-      {aws_access_key_id: c[:aws_access_key_id], aws_secret_access_key: c[:aws_secret_access_key]}
+      {aws_access_key_id: c[:access_key_id], aws_secret_access_key: c[:secret_access_key]}
     else
       { use_iam_profile: true }
     end)

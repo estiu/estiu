@@ -41,6 +41,7 @@ en:
       name: Name
       description: Description
       goal: Goal
+      cost_justification: Cost justification
     form:
       maximum_attendance: "Maximum attendance"
       venue_capacity: 'Capacity'

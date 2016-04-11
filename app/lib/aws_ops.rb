@@ -29,12 +29,12 @@ module AwsOps
     (self.aws_ops_environment || Rails.env).to_s
   end
   
-  def credentials
+  def credentials # the AWS API expects the aws_access_key and aws_secret_key key names, in downcase; no other names must be used.
     result = 
       if ENV['CODESHIP'].present?
         Hash[
-          %w(AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY).map{|k|
-            [k.downcase, ENV.fetch(k)]
+          %w(access_key_id secret_access_key).map{|k|
+            [k, ENV.fetch(k)]
           }
         ]
       else
