@@ -45,7 +45,7 @@ describe 'Header notifications' do
     sign_as :event_promoter, :feature
     
     def setup create_event=false
-      campaign = FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
+      campaign = FG.create :campaign, :fulfilled, campaign_draft: FG.build(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
       FG.create(:event, campaign: campaign) if create_event
       visit '/'
     end

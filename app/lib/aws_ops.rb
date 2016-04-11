@@ -33,8 +33,8 @@ module AwsOps
     result = 
       if ENV['CODESHIP'].present?
         Hash[
-          %w(AWS_ACCESS_KEY_ID AWS_ACCESS_KEY AWS_SECRET_ACCESS_KEY AWS_SECRET_KEY).map{|k|
-            [k, ENV[k]]
+          %w(AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY).map{|k|
+            [k.downcase, ENV.fetch(k)]
           }
         ]
       else

@@ -61,6 +61,7 @@ class CampaignDraftsController < ApplicationController
       redirect_to @draft.campaign
     else
       @draft.published_at = nil
+      @draft.campaign = nil
       flash.now[:error] = t('.error')
       render :show
     end

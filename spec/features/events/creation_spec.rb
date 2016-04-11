@@ -4,7 +4,7 @@ describe 'Event creation', js: true do
     
     sign_as :event_promoter, :feature
     
-    let(:campaign) { FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id) }
+    let(:campaign) { FG.create :campaign, :fulfilled, campaign_draft: FG.build(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id) }
     
     before { visit new_event_campaign_path(id: campaign.id) }
     
