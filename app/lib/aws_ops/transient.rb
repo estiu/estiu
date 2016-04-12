@@ -258,12 +258,17 @@ module AwsOps
       ASG_ROLES.each do |role|
         puts %|Processing old ASG for role #{role}...|
         wait_until_new_asg_in_service role
-        puts 'Putting the old ASG instances in "stand by"...'
-        auto_scaling_client.set_desired_capacity({
-          auto_scaling_group_name: old_asg(role).auto_scaling_group_name,
-          desired_capacity: 0,
-          honor_cooldown: false
-        })
+        _old_asg = old_asg(role)
+        if _old_asg
+          puts 'Putting the old ASG instances in "stand by"...'
+          auto_scaling_client.set_desired_capacity({
+            auto_scaling_group_name: _old_asg(role).auto_scaling_group_name,
+            desired_capacity: 0,
+            honor_cooldown: false
+          })
+        else
+          puts "There was no old ASG to remove."
+        end
       end
     end
     
@@ -291,10 +296,13 @@ module AwsOps
     def self.delete_old_asgs!
       puts "Deleting old ASGs.."
       ASG_ROLES.each do |role|
-        old_commit = old_asg(role).tags.detect{|tag| tag.key == 'commit' }.value
-        name = final_asg_name(role, old_commit)
-        delete_asgs [name]
-        delete_launch_configurations [name]
+        _old_asg = old_asg(role)
+        if _old_asg
+          old_commit = _old_asg(role).tags.detect{|tag| tag.key == 'commit' }.value
+          name = final_asg_name(role, old_commit)
+          delete_asgs [name]
+          delete_launch_configurations [name]
+        end
       end
       puts "Done!"
     end
