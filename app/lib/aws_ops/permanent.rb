@@ -181,9 +181,9 @@ module AwsOps
     
     POSTGRES_SECURITY_GROUP = "postgresql"
     
-    def find_or_create_postgres_security_group
+    def self.find_or_create_postgres_security_group
       name = POSTGRES_SECURITY_GROUP
-      existing = ec2_client.<FIND_BY_NAME>(name).first # XXX
+      existing = ec2_client.describe_security_groups(group_names: [POSTGRES_SECURITY_GROUP]).security_groups.first
       return existing.group_id if existing
       group_id = ec2_client.create_security_group({
         group_name: name,
@@ -214,25 +214,35 @@ module AwsOps
         master_user_password: password,
         backup_retention_period: (environment == 'production' ? 90 : 0),
         allocated_storage: 8,
-        vpc_security_group_ids: [security_group_id]
-        # XXX needs multi-az option
+        vpc_security_group_ids: [security_group_id],
+        multi_az: (environment == 'production')
       }).db_instance
       
       rds_client.wait_until :db_instance_available, db_instance_identifier: db_instance_identifier
       host = rds_client.describe_db_instances(db_instance_identifier: db_instance_identifier).db_instances.first.endpoint.address
       
       `echo "\nPOSTGRESQL_HOST=#{host}" >> .env.#{environment}`
+      
+      # xxx add sanity check for this somewhere
       puts "ATTENTION! Your .env.#{environment} file has been appended one RDS-related entry (POSTGRESQL_HOST). Make sure to delete the old POSTGRESQL_HOST entry (if any)."
       
     end
     
     def self.delete_rds
+      db_instance_identifier = base_dotenv_environment[AwsOps::RDS_INSTANCE_ID_KEY]
       skip_final_snapshot = environment != 'production'
       opts = {
-        db_instance_identifier: base_dotenv_environment[AwsOps::RDS_INSTANCE_ID_KEY],
+        db_instance_identifier: db_instance_identifier,
         skip_final_snapshot: skip_final_snapshot
       }
       opts.merge!(final_db_snapshot_identifier: "final-snapshot-#{SecureRandom.hex}") unless skip_final_snapshot
+      
+      begin
+        rds_client.describe_db_instances(db_instance_identifier: db_instance_identifier).db_instances
+      rescue Aws::RDS::Errors::DBInstanceNotFound
+        return # return early without deleting the instance, because it doesn't exist.
+      end
+      
       rds_client.delete_db_instance(opts)
     end
     

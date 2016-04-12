@@ -115,8 +115,9 @@ module AwsOps
   def self.create!
     begin
       AwsOps::Permanent.create_elb
+      AwsOps::Permanent.create_rds
       puts "Permanent infrastructure succesfully created."
-      deploy!
+      puts "Now you must rebuild non-base images so the new dotfiles are picked up."
     rescue Exception => e
       puts "An error ocurred."
       delete_permanent!
@@ -157,7 +158,7 @@ module AwsOps
     else
       puts "Deleting RDS instances / data..."
       AwsOps::Permanent.delete_rds
-      puts "Deleted RDS instaces / data."
+      puts "Deleted RDS instances / data."
     end
     
   end

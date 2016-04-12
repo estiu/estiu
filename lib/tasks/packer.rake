@@ -54,7 +54,7 @@ def build force_rebuild, images, environment
   
   all_good = true
   
-  images.each_with_index do |image, i|
+  images.each_with_index do |image, i| # XXX parallel building of non-base images.
     
     fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
     

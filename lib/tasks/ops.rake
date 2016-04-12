@@ -30,7 +30,7 @@ namespace :ops do
         AwsOps::S3.update_env_files
       end
       
-      task create: :update_env do
+      task create: :update_env do # keep in mind that :create and :deploy must be separate steps, due to dotfiles being written on :create, which requires a packer rebuild.
         AwsOps.delete_permanent!
         reset_state environment
         AwsOps.create!
