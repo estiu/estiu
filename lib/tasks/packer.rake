@@ -41,9 +41,12 @@ def build force_rebuild, images, environment
   command = "git diff --name-only HEAD~#{build_commit_count}..HEAD"
   files = ['packer/base', 'lib/tasks/packer.rake', 'Gemfile*']
   no_base_built = AwsOps::Amis.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE)
+  latest_ami_object = AwsOps::Amis.latest_ami_object(:base, AwsOps::BUILD_SIZE)
   
   rebuild_base = if force_rebuild
       true
+    elsif latest_ami_object.tags.detect{|tag| tag.key == 'commit' && tag.value == AwsOps::Permanent.current_commit }
+      false
     elsif files.map{|f| `#{command} #{f}` }.any?(&:present?)
       puts "Will build base because one of the following has changed: #{files}"
       true
@@ -54,7 +57,7 @@ def build force_rebuild, images, environment
   
   all_good = true
   
-  images.each_with_index do |image, i|
+  images.each_with_index do |image, i| # XXX parallel building of non-base images.
     
     fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
     

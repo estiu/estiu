@@ -1,5 +1,5 @@
 default: &default
-  database: <%= "estiu_#{Rails.env}" %>
+  database: <%= "estiu_#{Rails.env}" %> # make sure it matches AwsOps::Permanent.db_name
   adapter: postgresql
   pool: 5 # fix?
 

@@ -24,6 +24,7 @@ module AwsOps
   SCALE_IN_SUFFIX = ' - scale in'
   CONNECTION_DRAINING_TIMEOUT = 30
   ESTIMATED_INIT_TIME = 210 # 3 minutes and half.
+  RDS_INSTANCE_ID_KEY = 'RDS_INSTANCE_ID'
   
   def environment
     (self.aws_ops_environment || Rails.env).to_s
@@ -41,6 +42,10 @@ module AwsOps
         Dotenv::Environment.new(".aws_credentials.#{environment}").to_h
       end.symbolize_keys
     Hash.new{raise}.merge(result).merge(region: region)
+  end
+  
+  def base_dotenv_environment
+    @@base_dotenv_environment ||= Dotenv::Environment.new(".env.#{environment}").to_h
   end
   
   def region 
@@ -98,6 +103,10 @@ module AwsOps
   def cloudwatch_client
     @@cloudwatch_client ||= Aws::CloudWatch::Client.new(credentials)
   end
+
+  def rds_client
+    @@rds_client ||= Aws::RDS::Client.new(credentials)
+  end
   
   def elb_name
     "#{ELB_NAME}-#{environment}"
@@ -106,8 +115,9 @@ module AwsOps
   def self.create!
     begin
       AwsOps::Permanent.create_elb
+      AwsOps::Permanent.create_rds
       puts "Permanent infrastructure succesfully created."
-      deploy!
+      puts "Now you must rebuild non-base images so the new dotfiles are picked up."
     rescue Exception => e
       puts "An error ocurred."
       delete_permanent!
@@ -120,7 +130,7 @@ module AwsOps
     AwsOps::Transient.create_launch_configurations
     AwsOps::Transient.create_asgs
     AwsOps::Transient.setup_metrics_for_asgs
-    puts "Successfully deployed."
+    puts "Successfully created new ASGs."
   end
   
   def self.confirm
@@ -148,7 +158,7 @@ module AwsOps
     else
       puts "Deleting RDS instances / data..."
       AwsOps::Permanent.delete_rds
-      puts "Deleted RDS instaces / data."
+      puts "Deleted RDS instances / data."
     end
     
   end
