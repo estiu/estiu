@@ -42,7 +42,15 @@ def build force_rebuild, images, environment
   files = ['packer/base', 'lib/tasks/packer.rake', 'Gemfile*']
   no_base_built = AwsOps::Amis.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE)
   
-  rebuild_base = force_rebuild || files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
+  rebuild_base = if force_rebuild
+      true
+    elsif files.map{|f| `#{command} #{f}` }.any?(&:present?)
+      puts "Will build base because one of the following has changed: #{files}"
+      true
+    elsif no_base_built
+      puts "Will build base because no existing base image could be found."
+      true
+    end
   
   all_good = true
   
