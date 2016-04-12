@@ -23,16 +23,16 @@
       - if locals[:remove_button]
         %span.remove-nested-attribute-item.float-right{style: 'color: black'}
           = remove_button
-    - if locals[:popover]
-      -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
-      %a{'data-toggle' => 'popover',
-        'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
-        'data-html' => locals[:popover].keys.include?(:html).to_s,
-        tabindex: '0',
-        role: 'button'}
-        %span.glyphicon.glyphicon-question-sign.black
-      -# empty div: for causing a newline, which is expected after a <label>.
-      %div
+      - if locals[:popover]
+        -# <a>/tabindex/role as explained here http://getbootstrap.com/javascript/#popovers
+        %a{'data-toggle' => 'popover',
+          'data-content' => (locals[:popover][:text] || locals[:popover][:html]),
+          'data-html' => locals[:popover].keys.include?(:html).to_s,
+          tabindex: '0',
+          role: 'button'}
+          %span.glyphicon.glyphicon-question-sign.black
+        -# empty div: for causing a newline, which is expected after a <label>.
+        %div
   - if locals[:force_newline_after_label]
     %div
   - unless locals[:only_label]
