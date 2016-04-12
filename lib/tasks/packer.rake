@@ -4,9 +4,9 @@ def all_image_types
   AwsOps::IMAGE_TYPES
 end
 
-def rebuild role, force_rebuild, rails_environment
+def rebuild role, rails_environment
   puts "Building image for role #{role}..."
-  base_ami = (force_rebuild && role.to_s == AwsOps::BASE_IMAGE_NAME) ?
+  base_ami = (role.to_s == AwsOps::BASE_IMAGE_NAME) ?
     AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
     AwsOps::Amis.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
   repo_source = ci? ? "~/clone" : "~/estiu"
@@ -59,9 +59,9 @@ def build force_rebuild, images, environment
     fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
     
     all_good = if image == AwsOps::BASE_IMAGE_NAME
-      (rebuild_base ? rebuild(image, force_rebuild, environment) : true)
+      (rebuild_base ? rebuild(image, environment) : true)
     else
-      rebuild(image, force_rebuild, environment)
+      rebuild(image, environment)
     end
     
     all_good || fail # prevent additional builds
