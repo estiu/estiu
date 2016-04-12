@@ -130,7 +130,7 @@ module AwsOps
     AwsOps::Transient.create_launch_configurations
     AwsOps::Transient.create_asgs
     AwsOps::Transient.setup_metrics_for_asgs
-    puts "Successfully deployed."
+    puts "Successfully created new AWGs."
   end
   
   def self.confirm

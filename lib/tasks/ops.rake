@@ -37,7 +37,9 @@ namespace :ops do
       end
       
       task deploy: :update_env do
+        # XXX check precondition: no more than one asg running
         AwsOps.deploy!
+        puts "Removing old ASGs (if any)..."
         AwsOps::Transient.remove_old_asgs_instances!
         puts "Type 'OK' to confirm that the deploy was performed correctly, deleting the old ASGs accordingly. Else press Enter."
         if AwsOps.confirm
@@ -58,6 +60,7 @@ namespace :ops do
       end
       
       task rollback: :update_env do
+        # XXX check precondition: exactly 2 asgs running
         AwsOps::Transient.restore_old_asgs_instances!
         AwsOps::Transient.delete_old_asgs!
       end
@@ -73,11 +76,13 @@ namespace :ops do
         
         if AwsOps.confirm
           
-          puts "Deleting permanent infrastructure..."
+          puts "Deleting transient infrastructure first..."
           
           AwsOps.delete_transient!
           
           reset_state environment, :silent, false
+          
+          puts "Deleting permanent infrastructure now..."
           
           AwsOps.delete_permanent!
           
