@@ -62,10 +62,6 @@ namespace :ops do
         AwsOps::Transient.delete_old_asgs!
       end
       
-      task launch_worker: :update_env do
-        AwsOps.launch_worker!
-      end
-      
       task delete_transient: :update_env do
         AwsOps.delete_transient!
         reset_state environment, :silent

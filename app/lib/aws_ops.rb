@@ -123,17 +123,6 @@ module AwsOps
     puts "Successfully deployed."
   end
   
-  def self.launch_worker!
-    begin
-      AwsOps::Transient.create_launch_configurations [ASG_WORKER_NAME]
-      AwsOps::Transient.create_asgs [ASG_WORKER_NAME]
-      puts "Worker succesfully launched."
-    rescue Exception => e
-      puts "An error ocurred."
-      raise e
-    end
-  end
-  
   def self.confirm
     STDIN.gets.downcase.include?('ok')
   end
@@ -147,14 +136,14 @@ module AwsOps
   
   def self.delete_permanent!
     
-    delete_transient!, :silent
+    delete_transient! :silent
     
     AwsOps::Permanent.delete_elbs
     # delete SGs, S3 buckets, etc
     
     puts "Deleted permanent infrastructure."
     
-    if environment == 'production'
+    if ::AwsOps::Permanent.environment == 'production'
       puts "Won't drop the production database. Do manually if really needed."
     else
       puts "Deleting RDS instances / data..."
