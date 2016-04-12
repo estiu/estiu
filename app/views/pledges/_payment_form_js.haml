@@ -6,7 +6,7 @@
   var handler = StripeCheckout.configure({
     key: '#{Rails.application.secrets.stripe_publishable_key}',
     image: '#{image_path}',
-    locale: '#I18n.locale',
+    locale: '#{I18n.locale}',
     closed: function(){
       if (!received_stripe_token){
         $('.block-ui').remove()
@@ -29,7 +29,7 @@
       })
       request.fail(function(response){
         if (response.status == 500){
-          set_flash_messages(flash_error("#{t 'pledges.form.error_500'}"))
+          set_flash_messages(flash_error("#{j(t'pledges.form.error_500')}"))
         } else {
           set_flash_messages(response)
         }
@@ -92,7 +92,7 @@
       $('.block-ui').remove()
       pledge_is_valid = false
       if (response.status == 500){
-        set_flash_messages(flash_error("#{t 'pledges.create.error'}"))
+        set_flash_messages(flash_error("#{j(t'pledges.create.error')}"))
       } else {
         set_flash_messages(response)
       }
@@ -142,9 +142,9 @@
     }
     payment_form.append("<div class='block-ui' style='position: absolute; top: 0; bottom: 0; left: 0; right: 0; background-color: white; opacity: 0.45; z-index: 3'>")
     handler.open({
-      name: '#{title}',
+      name: '#{j title}',
       email: '#{email}',
-      description: '#{description}',
+      description: '#{j description}',
       currency: "#{Pledge::STRIPE_EUR}",
       amount: amount_cents
     });
