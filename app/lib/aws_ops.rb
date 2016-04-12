@@ -110,7 +110,7 @@ module AwsOps
       deploy!
     rescue Exception => e
       puts "An error ocurred."
-      delete!
+      delete_permanent!
       raise e
     end
   end
@@ -124,14 +124,12 @@ module AwsOps
   end
   
   def self.launch_worker!
-    delete!
     begin
       AwsOps::Transient.create_launch_configurations [ASG_WORKER_NAME]
       AwsOps::Transient.create_asgs [ASG_WORKER_NAME]
       puts "Worker succesfully launched."
     rescue Exception => e
       puts "An error ocurred."
-      delete!
       raise e
     end
   end
@@ -148,6 +146,8 @@ module AwsOps
   end
   
   def self.delete_permanent!
+    
+    delete_transient!, :silent
     
     AwsOps::Permanent.delete_elbs
     # delete SGs, S3 buckets, etc

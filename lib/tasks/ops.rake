@@ -31,7 +31,7 @@ namespace :ops do
       end
       
       task create: :update_env do
-        AwsOps.delete!
+        AwsOps.delete_permanent!
         reset_state environment
         AwsOps.create!
       end
