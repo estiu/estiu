@@ -2,7 +2,9 @@ FG.define do
   
   factory :campaign do
     
-    association :campaign_draft, factory: [:campaign_draft, :published]
+    after(:build) do |rec, eva|
+      rec.campaign_draft ||= FG.build(:campaign_draft, :published, campaign: rec)
+    end
     
     trait :with_event do
       

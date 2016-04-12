@@ -4,6 +4,10 @@ class CampaignDraftPolicy < ApplicationPolicy
     user.event_promoter?
   end
   
+  def index?
+    new_or_create?
+  end
+  
   def show?
     (user.event_promoter == record.event_promoter) || user.admin?
   end

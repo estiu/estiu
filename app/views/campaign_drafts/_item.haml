@@ -1,0 +1,19 @@
+%h2.top0
+  .row
+    .col-xs-12.col-sm-7
+      = link_to campaign.name, campaign
+    .col-xs-12.col-sm-5.right{style: 'margin-top: -2px'}
+      %span.f12{class: "label label-#{campaign.presentational_status}"}
+        = t "campaign_drafts.show.review_status_#{campaign.presentational_status}"
+  .row.top5
+    .col-xs-12
+      - unless campaign.submitted_at
+        = render 'submit_form', campaign: campaign, hr: false, submit_html_class: 'btn-xs', inline: true
+        = link_to t('campaign_drafts.show.edit'), edit_campaign_draft_path(campaign), class: 'btn btn-xs btn-info'
+        = link_to t('campaign_drafts.show.destroy'), campaign_draft_path(campaign), method: :delete, class: 'btn btn-xs btn-danger', id: "delete-draft-#{campaign.id}"
+      - if campaign.approved_at && !campaign.campaign
+        = link_to t('.publish'), campaign, class: 'btn btn-xs btn-primary'
+%hr
+= render 'step_1_fields', campaign: campaign
+- if campaign.published_at
+  = render 'step_2_fields', campaign: campaign

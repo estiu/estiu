@@ -1,6 +1,7 @@
 class EventPromoter < ActiveRecord::Base
   
-  has_many :campaigns
+  has_many :campaign_drafts
+  has_many :campaigns, through: :campaign_drafts
   has_many :contacts, as: :contactable
   has_one :user
   

@@ -25,11 +25,20 @@ describe "Campaign draft publishing", js: true do
     any_day
   end
   
+  def fill_estimated_event_date
+    find("#campaign_draft_estimated_event_date").click
+    next_month
+    next_month
+    any_day
+  end
+  
   def fill_most
     find('#campaign_draft_starts_immediately').find("option[value='false']").select_option
     find('#campaign_draft_time_zone').find("option[value='#{Estiu::Timezones::FOR_SELECT.sample[1]}']").select_option
     fill_starts_at
     fill_ends_at
+    fill_estimated_event_date
+    find('#campaign_draft_estimated_event_hour').all("option").last.select_option
     find('#campaign_draft_visibility').find("option[value='public']").select_option
   end
   

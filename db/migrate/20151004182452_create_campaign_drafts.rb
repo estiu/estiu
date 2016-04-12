@@ -2,9 +2,13 @@ class CreateCampaignDrafts < ActiveRecord::Migration
   def change
     create_table :campaign_drafts do |t|
       t.string :name, null: false
-      t.text :description
-      t.integer :goal_cents
-      t.integer :minimum_pledge_cents
+      t.text :description, null: false
+      t.text :cost_justification, null: false
+      t.integer :goal_cents, null: false
+      t.integer :minimum_pledge_cents, null: false
+      t.date :estimated_event_date
+      t.integer :estimated_event_hour
+      t.integer :estimated_event_minutes, default: 0
       t.datetime :starts_at
       t.datetime :ends_at
       t.datetime :approved_at, :datetime

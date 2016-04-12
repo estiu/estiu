@@ -30,12 +30,12 @@ module AwsOps
     (self.aws_ops_environment || Rails.env).to_s
   end
   
-  def credentials
+  def credentials # the AWS API expects the aws_access_key and aws_secret_key key names, in downcase; no other names must be used.
     result = 
       if ENV['CODESHIP'].present?
         Hash[
-          %w(AWS_ACCESS_KEY_ID AWS_ACCESS_KEY AWS_SECRET_ACCESS_KEY AWS_SECRET_KEY).map{|k|
-            [k, ENV[k]]
+          %w(access_key_id secret_access_key).map{|k|
+            [k, ENV.fetch(k)]
           }
         ]
       else
@@ -119,7 +119,7 @@ module AwsOps
       deploy!
     rescue Exception => e
       puts "An error ocurred."
-      delete!
+      delete_permanent!
       raise e
     end
   end
@@ -130,19 +130,6 @@ module AwsOps
     AwsOps::Transient.create_asgs
     AwsOps::Transient.setup_metrics_for_asgs
     puts "Successfully deployed."
-  end
-  
-  def self.launch_worker!
-    delete!
-    begin
-      AwsOps::Transient.create_launch_configurations [ASG_WORKER_NAME]
-      AwsOps::Transient.create_asgs [ASG_WORKER_NAME]
-      puts "Worker succesfully launched."
-    rescue Exception => e
-      puts "An error ocurred."
-      delete!
-      raise e
-    end
   end
   
   def self.confirm
@@ -158,12 +145,14 @@ module AwsOps
   
   def self.delete_permanent!
     
+    delete_transient! :silent
+    
     AwsOps::Permanent.delete_elbs
     # delete SGs, S3 buckets, etc
     
     puts "Deleted permanent infrastructure."
     
-    if AwsOps::Permanent.environment == 'production'
+    if ::AwsOps::Permanent.environment == 'production'
       puts "Won't drop the production database. Do manually if really needed."
     else
       puts "Deleting RDS instances / data..."

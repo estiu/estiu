@@ -26,6 +26,7 @@ describe "Attendee registration" do
     
       find('.btn-facebook').click
       expect(current_host).to include 'facebook.com'
+      sleep 3
       expect(page).to have_content 'Password'
       
     end

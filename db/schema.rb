@@ -57,10 +57,14 @@ ActiveRecord::Schema.define(version: 20151123190146) do
   end
 
   create_table "campaign_drafts", force: :cascade do |t|
-    t.string   "name",                       null: false
-    t.text     "description"
-    t.integer  "goal_cents"
-    t.integer  "minimum_pledge_cents"
+    t.string   "name",                                   null: false
+    t.text     "description",                            null: false
+    t.text     "cost_justification",                     null: false
+    t.integer  "goal_cents",                             null: false
+    t.integer  "minimum_pledge_cents",                   null: false
+    t.date     "estimated_event_date"
+    t.integer  "estimated_event_hour"
+    t.integer  "estimated_event_minutes",    default: 0
     t.datetime "starts_at"
     t.datetime "ends_at"
     t.datetime "approved_at"
@@ -74,10 +78,10 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.boolean  "starts_immediately"
     t.string   "invite_token"
     t.string   "time_zone"
-    t.integer  "venue_id",                   null: false
-    t.integer  "event_promoter_id",          null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "venue_id",                               null: false
+    t.integer  "event_promoter_id",                      null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
   end
 
   add_index "campaign_drafts", ["event_promoter_id"], name: "index_campaign_drafts_on_event_promoter_id", using: :btree

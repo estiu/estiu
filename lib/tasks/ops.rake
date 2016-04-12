@@ -31,7 +31,7 @@ namespace :ops do
       end
       
       task create: :update_env do
-        AwsOps.delete!
+        AwsOps.delete_permanent!
         reset_state environment
         AwsOps.create!
       end
@@ -60,10 +60,6 @@ namespace :ops do
       task rollback: :update_env do
         AwsOps::Transient.restore_old_asgs_instances!
         AwsOps::Transient.delete_old_asgs!
-      end
-      
-      task launch_worker: :update_env do
-        AwsOps.launch_worker!
       end
       
       task delete_transient: :update_env do

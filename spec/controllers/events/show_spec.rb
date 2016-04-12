@@ -13,7 +13,7 @@ describe EventsController do
       context "the promoter is related to the campaign" do
         
         let(:event){
-          campaign = FG.create :campaign, :fulfilled, campaign_draft: FG.create(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
+          campaign = FG.create :campaign, :fulfilled, campaign_draft: FG.build(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
           FG.create :event, campaign: campaign
         }
         

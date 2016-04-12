@@ -1,14 +1,10 @@
 en:
   campaign_drafts:
-    errors:
-      minimum_pledge_cents:
-        venue: You must set at least %{value}.
-      starts_at:
-        ends_at: Must be prior to Ends at
-      ends_at:
-        starts_at: The campaign must remain open for at least %{hours} hours.
-      generate_invite_link: If the event is invite only, then a link must be generated.
-      generate_invite_link_false: If the event is public, a secret shareable link isn't needed.
+    index:
+      title: Campaign drafts
+      new: New campaign...
+    item:
+      publish: 'Publish...'
     create:
       success: "Succesfully saved the campaign proposal. Now please check everything's correct (else please edit it). Then you can submit it for review."
       error: "Couldn't create campaign due to the indicated errors."
@@ -31,9 +27,10 @@ en:
     submit_form:
       submit: "Submit for review"
     show:
+      review_status_primary: "Pending review"
       review_status_success: "Approved"
       review_status_danger: "Rejected"
-      review_status_info: "Pending review"
+      review_status_info: "Unsubmitted"
       edit: Edit
       destroy: Discard
       title_proposal: 'Campaign proposal: %{campaign_name}'
@@ -44,6 +41,7 @@ en:
       name: Name
       description: Description
       goal: Goal
+      cost_justification: Cost justification
     form:
       maximum_attendance: "Maximum attendance"
       venue_capacity: 'Capacity'
@@ -53,6 +51,8 @@ en:
       minimum_pledge_cents: Minimum payment
       minimum_pledge_cents_short: Minimum payment
       submit: "Save draft"
+      cost_justification_popover: "Please explain in this field what do you need the money for (each service and its cost)."
+      cost_justification_popover_2: "This justification should match the project goal."
     publish_form:
       starts_later: 'No, I will specify a date'
       starts_immediately_popover: "Whether this campaign should be public since the first moment, or only after the date/time you specify."
@@ -70,6 +70,11 @@ en:
       public_visibility: Public
       app_visibility: Confirmed Estiu members
       invite_visibility: By invitation only
+      estimated_event_date: "Estimated event date"
+      estimated_event_hour: "hour"
+      estimated_event_minutes: "minutes"
+      estimated_event_date_popover: "The approximate date and time when you expect the event to take place."
+      estimated_event_date_popover_2: "An accurate estimation will help you attract attendees."
     approve:
       success: "Campaign approved successfully. The event promoter will receive an email confimation."
       error: "Sorry, there has been an error when approving the campaign. No changes have been applied."

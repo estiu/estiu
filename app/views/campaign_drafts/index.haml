@@ -1,0 +1,15 @@
+%div{class: centered_wider}
+  
+  .row
+    .col-sm-8.col-xs-12
+      %h1.m0
+        =t('.title')
+    .col-sm-4.col-xs-12.right.top5
+      %span
+        = link_to t(".new"), new_campaign_draft_path, class: 'btn btn-success'
+
+  %hr
+  %ul#all-campaign-drafts
+    - @drafts.each do |campaign|
+      %li.listing-item.bordered.p10
+        = render 'item', campaign: campaign, listing: true

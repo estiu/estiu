@@ -5,6 +5,8 @@ class CampaignDraftsController < ApplicationController
   before_action :authorize_draft, only: should_load_draft
   
   def index
+    authorize CampaignDraft
+    @drafts = current_event_promoter.campaign_drafts.without_campaign
   end
   
   def show
@@ -59,6 +61,7 @@ class CampaignDraftsController < ApplicationController
       redirect_to @draft.campaign
     else
       @draft.published_at = nil
+      @draft.campaign = nil
       flash.now[:error] = t('.error')
       render :show
     end

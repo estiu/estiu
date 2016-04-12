@@ -4,9 +4,9 @@ def all_image_types
   AwsOps::IMAGE_TYPES
 end
 
-def rebuild role, force_rebuild, rails_environment
+def rebuild role, rails_environment
   puts "Building image for role #{role}..."
-  base_ami = (force_rebuild && role.to_s == AwsOps::BASE_IMAGE_NAME) ?
+  base_ami = (role.to_s == AwsOps::BASE_IMAGE_NAME) ?
     AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE) :
     AwsOps::Amis.latest_ami(AwsOps::BASE_IMAGE_NAME, AwsOps::BUILD_SIZE)
   repo_source = ci? ? "~/clone" : "~/estiu"
@@ -42,7 +42,15 @@ def build force_rebuild, images, environment
   files = ['packer/base', 'lib/tasks/packer.rake', 'Gemfile*']
   no_base_built = AwsOps::Amis.latest_ami(:base, AwsOps::BUILD_SIZE) == AwsOps::Amis.clean_ubuntu_ami(AwsOps::BUILD_SIZE)
   
-  rebuild_base = force_rebuild || files.map{|f| `#{command} #{f}` }.any?(&:present?) || no_base_built
+  rebuild_base = if force_rebuild
+      true
+    elsif files.map{|f| `#{command} #{f}` }.any?(&:present?)
+      puts "Will build base because one of the following has changed: #{files}"
+      true
+    elsif no_base_built
+      puts "Will build base because no existing base image could be found."
+      true
+    end
   
   all_good = true
   
@@ -51,9 +59,9 @@ def build force_rebuild, images, environment
     fail if i.zero? && image != AwsOps::BASE_IMAGE_NAME # ensure ordering
     
     all_good = if image == AwsOps::BASE_IMAGE_NAME
-      (rebuild_base ? rebuild(image, force_rebuild, environment) : true)
+      (rebuild_base ? rebuild(image, environment) : true)
     else
-      rebuild(image, force_rebuild, environment)
+      rebuild(image, environment)
     end
     
     all_good || fail # prevent additional builds
@@ -72,33 +80,35 @@ namespace :packer do
   
   %i(production staging).each do |environment|
     
-    task :set_environment => :environment do
+    set_task = "set_#{environment}_environment".to_sym
+    
+    task set_task => :environment do
       AwsOps.aws_ops_environment = environment
     end
     
-    task environment => :set_environment do
+    task environment => set_task do
       build(false, all_image_types, environment)
     end
     
     namespace environment do
           
-      task rebuild: :set_environment do
+      task rebuild: set_task do
         build :force_rebuild, all_image_types, environment
       end
       
       (AwsOps::IMAGE_TYPES - [AwsOps::BASE_IMAGE_NAME]).each do |image|
         
-        task("rebuild_#{image}".to_sym => :set_environment) do
+        task("rebuild_#{image}".to_sym => set_task) do
           build false, [AwsOps::BASE_IMAGE_NAME, image], environment
         end
         
       end
       
-      task clear: :set_environment do
+      task clear: set_task do
         AwsOps::Amis.delete_amis
       end
       
-      task clear_all: :set_environment do
+      task clear_all: set_task do
         AwsOps::Amis.delete_amis :all
       end
       

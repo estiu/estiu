@@ -8,6 +8,12 @@
       = link_to t(".title"), root_path, class: 'navbar-brand bold', style: 'letter-spacing: 0.5px; padding-top: 13.5px'
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
       %ul.nav.navbar-nav
+        - if policy(CampaignDraft).index? && !@draft_notification_value.zero?
+          %li
+            = link_to campaign_drafts_path do
+              = t(".campaign_drafts")
+              %span.header-notification
+                = @draft_notification_value
         - if current_user
           %li
             = link_to (current_event_promoter ? mine_campaigns_path : campaigns_path) do

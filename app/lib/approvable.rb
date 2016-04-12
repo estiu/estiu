@@ -47,6 +47,18 @@ module Approvable
         end
       end
       
+      def presentational_status
+        if !submitted_at
+          'info'
+        elsif must_be_reviewed?
+          'primary'  
+        elsif rejected_at
+          'danger'
+        else # approved
+          'success'
+        end
+      end
+      
     end
   end
   
