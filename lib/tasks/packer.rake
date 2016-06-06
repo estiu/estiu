@@ -98,11 +98,11 @@ namespace :packer do
       task rebuild: set_task do
         build :force_rebuild, all_image_types, environment
       end
-      
-      (AwsOps::IMAGE_TYPES - [AwsOps::BASE_IMAGE_NAME]).each do |image|
+        
+      AwsOps::IMAGE_TYPES.each do |image|
         
         task("rebuild_#{image}".to_sym => set_task) do
-          build false, [AwsOps::BASE_IMAGE_NAME, image], environment
+          build (image == AwsOps::BASE_IMAGE_NAME), [AwsOps::BASE_IMAGE_NAME, image], environment
         end
         
       end
