@@ -1,16 +1,16 @@
 GIT
-  remote: git://github.com/phstc/shoryuken.git
+  remote: git://github.com/vemv/okcomputer.git
+  revision: 9dfed9285ded2b12b5c09fa3a8ff74e3eca93978
+  specs:
+    okcomputer (1.6.4)
+
+GIT
+  remote: git://github.com/vemv/shoryuken.git
   revision: 555953fb5e4c37933335109adc1e23d5197c382b
   specs:
     shoryuken (2.0.6)
       aws-sdk-core (~> 2)
       celluloid (~> 0.16)
-
-GIT
-  remote: git://github.com/vemv/okcomputer.git
-  revision: 9dfed9285ded2b12b5c09fa3a8ff74e3eca93978
-  specs:
-    okcomputer (1.6.4)
 
 GEM
   remote: https://rubygems.org/
@@ -321,6 +321,7 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (2.99.2)
+    mime-types-data (3.2016.0521)
     mimemagic (0.3.1)
     mini_portile2 (2.0.0)
     minitest (5.9.0)
