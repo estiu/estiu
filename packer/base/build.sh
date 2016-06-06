@@ -16,7 +16,7 @@ source ~/.profile
 rbenv install 2.3.0
 rbenv global 2.3.0
 gem install bundler
-git clone git@bitbucket.org:vemv/events.git estiu
+git clone git@bitbucket.org:vemv/events.git -b $RAILS_ENV estiu
 cd estiu
 bundle --without development test --path vendor/bundle # extraneous GEM_HOME insists in being there under Codeship, so we install to ~/estiu/vendor/bundler
 cd
