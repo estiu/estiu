@@ -26,7 +26,7 @@ module AwsOps
         latest
       else
         if role.to_s == BASE_IMAGE_NAME
-          Struct.new(:image_id).new(clean_ubuntu_ami size)
+          Struct.new(:image_id, :tags).new(clean_ubuntu_ami(size), [])
         else
           latest_ami BASE_IMAGE_NAME, size
         end
