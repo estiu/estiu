@@ -191,6 +191,9 @@ class ApplicationController < ActionController::Base
     ensure_ajax_uploading
     @uploader = MountedUploader.new.uploader
     @uploader.success_action_status = '201'
+    @uploader.policy do |conditions|
+      conditions << {"response-content-disposition" => "inline"}
+    end
   end
   
 end
