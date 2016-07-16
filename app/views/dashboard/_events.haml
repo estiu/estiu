@@ -1,26 +1,31 @@
-%h2= t '.title'
+- the_id = "events-table"
+
+%h2
+  = t '.title'
+  %a.collapser{role: 'button', data: {toggle: 'collapse'}, href: "##{the_id}"}= "-"
 
 %hr.top0
 
-%table.table.table-striped.bordered.stupid-table
-  %thead
-    %tr
-      %th{data: {sort: "string"}}= t '.promoter'
-      %th{data: {sort: "string"}}= t '.name'
-      %th{data: {sort: "int"}}= t '.pledged'
-      %th{data: {sort: "int"}}= t '.attendees'
-      %th{data: {sort: "string"}}= t '.status'
-      %th{data: {sort: "string"}}= t 'events.item.venue'
-      %th{data: {sort: "int"}}= t 'events.item.starts_at'
-      %th{data: {sort: "int"}}= t 'events.item.duration'
-  %tbody
-    - @events.each do |event|
+%div.collapse.in{id: the_id}
+  %table.table.table-striped.bordered.stupid-table
+    %thead
       %tr
-        %td= event.event_promoter
-        %td= link_to(event.name, event)
-        %td{data: {'sort-value' => event.campaign.pledged_cents}}= event.campaign.pledged.format
-        %td= event.campaign.attendees.count
-        %td= render 'events/status', event: event
-        %td= event.venue
-        %td{data: {'sort-value' => event.starts_at_for_calculations.to_i}}= event.starts_at_for_user
-        %td{data: {'sort-value' => event.duration.to_i}}= distance_of_time_in_words(Time.now, event.duration.seconds.from_now)
+        %th{data: {sort: "string"}}= t '.promoter'
+        %th{data: {sort: "string"}}= t '.name'
+        %th{data: {sort: "int"}}= t '.pledged'
+        %th{data: {sort: "int"}}= t '.attendees'
+        %th{data: {sort: "string"}}= t '.status'
+        %th{data: {sort: "string"}}= t 'events.item.venue'
+        %th{data: {sort: "int"}}= t 'events.item.starts_at'
+        %th{data: {sort: "int"}}= t 'events.item.duration'
+    %tbody
+      - @events.each do |event|
+        %tr
+          %td= event.event_promoter
+          %td= link_to(event.name, event)
+          %td{data: {'sort-value' => event.campaign.pledged_cents}}= event.campaign.pledged.format
+          %td= event.campaign.attendees.count
+          %td= render 'events/status', event: event
+          %td= event.venue
+          %td{data: {'sort-value' => event.starts_at_for_calculations.to_i}}= event.starts_at_for_user
+          %td{data: {'sort-value' => event.duration.to_i}}= distance_of_time_in_words(Time.now, event.duration.seconds.from_now)

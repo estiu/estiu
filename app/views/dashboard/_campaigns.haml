@@ -1,26 +1,31 @@
-%h2= t '.title'
+- the_id = "campaigns-table"
+
+%h2
+  = t '.title'
+  %a.collapser{role: 'button', data: {toggle: 'collapse'}, href: "##{the_id}"}= "-"
 
 %hr.top0
 
-%table.table.table-striped.bordered.stupid-table
-  %thead
-    %tr
-      %th{data: {sort: "string"}}= t '.promoter'
-      %th{data: {sort: "string"}}= t '.name'
-      %th{data: {sort: "float"}}= t '.progress'
-      %th{data: {sort: "int"}}= t '.goal'
-      %th{data: {sort: "int"}}= t '.attendee_count'
-      %th{data: {sort: "string"}}= t '.is_active'
-      %th{data: {sort: "string"}}= t '.is_fulfilled'
-  %tbody
-    - @campaigns.each do |campaign|
+%div.collapse.in{id: the_id}
+  %table.table.table-striped.bordered.stupid-table
+    %thead
       %tr
-        %td= campaign.event_promoter
-        %td= link_to(campaign.name, campaign)
-        %td{data: {'sort-value' => campaign.percent_pledged}}
-          = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
-        %td{data: {'sort-value' => campaign.goal_cents}}= campaign.goal.format
-        %td
-          = campaign.attendees.count
-        %td= boolean campaign.active?
-        %td= boolean campaign.fulfilled?
+        %th{data: {sort: "string"}}= t '.promoter'
+        %th{data: {sort: "string"}}= t '.name'
+        %th{data: {sort: "float"}}= t '.progress'
+        %th{data: {sort: "int"}}= t '.goal'
+        %th{data: {sort: "int"}}= t '.attendee_count'
+        %th{data: {sort: "string"}}= t '.is_active'
+        %th{data: {sort: "string"}}= t '.is_fulfilled'
+    %tbody
+      - @campaigns.each do |campaign|
+        %tr
+          %td= campaign.event_promoter
+          %td= link_to(campaign.name, campaign)
+          %td{data: {'sort-value' => campaign.percent_pledged}}
+            = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
+          %td{data: {'sort-value' => campaign.goal_cents}}= campaign.goal.format
+          %td
+            = campaign.attendees.count
+          %td= boolean campaign.active?
+          %td= boolean campaign.fulfilled?
