@@ -2,7 +2,7 @@
 
 %hr.top0
 
-%table.table.bordered.stupid-table
+%table.table.table-striped.bordered.stupid-table
   %thead
     %tr
       %th{data: {sort: "string"}}= t '.promoter'
@@ -21,7 +21,6 @@
           = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
         %td{data: {'sort-value' => campaign.goal_cents}}= campaign.goal.format
         %td
-          %strong
-            = campaign.attendees.count
+          = campaign.attendees.count
         %td= boolean campaign.active?
         %td= boolean campaign.fulfilled?

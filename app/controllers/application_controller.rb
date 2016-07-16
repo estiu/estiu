@@ -134,7 +134,11 @@ class ApplicationController < ActionController::Base
   def home
     skip_authorization
     if current_user
-      redirect_to (current_event_promoter ? mine_campaigns_path : campaigns_path)
+      if policy(DashboardPolicy).index?
+        redirect_to dashboard_path
+      else
+        redirect_to campaigns_path
+      end
     else
       if Rails.env.development?
         redirect_to new_user_session_path
