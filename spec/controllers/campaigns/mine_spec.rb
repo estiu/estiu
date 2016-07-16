@@ -1,5 +1,9 @@
 describe CampaignsController do
-
+  
+  def the_test
+    get :mine
+  end
+  
   describe 'permitted roles' do
     
     after do
@@ -10,8 +14,28 @@ describe CampaignsController do
       
       sign_as :event_promoter
       
-      it 'works' do
-        get :mine
+      context "with Campaigns" do
+        
+        before {
+          FG.create :campaign, campaign_draft: FG.build(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id)
+        }
+        
+        it 'works' do
+          the_test
+        end
+        
+      end
+      
+      context "without Campaigns" do
+        
+        before {
+          expect(Campaign.count).to be_zero
+        }
+        
+        it 'works' do
+          the_test
+        end
+        
       end
       
     end
@@ -20,8 +44,28 @@ describe CampaignsController do
       
       sign_as :attendee
       
-      it 'works' do
-        get :mine
+      context "with Campaigns" do
+        
+        before {
+          FG.create :campaign
+        }
+        
+        it 'works' do
+          the_test
+        end
+        
+      end
+      
+      context "without Campaigns" do
+        
+        before {
+          expect(Campaign.count).to be_zero
+        }
+        
+        it 'works' do
+          the_test
+        end
+        
       end
       
     end
@@ -30,8 +74,28 @@ describe CampaignsController do
       
       sign_as :admin
       
-      it 'works too' do
-        get :mine
+      context "with Campaigns" do
+        
+        before {
+          FG.create :campaign
+        }
+        
+        it 'works' do
+          the_test
+        end
+        
+      end
+      
+      context "without Campaigns" do
+        
+        before {
+          expect(Campaign.count).to be_zero
+        }
+        
+        it 'works' do
+          the_test
+        end
+        
       end
       
     end
@@ -42,7 +106,7 @@ describe CampaignsController do
     
     before {
       expect_unauthorized
-      get :mine
+      the_test
     }
     
     forbidden_for(nil)
