@@ -17,6 +17,7 @@
 //= require autonumeric-min
 //= require underscore-min
 //= require jquery-fileupload/basic
+//= require stupid_table
 //= require_tree .
 
 _.templateSettings.interpolate = /\{\{(.+?)\}\}/g;
@@ -89,7 +90,7 @@ $(function(){
     }, 800, 'easeInOutExpo');
     event.preventDefault();
   });
-  // 
+  $('.stupid-table').stupidtable()
 })
 
 var flash_error = function(message){

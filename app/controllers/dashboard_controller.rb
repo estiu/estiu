@@ -1,13 +1,17 @@
 class DashboardController < ApplicationController
   
+  before_action :authorize_dashboard, only: [:index]
   before_action :load_campaigns, only: [:index]
   before_action :load_events, only: [:index]
   
   def index
-    authorize DashboardPolicy
   end
   
   protected
+  
+  def authorize_dashboard
+    authorize DashboardPolicy
+  end
   
   def load_campaigns
     @campaigns = DashboardPolicy::Scope.new(current_user, campaign_listing_scope).resolve

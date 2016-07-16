@@ -1,7 +1,7 @@
 class DashboardPolicy < ApplicationPolicy
   
   def index?
-    user.event_promoter? || user.admin?
+    logged_in? && (user.event_promoter? || user.admin?)
   end
   
   class Scope < Scope

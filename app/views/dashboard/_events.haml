@@ -2,25 +2,25 @@
 
 %hr.top0
 
-%table.table.bordered
+%table.table.bordered.stupid-table
   %thead
     %tr
-      %th= t '.promoter'
-      %th= t '.name'
-      %th= t '.pledged'
-      %th= t '.attendees'
-      %th= t '.status'
-      %th= t 'events.item.venue'
-      %th= t 'events.item.starts_at'
-      %th= t 'events.item.duration'
+      %th{data: {sort: "string"}}= t '.promoter'
+      %th{data: {sort: "string"}}= t '.name'
+      %th{data: {sort: "int"}}= t '.pledged'
+      %th{data: {sort: "int"}}= t '.attendees'
+      %th{data: {sort: "string"}}= t '.status'
+      %th{data: {sort: "string"}}= t 'events.item.venue'
+      %th{data: {sort: "int"}}= t 'events.item.starts_at'
+      %th{data: {sort: "int"}}= t 'events.item.duration'
   %tbody
     - @events.each do |event|
       %tr
         %td= event.event_promoter
         %td= link_to(event.name, event)
-        %td= event.campaign.pledged.format
+        %td{data: {'sort-value' => event.campaign.pledged_cents}}= event.campaign.pledged.format
         %td= event.campaign.attendees.count
         %td= render 'events/status', event: event
         %td= event.venue
-        %td= event.starts_at_for_user
-        %td= distance_of_time_in_words(Time.now, event.duration.seconds.from_now)
+        %td{data: {'sort-value' => event.starts_at_for_calculations.to_i}}= event.starts_at_for_user
+        %td{data: {'sort-value' => event.duration.to_i}}= distance_of_time_in_words(Time.now, event.duration.seconds.from_now)
