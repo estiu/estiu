@@ -36,6 +36,8 @@ devise: &devise
         submit: Log in
 
 en:
+  "boolean_yes": "Yes"
+  "boolean_no": "No"
   javascript:
     errors:
       uploader: Sorry, there has been a problem uploading your file. Please try again.
@@ -62,6 +64,7 @@ en:
   <<: *devise
   layouts:
     header:
+      dashboard: Dashboard
       for_promoters: For promoters
       title: estiu
       campaigns: Campaigns

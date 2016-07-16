@@ -8,6 +8,10 @@
       = link_to t(".title"), root_path, class: 'navbar-brand bold', style: 'letter-spacing: 0.5px; padding-top: 13.5px'
     #bs-example-navbar-collapse-1.collapse.navbar-collapse
       %ul.nav.navbar-nav
+        - if policy(DashboardPolicy).index?
+          %li
+            = link_to dashboard_path do
+              = t(".dashboard")
         - if policy(CampaignDraft).index? && !@draft_notification_value.zero?
           %li
             = link_to campaign_drafts_path do

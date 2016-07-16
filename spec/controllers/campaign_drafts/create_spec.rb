@@ -67,7 +67,7 @@ describe CampaignDraftsController do
       post :create
     }
     
-    forbidden_for(nil, :attendee)
+    forbidden_for(nil, :attendee, :admin)
     
   end
   

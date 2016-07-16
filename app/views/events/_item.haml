@@ -2,8 +2,7 @@
 
 - if listing
   = link_to event.name, event, class: 'show-link-title'
-  %span{class: "label label-#{event.presentational_status} label-xs"}
-    = t(".event_status_#{event.presentational_status}")
+  = render 'events/status', event: event
   %div.bottom10
 - else
   .row.bottom10

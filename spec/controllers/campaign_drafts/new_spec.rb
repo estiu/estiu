@@ -28,7 +28,7 @@ describe CampaignDraftsController do
       get :new
     }
     
-    forbidden_for(nil, :attendee)
+    forbidden_for(nil, :attendee, :admin)
     
   end
   

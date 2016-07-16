@@ -4,7 +4,8 @@ FG.define do
     
     association :event_promoter
     association :venue
-    name "Fund my party"
+    names = ['Fund my party', 'Help me out with this event idea', 'Awesome night proposal', 'Ravers unite!', 'Sample campaign', 'My Campaign', 'Awesome Campaign', 'Crowdfund my event!']
+    name { names.sample }
     description "I was thinking of throwing the perfect party, in a great open-air venue, at daytime, and with some of the latest and greatest DJs out there."
     goal_cents { Random.rand(CampaignDraft::MAXIMUM_GOAL_AMOUNT - CampaignDraft::MINIMUM_GOAL_AMOUNT).to_i + CampaignDraft::MINIMUM_GOAL_AMOUNT}
     cost_justification {

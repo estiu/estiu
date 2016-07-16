@@ -2,7 +2,7 @@ FG.define do
   
   factory :event_promoter do
     
-    name "TheEventPromoter"
+    name "Event Promoter #{SecureRandom.hex(4)}"
     
     website {"#{SecureRandom.hex(12)}.com"}
     

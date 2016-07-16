@@ -1,0 +1,21 @@
+en:
+  dashboard:
+    campaigns:
+      title: Campaigns
+      promoter: Event promoter
+      name: Name
+      goal: "Goal"
+      progress: "Progress"
+      attendee_count: "Attendees"
+      is_active: "Active?"
+      is_fulfilled: "Fulfilled?"
+      is_fulfilled_true: "Fulfilled"
+      is_fulfilled_false: "Unfulfilled"
+      is_fulfilled_active: "Still active"
+    events:
+      title: Events
+      promoter: Event promoter
+      name: Name
+      status: Status
+      pledged: Pledged amount
+      attendees: Attendees
