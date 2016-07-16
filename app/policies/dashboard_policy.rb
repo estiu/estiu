@@ -7,9 +7,9 @@ class DashboardPolicy < ApplicationPolicy
   class Scope < Scope
     def resolve
       if user.admin?
-        scope
+        scope.all
       elsif user.event_promoter?
-        scope.joins(:campaign_draft).where(campaign_drafts: {event_promoter_id: user.event_promoter_id})
+        scope.visible_for_event_promoter(user.event_promoter)
       else
         raise
       end

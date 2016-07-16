@@ -1,0 +1,26 @@
+%h2= t '.title'
+
+%hr.top0
+
+%table.table.bordered
+  %thead
+    %tr
+      %th= t '.promoter'
+      %th= t '.name'
+      %th= t '.pledged'
+      %th= t '.attendees'
+      %th= t '.status'
+      %th= t 'events.item.venue'
+      %th= t 'events.item.starts_at'
+      %th= t 'events.item.duration'
+  %tbody
+    - @events.each do |event|
+      %tr
+        %td= event.event_promoter
+        %td= link_to(event.name, event)
+        %td= event.campaign.pledged.format
+        %td= event.campaign.attendees.count
+        %td= render 'events/status', event: event
+        %td= event.venue
+        %td= event.starts_at_for_user
+        %td= distance_of_time_in_words(Time.now, event.duration.seconds.from_now)
