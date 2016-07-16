@@ -22,11 +22,11 @@ class DashboardController < ApplicationController
   end
   
   def campaign_listing_scope
-    Campaign.without_event
+    Campaign.joins(:campaign_draft).includes(campaign_draft: :event_promoter).without_event
   end
   
   def event_listing_scope
-    Event
+    Event.includes(campaign: {campaign_draft: :event_promoter})
   end
   
 end
