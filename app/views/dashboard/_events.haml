@@ -10,7 +10,8 @@
   %table.table.table-striped.bordered.stupid-table
     %thead
       %tr
-        %th{data: {sort: "string"}}= t '.promoter'
+        - if current_admin
+          %th{data: {sort: "string"}}= t '.promoter'
         %th{data: {sort: "string"}}= t '.name'
         %th{data: {sort: "int"}}= t '.pledged'
         %th{data: {sort: "int"}}= t '.attendees'
@@ -21,7 +22,8 @@
     %tbody
       - @events.each do |event|
         %tr
-          %td= event.event_promoter
+          - if current_admin
+            %td= event.event_promoter
           %td= link_to(event.name, event)
           %td{data: {'sort-value' => event.campaign.pledged_cents}}= event.campaign.pledged.format
           %td= event.campaign.attendees.count

@@ -10,7 +10,8 @@
   %table.table.table-striped.bordered.stupid-table
     %thead
       %tr
-        %th{data: {sort: "string"}}= t '.promoter'
+        - if current_admin
+          %th{data: {sort: "string"}}= t '.promoter'
         %th{data: {sort: "string"}}= t '.name'
         %th{data: {sort: "float"}}= t '.progress'
         %th{data: {sort: "int"}}= t '.goal'
@@ -20,7 +21,8 @@
     %tbody
       - @campaigns.each do |campaign|
         %tr
-          %td= campaign.event_promoter
+          - if current_admin
+            %td= campaign.event_promoter
           %td= link_to(campaign.name, campaign)
           %td{data: {'sort-value' => campaign.percent_pledged}}
             = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
