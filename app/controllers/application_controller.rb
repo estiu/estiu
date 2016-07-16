@@ -62,7 +62,7 @@ class ApplicationController < ActionController::Base
     if request.xhr?
       render json: flash_json, status: 403
     else
-      redirect_to(request.referrer || root_path)
+      redirect_to(root_path)
     end
   end
   

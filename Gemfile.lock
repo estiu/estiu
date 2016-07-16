@@ -322,7 +322,6 @@ GEM
       mime-types (>= 1.16, < 4)
     method_source (0.8.2)
     mime-types (2.99.1)
-    mime-types-data (3.2016.0221)
     mini_portile2 (2.0.0)
     minitest (5.8.4)
     monetize (1.4.0)
@@ -565,5 +564,8 @@ DEPENDENCIES
   validates_formatting_of (~> 0.9)
   webmock (~> 1.21)
 
+RUBY VERSION
+   ruby 2.3.0p0
+
 BUNDLED WITH
-   1.11.2
+   1.12.5

@@ -31,7 +31,6 @@
   - if policy(campaign.campaign_draft).show?
     .top5.pl2
       %small.text-muted.f14= t('.from_campaign_draft', campaign_link: link_to(t('.from_campaign_draft_link'), campaign_draft_path(campaign.campaign_draft))).html_safe
-    
 
 %p.p20.top20.bottom20{class: "#{'bordered' unless listing}"}= campaign.description
 

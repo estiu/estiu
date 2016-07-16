@@ -73,6 +73,12 @@ module ApplicationHelper
     end
   end
   
+  def boolean v
+    content_tag(:span, class: "label label-#{v ? 'success' : 'danger'}") do
+      t("#{v ? 'boolean_yes' : 'boolean_no'}")
+    end
+  end
+  
   private
   
   def form_field form, key, locals={}

@@ -8,4 +8,28 @@ class AwsOps::S3
     end
   end
   
+  # NOTE: uploads buckets must have a CORS config such as the following:
+  # ----------
+  # <CORSConfiguration>
+  #   <CORSRule>
+  #       <AllowedOrigin>*</AllowedOrigin>
+  #       <AllowedMethod>GET</AllowedMethod>
+  #       <MaxAgeSeconds>3000</MaxAgeSeconds>
+  #       <AllowedHeader>*</AllowedHeader>
+  #   </CORSRule>
+  #   <CORSRule>
+  #       <AllowedOrigin>*</AllowedOrigin>
+  #       <AllowedMethod>POST</AllowedMethod>
+  #       <MaxAgeSeconds>3000</MaxAgeSeconds>
+  #       <AllowedHeader>*</AllowedHeader>
+  #   </CORSRule>
+  #   <CORSRule>
+  #       <AllowedOrigin>*</AllowedOrigin>
+  #       <AllowedMethod>PUT</AllowedMethod>
+  #       <MaxAgeSeconds>3000</MaxAgeSeconds>
+  #       <AllowedHeader>*</AllowedHeader>
+  #   </CORSRule>
+  # </CORSConfiguration>
+
+  
 end

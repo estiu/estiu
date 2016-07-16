@@ -19,7 +19,7 @@ module AwsOps
   USERNAME = 'ec2-user'
   BUILD_SIZE = 't2.micro'
   PRODUCTION_SIZE = 't2.micro'
-  UPLOADS_BUCKET = "events-uploads-#{Rails.env}"
+  UPLOADS_BUCKET = "estiu-uploads-#{Rails.env}"
   SCALE_OUT_SUFFIX = ' - scale out'
   SCALE_IN_SUFFIX = ' - scale in'
   CONNECTION_DRAINING_TIMEOUT = 30

@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     
     resources :venues, only: [:create]
     
+    get '/dashboard', to: 'dashboard#index', as: :dashboard
     get '/pages', to: 'pages#home'
     get "/pages/*id" => 'pages#show', as: :page, format: false
     root to: 'application#home'

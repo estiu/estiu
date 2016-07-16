@@ -1,0 +1,27 @@
+%h2= t '.title'
+
+%hr.top0
+
+%table.table.bordered
+  %thead
+    %tr
+      %th= t '.promoter'
+      %th= t '.name'
+      %th= t '.progress'
+      %th= t '.goal'
+      %th= t '.attendee_count'
+      %th= t '.is_active'
+      %th= t '.is_fulfilled'
+  %tbody
+    - @campaigns.each do |campaign|
+      %tr
+        %td= campaign.event_promoter
+        %td= link_to(campaign.name, campaign)
+        %td
+          = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
+        %td= campaign.goal.format
+        %td
+          %strong
+            = campaign.attendees.count
+        %td= boolean campaign.active?
+        %td= boolean campaign.fulfilled?
