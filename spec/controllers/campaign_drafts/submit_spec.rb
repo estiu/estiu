@@ -43,7 +43,7 @@ describe CampaignDraftsController do
       the_action
     }
     
-    forbidden_for(nil, :attendee)
+    forbidden_for(nil, :attendee, :admin)
     
   end
   

@@ -201,7 +201,7 @@ describe CampaignDraftsController do
       post :publish, id: campaign.id
     }
     
-    forbidden_for(nil, :attendee)
+    forbidden_for(nil, :attendee, :admin)
     
   end
   
