@@ -56,10 +56,7 @@ $(function(){
   $.datepicker.setDefaults({dateFormat: 'dd/mm/yy'})
   $(".datepicker").datepicker()
   $('.currency').each(function(){
-    var options = {
-      aSep: '.',
-      aDec: ','
-    }
+    var options = CURRENCY_OPTIONS
     var min = 0 // $(this).data('min-value') // https://github.com/BobKnothe/autoNumeric/issues/169
     var max = $(this).data('max-value')
     if (max){
