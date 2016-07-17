@@ -1,12 +1,8 @@
-- the_id = "add-venue-item-to-campaign-draft"
-- venue_form_class = 'add-venue-remote-form'
-- select_wrapper_id = 'venue-select-row'
-
 %hr
 = form_for(campaign, class: 'form-horizontal') do |f|
   = form_fields(f, 'campaign_drafts.form') do |field|
-    .row{id: select_wrapper_id}
-      = render 'venue_select', field: field, the_id: the_id
+    .row{id: campaign_draft_venue_row_id}
+      = render 'venue_select', field: field
     = field.(:name)
     = field.(:description, as: :textarea)
     .row
@@ -24,7 +20,7 @@
     .right
       = field.(:submit)
 
-.modal.fade{id: the_id, role: 'dialog', tabindex: '-1'}
+.modal.fade{id: new_venue_form_modal_id, role: 'dialog', tabindex: '-1'}
   .modal-dialog{role: 'document'}
     .modal-content
       .modal-header
@@ -32,6 +28,6 @@
           %span &times;
         %h4= t '.add_venue_title'
       .modal-body.left
-        = render 'venues/form', form_class: venue_form_class
+        = render 'venues/form'
 
 = render 'form_js'
