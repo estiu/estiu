@@ -1,0 +1,24 @@
+- form_class ||= "add-venue-#{SecureRandom.hex}"
+
+= form_for(Venue.new, remote: true, html: {class: "#{form_class}"}) do |f|
+  = form_fields(f, 'venues.form') do |field|
+    = field.(:name)
+    = field.(:address)
+    = field.(:description, as: :textarea)
+    = field.(:capacity, as: :integer)
+    = field.(:submit, value: t('.submit'))
+    
+:javascript
+  $(function(){
+    var sel = $('.#{form_class}')
+    var submit = sel.find('input[type="submit"]')
+    sel.on("ajax:send", function(){
+      submit.attr("disabled", true)
+    })
+    sel.on("ajax:success", function(){
+      submit.removeAttr("disabled")
+    })
+    sel.on("ajax:error", function(){
+      submit.removeAttr("disabled")
+    })
+  })

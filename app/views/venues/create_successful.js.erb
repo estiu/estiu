@@ -1,0 +1,12 @@
+<% the_id = "add-venue-item-to-campaign-draft" %>
+<% select_content = nil %>
+
+<% form_for(CampaignDraft.new, class: 'form-horizontal') do |f| %> 
+  <% form_fields(f, 'campaign_drafts.form') do |field| %>
+    <% select_content = render 'campaign_drafts/venue_select', field: field, the_id: the_id, selected_id: selected_id %>
+  <% end %>
+<% end %>
+
+$('#venue-select-row').html("<%= j(select_content) %>")
+$('#<%= the_id %>').modal('hide')
+$('.add-venue-remote-form')[0].reset()

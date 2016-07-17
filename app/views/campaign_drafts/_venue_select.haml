@@ -1,0 +1,13 @@
+- selected_id ||= nil
+
+- venue_capacity = capture do
+  .venue-capacity.f13{style: 'margin-top: 3px'}
+    %strong
+      %span#venue-capacity-indicator
+
+.col-xs-2
+  = field.(:venue_id, as: :select, values: Venue.for_select, only_label: true)
+.col-xs-6.right
+  = field.(:venue_id, as: :select, values: Venue.for_select, selected: selected_id, only_input: true, after: venue_capacity, form_group_class: 'm0')
+.col-xs-4.right
+  = link_to(t('venues.form.other'), '#', class: 'btn btn-info btn-xs', "data-toggle" => 'modal', 'data-target' => "##{the_id}")

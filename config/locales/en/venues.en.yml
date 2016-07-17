@@ -1,0 +1,10 @@
+en:
+  venues:
+    create:
+      error: "Sorry, there has been an error when adding the venue."
+    form:
+      name: Name
+      address: Address
+      description: Description
+      capacity: "Capacity (approx.)"
+      submit: Add

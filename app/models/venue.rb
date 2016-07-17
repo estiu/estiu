@@ -8,6 +8,8 @@ class Venue < ActiveRecord::Base
     validates attr, presence: true
   end
   
+  validates :name, uniqueness: true
+  
   def self.for_select
     pluck :name, :id
   end

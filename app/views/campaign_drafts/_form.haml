@@ -1,17 +1,12 @@
+- the_id = "add-venue-item-to-campaign-draft"
+- venue_form_class = 'add-venue-remote-form'
+- select_wrapper_id = 'venue-select-row'
+
 %hr
 = form_for(campaign, class: 'form-horizontal') do |f|
   = form_fields(f, 'campaign_drafts.form') do |field|
-    - venue_capacity = capture do
-      .venue-capacity.f13{style: 'margin-top: 3px'}
-        %strong
-          %span#venue-capacity-indicator
-    .row
-      .col-xs-2
-        = field.(:venue_id, as: :select, values: Venue.for_select, only_label: true)
-      .col-xs-6.right
-        = field.(:venue_id, as: :select, values: Venue.for_select, only_input: true, after: venue_capacity, form_group_class: 'm0')
-      .col-xs-4.right
-        = link_to(t('venues.form.other'), '#', id: 'other-venue', class: 'btn btn-info btn-xs')
+    .row{id: select_wrapper_id}
+      = render 'venue_select', field: field, the_id: the_id
     = field.(:name)
     = field.(:description, as: :textarea)
     .row
@@ -28,5 +23,15 @@
     %hr
     .right
       = field.(:submit)
-          
+
+.modal.fade{id: the_id, role: 'dialog', tabindex: '-1'}
+  .modal-dialog{role: 'document'}
+    .modal-content
+      .modal-header
+        %button.close{type: 'button', 'data-dismiss' => 'modal'}
+          %span &times;
+        %h4= t '.add_venue_title'
+      .modal-body.left
+        = render 'venues/form', form_class: venue_form_class
+
 = render 'form_js'

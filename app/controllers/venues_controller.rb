@@ -1,12 +1,13 @@
 class VenuesController < ApplicationController
   
   def create
+    authorize Venue
     venue = Venue.new venue_params
     if venue.save
-      render json: {id: venue.id}
+      render 'venues/create_successful', locals: {selected_id: venue.id}, layout: false, status: 200
     else
-      flash[:error] = t '.error'
-      render json: flash_json, status: 422
+      flash.now[:error] = t '.error'
+      render 'layouts/flash_messages_js', layout: false, status: 422
     end
   end
   

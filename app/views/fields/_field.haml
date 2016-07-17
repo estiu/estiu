@@ -1,5 +1,5 @@
 - locals.merge!(html_opts: {class: "#{"form-control" unless (as == :checkbox || key == :submit || as == :checkboxes)} #{locals[:html_class]}"})
-- %i(autofocus value style disabled).each do |key|
+- %i(autofocus value style disabled selected).each do |key|
   - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
 - locals[:html_opts].merge!(required: true) if (locals[:required] != false) && !locals[:optional] && %i(date datetime text password currency email).include?(as) && !Rails.env.test? # not in test env, so one can test backend validation
