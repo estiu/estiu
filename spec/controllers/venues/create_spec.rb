@@ -1,56 +1,63 @@
 describe VenuesController do
   
-  describe '#create' do
+  %w(event campaign_draft).each do |type|
     
-    def venue_params
-      v = FG.build :venue
-      {
-        venue: Hash[Venue::CREATE_ATTRS.map{|attr| [attr, v.send(attr)] }],
-        format: :js
-      }
-    end
+    let(:the_type){ type }
     
-    def incomplete_venue_params
-      p = venue_params
-      p[:venue].except!(Venue::CREATE_ATTRS.first)
-      p
-    end
-    
-    %i(event_promoter admin).each do |role|
+    describe "#create (for #{type})" do
       
-      describe "as an #{role}" do
+      def venue_params
+        v = FG.build :venue
+        entries = Venue::CREATE_ATTRS.map{|attr| [attr, v.send(attr)] }
+        {
+          venue: Hash[entries].merge({VenuesController::OBJECT_FOR_FORM_KEY => the_type}),
+          format: :js
+        }
+      end
+      
+      def incomplete_venue_params
+        p = venue_params
+        p[:venue].except!(Venue::CREATE_ATTRS.first)
+        p
+      end
+      
+      %i(event_promoter admin).each do |role|
         
-        sign_as role
-        
-        describe 'success' do
+        describe "as an #{role}" do
           
-          after do
-            controller_ok
+          sign_as role
+          
+          describe 'success' do
+            
+            after do
+              controller_ok
+            end
+              
+            it "is possible to create a Venue" do
+              
+              expect {
+                post :create, venue_params
+              }.to change {
+                Venue.count
+              }.by(1)
+              
+            end
+            
           end
-            
-          it "is possible to create a Venue" do
-            
-            expect {
-              post :create, venue_params
-            }.to change {
-              Venue.count
-            }.by(1)
-            
-          end
           
-        end
-        
-        describe 'validation errors' do
-          
-          it "is handled when I don't provide enough info to create a Venue" do
+          describe 'validation errors' do
             
-            expect {
-              post :create, incomplete_venue_params
-            }.to_not change {
-              Venue.count
-            }
-            
-            expect(response.status).to eq 422
+            it "is handled when I don't provide enough info to create a Venue" do
+              
+              expect {
+                post :create, incomplete_venue_params
+              }.to_not change {
+                Venue.count
+              }
+              
+              expect(response.status).to eq 422
+              
+            end
             
           end
           
@@ -58,29 +65,29 @@ describe VenuesController do
         
       end
       
-    end
-    
-    context 'forbidden roles' do
-      
-      context "With complete venue params" do
+      context 'forbidden roles' do
         
-        before {
-          expect_unauthorized
-          post :create, venue_params
-        }
+        context "With complete venue params" do
+          
+          before {
+            expect_unauthorized
+            post :create, venue_params
+          }
+          
+          forbidden_for(nil, :attendee)
+          
+        end
         
-        forbidden_for(nil, :attendee)
-        
-      end
-      
-      context "With incomplete venue params" do
-        
-        before {
-          expect_unauthorized
-          post :create, incomplete_venue_params
-        }
-        
-        forbidden_for(nil, :attendee)
+        context "With incomplete venue params" do
+          
+          before {
+            expect_unauthorized
+            post :create, incomplete_venue_params
+          }
+          
+          forbidden_for(nil, :attendee)
+          
+        end
         
       end
       

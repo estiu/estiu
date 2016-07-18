@@ -21,7 +21,7 @@ class VenuesController < ApplicationController
   end
   
   def object_for_form
-    OBJECT_FOR_FORM_HASH.merge("event" => Event.new, "campaign_draft" => CampaignDraft.new) # this merge must be done at runtime, else suite fails
+    OBJECT_FOR_FORM_HASH.merge!("event" => Event.new, "campaign_draft" => CampaignDraft.new) # this merge must be done at runtime, else suite fails
     OBJECT_FOR_FORM_HASH[venue_params.require(OBJECT_FOR_FORM_KEY)]
   end
   
