@@ -13,4 +13,4 @@
 .col-xs-6.right
   = field.(:venue_id, select_options)
 .col-xs-4.right
-  = link_to(t('venues.form.other'), '#', class: 'btn btn-info btn-xs', "data-toggle" => 'modal', 'data-target' => "##{new_venue_form_modal_id}")
+  = link_to(t('venues.form.other'), '#', id: 'add-venue-button', class: 'btn btn-info btn-xs', "data-toggle" => 'modal', 'data-target' => "##{new_venue_form_modal_id}")
