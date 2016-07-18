@@ -6,7 +6,7 @@
 :ruby
   selected_id ||= nil
   select_options = {as: :select, values: Venue.for_select, only_input: true, after: venue_capacity, form_group_class: 'm0'}
-  select.merge!(selected: selected_id) if selected_id
+  select_options.merge!(selected: selected_id) if selected_id
 
 .col-xs-2
   = field.(:venue_id, as: :select, values: [], only_label: true)
