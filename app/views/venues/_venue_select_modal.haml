@@ -6,7 +6,7 @@
           %span &times;
         %h4= t 'campaign_drafts.form.add_venue_title'
       .modal-body.left
-        = render 'venues/form'
+        = render 'venues/form', object_for_form: object_for_form
         
 :javascript
   #{set_venue_capacities}

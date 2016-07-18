@@ -1,6 +1,7 @@
 = form_for(Venue.new, remote: true, html: {class: new_venue_form_class}) do |f|
   = form_fields(f, 'venues.form') do |field|
     = field.(:name)
+    = field.(VenuesController::OBJECT_FOR_FORM_KEY.to_sym, as: :hidden, value: object_for_form)
     = field.(:address)
     = field.(:description, as: :textarea)
     = field.(:capacity, as: :integer)

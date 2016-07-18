@@ -55,4 +55,4 @@
             %hr
             = field.(:submit, value: (event.id ? t('.submit_edit') : t('.submit_new')))
 
-= render 'venues/venue_select_modal'
+= render 'venues/venue_select_modal', object_for_form: 'event'

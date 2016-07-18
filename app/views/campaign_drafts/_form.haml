@@ -20,5 +20,5 @@
     .right
       = field.(:submit)
 
-= render 'venues/venue_select_modal'
+= render 'venues/venue_select_modal', object_for_form: 'campaign_draft'
 = render 'form_js'

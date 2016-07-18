@@ -1,6 +1,6 @@
 <% select_content = nil %>
 
-<% form_for(CampaignDraft.new, class: 'form-horizontal') do |f| %> 
+<% form_for(object_for_form, class: 'form-horizontal') do |f| %> 
   <% form_fields(f, 'campaign_drafts.form') do |field| %>
     <% select_content = render 'venues/venue_select', field: field, selected_id: selected_id %>
   <% end %>
