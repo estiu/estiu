@@ -1,0 +1,18 @@
+.modal.fade{id: new_venue_form_modal_id, role: 'dialog', tabindex: '-1'}
+  .modal-dialog{role: 'document'}
+    .modal-content
+      .modal-header
+        %button.close{type: 'button', 'data-dismiss' => 'modal'}
+          %span &times;
+        %h4= t 'campaign_drafts.form.add_venue_title'
+      .modal-body.left
+        = render 'venues/form'
+        
+:javascript
+  #{set_venue_capacities}
+  $(document).on('change', '.venue_select_id', function(){
+    var val = window.venue_capacities[$(this).val()]
+    var caption = val ? "#{t('campaign_drafts.form.venue_capacity')}: " + val : ""
+    $("#venue-capacity-indicator").text(caption)
+  })
+  $('.venue_select_id').change()

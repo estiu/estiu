@@ -90,7 +90,11 @@ module ApplicationHelper
   def campaign_draft_venue_row_id
     'venue-select-row'
   end
-
+  
+  def set_venue_capacities
+    "window.venue_capacities = #{Venue.venue_capacities.to_json}".html_safe
+  end
+  
   private
   
   def form_field form, key, locals={}

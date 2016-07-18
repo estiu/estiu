@@ -11,7 +11,8 @@
           .col-xs-12
             = field.(:name)
           .col-xs-12
-            = field.(:venue_id, as: :select, values: Venue.for_select)
+            .row{id: campaign_draft_venue_row_id}
+              = render 'venues/venue_select', field: field
           .col-xs-12
             = field.(:starts_at_date, as: :date)
             
@@ -53,3 +54,5 @@
               on_added: activate_popover)
             %hr
             = field.(:submit, value: (event.id ? t('.submit_edit') : t('.submit_new')))
+
+= render 'venues/venue_select_modal'

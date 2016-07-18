@@ -2,7 +2,7 @@
 = form_for(campaign, class: 'form-horizontal') do |f|
   = form_fields(f, 'campaign_drafts.form') do |field|
     .row{id: campaign_draft_venue_row_id}
-      = render 'venue_select', field: field
+      = render 'venues/venue_select', field: field
     = field.(:name)
     = field.(:description, as: :textarea)
     .row
@@ -20,14 +20,5 @@
     .right
       = field.(:submit)
 
-.modal.fade{id: new_venue_form_modal_id, role: 'dialog', tabindex: '-1'}
-  .modal-dialog{role: 'document'}
-    .modal-content
-      .modal-header
-        %button.close{type: 'button', 'data-dismiss' => 'modal'}
-          %span &times;
-        %h4= t '.add_venue_title'
-      .modal-body.left
-        = render 'venues/form'
-
+= render 'venues/venue_select_modal'
 = render 'form_js'

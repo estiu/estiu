@@ -1,4 +1,4 @@
-- locals.merge!(html_opts: {class: "#{"form-control" unless (as == :checkbox || key == :submit || as == :checkboxes)} #{locals[:html_class]}"})
+- locals.merge!(html_opts: {class: "#{locals[:html_class]} #{"form-control" if !(%i(checkbox checkboxes submit).include?(as)) && !locals[:no_form_control]}"})
 - %i(autofocus value style disabled selected).each do |key|
   - locals[:html_opts].merge!(key => locals[key]) if locals.keys.include?(key)
 
