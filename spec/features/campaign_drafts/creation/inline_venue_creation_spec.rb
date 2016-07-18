@@ -19,18 +19,6 @@ describe "Creating a Venue while creating a CampaignDraft", js: true do
     find("#campaign_draft_description").set(campaign.description)
   end
   
-  def fill_venue_form
-    
-    find('#add-venue-button').click
-    
-    within("##{new_venue_form_modal_id}") do
-      Venue::CREATE_ATTRS.each do |attr|
-        find("#venue_#{attr}").set(venue.send(attr))
-      end
-    end
-    
-  end
-  
   def the_add_action
     find("##{new_venue_form_modal_id} input[type='submit']").click
     sleep 3
@@ -61,8 +49,8 @@ describe "Creating a Venue while creating a CampaignDraft", js: true do
       expect {
         the_add_action
       }.to change {
-        find('#campaign_draft_venue_id').value.blank?
-      }.from(true).to(false) # ideally we'd use Venue.last.id.to_s, but can't due to the fact that rspec `.to` can't take a block as an argument.
+        find('#campaign_draft_venue_id').value
+      }.from("").to(->(id){ id == Venue.last.id.to_s })
       
     end
     

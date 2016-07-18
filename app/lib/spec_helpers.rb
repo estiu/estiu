@@ -130,4 +130,18 @@ module SpecHelpers
     page.driver.instance_variable_get('@browser').find_elements(class: 'file-uploader').map{|i| i.send_keys path }
   end
   
+  def fill_venue_form
+    
+    find('#add-venue-button').click
+    
+    sleep 2
+    
+    within("##{new_venue_form_modal_id}") do
+      Venue::CREATE_ATTRS.each do |attr|
+        find("#venue_#{attr}").set(venue.send(attr))
+      end
+    end
+    
+  end
+  
 end

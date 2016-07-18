@@ -132,7 +132,6 @@ class Campaign < ActiveRecord::Base
     end
   end
   
-  
   def unfulfilled_at_truthful
     if unfulfilled_at && fulfilled?
       errors[:unfulfilled_at] << "Cannot be set if the campaign is actually fulfilled."
