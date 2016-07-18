@@ -14,13 +14,14 @@ class VenuesController < ApplicationController
   protected
   
   OBJECT_FOR_FORM_KEY = 'object_for_form'
-  OBJECT_FOR_FORM_HASH = Hash.new{ raise }.merge("event" => Event.new, "campaign_draft" => CampaignDraft.new).freeze
+  OBJECT_FOR_FORM_HASH = Hash.new{ raise }
   
   def venue_params
     params.require(:venue).permit(Venue::CREATE_ATTRS + [OBJECT_FOR_FORM_KEY])
   end
   
   def object_for_form
+    OBJECT_FOR_FORM_HASH.merge("event" => Event.new, "campaign_draft" => CampaignDraft.new) # this merge must be done at runtime, else suite fails
     OBJECT_FOR_FORM_HASH[venue_params.require(OBJECT_FOR_FORM_KEY)]
   end
   
