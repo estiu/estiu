@@ -13,18 +13,6 @@ describe "Creating a Venue while updating an Event", js: true do
     find('.edit-this-event').click
   }
   
-  def fill_event_form
-    find('#event_name').set SecureRandom.hex
-    find('#event_starts_at_date').click
-    next_month
-    any_day
-    options = find('#event_starts_at_hours').all("option")
-    options[(1..(options.size - 1)).to_a.sample].select_option
-    options = find('#event_duration_hours').all("option")
-    options[(1..(options.size - 1)).to_a.sample].select_option
-    find('#event_ra_artists_attributes_0_artist_path').set "dj/#{SecureRandom.hex}"
-  end
-  
   def the_add_action
     find("##{new_venue_form_modal_id} input[type='submit']").click
     sleep 3
@@ -65,7 +53,6 @@ describe "Creating a Venue while updating an Event", js: true do
       
       fill_venue_form
       the_add_action
-      fill_event_form
       
       old_id = the_event.venue_id
       
@@ -83,7 +70,6 @@ describe "Creating a Venue while updating an Event", js: true do
       
       fill_venue_form
       the_add_action
-      fill_event_form
       
       old_id = the_event.venue_id
       
