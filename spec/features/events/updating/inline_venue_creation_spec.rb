@@ -1,13 +1,17 @@
-describe "Creating a Venue while creating an Event", js: true do
+describe "Creating a Venue while updating an Event", js: true do
   
   include ApplicationHelper
   
   sign_as :event_promoter, :feature
   
-  let!(:campaign) { FG.create :campaign, :fulfilled, campaign_draft: FG.build(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id) }
-  let!(:venue){ FG.build :venue }
+  let(:the_event){ FG.create :event, event_promoter_id: event_promoter.event_promoter_id }
+  let(:venue){ FG.build :venue }
+  let(:initial_path) { event_path(the_event) }
   
-  before { visit new_event_campaign_path(id: campaign.id) }
+  before {
+    visit initial_path
+    find('.edit-this-event').click
+  }
   
   def fill_event_form
     find('#event_name').set SecureRandom.hex
@@ -27,12 +31,12 @@ describe "Creating a Venue while creating an Event", js: true do
   end
   
   def the_submit_action
-    find('#new_event input[type=submit]').click
+    find("#edit_event_#{the_event.id} input[type=submit]").click rescue binding.pry
   end
   
   describe 'success' do
     
-    it 'is possible to create a venue while creating an event' do
+    it 'is possible to create a venue while updating an event' do
       
       fill_venue_form
       
@@ -47,30 +51,49 @@ describe "Creating a Venue while creating an Event", js: true do
     it 'updates the <select> element present in the page, marking the newly created venue as the selected one' do
       
       fill_venue_form
+      old_id = the_event.venue_id.to_s
       
       expect {
         the_add_action
       }.to change {
         find('#event_venue_id').value
-      }.from("").to(->(id){ id == Venue.last.id.to_s })
+      }.from(old_id).to(->(id){ id == Venue.last.id.to_s })
       
     end
     
-    it 'is possible to create an event with that venue' do
+    it 'is possible to update the event with that venue (1/2)' do
       
       fill_venue_form
       the_add_action
-      the_id = Venue.last.id
       fill_event_form
+      
+      old_id = the_event.venue_id
       
       expect {
         the_submit_action
       }.to change {
-        Event.count
-      }.by(1)
+        the_event.reload.updated_at
+      }
       
-      expect(page).to have_content(t 'events.create.success')
-      expect(Event.last.venue_id).to eq(the_id)
+      expect(page).to have_content(t 'events.update.success')
+      
+    end
+    
+    it 'is possible to update the event with that venue (2/2)' do
+      
+      fill_venue_form
+      the_add_action
+      fill_event_form
+      
+      old_id = the_event.venue_id
+      
+      expect {
+        the_submit_action
+      }.to change {
+        the_event.reload.venue_id
+      } # .from(old_id).to(->(id){ id == Venue.last.id.to_s }) # XXX shitty rspec issue
+      
+      expect(page).to have_content(t 'events.update.success')
       
     end
     
