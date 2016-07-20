@@ -56,6 +56,18 @@ describe "Creating a Venue while creating an Event", js: true do
       
     end
     
+    it "updates the venue capacity indicator" do
+      
+      fill_venue_form
+      
+      expect {
+        the_add_action
+      }.to change {
+        find('#venue-capacity-indicator').text
+      }.from("").to(->(text){ text == "#{t('campaign_drafts.form.venue_capacity')}: #{Venue.last.capacity}" })
+      
+    end
+    
     it 'is possible to create an event with that venue' do
       
       fill_venue_form

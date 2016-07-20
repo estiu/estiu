@@ -49,6 +49,21 @@ describe "Creating a Venue while updating a CampaignDraft", js: true do
       
     end
     
+    it "updates the venue capacity indicator" do
+      
+      fill_venue_form
+      
+      expect {
+        the_add_action
+      }.to change {
+        find('#venue-capacity-indicator').text
+      }.from("#{t('campaign_drafts.form.venue_capacity')}: #{the_campaign.venue.capacity}").
+        to(->(text){
+          text == "#{t('campaign_drafts.form.venue_capacity')}: #{Venue.last.capacity}" 
+        })
+      
+    end
+    
     it 'is possible update a campaign draft with that venue (1/2)' do
 
       fill_venue_form

@@ -29,6 +29,16 @@ describe "Updating an unsubmitted event", js: true do
     
   end
   
+  describe 'the venue capacity indicator' do
+    
+    it "displays its correspondingly value correctly at load time" do
+      
+      expect(find('#venue-capacity-indicator').text).to eq("#{t('campaign_drafts.form.venue_capacity')}: #{event.venue.capacity}")
+      
+    end
+    
+  end
+  
   describe 'deleting a ra_artist'  do
     
     it "is possible to delete single ra_artist" do

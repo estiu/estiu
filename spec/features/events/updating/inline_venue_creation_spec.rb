@@ -19,7 +19,7 @@ describe "Creating a Venue while updating an Event", js: true do
   end
   
   def the_submit_action
-    find("#edit_event_#{the_event.id} input[type=submit]").click rescue binding.pry
+    find("#edit_event_#{the_event.id} input[type=submit]").click
   end
   
   describe 'success' do
@@ -46,6 +46,21 @@ describe "Creating a Venue while updating an Event", js: true do
       }.to change {
         find('#event_venue_id').value
       }.from(old_id).to(->(id){ id == Venue.last.id.to_s })
+      
+    end
+    
+    it "updates the venue capacity indicator" do
+      
+      fill_venue_form
+      
+      expect {
+        the_add_action
+      }.to change {
+        find('#venue-capacity-indicator').text
+      }.from("#{t('campaign_drafts.form.venue_capacity')}: #{the_event.venue.capacity}").
+        to(->(text){
+          text == "#{t('campaign_drafts.form.venue_capacity')}: #{Venue.last.capacity}" 
+        })
       
     end
     

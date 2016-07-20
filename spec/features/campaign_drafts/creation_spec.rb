@@ -13,11 +13,18 @@ describe "Campaign draft creation", js: true do
   }
   
   def step1
-    find('#campaign_draft_venue_id').find("option[value='#{campaign.venue.id}']").select_option
+    
+    expect {
+      find('#campaign_draft_venue_id').find("option[value='#{campaign.venue.id}']").select_option
+    }.to change {
+      find('#venue-capacity-indicator').text()
+    }.from("").to("#{t('campaign_drafts.form.venue_capacity')}: #{campaign.venue.capacity}" )
+    
     find('#campaign_draft_name').set(campaign.name)
     find('#campaign_draft_cost_justification').set(campaign.cost_justification)
     find('#campaign_draft_goal_cents_facade').set(campaign.goal_cents / 100)
     find('#campaign_draft_minimum_pledge_cents_facade').send_keys("#{campaign.minimum_pledge.format(symbol: false)}")
+    
   end
   
   def fill_most
