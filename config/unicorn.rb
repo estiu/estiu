@@ -1,8 +1,7 @@
 app_dir = File.expand_path("../..", __FILE__)
 shared_dir = "#{app_dir}/../../shared/"
 dev_env = !File.exists?(File.join(app_dir, 'RAILS_ENV'))
-capistrano = false
-use_default_directories = dev_env || !capistrano
+use_default_directories = dev_env
 log_path = (use_default_directories ? "#{app_dir}/" : shared_dir) + "log"
 pid_file = (use_default_directories ? "#{app_dir}/tmp/" : shared_dir) + 'pids/unicorn.pid'
 
