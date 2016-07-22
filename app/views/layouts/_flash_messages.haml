@@ -7,6 +7,6 @@
 - flash.each do |type, content|
   - messages = Array(content)
   - messages.each do |message|
-    %div{:class => "alert #{alert_class_for(type)} #{"fixed_at_bottom" if fixed_at_bottom} fade in"}
+    %div{:class => "alert #{alert_class_for(type)} #{"fixed_at_bottom" if fixed_at_bottom} fade in estiu-flash-messages"}
       %button.close{"data-dismiss" => "alert"} ×
       = message

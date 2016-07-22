@@ -13,6 +13,7 @@
     var submit = sel.find('input[type="submit"]')
     sel.on("ajax:send", function(){
       submit.attr("disabled", true)
+      $('.estiu-flash-messages').remove()
     })
     sel.on("ajax:success", function(){
       submit.removeAttr("disabled")
