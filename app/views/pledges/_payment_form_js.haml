@@ -28,7 +28,7 @@
         }})
       })
       request.fail(function(response){
-        if (response.status == 500){
+        if (response.status >= 500){
           set_flash_messages(flash_error("#{j(t'pledges.form.error_500')}"))
         } else {
           set_flash_messages(response)
@@ -91,7 +91,7 @@
     request.fail(function(response){
       $('.block-ui').remove()
       pledge_is_valid = false
-      if (response.status == 500){
+      if (response.status >= 500){
         set_flash_messages(flash_error("#{j(t'pledges.create.error')}"))
       } else {
         set_flash_messages(response)

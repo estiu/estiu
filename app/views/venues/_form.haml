@@ -13,12 +13,15 @@
     var submit = sel.find('input[type="submit"]')
     sel.on("ajax:send", function(){
       submit.attr("disabled", true)
-      $('.estiu-flash-messages').remove()
+      set_flash_messages(null)
     })
     sel.on("ajax:success", function(){
       submit.removeAttr("disabled")
     })
-    sel.on("ajax:error", function(){
+    sel.on("ajax:error", function(event, error){
+      if (error.status >= 500){
+        set_flash_messages(flash_error("#{j(t'venues.form.error_500')}", "fixed_at_bottom"))
+      }
       submit.removeAttr("disabled")
     })
   })

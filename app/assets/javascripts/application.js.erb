@@ -90,8 +90,8 @@ $(function(){
   $('.stupid-table').stupidtable()
 })
 
-var flash_error = function(message){
-  var _ = '<div class="alert fade in alert-danger"><div class="button.close"></div>' + message + '<div>'
+var flash_error = function(message, extra_classes){
+  var _ = '<div class="' + (extra_classes || '') + ' alert fade in alert-danger"><div class="button.close"></div>' + message + '</div>'
   return {responseJSON: {flash_content: _}}
 }
 

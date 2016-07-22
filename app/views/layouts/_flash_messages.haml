@@ -1,8 +1,4 @@
-- skip_rendering_delimiter ||= false
 - fixed_at_bottom ||= false
-
-- unless skip_rendering_delimiter
-  %span#flash-messages-delimiter
 
 - flash.each do |type, content|
   - messages = Array(content)
