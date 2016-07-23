@@ -1,0 +1,30 @@
+- the_id = 'the-venue-table'
+- the_button_class = 'create-campaign-from-venue'
+
+%h2
+  = t '.title'
+
+%hr.top0
+
+:sass
+  ##{the_id} tbody tr .#{the_button_class}
+    opacity: 0
+  ##{the_id} tbody tr:hover .#{the_button_class}
+    opacity: 1
+
+%table.table.table-striped.bordered.stupid-table.table-hover{id: the_id}
+  %thead
+    %tr
+      %th{data: {sort: "string"}}= t 'venues.name'
+      %th{data: {sort: "int"}}= t 'venues.capacity'
+      %th{data: {sort: "string"}}= t 'venues.address'
+      %th{data: {sort: "string"}}= t 'venues.description'
+      %th
+  %tbody
+    - @venues.each do |venue|
+      %tr
+        %td= venue.name
+        %td= venue.capacity
+        %td= venue.address
+        %td= venue.description
+        %td= link_to t(".new_campaign"), new_campaign_draft_path(venue_id: venue.id), class: "btn btn-success btn-xs #{the_button_class}", 'data-venue-id' => venue.id

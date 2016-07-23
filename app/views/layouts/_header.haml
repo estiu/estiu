@@ -32,6 +32,10 @@
               - unless @event_notification_value.zero?
                 %span.header-notification
                   = @event_notification_value
+        - if current_user
+          %li
+            = link_to venues_path do
+              = t(".venues")
         
       %ul.nav.navbar-nav.navbar-right
         %li

@@ -43,6 +43,7 @@ en:
       goal: Goal
       cost_justification: Cost justification
     form:
+      add_venue_title: Add a new venue
       maximum_attendance: "Maximum attendance"
       venue_capacity: 'Capacity'
       goal_cents: Campaign Goal

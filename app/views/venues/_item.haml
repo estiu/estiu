@@ -1,0 +1,23 @@
+- if listing
+  .row
+    .col-xs-12
+      %h3
+        = venue.name # a link to venue could be used here          
+- else
+  %h1= venue.name
+
+%p.p10.top10.bottom10{class: "#{'bordered' unless listing}"}
+  = venue.description
+
+%div
+  %strong= t('venues.address') + ':'
+  = venue.address
+  %strong= t('venues.capacity') + ':'
+  = venue.capacity
+
+%div
+  %strong= t('.active_campaigns') + ':'
+%div
+  - venue.campaigns.select(&:active?).each do |campaign|
+    %div
+      = link_to campaign.name, campaign

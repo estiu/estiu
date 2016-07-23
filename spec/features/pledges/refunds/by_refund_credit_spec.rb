@@ -10,6 +10,7 @@ describe 'Pledge refund, by credit creation', js: true do
     
     expect {
       find('.refund-action').click
+      sleep 3
     }.to change {
       Credit.count
     }.by(1)

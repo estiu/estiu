@@ -1,9 +1,7 @@
 :javascript
   
-  window.venue_capacities = #{Venue.venue_capacities.to_json}
-  
   function update_recommended_pledge(){
-    var capacity = window.venue_capacities[$('#campaign_draft_venue_id').val()] || "#{t 'campaign_drafts.form.venue_capacity'}"
+    var capacity = window.venue_capacities[$('.venue_select_id').val()] || "#{t 'campaign_drafts.form.venue_capacity'}"
     var facade = $('#campaign_draft_goal_cents_facade').val()
     var goal = $('#campaign_draft_goal_cents').val()
     var result;
@@ -33,12 +31,8 @@
     $('#attendance-indicator').html(caption + ": " + value)
   }
   
-  $('#campaign_draft_venue_id').change(function(){
-    var val = window.venue_capacities[$(this).val()]
-    var caption = val ? "#{t('campaign_drafts.form.venue_capacity')}: " + val : ""
-    $("#venue-capacity-indicator").text(caption)
-    update_recommended_pledge()
-  }).change()
+  $(document).on('change', '.venue_select_id', update_recommended_pledge)
+  $('.venue_select_id').change()
   
   $('#campaign_draft_goal_cents_facade').bind('cents_field_updated', update_recommended_pledge)
   update_recommended_pledge()

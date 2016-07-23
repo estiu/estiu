@@ -1,0 +1,13 @@
+<% select_content = nil %>
+
+<% form_for(object_for_form, class: 'form-horizontal') do |f| %> 
+  <% form_fields(f, 'campaign_drafts.form') do |field| %>
+    <% select_content = render 'venues/venue_select', field: field, selected_id: selected_id %>
+  <% end %>
+<% end %>
+
+<%= set_venue_capacities %>
+$('#<%= campaign_draft_venue_row_id %>').html("<%= j(select_content) %>")
+$('.venue_select_id').change()
+$('#<%= new_venue_form_modal_id %>').modal('hide')
+$('.<%= new_venue_form_class %>')[0].reset()

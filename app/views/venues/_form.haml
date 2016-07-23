@@ -1,0 +1,27 @@
+= form_for(Venue.new, remote: true, html: {class: new_venue_form_class}) do |f|
+  = form_fields(f, 'venues.form') do |field|
+    = field.(:name)
+    = field.(VenuesController::OBJECT_FOR_FORM_KEY.to_sym, as: :hidden, value: object_for_form)
+    = field.(:address)
+    = field.(:description, as: :textarea)
+    = field.(:capacity, as: :integer)
+    = field.(:submit, value: t('.submit'))
+    
+:javascript
+  $(function(){
+    var sel = $('.#{new_venue_form_class}')
+    var submit = sel.find('input[type="submit"]')
+    sel.on("ajax:send", function(){
+      submit.attr("disabled", true)
+      set_flash_messages(null)
+    })
+    sel.on("ajax:success", function(){
+      submit.removeAttr("disabled")
+    })
+    sel.on("ajax:error", function(event, error){
+      if (error.status >= 500){
+        set_flash_messages(flash_error("#{j(t'venues.form.error_500')}", "fixed_at_bottom"))
+      }
+      submit.removeAttr("disabled")
+    })
+  })

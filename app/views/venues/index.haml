@@ -1,0 +1,4 @@
+- if VenuePolicy.new(current_user, nil).new_or_create?
+  = render 'table'
+- else
+  = render 'list'

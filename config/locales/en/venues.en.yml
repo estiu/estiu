@@ -1,0 +1,23 @@
+en:
+  venues:
+    create:
+      error: "Couldn't create a new Venue. Please check that all fields are correct."
+    form:
+      name: Name
+      address: Address
+      description: Description
+      capacity: "Capacity (approx.)"
+      submit: Add
+      error_500: "Sorry, there has been an error when processing your request. Please try again."
+    table:
+      title: Venues
+      new_campaign: New campaign in this venue
+    list:
+      title: Venues
+      empty: "Sorry, there are no venues with active campaigns at the moment."
+    item:
+      active_campaigns: Active campaigns
+    name: Name
+    capacity: Capacity
+    address: Address
+    description: Description

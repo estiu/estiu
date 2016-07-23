@@ -57,6 +57,16 @@ describe "Campaign draft updating", js: true do
     
   end
   
+  describe 'the venue capacity indicator' do
+    
+    it "displays its correspondingly value correctly at load time" do
+      
+      expect(find('#venue-capacity-indicator').text).to eq("#{t('campaign_drafts.form.venue_capacity')}: #{campaign.venue.capacity}")
+      
+    end
+    
+  end
+  
   # XXX describe other fields, given their JS-ness/complexity
   
 end

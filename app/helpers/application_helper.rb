@@ -79,6 +79,22 @@ module ApplicationHelper
     end
   end
   
+  def new_venue_form_modal_id
+    "add-venue-item-to-campaign-draft"
+  end
+  
+  def new_venue_form_class
+    'add-venue-remote-form'
+  end
+  
+  def campaign_draft_venue_row_id
+    'venue-select-row'
+  end
+  
+  def set_venue_capacities
+    "window.venue_capacities = #{Venue.venue_capacities.to_json}".html_safe
+  end
+  
   private
   
   def form_field form, key, locals={}

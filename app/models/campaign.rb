@@ -69,6 +69,7 @@ class Campaign < ActiveRecord::Base
     Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(DateTime.current)
   end
   
+  # if the definition of active ever changes, make sure to update Venue.with_active_campaigns too.
   def active?
     active_time? && !fulfilled? && !unfulfilled_at
   end
@@ -131,7 +132,6 @@ class Campaign < ActiveRecord::Base
       errors[:fulfilled_at] << "Cannot be set if the campaign isn't actually fulfilled."
     end
   end
-  
   
   def unfulfilled_at_truthful
     if unfulfilled_at && fulfilled?

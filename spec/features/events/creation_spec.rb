@@ -5,6 +5,7 @@ describe 'Event creation', js: true do
     sign_as :event_promoter, :feature
     
     let(:campaign) { FG.create :campaign, :fulfilled, campaign_draft: FG.build(:campaign_draft, :published, event_promoter_id: event_promoter.event_promoter_id) }
+    let!(:the_venue) { FG.create :venue }
     
     before { visit new_event_campaign_path(id: campaign.id) }
     
@@ -13,8 +14,15 @@ describe 'Event creation', js: true do
     let(:ra3){ "dj/#{SecureRandom.hex}" }
     
     def fill_most
+      
       find('#event_name').set SecureRandom.hex
-      find('#event_venue_id').all("option")[1].select_option
+      
+      expect {
+        find('#event_venue_id').find("option[value='#{the_venue.id}']").select_option
+      }.to change {
+        find('#venue-capacity-indicator').text()
+      }.from("").to("#{t('campaign_drafts.form.venue_capacity')}: #{the_venue.capacity}" )
+      
       find('#event_starts_at_date').click
       next_month
       any_day
@@ -23,6 +31,7 @@ describe 'Event creation', js: true do
       options = find('#event_duration_hours').all("option")
       options[(1..(options.size - 1)).to_a.sample].select_option
       find('#event_ra_artists_attributes_0_artist_path').set ra1
+      
     end
     
     def the_action
