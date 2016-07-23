@@ -11,6 +11,11 @@ class VenuesController < ApplicationController
     end
   end
   
+  def index
+    authorize Venue
+    @venues = policy_scope Venue
+  end
+  
   protected
   
   OBJECT_FOR_FORM_KEY = 'object_for_form'

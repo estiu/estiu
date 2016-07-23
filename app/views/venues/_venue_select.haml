@@ -4,7 +4,7 @@
       %span#venue-capacity-indicator
 
 :ruby
-  selected_id ||= nil
+  selected_id ||= params[:venue_id].presence
   select_options = {as: :select, values: Venue.for_select, only_input: true, after: venue_capacity, form_group_class: 'm0', html_class: 'venue_select_id', no_form_control: true}
   select_options.merge!(selected: selected_id) if selected_id
 

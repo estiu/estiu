@@ -18,7 +18,7 @@ html
 body
   font-size: 15px
   
-.navbar-header
+.navbar-header, nav.navbar ul.navbar-nav li
   border-right: $border-style
 
 .footer
@@ -75,7 +75,7 @@ ul
   font-size: 32px
   color: $black
   display: block
-  &:hover
+  &:hover, &:focus
     text-decoration: none
     color: $black
 
@@ -292,3 +292,6 @@ $padding_for_left_right_columns: 5px
   position: fixed
   bottom: 0
   z-index: 9999
+
+.table-hover tbody tr:hover
+  background-color: #eaf1ff !important

@@ -55,7 +55,7 @@ Rails.application.routes.draw do
       end
     end
     
-    resources :venues, only: [:create]
+    resources :venues, only: [:create, :index]
     
     get '/dashboard', to: 'dashboard#index', as: :dashboard
     get '/pages', to: 'pages#home'

@@ -69,6 +69,7 @@ class Campaign < ActiveRecord::Base
     Rails.env.test? && skip_past_date_validations ? true : (starts_at_criterion..ends_at).cover?(DateTime.current)
   end
   
+  # if the definition of active ever changes, make sure to update Venue.with_active_campaigns too.
   def active?
     active_time? && !fulfilled? && !unfulfilled_at
   end
