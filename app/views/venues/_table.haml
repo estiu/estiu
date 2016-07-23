@@ -27,4 +27,4 @@
         %td= venue.capacity
         %td= venue.address
         %td= venue.description
-        %td= link_to t(".new_campaign"), new_campaign_draft_path(venue_id: venue.id), class: "btn btn-success btn-xs #{the_button_class}"
+        %td= link_to t(".new_campaign"), new_campaign_draft_path(venue_id: venue.id), class: "btn btn-success btn-xs #{the_button_class}", 'data-venue-id' => venue.id
