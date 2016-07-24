@@ -22,7 +22,7 @@ describe "Campaign draft creation", js: true do
     
     find('#campaign_draft_name').set(campaign.name)
     find('#campaign_draft_cost_justification').set(campaign.cost_justification)
-    find('#campaign_draft_goal_cents_facade').set(campaign.goal_cents / 100)
+    find('#campaign_draft_proposed_goal_cents_facade').set(campaign.goal_cents / 100)
     find('#campaign_draft_minimum_pledge_cents_facade').send_keys("#{campaign.minimum_pledge.format(symbol: false)}")
     
   end

@@ -11,6 +11,9 @@
   = campaign.description
 
 %p
+  %strong= t '.proposed_goal'
+  = campaign.proposed_goal.format
+%p
   %strong= t '.goal'
   = campaign.goal.format
 

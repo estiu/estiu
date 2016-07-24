@@ -4,7 +4,8 @@ class CreateCampaignDrafts < ActiveRecord::Migration
       t.string :name, null: false
       t.text :description, null: false
       t.text :cost_justification, null: false
-      t.integer :goal_cents, null: false
+      t.integer :proposed_goal_cents, null: false
+      t.integer :goal_cents
       t.integer :minimum_pledge_cents, null: false
       t.date :estimated_event_date
       t.integer :estimated_event_hour

@@ -10,5 +10,8 @@ class CreateEvents < ActiveRecord::Migration
       t.boolean :skip_past_date_validations
       t.timestamps null: false
     end
+    add_column :events, :approved_at, :datetime
+    add_column :events, :rejected_at, :datetime
+    add_column :events, :submitted_at, :datetime
   end
 end

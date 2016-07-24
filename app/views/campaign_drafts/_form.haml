@@ -7,7 +7,7 @@
     = field.(:description, as: :textarea)
     .row
       .col-xs-6
-        = field.(:goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT)
+        = field.(:proposed_goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT)
       .col-xs-6
         #recommended-pledge-indicator.f12.alert.alert-info.p10{style: 'margin-top: 22px'}
     .row

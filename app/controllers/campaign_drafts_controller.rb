@@ -7,9 +7,11 @@ class CampaignDraftsController < ApplicationController
   def index
     authorize CampaignDraft
     @drafts = current_event_promoter.campaign_drafts.without_campaign
+    @drafts.each &:generate_goal_cents
   end
   
   def show
+    @draft.generate_goal_cents
   end
   
   def edit

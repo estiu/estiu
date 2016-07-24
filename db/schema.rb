@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151123190146) do
+ActiveRecord::Schema.define(version: 20151123181756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,8 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.string   "name",                                   null: false
     t.text     "description",                            null: false
     t.text     "cost_justification",                     null: false
-    t.integer  "goal_cents",                             null: false
+    t.integer  "proposed_goal_cents",                    null: false
+    t.integer  "goal_cents"
     t.integer  "minimum_pledge_cents",                   null: false
     t.date     "estimated_event_date"
     t.integer  "estimated_event_hour"
@@ -155,11 +156,11 @@ ActiveRecord::Schema.define(version: 20151123190146) do
     t.boolean  "skip_past_date_validations"
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
-    t.integer  "campaign_id",                            null: false
-    t.integer  "venue_id",                               null: false
     t.datetime "approved_at"
     t.datetime "rejected_at"
     t.datetime "submitted_at"
+    t.integer  "campaign_id",                            null: false
+    t.integer  "venue_id",                               null: false
   end
 
   add_index "events", ["campaign_id"], name: "index_events_on_campaign_id", using: :btree

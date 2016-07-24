@@ -9,8 +9,7 @@
           window.errors.push([a, b, c]);
           return false; // false: don't swallow exceptions.
         }
-    - unless Rails.env.production?
-      %meta{name: 'robots', content: 'noindex'}
+    %meta{name: 'robots', content: 'noindex'}
     %title Estiu
     %meta{name: 'viewport', content: 'width=device-width, initial-scale=1'}
     = stylesheet_link_tag 'application', media: 'all'

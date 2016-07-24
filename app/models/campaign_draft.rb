@@ -9,14 +9,16 @@ class CampaignDraft < ActiveRecord::Base
   MINIMUM_GOAL_AMOUNT = 100_00
   MAXIMUM_GOAL_AMOUNT = 15_000_00
   DATE_ATTRS = %i(starts_at ends_at)
-  CREATE_ATTRS_STEP_1 = %i(name description venue_id goal_cents minimum_pledge_cents cost_justification)
+  CREATE_ATTRS_STEP_1 = %i(name description venue_id proposed_goal_cents minimum_pledge_cents cost_justification)
   CREATE_ATTRS_STEP_2 = DATE_ATTRS + %i(starts_immediately time_zone visibility generate_invite_link estimated_event_date estimated_event_hour estimated_event_minutes)
   FORWARD_METHODS = %i(
     starts_at_criterion
     skip_past_date_validations
     venue
     event_promoter
+    proposed_goal
     goal
+    goal_cents
     invite_token
     minimum_pledge
   )
@@ -28,7 +30,7 @@ class CampaignDraft < ActiveRecord::Base
   
   extend ResettableDates
   
-  monetize :goal_cents, subunit_numericality: {
+  monetize :proposed_goal_cents, subunit_numericality: {
     greater_than_or_equal_to: MINIMUM_GOAL_AMOUNT,
     less_than: MAXIMUM_GOAL_AMOUNT,
     message: I18n.t!("money_range", min: Money.new(MINIMUM_GOAL_AMOUNT).format, max: Money.new(MAXIMUM_GOAL_AMOUNT).format)
@@ -40,6 +42,7 @@ class CampaignDraft < ActiveRecord::Base
   }
   
   monetize :estimated_minimum_pledge_cents
+  monetize :goal_cents, allow_nil: true
   
   (CREATE_ATTRS_STEP_1 - %i(description cost_justification)).each do |attr|
     validates attr, presence: true
@@ -52,10 +55,11 @@ class CampaignDraft < ActiveRecord::Base
   validates :cost_justification, presence: true, length: {minimum: (Rails.env.development? ? 2 : 140), maximum: 1000}
   validates :starts_at, inclusion: [nil], if: :starts_immediately
   validates :published_at, presence: true, if: ->(rec){ (CREATE_ATTRS_STEP_2 - %i(estimated_event_minutes)).any?{|attr| rec.send(attr).present? } }
-  validates :published_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
-  validates :submitted_at, inclusion: [nil], if: ->(rec){ Rails.env.production? ? !rec.id : false }
+  validates :published_at, inclusion: [nil], if: ->(rec){ production_or_staging? ? !rec.id : false }
+  validates :submitted_at, inclusion: [nil], if: ->(rec){ production_or_staging? ? !rec.id : false }
   
   begin # validations enclosed in this black depend on :published_at
+    validates :goal_cents, presence: true, if: :published_at
     validates :starts_immediately, inclusion: {in: [true, false], message: I18n.t!('errors.inclusion')}, if: :published_at
     validates :starts_at, presence: true, if: ->(rec){ rec.published_at && !rec.starts_immediately }
     validates :ends_at, presence: true, if: :published_at
@@ -87,10 +91,11 @@ class CampaignDraft < ActiveRecord::Base
   validate :minimum_pledge_according_to_venue
   validate :minimum_pledge_not_greater_than_goal
 
+  before_validation :generate_goal_cents, if: ->(rec){ (rec.submitted_at && !rec.published_at) || changes[:published_at].present? }
   before_validation :do_generate_invite_link
   before_validation :maybe_discard_starts_at
 
-  attr_accessor :goal_cents_facade
+  attr_accessor :proposed_goal_cents_facade
   
   before_validation :create_campaign
   
@@ -124,6 +129,10 @@ class CampaignDraft < ActiveRecord::Base
     end
   end
   
+  def generate_goal_cents
+    self.goal_cents = self.proposed_goal_cents + Commissions.calculate_for(self)
+  end
+  
   def do_generate_invite_link
     if generate_invite_link && changes[:generate_invite_link]
       self.invite_token = SecureRandom.hex(6)
@@ -148,7 +157,7 @@ class CampaignDraft < ActiveRecord::Base
         errors[:starts_at] << I18n.t!('campaigns.errors.starts_at.ends_at')
       end
       if ends_at.to_i - starts_at_criterion.to_i < self.class.minimum_active_hours.hours
-        unless Rails.env.production? && DeveloperMachine.running_in_developer_machine? # sometimes one runs production in a developer machine.
+        unless production_or_staging? && DeveloperMachine.running_in_developer_machine? # sometimes one runs production in a developer machine.
           errors[:ends_at] << I18n.t!('campaigns.errors.ends_at.starts_at', hours: self.class.minimum_active_hours)
         end
       end
@@ -167,15 +176,15 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def minimum_pledge_not_greater_than_goal
-    if minimum_pledge_cents && goal_cents
-      if (goal_cents.to_f / minimum_pledge_cents.to_f) < GOAL_TO_MINIMUM_PLEDGE_FACTOR.to_f
+    if minimum_pledge_cents && proposed_goal_cents
+      if (proposed_goal_cents.to_f / minimum_pledge_cents.to_f) < GOAL_TO_MINIMUM_PLEDGE_FACTOR.to_f
         errors[:minimum_pledge_cents] << I18n.t!('campaigns.errors.minimum_pledge_cents.goal_cents', n: GOAL_TO_MINIMUM_PLEDGE_FACTOR)
       end
     end
   end
   
   def minimum_pledge_according_to_venue
-    if minimum_pledge_cents && goal_cents && venue
+    if minimum_pledge_cents && proposed_goal_cents && venue
       if minimum_pledge_cents < estimated_minimum_pledge_cents
         errors[:minimum_pledge_cents] << I18n.t!("campaigns.errors.minimum_pledge_cents.venue", value: estimated_minimum_pledge.format)
       end
@@ -184,7 +193,7 @@ class CampaignDraft < ActiveRecord::Base
   
   def estimated_minimum_pledge_cents
     if venue
-      goal_cents / venue.capacity
+      proposed_goal_cents / venue.capacity
     else
       nil
     end
