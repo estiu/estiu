@@ -83,7 +83,7 @@ class CampaignDraft < ActiveRecord::Base
     validate :estimated_event_datetime_present, if: :published_at
   end
 
-  validate :valid_date_fields
+  validate :valid_date_fields, unless: :reviewed?
   validate :minimum_pledge_according_to_venue
   validate :minimum_pledge_not_greater_than_goal
 
