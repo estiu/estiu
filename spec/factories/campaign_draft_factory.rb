@@ -39,7 +39,7 @@ FG.define do
       time_zone { Estiu::Timezones::ALL.sample }
       starts_immediately false
       published_at { DateTime.now }
-      estimated_event_date { 30.days.from_now.to_date }
+      estimated_event_date { 31.days.from_now.to_date }
       estimated_event_hour { (0..23).to_a.sample }
       estimated_event_minutes { (0..59).to_a.sample }
     end
