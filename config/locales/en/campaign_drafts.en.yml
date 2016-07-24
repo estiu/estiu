@@ -34,7 +34,7 @@ en:
       edit: Edit
       destroy: Discard
       title_proposal: 'Campaign proposal: %{campaign_name}'
-      title_documentation: 'Campaign documentation: %{campaign_name}'
+      title_documentation: 'Campaign proposal: %{campaign_name}'
       has_campaign: "This campaign has been published! Link: %{link}"
     step_1_fields:
       venue: Venue
@@ -84,10 +84,10 @@ en:
       error: "Sorry, there has been an error when rejecting the campaign. No changes have been applied."
     review:
       approve:
-        popover: "Do you confirm this campaign documentation is correct?"
+        popover: "Do you confirm this campaign proposal is correct?"
         popover_2: "By approving a campaign, you grant the promoter rights to immediately publish the campaign."
       reject:
-        popover: "Do you confirm this campaign documentation is not adequate to publish?"
+        popover: "Do you confirm this campaign proposal is not adequate to publish?"
     approve_or_reject:
       title: Approve / Reject
       approve: Approve

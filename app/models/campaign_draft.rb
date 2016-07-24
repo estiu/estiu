@@ -80,6 +80,7 @@ class CampaignDraft < ActiveRecord::Base
         record.generate_invite_link &&
         record.visibility == PUBLIC_VISIBILITY
       }
+    validate :estimated_event_datetime_present, if: :published_at
   end
 
   validate :valid_date_fields
@@ -111,6 +112,18 @@ class CampaignDraft < ActiveRecord::Base
     starts_immediately ? created_at : starts_at
   end
   
+  def estimated_event_datetime_conditions
+    [time_zone, estimated_event_date, estimated_event_hour, estimated_event_minutes].all? &:present?
+  end
+  
+  def estimated_event_datetime
+    if estimated_event_datetime_conditions
+      if tz = ActiveSupport::TimeZone.all.detect{|t| t.tzinfo.name == time_zone }
+        tz.local estimated_event_date.year, estimated_event_date.month, estimated_event_date.day, estimated_event_hour, estimated_event_minutes
+      end
+    end
+  end
+  
   def do_generate_invite_link
     if generate_invite_link && changes[:generate_invite_link]
       self.invite_token = SecureRandom.hex(6)
@@ -120,6 +133,12 @@ class CampaignDraft < ActiveRecord::Base
   def maybe_discard_starts_at
     if self.starts_immediately
       self.starts_at = nil
+    end
+  end
+  
+  def estimated_event_datetime_present
+    if estimated_event_datetime_conditions && !estimated_event_datetime
+      self.errors[:estimated_event_date] << I18n.t!('campaigns.errors.estimated_event_date.estimated_event_datetime')
     end
   end
   
@@ -141,6 +160,9 @@ class CampaignDraft < ActiveRecord::Base
       if ends_at && ends_at.to_i - DateTime.current.to_i < -60
         errors[:ends_at] << I18n.t!('past_date')
       end
+    end
+    if estimated_event_datetime && ends_at && (estimated_event_datetime < ends_at)
+      errors[:estimated_event_date] << I18n.t!('campaigns.errors.estimated_event_date.ends_at')
     end
   end
   
