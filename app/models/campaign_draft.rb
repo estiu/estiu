@@ -82,8 +82,8 @@ class CampaignDraft < ActiveRecord::Base
       }
   end
 
-  validate :valid_date_fields, on: :create
-  validate :minimum_pledge_according_to_venue, on: :create
+  validate :valid_date_fields
+  validate :minimum_pledge_according_to_venue
   validate :minimum_pledge_not_greater_than_goal
 
   before_validation :do_generate_invite_link
