@@ -34,7 +34,7 @@ class Event < ActiveRecord::Base
   validates_numericality_of :duration, greater_than_or_equal_to: MIN_DURATION
   
   validate :campaign_was_fulfilled
-  validate :starts_at_is_future, on: :create
+  validate :starts_at_is_future, unless: :reviewed?
   validate :at_least_one_ra_artist
   
   def self.visible_for_event_promoter event_promoter
