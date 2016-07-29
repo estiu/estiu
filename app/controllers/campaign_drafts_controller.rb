@@ -28,6 +28,7 @@ class CampaignDraftsController < ApplicationController
       flash[:success] = t('.success')
       redirect_to campaign_draft_path(@draft)
     else
+      generate_goal_cents
       flash.now[:error] = t('.error')
       render :new
     end

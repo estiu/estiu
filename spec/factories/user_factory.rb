@@ -2,7 +2,7 @@ FG.define do
   
   factory :user do
     
-    email { "#{SecureRandom.hex(16)}@mailinator.com" } # mail can be actually checked at mailinator.com.
+    email { "#{SecureRandom.hex(8)}@mailinator.com" } # mail can be actually checked at mailinator.com.
     password { SecureRandom.hex }
     confirmed_at { DateTime.now }
     
