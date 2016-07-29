@@ -35,7 +35,7 @@ class Commissions
   
   def self.calculate_for campaign_draft
     base = campaign_draft.proposed_goal_cents
-    return false if base.blank? || base.zero?
+    return 0 if base.blank? || base.zero?
     rate = RATES_BY_THRESHOLDS.min_by{|k, v| (k - base).abs }.second
     (base.to_f * rate).to_i
   end

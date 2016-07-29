@@ -47,7 +47,7 @@ module ApplicationHelper
   end
   
   def popover_html key, locals={}
-    popover2 = t((key + '_popover_2'), locals)
+    popover2 = t((key + '_popover_2'), locals.merge(default: ""))
     small = "<br> <small> #{popover2} </small>" if popover2.present?
     "#{t((key + '_popover'), locals)}#{small}"
   end

@@ -39,3 +39,18 @@
   update_attendance_indicator()
   
   $('#campaign_draft_proposed_goal_cents_facade, #campaign_draft_minimum_pledge_cents_facade').bind('cents_field_updated', update_attendance_indicator)
+  
+  var goal_cents_handler = _.debounce(function(){
+    var goal = $('#campaign_draft_proposed_goal_cents').val()
+    var proposed_goal_cents = goal && !isNaN(goal) && new Number(goal)
+    if (proposed_goal_cents){
+      var request = $.ajax("#{calculate_goal_cents_path}", {method: 'GET', data: {proposed_goal_cents: proposed_goal_cents}})
+      request.done(function(response){
+        $('#calculated-goal-cents-indicator').text(response['value'])
+      })
+    } else {
+      $('#calculated-goal-cents-indicator').text("")
+    }
+  }, 175)
+  
+  $('#campaign_draft_proposed_goal_cents_facade').keyup(goal_cents_handler)

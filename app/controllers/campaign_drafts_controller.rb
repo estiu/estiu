@@ -2,6 +2,7 @@ class CampaignDraftsController < ApplicationController
   
   should_load_draft = [:show, :edit, :update, :destroy, :submit, :publish, :approve, :reject]
   before_action :load_draft, only: should_load_draft
+  before_action :generate_goal_cents, only: [:show, :edit]
   before_action :authorize_draft, only: should_load_draft
   
   def index
@@ -11,7 +12,6 @@ class CampaignDraftsController < ApplicationController
   end
   
   def show
-    @draft.generate_goal_cents
   end
   
   def edit
@@ -121,6 +121,10 @@ class CampaignDraftsController < ApplicationController
   helper_method :should_review_draft?
   def should_review_draft?
     current_admin && @draft.must_be_reviewed?
+  end
+  
+  def generate_goal_cents
+    @draft.generate_goal_cents
   end
   
 end

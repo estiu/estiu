@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     resources :venues, only: [:create, :index]
     
     get '/dashboard', to: 'dashboard#index', as: :dashboard
+    get '/calculate_goal_cents', to: 'calculations#calculate_goal_cents', as: :calculate_goal_cents
     get '/pages', to: 'pages#home'
     get "/pages/*id" => 'pages#show', as: :page, format: false
     root to: 'application#home'

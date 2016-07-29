@@ -48,13 +48,14 @@ en:
       add_venue_title: Add a new venue
       maximum_attendance: "Maximum attendance"
       venue_capacity: 'Capacity'
-      goal_cents: Campaign Goal
-      proposed_goal_cents: Campaign Goal
+      goal_cents: Actual Campaign Goal
+      proposed_goal_cents: Proposed Campaign Goal
       recommended_pledge: Recommended minimum payment
       recommended_pledge_cents: Recommended payment
       minimum_pledge_cents: Minimum payment
       minimum_pledge_cents_short: Minimum payment
       submit: "Save draft"
+      goal_cents_popover: "The final goal after taxes and (possibly) commissions."
       cost_justification_popover: "Please explain in this field what do you need the money for (each service and its cost)."
       cost_justification_popover_2: "This justification should match the project goal."
     publish_form:
