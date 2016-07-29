@@ -1,8 +1,12 @@
 - the_id = "campaigns-table"
 
 %h2
-  = t '.title'
-  %a.collapser{role: 'button', data: {toggle: 'collapse'}, href: "##{the_id}"}= "-"
+  .row
+    .col-xs-7
+      = t '.title'
+      %a.collapser{role: 'button', data: {toggle: 'collapse'}, href: "##{the_id}"}= "-"
+    .col-xs-5.right
+      = link_to t("campaigns.index.new"), new_campaign_draft_path, class: 'btn btn-success btn-xs'
 
 %hr.top0
 
