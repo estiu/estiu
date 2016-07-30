@@ -57,6 +57,7 @@ class CampaignDraft < ActiveRecord::Base
   validates :published_at, presence: true, if: ->(rec){ (CREATE_ATTRS_STEP_2 - %i(estimated_event_minutes)).any?{|attr| rec.send(attr).present? } }
   validates :published_at, inclusion: [nil], if: ->(rec){ production_or_staging? ? !rec.id : false }
   validates :submitted_at, inclusion: [nil], if: ->(rec){ production_or_staging? ? !rec.id : false }
+  validates :goal_cents, inclusion: [nil], unless: :submitted_at
   
   begin # validations enclosed in this black depend on :published_at
     validates :goal_cents, presence: true, if: :published_at
@@ -91,7 +92,7 @@ class CampaignDraft < ActiveRecord::Base
   validate :minimum_pledge_according_to_venue
   validate :minimum_pledge_not_greater_than_goal
 
-  before_validation :generate_goal_cents, if: ->(rec){ (rec.submitted_at && !rec.published_at) || changes[:published_at].present? }
+  before_validation :generate_goal_cents, if: :needs_goal_cents_generation?
   before_validation :do_generate_invite_link
   before_validation :maybe_discard_starts_at
 
@@ -111,6 +112,10 @@ class CampaignDraft < ActiveRecord::Base
   
   def self.minimum_active_hours
     1
+  end
+  
+  def needs_goal_cents_generation?
+    (submitted_at && !published_at) || changes[:published_at].present?
   end
   
   def starts_at_criterion
