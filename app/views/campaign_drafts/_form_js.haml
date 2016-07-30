@@ -1,6 +1,6 @@
 :javascript
   
-  window.actual_goal_cents = null
+  window.actual_goal_cents = #{actual_goal_cents}
   
   function update_recommended_pledge(){
     var capacity = window.venue_capacities[$('.venue_select_id').val()] || "#{t 'campaign_drafts.form.venue_capacity'}"
@@ -10,15 +10,15 @@
     if (facade && goal && !isNaN(capacity) && !isNaN(goal)){
       var _goal = new Number(goal)
       var _capacity = new Number(capacity)
-      result = (_goal / _capacity / 100.0).toFixed(2)
+      result = format_currency(_goal / _capacity)
       $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', result)
     } else {
       result = "#{t 'campaign_drafts.form.minimum_pledge_cents_short'}"
       $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', null)
     }
     result = '<strong>' + result + '</strong>'
-    var money = facade || "#{t 'campaign_drafts.form.goal_cents'}"
-    var caption = money + " / " + capacity + " = " + result
+    var money = facade || "#{t 'campaign_drafts.form.goal_cents_short'}"
+    var caption = money + " / " + capacity + " = <br>" + result
     $('#recommended-pledge-indicator').html(caption)
   }
   
@@ -39,9 +39,9 @@
     if (proposed_goal_cents){
       var request = $.ajax("#{calculate_goal_cents_path}", {method: 'GET', data: {proposed_goal_cents: proposed_goal_cents}})
       request.done(function(response){
-        $('#calculated-goal-cents-indicator').text(response['formatted_value'])
-        $('#calculated-goal-cents-indicator').data('formatted-value-no-symbol', response['formatted_value_no_symbol'])
-        window.actual_goal_cents = response['cents_value']
+        $('#calculated-goal-cents-indicator').text(response['explanation'])
+        $('#calculated-goal-cents-indicator').data('formatted-value-no-symbol', response['formatted_total_no_symbol'])
+        window.actual_goal_cents = response['cents_total']
         update_recommended_pledge()
       })
     } else {

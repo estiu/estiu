@@ -149,7 +149,7 @@ module SpecHelpers
   end
   
   def goal_indicator_format_opts
-    CalculationsController::FORMAT_OPTS.dup
+    CampaignDraft::FORMAT_OPTS.dup
   end
   
 end

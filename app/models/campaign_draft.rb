@@ -27,6 +27,7 @@ class CampaignDraft < ActiveRecord::Base
   INVITE_VISIBILITY = 'invite'
   VISIBILITIES = [APP_VISIBILITY, INVITE_VISIBILITY, PUBLIC_VISIBILITY]
   GOAL_TO_MINIMUM_PLEDGE_FACTOR = 10 # goal must be at least 10 times higher than the minimum pledge, so at least 10 people can attend.
+  FORMAT_OPTS = {no_cents_if_whole: false}.freeze
   
   extend ResettableDates
   
@@ -43,6 +44,8 @@ class CampaignDraft < ActiveRecord::Base
   
   monetize :estimated_minimum_pledge_cents, allow_nil: true
   monetize :goal_cents, allow_nil: true
+  monetize :commissions_cents, allow_nil: true
+  monetize :taxes_cents, allow_nil: true
   
   (CREATE_ATTRS_STEP_1 - %i(description cost_justification)).each do |attr|
     validates attr, presence: true
@@ -97,6 +100,8 @@ class CampaignDraft < ActiveRecord::Base
   before_validation :maybe_discard_starts_at
 
   attr_accessor :proposed_goal_cents_facade
+  attr_accessor :commissions_cents
+  attr_accessor :taxes_cents
   
   before_validation :create_campaign
   
@@ -135,7 +140,10 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def generate_goal_cents
-    self.goal_cents = self.proposed_goal_cents + Commissions.calculate_for(self)
+    self.commissions_cents = Commissions.calculate_for(self)
+    self.goal_cents = self.proposed_goal_cents + self.commissions_cents
+    self.taxes_cents = Taxes.calculate_for(self)
+    self.goal_cents += self.taxes_cents
   end
   
   def do_generate_invite_link
@@ -219,6 +227,21 @@ class CampaignDraft < ActiveRecord::Base
     if change && change[0].nil? && change[1].present?
       self.campaign ||= Campaign.new(campaign_draft: self)
     end
+  end
+  
+  def present_calculations
+    generate_goal_cents
+    total = goal
+    formatted_total = total.format(FORMAT_OPTS.dup)
+    base_formatted_no_symbol = proposed_goal.format(FORMAT_OPTS.dup.merge(symbol: false))
+    commissions_formatted_no_symbol = commissions.format(FORMAT_OPTS.dup.merge(symbol: false))
+    taxes_formatted_no_symbol = taxes.format(FORMAT_OPTS.dup.merge(symbol: false))
+    {
+      explanation: "#{base_formatted_no_symbol} + #{commissions_formatted_no_symbol} + #{taxes_formatted_no_symbol} = #{formatted_total}",
+      formatted_total: formatted_total,
+      formatted_total_no_symbol: total.format(FORMAT_OPTS.dup.merge(symbol: false)),
+      cents_total: total.fractional
+    }
   end
   
 end

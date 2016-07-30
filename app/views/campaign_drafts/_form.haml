@@ -1,3 +1,5 @@
+- calculations = campaign.goal_cents.try(:positive?) ? campaign.present_calculations : {}
+
 %hr
 = form_for(campaign, class: 'form-horizontal') do |f|
   = form_fields(f, 'campaign_drafts.form') do |field|
@@ -7,17 +9,21 @@
     = field.(:description, as: :textarea)
     .row
       .col-xs-6
-        = field.(:proposed_goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT, input_group_class: 'top5')
-      .col-xs-6.center
-        = field.(:goal_cents, only_label: true, form_group_class: 'm0', popover: {html: popover_html('.goal_cents')}, label_html: {class: 'bottom5'})
-        #calculated-goal-cents-indicator.f14.alert.alert-success.top5{style: 'padding: 5px 5px 7px 5px'}
-          - value = campaign.goal_cents.try(:positive?) ? campaign.goal : Money.new(0)
-          = value.format(CalculationsController::FORMAT_OPTS.dup) 
-    .row
+        = field.(:proposed_goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT)
       .col-xs-6
         = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
+    .row
+      .col-xs-12
+        = field.(:goal_cents, only_label: true, form_group_class: 'm0', label_html: {class: 'bottom5'})
+        #calculated-goal-cents-indicator.f14.alert.alert-success.top5.center{data: {'formatted-value-no-symbol' => calculations[:formatted_total_no_symbol]}, style: 'padding: 5px 5px 7px 5px'}
+          - if calculations.present?
+            = calculations.fetch :explanation
+          - else
+            = Money.new(0).format(CampaignDraft::FORMAT_OPTS.dup)
+    .row
       .col-xs-6.center
         #recommended-pledge-indicator.f12.alert.alert-info.p7
+      .col-xs-6.center
         #attendance-indicator.f12.alert.alert-warning.p7
           = t('.maximum_attendance') + ':'
     = field.(:cost_justification, as: :textarea, popover: {html: popover_html('.cost_justification')})
@@ -26,4 +32,4 @@
       = field.(:submit)
 
 = render 'venues/venue_select_modal', object_for_form: 'campaign_draft'
-= render 'form_js'
+= render 'form_js', actual_goal_cents: campaign.goal_cents.to_json

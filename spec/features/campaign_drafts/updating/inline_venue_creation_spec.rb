@@ -18,7 +18,16 @@ describe "Creating a Venue while updating a CampaignDraft", js: true do
   end
   
   def the_submit_action
+    
+    # 1. update the minimum pledge, according to the just-created Venue
+    
+    the_campaign.venue = Venue.last
+    the_campaign.minimum_pledge_cents = (the_campaign.goal_cents.to_f / the_campaign.venue.capacity.to_f).ceil
+    find('#campaign_draft_minimum_pledge_cents_facade').send_keys("#{the_campaign.minimum_pledge.format(symbol: false)}")
+    
+    # 2. submit
     find("#edit_campaign_draft_#{the_campaign.id} input[type=submit]").click
+    
   end
   
   describe 'success' do

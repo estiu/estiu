@@ -29,7 +29,7 @@ describe "Calculating the actual goal as the user types a proposed goal, on Camp
         sleep 3
       }.to change {
         the_actual_goal_indicator.text
-      }.from(Money.new(0).format(goal_indicator_format_opts)).to(reference_campaign.goal.format(goal_indicator_format_opts))
+      }.from(Money.new(0).format(goal_indicator_format_opts)).to(reference_campaign.present_calculations.fetch(:explanation))
       
     end
     

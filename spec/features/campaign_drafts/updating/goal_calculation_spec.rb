@@ -24,7 +24,7 @@ describe "Calculating the actual goal as the user types a proposed goal, on Camp
     
     it "the actual goal indicator already has a value present" do
       
-      expect(the_actual_goal_indicator.text).to eq(the_campaign.goal.format(goal_indicator_format_opts))
+      expect(the_actual_goal_indicator.text).to eq(the_campaign.present_calculations.fetch(:explanation))
       
     end
     

@@ -41,14 +41,15 @@ en:
       name: Name
       description: Description
       proposed_goal: Proposed goal
-      goal: Goal (commissions included)
+      goal: Goal + commissions + taxes
       proposed_goal: Goal
       cost_justification: Cost justification
     form:
       add_venue_title: Add a new venue
       maximum_attendance: "Maximum attendance"
       venue_capacity: 'Capacity'
-      goal_cents: Actual Campaign Goal
+      goal_cents: Actual Campaign Goal (proposed + commissions + taxes)
+      goal_cents_short: Actual Campaign Goal
       proposed_goal_cents: Proposed Campaign Goal
       recommended_pledge: Recommended minimum payment
       recommended_pledge_cents: Recommended payment
