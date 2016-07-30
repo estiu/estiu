@@ -99,3 +99,7 @@ var set_flash_messages = function(response){
   var content = response ? response.responseJSON['flash_content'] : ""
   $('#all-flash-messages').html(content)
 }
+
+function format_currency(value_in_cents){
+  return $('input.currency#the-currency-formatter').autoNumeric('set', value_in_cents / 100.0).val()
+}

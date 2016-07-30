@@ -7,20 +7,18 @@
     = field.(:description, as: :textarea)
     .row
       .col-xs-6
-        = field.(:proposed_goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT)
+        = field.(:proposed_goal_cents, as: :currency, min: CampaignDraft::MINIMUM_GOAL_AMOUNT, max: CampaignDraft::MAXIMUM_GOAL_AMOUNT, input_group_class: 'top5')
       .col-xs-6.center
-        = field.(:goal_cents, only_label: true, form_group_class: 'm0', popover: {html: popover_html('.goal_cents')})
-        #calculated-goal-cents-indicator{style: 'height: 35px; padding-top: 5px'}
-          = campaign.proposed_goal_cents.try(:positive?) ? campaign.goal.format : ""
+        = field.(:goal_cents, only_label: true, form_group_class: 'm0', popover: {html: popover_html('.goal_cents')}, label_html: {class: 'bottom5'})
+        #calculated-goal-cents-indicator.f14.alert.alert-success.top5{style: 'padding: 5px 5px 7px 5px'}
+          - value = campaign.goal_cents.try(:positive?) ? campaign.goal : Money.new(0)
+          = value.format(CalculationsController::FORMAT_OPTS.dup) 
     .row
       .col-xs-6
         = field.(:minimum_pledge_cents, as: :currency, max: Pledge::MAXIMUM_PLEDGE_AMOUNT)
-      .col-xs-6
-        #recommended-pledge-indicator.f12.alert.alert-info.p10
-    .row
-      .col-xs-6
-      .col-xs-6
-        #attendance-indicator.f12.alert.alert-warning.p10
+      .col-xs-6.center
+        #recommended-pledge-indicator.f12.alert.alert-info.p7
+        #attendance-indicator.f12.alert.alert-warning.p7
           = t('.maximum_attendance') + ':'
     = field.(:cost_justification, as: :textarea, popover: {html: popover_html('.cost_justification')})
     %hr

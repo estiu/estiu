@@ -16,6 +16,7 @@
     :javascript
       MOBILE = #{browser.mobile?}
       CURRENCY_OPTIONS = #{CurrencyFormat.js_options}
+    %input.currency#the-currency-formatter{style: jquery_hidden}
     = javascript_include_tag 'application'
     = csrf_meta_tags
   %body
