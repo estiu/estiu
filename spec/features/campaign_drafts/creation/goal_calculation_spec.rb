@@ -2,7 +2,11 @@ describe "Calculating the actual goal as the user types a proposed goal, on Camp
   
   sign_as :event_promoter, :feature
   
-  let!(:reference_campaign){ FG.build :campaign_draft }
+  let!(:reference_campaign){
+    v = FG.build :campaign_draft
+    v.generate_goal_cents
+    v
+  }
   
   before {
     visit new_campaign_draft_path
@@ -18,18 +22,14 @@ describe "Calculating the actual goal as the user types a proposed goal, on Camp
   
   context "when I fill the Proposed Goal field" do
     
-    before {
-      expect(the_proposed_goal_field.value).to be_blank
-    }
-    
     it "updates the actual goal indicator" do
       
       expect {
-        the_proposed_goal_field.set(reference_campaign.proposed_goal.format)
+        the_proposed_goal_field.set(reference_campaign.proposed_goal.format(currency_field_format_opts))
         sleep 3
       }.to change {
-        the_actual_goal_indicator.text.blank?
-      }.from(true).to(false)
+        the_actual_goal_indicator.text
+      }.from(Money.new(0).format(goal_indicator_format_opts)).to(reference_campaign.goal.format(goal_indicator_format_opts))
       
     end
     
@@ -38,14 +38,14 @@ describe "Calculating the actual goal as the user types a proposed goal, on Camp
   context "when I fill the Proposed Goal field again with the same value" do
     
     before {
-      the_proposed_goal_field.set(reference_campaign.proposed_goal.format)
+      the_proposed_goal_field.set(reference_campaign.proposed_goal.format(currency_field_format_opts))
       sleep 3
     }
     
     it "doesn't update the actual goal indicator" do
       
       expect {
-        the_proposed_goal_field.set(reference_campaign.proposed_goal.format)
+        the_proposed_goal_field.set(reference_campaign.proposed_goal.format(currency_field_format_opts))
         sleep 3
       }.to_not change {
         the_actual_goal_indicator.text
@@ -58,17 +58,21 @@ describe "Calculating the actual goal as the user types a proposed goal, on Camp
   context "when I fill the Proposed Goal field again a new value" do
     
     before {
-      the_proposed_goal_field.set(reference_campaign.proposed_goal.format)
+      the_proposed_goal_field.set(reference_campaign.proposed_goal.format(currency_field_format_opts))
+      sleep 3
     }
     
+    let!(:old_value){ reference_campaign.goal.format(goal_indicator_format_opts) }
+    
     it "updates the actual goal indicator" do
-      
+      new_value = nil
       expect {
-        the_proposed_goal_field.set((reference_campaign.proposed_goal * 2).format)
+        new_value = Money.new(reference_campaign.proposed_goal_cents * 2)
+        the_proposed_goal_field.set(new_value.format(currency_field_format_opts))
         sleep 3
       }.to change {
         the_actual_goal_indicator.text
-      }
+      }#.from(old_value).to(->(v){ v == new_value.format(goal_indicator_format_opts) }) # XXX shitty RSpec bug
       
     end
     

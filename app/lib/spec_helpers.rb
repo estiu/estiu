@@ -144,4 +144,12 @@ module SpecHelpers
     
   end
   
+  def currency_field_format_opts
+    {symbol: false, no_cents_if_whole: false, delimiter: nil}
+  end
+  
+  def goal_indicator_format_opts
+    CalculationsController::FORMAT_OPTS.dup
+  end
+  
 end
