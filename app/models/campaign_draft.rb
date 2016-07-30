@@ -41,7 +41,7 @@ class CampaignDraft < ActiveRecord::Base
     less_than: Pledge::MAXIMUM_PLEDGE_AMOUNT
   }
   
-  monetize :estimated_minimum_pledge_cents
+  monetize :estimated_minimum_pledge_cents, allow_nil: true
   monetize :goal_cents, allow_nil: true
   
   (CREATE_ATTRS_STEP_1 - %i(description cost_justification)).each do |attr|
@@ -189,16 +189,26 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def minimum_pledge_according_to_venue
-    if minimum_pledge_cents && proposed_goal_cents && venue
+    
+    had_goal_cents = goal_cents.present?
+    
+    if proposed_goal_cents && !goal_cents
+      generate_goal_cents
+    end
+    
+    if minimum_pledge_cents && goal_cents && venue
       if minimum_pledge_cents < estimated_minimum_pledge_cents
         errors[:minimum_pledge_cents] << I18n.t!("campaigns.errors.minimum_pledge_cents.venue", value: estimated_minimum_pledge.format)
       end
     end
+    
+    (self.goal_cents = nil) unless had_goal_cents
+    
   end
   
   def estimated_minimum_pledge_cents
-    if venue
-      proposed_goal_cents / venue.capacity
+    if goal_cents && venue
+      goal_cents / venue.capacity
     else
       nil
     end

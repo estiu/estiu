@@ -8,8 +8,12 @@ class CalculationsController < ApplicationController
   def calculate_goal_cents
     campaign = CampaignDraft.new(proposed_goal_cents: params.require(:proposed_goal_cents))
     campaign.generate_goal_cents
-    value = campaign.goal.format(FORMAT_OPTS.dup)
-    render json: {value: value}
+    value = campaign.goal
+    render json: {
+      formatted_value: value.format(FORMAT_OPTS.dup),
+      formatted_value_no_symbol: value.format(FORMAT_OPTS.dup.merge(symbol: false)),
+      cents_value: value.fractional
+  }
   end
   
   protected

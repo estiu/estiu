@@ -18,7 +18,10 @@ FG.define do
     skip_past_date_validations true
     
     after(:build) do |rec, eva|
-      rec.minimum_pledge_cents = [(rec.proposed_goal_cents.to_f / rec.venue.capacity.to_f).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max
+      had_goal_cents = rec.goal_cents.present?
+      rec.generate_goal_cents
+      rec.minimum_pledge_cents = [(rec.goal_cents.to_f / rec.venue.capacity.to_f).ceil, Pledge::STRIPE_MINIMUM_PAYMENT].max
+      (rec.goal_cents = nil) unless had_goal_cents
     end
     
     trait :submitted do
