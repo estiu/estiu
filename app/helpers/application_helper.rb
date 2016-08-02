@@ -21,6 +21,21 @@ module ApplicationHelper
     render 'layouts/progress_bar', percent: percent, label: label, type: type, id: id
   end
   
+  def progress_bar_type_for campaign
+    value = campaign.percent_pledged
+    if value == 100
+      'success'
+    elsif value > 80
+      'primary'
+    elsif value > 49
+      'info'
+    elsif value > 0
+      'warning'
+    else
+      'danger'
+    end
+  end
+  
   def centered
     "#{centered_wider} col-lg-4 col-lg-offset-4"
   end

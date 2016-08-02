@@ -29,7 +29,7 @@
             %td= campaign.event_promoter
           %td= link_to(campaign.name, campaign)
           %td{data: {'sort-value' => campaign.percent_pledged}}
-            = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), nil, 'campaign-progress-bar'
+            = progress_bar campaign.percent_pledged, t('campaigns.show.percent', percent: campaign.percent_pledged), progress_bar_type_for(campaign), 'campaign-progress-bar'
           %td{data: {'sort-value' => campaign.goal_cents}}= campaign.goal.format
           %td
             = campaign.attendees.count
