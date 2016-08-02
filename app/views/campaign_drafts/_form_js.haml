@@ -18,7 +18,7 @@
     }
     result = '<strong>' + result + '</strong>'
     var money = facade || "#{t 'campaign_drafts.form.goal_cents_short'}"
-    var caption = money + " / " + capacity + " = <br>" + result
+    var caption = money + " / " + capacity + " = " + result
     $('#recommended-pledge-indicator').html(caption)
   }
   
