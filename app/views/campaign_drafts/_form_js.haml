@@ -1,6 +1,7 @@
 :javascript
   
   window.actual_goal_cents = #{actual_goal_cents}
+  window.recommended_pledge_cents = null
   
   function update_recommended_pledge(){
     var capacity = window.venue_capacities[$('.venue_select_id').val()] || "#{t 'campaign_drafts.form.venue_capacity'}"
@@ -10,7 +11,9 @@
     if (facade && goal && !isNaN(capacity) && !isNaN(goal)){
       var _goal = new Number(goal)
       var _capacity = new Number(capacity)
-      result = format_currency(_goal / _capacity)
+      var _result = _goal / _capacity
+      window.recommended_pledge_cents = _result
+      result = format_currency(_result)
       $('#campaign_draft_minimum_pledge_cents_facade').attr('placeholder', result)
     } else {
       result = "#{t 'campaign_drafts.form.minimum_pledge_cents_short'}"
@@ -29,6 +32,9 @@
     var value = ""
     if (goal && pledge && pledge != "0") { // "0": because of autonumeric's min.
       value = Math.floor(goal / pledge)
+      if (!(window.recommended_pledge_cents && pledge >= window.recommended_pledge_cents)){
+        value = ""
+      }
     }
     $('#attendance-indicator').html(caption + ": " + value)
   }
