@@ -91,7 +91,7 @@ class CampaignDraft < ActiveRecord::Base
     validate :estimated_event_datetime_present, if: :published_at
   end
 
-  validate :valid_date_fields, unless: :reviewed?
+  validate :valid_date_fields, if: :being_published?
   validate :minimum_pledge_according_to_venue
   validate :minimum_pledge_not_greater_than_goal
 
@@ -121,6 +121,10 @@ class CampaignDraft < ActiveRecord::Base
   
   def needs_goal_cents_generation?
     (submitted_at && !published_at) || changes[:published_at].present?
+  end
+  
+  def being_published?
+    (approved_at && changes[:approved_at].blank? && !published_at) || changes[:published_at].present?
   end
   
   def starts_at_criterion
