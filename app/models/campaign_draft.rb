@@ -124,7 +124,7 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def being_published?
-    (approved_at && changes[:approved_at].blank? && !published_at) || changes[:published_at].present?
+    changes[:published_at].present?
   end
   
   def starts_at_criterion
@@ -169,6 +169,7 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def valid_date_fields
+    
     if starts_at_criterion && ends_at
       if starts_at_criterion > ends_at
         errors[:starts_at] << I18n.t!('campaigns.errors.starts_at.ends_at')
@@ -179,6 +180,7 @@ class CampaignDraft < ActiveRecord::Base
         end
       end
     end
+    
     if (dev_or_test? ? !skip_past_date_validations : true)
       if starts_at && starts_at.to_i - DateTime.current.to_i < -60
         errors[:starts_at] << I18n.t!('past_date')
@@ -187,9 +189,11 @@ class CampaignDraft < ActiveRecord::Base
         errors[:ends_at] << I18n.t!('past_date')
       end
     end
+    
     if estimated_event_datetime && ends_at && (estimated_event_datetime < ends_at)
       errors[:estimated_event_date] << I18n.t!('campaigns.errors.estimated_event_date.ends_at')
     end
+    
   end
   
   def minimum_pledge_not_greater_than_goal
