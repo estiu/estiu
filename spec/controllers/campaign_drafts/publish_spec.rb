@@ -10,7 +10,7 @@ describe CampaignDraftsController do
     let!(:campaign_params){
       v = {campaign_draft: {}, id: campaign.id}
       CampaignDraft::CREATE_ATTRS_STEP_2.each do |attr|
-        v[:campaign_draft][attr] = sample_campaign.send attr
+        v[:campaign_draft][attr] = sample_campaign.send(attr).to_s
       end
       CampaignDraft::DATE_ATTRS.each do |attr|
         v[:campaign_draft][attr] = sample_campaign.send(attr).advance(days: 1).strftime(Date::DATE_FORMATS[:default])
@@ -20,7 +20,8 @@ describe CampaignDraftsController do
         "starts_at(4i)" => "23",
         "starts_at(5i)" => "59",
         "ends_at(4i)" => "23",
-        "ends_at(5i)" => "59"
+        "ends_at(5i)" => "59",
+        "estimated_event_date" => 10.years.from_now.to_date.to_s
       })
       v
     }

@@ -33,7 +33,10 @@ describe CalculationsController do
       def the_tests
         
         get :calculate_goal_cents, proposed_goal_cents: 0
-        all_response_values_present
+        expect(the_formatted_total).to be_present
+        expect(the_formatted_total_without_symbol).to be_nil
+        expect(the_cents_total).to be_present
+        expect(the_explanation).to be_present
         expect(Monetize.parse(the_formatted_total).to_i).to eq 0
         
         # ---
