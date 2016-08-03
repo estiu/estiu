@@ -95,7 +95,7 @@ class CampaignDraft < ActiveRecord::Base
   validate :minimum_pledge_according_to_venue
   validate :minimum_pledge_not_greater_than_goal
 
-  before_validation :generate_goal_cents, if: :needs_goal_cents_generation?
+  before_validation :generate_goal_cents, if: :being_submitted?
   before_validation :do_generate_invite_link
   before_validation :maybe_discard_starts_at
 
@@ -119,8 +119,8 @@ class CampaignDraft < ActiveRecord::Base
     1
   end
   
-  def needs_goal_cents_generation?
-    (submitted_at && !published_at) || changes[:published_at].present?
+  def being_submitted?
+    changes[:submitted_at].present?
   end
   
   def being_published?
