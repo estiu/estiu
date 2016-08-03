@@ -234,18 +234,29 @@ class CampaignDraft < ActiveRecord::Base
   end
   
   def present_calculations
+    
     generate_goal_cents
     total = goal
+    
     formatted_total = total.format(FORMAT_OPTS.dup)
-    base_formatted_no_symbol = proposed_goal.format(FORMAT_OPTS.dup.merge(symbol: false))
-    commissions_formatted_no_symbol = commissions.format(FORMAT_OPTS.dup.merge(symbol: false))
-    taxes_formatted_no_symbol = taxes.format(FORMAT_OPTS.dup.merge(symbol: false))
+    formatted_total_no_symbol = goal_cents.zero? ? nil : total.format(FORMAT_OPTS.dup.merge(symbol: false))
+    
+    explanation = if goal_cents.zero?
+      goal.format(FORMAT_OPTS.dup)
+    else
+      base_formatted_no_symbol = proposed_goal.format(FORMAT_OPTS.dup.merge(symbol: false))
+      commissions_formatted_no_symbol = commissions.format(FORMAT_OPTS.dup.merge(symbol: false))
+      taxes_formatted_no_symbol = taxes.format(FORMAT_OPTS.dup.merge(symbol: false))
+      "#{base_formatted_no_symbol} + #{commissions_formatted_no_symbol} + #{taxes_formatted_no_symbol} = #{formatted_total}"
+    end
+    
     {
-      explanation: "#{base_formatted_no_symbol} + #{commissions_formatted_no_symbol} + #{taxes_formatted_no_symbol} = #{formatted_total}",
+      explanation: explanation,
       formatted_total: formatted_total,
-      formatted_total_no_symbol: total.format(FORMAT_OPTS.dup.merge(symbol: false)),
+      formatted_total_no_symbol: formatted_total_no_symbol,
       cents_total: total.fractional
     }
+    
   end
   
 end
