@@ -6,6 +6,7 @@ describe Campaign do
     
     before {
       subject.skip_past_date_validations = false
+      subject.published_at = DateTime.current
     }
     
     context 'starts_at > ends_at' do
