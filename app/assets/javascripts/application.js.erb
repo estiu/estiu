@@ -38,7 +38,9 @@ function notify_uploader_deletion_problem(){
   alert("<%= I18n.t! 'javascript.errors.uploader_deletion' %>")
 }
 
-DEFAULT_POPOVER_OPTIONS = {trigger: 'focus', placement: (MOBILE ? 'top' : 'auto'), delay: 200} // data-placement is completely ignored if we pass these options, sadly.
+DEFAULT_POPOVER_OPTIONS = {placement: (MOBILE ? 'top' : 'auto'), delay: 200}
+FOCUS_POPOVER_OPTIONS = _.extend({trigger: 'focus'}, DEFAULT_POPOVER_OPTIONS)
+CLICK_POPOVER_OPTIONS = _.extend({trigger: 'click'}, DEFAULT_POPOVER_OPTIONS)
 DEFAULT_UPLOAD_OPTIONS = {
   // forceIframeTransport: true, // if true, we cannot get XML data back from AWS. So it cannot be used.
   autoUpload: true,
@@ -79,7 +81,8 @@ $(function(){
     keydown(function(e) { e.preventDefault() } ).
     bind("paste", function(e) { e.preventDefault() } ).
     focus(function(){ $(this).blur() })
-  $('[data-toggle="popover"]').popover(DEFAULT_POPOVER_OPTIONS)
+  $('[data-estiu-popover-type="click"]').popover(CLICK_POPOVER_OPTIONS)
+  $('[data-toggle="popover"][data-estiu-popover-type!="click"]').popover(FOCUS_POPOVER_OPTIONS)
   $('a.page-scroll').bind('click', function(event) {
     var $anchor = $(this);
     $('html, body').stop().animate({

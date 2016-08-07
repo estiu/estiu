@@ -58,7 +58,7 @@ module ApplicationHelper
   end
   
   def activate_popover
-    ".find('label span').popover(DEFAULT_POPOVER_OPTIONS)"
+    ".find('label a').popover(DEFAULT_POPOVER_OPTIONS)"
   end
   
   def popover_html key, locals={}
