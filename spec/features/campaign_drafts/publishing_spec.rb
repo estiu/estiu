@@ -18,17 +18,17 @@ describe "Campaign draft publishing", js: true do
     any_day
   end
   
+  let(:months_away) { 2 }
+  
   def fill_ends_at
     find("#campaign_draft_ends_at").click
-    next_month
-    next_month
+    months_away.times { next_month }
     any_day
   end
   
   def fill_estimated_event_date
     find("#campaign_draft_estimated_event_date").click
-    next_month
-    next_month
+    (months_away * 2).times { next_month }
     any_day
   end
   
