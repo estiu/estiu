@@ -20,16 +20,14 @@ module Estiu
       when 'development'
         false ?
           Socket.ip_address_list.detect{|intf| intf.ipv4_private?}.ip_address : # for mobile access
-          'localhost'
+          'www.lvh.me'
       when 'test'
         'localhost'
       end
     end
     
     def self.port
-      if Rails.env.development?
-        8080
-      elsif Rails.env.test?
+      if Rails.env.test?
         56866
       else
         nil
@@ -50,7 +48,11 @@ module Estiu
     end
     
     def self.protocol
-      'http'
+      if Rails.env.development?
+        'https'
+      else
+        'http'
+      end
     end
     
     def self.job_names environments=['staging', 'production']
