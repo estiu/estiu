@@ -55,6 +55,23 @@ module Estiu
       end
     end
     
+    def self.set_url_options!
+      [
+        config.action_controller.default_url_options,
+        config.action_mailer.default_url_options,
+        Rails.application.routes.default_url_options,
+        Devise::Engine.routes.default_url_options,
+        Devise::Engine.config.action_controller.default_url_options
+      ].each do |config|
+
+        config[:host] = self.host
+        config[:port] = self.port if self.port
+        config[:protocol] = self.protocol
+        config[:only_path] = false
+         
+      end
+    end
+    
     def self.job_names environments=['staging', 'production']
       
       jobs_dir = Rails.root.join('app', 'jobs')
@@ -79,17 +96,17 @@ module Estiu
     I18n.locale = config.i18n.locale = I18n.default_locale = :en
     config.i18n.fallbacks = [:en]
     
+    config.action_controller.default_url_options ||= {}
+    config.action_mailer.default_url_options ||= {}
+    Rails.application.routes.default_url_options ||= {}
+    set_url_options!
+    
     config.time_zone = 'Europe/Madrid'
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.yml').to_s]
     config.middleware.use Rack::ContentLength
     config.active_job.queue_adapter = :sidekiq
-    config.action_mailer.default_url_options ||= {}
-    config.action_mailer.default_url_options[:host] = host
-    config.action_mailer.default_url_options[:port] = port if port
     config.action_mailer.preview_path = "#{Rails.root}/app/mailer_previews"
     config.asset_host = "#{self.protocol}://#{self.host}#{":" + self.port.to_s if self.port}#{nginx_prefix}"
-    Rails.application.routes.default_url_options[:host] = host
-    Rails.application.routes.default_url_options[:port] = port if port
     
   end
 end
