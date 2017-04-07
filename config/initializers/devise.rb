@@ -18,5 +18,6 @@ Devise.setup do |config|
     Rails.application.secrets.facebook_app_secret,
     scope: 'email',
     info_fields: 'email, first_name, last_name',
-    display: :page)
+    display: :page,
+    token_params: { parse: :json })
 end
