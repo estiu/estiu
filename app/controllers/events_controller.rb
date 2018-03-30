@@ -26,7 +26,7 @@ class EventsController < ApplicationController
   end
   
   def create
-    authorize(@event = Event.new(event_attrs))
+    authorize(@event = Event.new(event_attrs(creating: true)))
     if @event.save
       flash[:success] = t('.success')
       redirect_to @event
@@ -40,7 +40,9 @@ class EventsController < ApplicationController
   end
   
   def update
-    @event.assign_attributes event_attrs
+    @event.assign_attributes event_attrs(creating: false)
+    ra_artists = params.permit(event: ra_artists_attributes_params)[:event][:ra_artists_attributes].values
+    @event.ra_artists.tap(&:clear).build(ra_artists)
     if @event.save
       flash[:success] = t '.success'
       redirect_to @event
@@ -117,8 +119,12 @@ class EventsController < ApplicationController
     authorize(@event = Event.find(params[:id]))
   end
   
-  def event_attrs
-    v = params.permit(event: (Event::CREATE_ATTRS + [{ra_artists_attributes: %i(artist_path id _destroy)}]))[:event]
+  def ra_artists_attributes_params
+    [{ra_artists_attributes: %i(artist_path)}]
+  end
+  
+  def event_attrs creating:
+    v = params.permit(event: (Event::CREATE_ATTRS + (creating ? ra_artists_attributes_params : [])))[:event]
     v.merge!(campaign_id: params[:id]) unless @event.try(:campaign_id) # for `new` only (`edit` doesn't need campaign_id)
     v
   end

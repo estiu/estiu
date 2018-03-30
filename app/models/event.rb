@@ -16,7 +16,7 @@ class Event < ActiveRecord::Base
   
   accepts_nested_attributes_for :ra_artists, allow_destroy: true, reject_if: ->(object){ object[:artist_path].blank? }
   accepts_nested_attributes_for :event_documents, allow_destroy: false, reject_if: ->(object){ object[:filename].blank? }
-  before_validation :find_ra_paths, on: :create
+  before_validation :find_ra_paths, unless: :submitted_at
   before_validation :ensure_at_least_one_event_document, if: :submitted_at
   after_commit :on_approval, on: :update
   after_commit :on_rejection, on: :update

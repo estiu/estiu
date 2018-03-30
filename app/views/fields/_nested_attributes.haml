@@ -33,7 +33,9 @@
   })
   $(document).on('click', '.remove-nested-attribute-item, .remove-nested-attribute-item *', function(){
     var wrapper = $(this).closest('.#{item_wrapper}')
-    var id = wrapper.find('.is-id-field').val()
+    
+    // _destroy tentatively deemed evil - better to blindly .clear on update controller actions
+    var id = false && wrapper.find('.is-id-field').val()
     if (id){
       wrapper.find('.nested-attributes-item-partial').remove()
       wrapper.find('.is-destroy-field').removeAttr('disabled').val(true)
